@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "514346757678",
+    "firebase_url": "https://visualmath-92ae4.firebaseio.com",
+    "project_id": "visualmath-92ae4",
+    "storage_bucket": "visualmath-92ae4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514346757678:android:25fa9f92a8b146aa19b9bf",
+        "android_client_info": {
+          "package_name": "com.example.visualmath"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514346757678-88t9uksgt8908tqqo9d45r49vgn9k4ti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.visualmath",
+            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+          }
+        },
+        {
+          "client_id": "514346757678-ugmq21vcm36no4t2cdfn0nkpo6df43ht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyFdBjLl7vQRQ7MqZYHpyNceONZ82GkKE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514346757678-ugmq21vcm36no4t2cdfn0nkpo6df43ht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
