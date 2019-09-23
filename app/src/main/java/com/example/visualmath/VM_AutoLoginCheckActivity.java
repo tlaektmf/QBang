@@ -29,7 +29,7 @@ public class VM_AutoLoginCheckActivity extends AppCompatActivity {
             this.finish();
         } else {
             // Call Next Activity : 저장된 정보가 있는 경우 VM_LoginActivity를 건너뜀
-            intent = new Intent(VM_AutoLoginCheckActivity.this, MainActivity.class);
+            intent = new Intent(VM_AutoLoginCheckActivity.this, HomeActivity.class);
             intent.putExtra("UID", SaveSharedPreference.getUserName(this).toString());//user id정보를 함께 넘김
             startActivity(intent);
             this.finish();

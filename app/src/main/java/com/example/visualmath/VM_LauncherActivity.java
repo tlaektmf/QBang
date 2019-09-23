@@ -15,10 +15,6 @@ import android.widget.Toast;
 public class VM_LauncherActivity extends AppCompatActivity {
 
 
-//    SharedPreferences preferences;
-//    Boolean isAutoLogin=false;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,24 +45,7 @@ public class VM_LauncherActivity extends AppCompatActivity {
             }
         },3000);
 
-//        Runnable r=new Runnable() {
-//            @Override
-//            public void run() {
-//                //몇초 뒤에 다음 화면으로 넘어가기 Handler 사용
-//
-//                if(!isAutoLogin) {
-//                    //자동로그인 안된 경우
-//                    Intent intent = new Intent(getApplicationContext(), VM_LoginActivity.class);
-//                    startActivity(intent);  //다음화면으로 넘어가기
-//                    finish();
-//                }else{
-//                    //자동 로그인이 되어있는 경우
-//                    Intent intent=new Intent(getApplicationContext(), VM_LoginActivity.class);
-//                    startActivity(intent);  //다음화면으로 넘어가기
-//                    finish();
-//                }
-//            }
-//        };
+
 
     }
 

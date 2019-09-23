@@ -30,4 +30,5 @@ public class SaveSharedPreference {
         editor.clear();
         editor.commit();
     }
+
 }
