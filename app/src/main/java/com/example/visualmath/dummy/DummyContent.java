@@ -38,7 +38,7 @@ public class DummyContent {
     }
 
     private static DummyItem createDummyItem(int position) { // 더미 아이템을 생성하는 함수
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+        return new DummyItem(String.valueOf(position), "교육청 " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) { //설명을 만드는 함수
@@ -54,6 +54,7 @@ public class DummyContent {
      * A dummy item representing a piece of content.
      */
     public static class DummyItem {
+        //public final String probID;//게시글 고유 id
         public final String id;
         public final String content;
         public final String details;

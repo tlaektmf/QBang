@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.MainActivity;
 import com.example.visualmath.R;
+import com.example.visualmath.VM_RegisterProblemActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -47,7 +48,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(getActivity(), MainActivity.class);
+                intent = new Intent(getActivity(), VM_RegisterProblemActivity.class);
                 startActivity(intent);
             }
         });
@@ -57,7 +58,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(getActivity(), MainActivity.class);
+                intent = new Intent(getActivity(), VM_RegisterProblemActivity.class);
                 startActivity(intent);
             }
         });

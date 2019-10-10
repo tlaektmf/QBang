@@ -10,6 +10,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -44,6 +47,9 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         //ds.shim
+
+
+
         buttonAlarm = findViewById(R.id.ib_alarm);
         buttonLive = findViewById(R.id.ib_live);
 
@@ -63,13 +69,29 @@ public class HomeActivity extends AppCompatActivity {
         buttonLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //activity 이동
+                Intent intent;
+                intent = new Intent(HomeActivity.this, VM_WebViewActivity.class);
+                startActivity(intent);
             }
         });
 
-
-
-
     }
 
+    public void replaceFragment(){
+
+        //** SettingsFragment 등록
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, new VM_SettingsActivity.SettingsFragment())
+                .commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();
+//        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
+    }
+
+
+
 }
+
