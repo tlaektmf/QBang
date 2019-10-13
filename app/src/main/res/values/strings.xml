@@ -28,4 +28,14 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Ted Permission -->
+    <string name="permission_alarm">푸쉬 알람을 위한 접근 권한이 필요합니다.</string>
+    <string name="permission_notice">[설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
+    <string name="permission_picture">사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.</string>
+    <string name="permission_confirm">확인</string>
+    <string name="permission_setting">설정</string>
+    <string name="permission_close">닫기</string>
+
+
 </resources>

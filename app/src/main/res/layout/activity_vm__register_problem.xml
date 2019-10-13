@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-
+            android:background="@null"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:id="@+id/tv_title"

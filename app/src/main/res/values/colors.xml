@@ -27,5 +27,8 @@
     <color name="colorLightSteelBlue">#B0C4DE</color>
 
     <color name="colorLightSlateGray">#778899</color>
+    <color name="colorLightskyblue">#87CEFA</color>
+    <color name="colorAzure">#F0FFFF</color>
+
 
 </resources>
