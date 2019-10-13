@@ -64,6 +64,7 @@
             
             <Button
                 android:layout_marginBottom="5dp"
+
                 android:background="@drawable/layout_border"
                 android:id="@+id/btn_other"
                 android:layout_width="match_parent"
@@ -91,12 +92,13 @@
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="188dp"
+        android:layout_marginStart="170dp"
         android:layout_marginBottom="3dp"
         android:backgroundTint="@color/colorLightSteelBlue"
         android:fontFamily="@font/bmdohyeon_ttf"
         android:text="문제 등록"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_goback"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_goneMarginBottom="10dp" />
 
