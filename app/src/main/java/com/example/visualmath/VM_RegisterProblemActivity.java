@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +63,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void addOther(View view) {
+        Intent intent;
+        intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
+        startActivity(intent);
     }
 
 //    public void changeAnswerFile(View view) {
