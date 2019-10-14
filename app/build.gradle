@@ -45,8 +45,6 @@ dependencies {
     implementation "gun0912.ted:tedpermission:2.0.0"
 
 
-
-
 }
 
 apply plugin: 'com.google.gms.google-services'

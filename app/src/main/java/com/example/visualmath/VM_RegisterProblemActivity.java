@@ -33,11 +33,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     private static final String TAG="RegisterProblem";
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     private static final int PICK_FROM_CAMERA = 2;
+    private static final int OTHER_DATA_LOAD=3;
+    private static final String DETAIL="detail";
+    private static final String ALL="all";
 
     private int returnResult;
     private static final int GALLERY=1;
@@ -49,7 +54,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     final CharSequence[] gradeItems = {"초등", "중등", "고등"};
 
     Button buttonGrade;
+    Button buttonGoOther;
     ImageView imageViewProblem;
+
 
 
     @Override
@@ -71,6 +78,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void init(){
         buttonGrade=findViewById(R.id.btn_grade);
         imageViewProblem=findViewById(R.id.iv_file_problem);
+        buttonGoOther=findViewById(R.id.btn_goOther);
         returnResult=NOTHING;
     }
 
@@ -141,7 +149,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,OTHER_DATA_LOAD);
     }
 
 
@@ -149,22 +157,25 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         imageViewProblem.setImageBitmap(originalBm); //이미지 set
+        if(originalBm==null){
+            Log.i(TAG,"null");
+        }
     }
 
     private File createImageFile() throws IOException {
 
-            // 이미지 파일 이름 ( {시간})
-            String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-            String imageFileName = timeStamp ;
+        // 이미지 파일 이름 ( {시간})
+        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String imageFileName = timeStamp ;
 
-            // 이미지가 저장될 폴더 이름 ( userID )
-            File storageDir = new File(Environment.getExternalStorageDirectory() + "/"+"userID"+"/");
-            if (!storageDir.exists()) storageDir.mkdirs();
+        // 이미지가 저장될 폴더 이름 ( userID )
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/"+"userID"+"/");
+        if (!storageDir.exists()) storageDir.mkdirs();
 
-            // 빈 파일 생성
-            File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        // 빈 파일 생성
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
-            return image;
+        return image;
 
     }
 
@@ -182,7 +193,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         //** 예외 사항 처리
         if (resultCode != Activity.RESULT_OK) {
 
-            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
             if(galleryFile != null) {
                 if (galleryFile.exists()) {
@@ -196,7 +207,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             return;
         }
 
-        if(requestCode==PICK_FROM_ALBUM){
+        else if(requestCode==PICK_FROM_ALBUM){
             Uri photo_problem=data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
             Cursor cursor=null;
 
@@ -214,10 +225,45 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     cursor.close();
                 }
             }
+
+            //데이터 등록
+
             setImage();
         }
         else if (requestCode == PICK_FROM_CAMERA) {
+
             setImage();
+        }
+        else if(requestCode==OTHER_DATA_LOAD){
+            if(resultCode==RESULT_OK){
+                String notice="";
+                VM_Data_ADD receiveData=data.getParcelableExtra(ALL);
+
+                if(!receiveData.getDetail().equals("")){
+                    notice="추가 설명 등록.";
+                    Log.i(TAG,receiveData.getDetail()+"떠야돼");
+                }
+                int count=0;
+                for(int i=0;i<3;i++){
+
+                    if(receiveData.getFilePathElement(i)!=null){
+                        count++;
+                        Log.i(TAG,receiveData.getFilePathElement(i).toString());
+                    }
+                }
+                if(count!=0){
+                    notice+="사진 "+count+"개 추가.";
+                }
+
+                //** 버튼에 정보 표시
+                if(notice!=""){
+                    buttonGoOther.setText(notice);
+                }else if (notice==""){
+                    buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
+                }
+
+                Log.i(TAG,count+"");
+            }
         }
     }
 
@@ -244,8 +290,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
         });
         dialog.callFunction();// 커스텀 다이얼로그를 호출
-        Log.i(TAG,dialog.getReturnResult()+"");
-        Log.i(TAG,returnResult+"");
+//        Log.i(TAG,dialog.getReturnResult()+"");
+//        Log.i(TAG,returnResult+"");
 
 //                if(dialog.getReturnResult()==GALLERY){
 //                    getAlbumFile();
@@ -288,6 +334,11 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
+    public void registerProblem(View view) {
+        finish();
+    }
 
-
+    public void cancel(View view) {
+        finish();
+    }
 }

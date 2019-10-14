@@ -3,15 +3,6 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.visualmath">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- camera, gallery -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <dist:module dist:instant="true" />
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VM_RegiserOtherThingsActivity"></activity>
+        <activity android:name=".VM_RegisterUserActivity"></activity>
+        <activity android:name=".VM_RegiserOtherThingsActivity" />
         <activity android:name=".VM_FullViewActivity" />
         <activity android:name=".VM_RegisterProblemActivity" />
         <activity
@@ -51,20 +43,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-
-        <!-- 사진 촬영을 위한 provide -->
+        <activity android:name=".MainActivity" /> <!-- 사진 촬영을 위한 provide -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.visualmath.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
+
+    <!-- camera, gallery -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <dist:module dist:instant="true" />
 
 </manifest>

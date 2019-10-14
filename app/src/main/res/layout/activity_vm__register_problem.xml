@@ -65,12 +65,11 @@
             <Button
                 android:onClick="addOther"
                 android:layout_marginBottom="5dp"
-
                 android:background="@drawable/layout_border"
-                android:id="@+id/btn_other"
+                android:id="@+id/btn_goOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="본인 풀이 또는 질문 내용 추가"
+                android:text="@string/add_question"
                 android:fontFamily="@font/bmdohyeon_ttf"/>
 
 
@@ -90,6 +89,7 @@
     </LinearLayout>
 
     <Button
+        android:onClick="registerProblem"
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,6 +104,7 @@
         app:layout_goneMarginBottom="10dp" />
 
     <Button
+        android:onClick="cancel"
         android:id="@+id/btn_goback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
