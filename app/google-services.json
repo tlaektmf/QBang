@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "514346757678-q1ok7ek3k8ajkc8h78u0m5ro2n9up1ci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.visualmath",
+            "certificate_hash": "f2dac3c48ba58c8cc130d611c170f26ad36a2233"
+          }
+        },
+        {
           "client_id": "514346757678-61a40af2l5denb621c0laher4ll6pvch.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

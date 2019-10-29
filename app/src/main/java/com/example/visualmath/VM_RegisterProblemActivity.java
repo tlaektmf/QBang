@@ -385,8 +385,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void registerProblem(View view) {
         //** 데이터베이스에 저장
         vmDataBasic.setTitle(editTextTitle.getText().toString());
-        VM_DB vmDb=new VM_DB();
-        vmDb.createPost(receiveData,vmDataBasic);
+        VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
+        vmDbHandler.newPost(receiveData,vmDataBasic);
 
         finish();
     }

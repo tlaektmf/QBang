@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 public class VM_Data_POST {
     private String p_id;//게시글 고유 id
-    private String content;// detail content
-    private Uri[] add_pictures;
-    private Uri main_problem;
     private int state;
     private int live_state;
     private String liveTime; //live 시간
@@ -15,20 +12,30 @@ public class VM_Data_POST {
     private String uploadDate; //업로드 날짜
     private ArrayList<VM_Data_CHAT> chatList;
 
-    VM_Data_POST(String _s_id,Uri _main_problem,String _key,String _uploadDate,int _live_state){
+    private VM_Data_BASIC data_basic;
+    private VM_Data_ADD data_add;
+//    private String content;// detail content
+//    private Uri[] add_pictures;
+//    private Uri main_problem;
+
+    public VM_Data_POST(VM_Data_BASIC _vm_data_basic,VM_Data_ADD _vm_data_add,
+                        String _s_id,Uri _main_problem,String _key,String _uploadDate,int _live_state){
         p_id=_key;
         state=VM_ENUM.BEFORE_MATH;
         live_state=_live_state;
-        main_problem=_main_problem;
         uploadDate=_uploadDate;
         matchSet=new String[2];
         matchSet[0]=_s_id;
 
         // 필수 아닌 것
-        content=null;
-        add_pictures=new Uri[3];
         liveTime=null;
         chatList=new ArrayList<>();
+
+//        main_problem=_main_problem;
+//        content=null;
+//        add_pictures=new Uri[3];
+        //this.data_add=_vm_data_add;
+        data_basic=_vm_data_basic;
 
     }
 
@@ -40,28 +47,44 @@ public class VM_Data_POST {
         this.p_id = p_id;
     }
 
-    public String getContent() {
-        return content;
+//    public String getContent() {
+//        return content;
+//    }
+//
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
+//
+//    public Uri[] getAdd_pictures() {
+//        return add_pictures;
+//    }
+//
+//    public void setAdd_pictures(Uri[] add_pictures) {
+//        this.add_pictures = add_pictures;
+//    }
+//
+//    public Uri getMain_problem() {
+//        return main_problem;
+//    }
+//
+//    public void setMain_problem(Uri main_problem) {
+//        this.main_problem = main_problem;
+//    }
+
+    public VM_Data_BASIC getData_basic() {
+        return data_basic;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setData_basic(VM_Data_BASIC data_basic) {
+        this.data_basic = data_basic;
     }
 
-    public Uri[] getAdd_pictures() {
-        return add_pictures;
+    public VM_Data_ADD getData_add() {
+        return data_add;
     }
 
-    public void setAdd_pictures(Uri[] add_pictures) {
-        this.add_pictures = add_pictures;
-    }
-
-    public Uri getMain_problem() {
-        return main_problem;
-    }
-
-    public void setMain_problem(Uri main_problem) {
-        this.main_problem = main_problem;
+    public void setData_add(VM_Data_ADD data_add) {
+        this.data_add = data_add;
     }
 
     public int getState() {
