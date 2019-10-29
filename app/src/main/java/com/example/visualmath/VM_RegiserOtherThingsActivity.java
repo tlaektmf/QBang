@@ -7,6 +7,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,28 +28,33 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.Provider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
 public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private static final String TAG="RegisterOther";
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     private static final int PICK_FROM_CAMERA = 2;
-    private static final int GO_BACK=3;
 
 
     private static final String ALL="all";
-    public EditText editTextdetail;
+//    private static final String SAVE_DATA="save_data";
+    private EditText editTextdetail;
     private ImageView[] imageViewsOtherPictureList;
 
     private int imageviewID;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
-    VM_Data_ADD vm_data_add;
+    private VM_Data_ADD vm_data_add;
+
 
 
     @Override
@@ -58,11 +64,18 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         init();
 
+        //** 화면 회전 시에도 데이터 유지
+//        if(savedInstanceState!=null){
+//            //vm_data_add=savedInstanceState.getParcelable(SAVE_DATA);
+//            //init_set();
+//            Log.i(TAG,savedInstanceState.getString("text"));
+//        }
+        //
 
     }
 
     public void init(){
-        //data_detail=null;
+
         editTextdetail=findViewById(R.id.tv_detail);
         imageviewID=-1;
         imageViewsOtherPictureList=new ImageView[3];
@@ -71,6 +84,29 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         imageViewsOtherPictureList[2]=findViewById(R.id.iv_picture3);
         vm_data_add=new VM_Data_ADD();
 
+        //** 데이터 넘어온 게 있는 지 확인
+        Intent intent=getIntent();
+        VM_Data_ADD receiveData=intent.getParcelableExtra(ALL);
+        receiveData=intent.getParcelableExtra(ALL);
+        if(receiveData!= null){
+            vm_data_add=receiveData;
+            init_set();
+        }
+
+
+    }
+    public void init_set(){
+        //1. edittext 채우기
+        editTextdetail.setText(vm_data_add.getDetail());
+
+        //2. picture 채우기
+        for(int i=0;i<3;i++){
+            Uri path=vm_data_add.getFilePathElement(i);
+            if(path!=null){
+                setImageByIndex(i,path);
+
+            }
+        }
     }
 
     //** 사용자 카메라, 사진첩에 접근하여 파일 추가
@@ -88,7 +124,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         Intent intent= new Intent(this,VM_RegisterProblemActivity.class);
         intent.putExtra(ALL,vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
-
         setResult(RESULT_OK, intent);
 
         finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
@@ -265,6 +300,22 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
     }
+
+    //setImage override
+    private void setImageByIndex(int index,Uri path) {
+//        try {
+//            Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+//            imageViewsOtherPictureList[index].setImageBitmap(bm);
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        Log.i(TAG,path.toString());
+    }
+
     private void showPickDialog(final int _imageviewID){
         //** 다이얼로그 실행
         // 커스텀 다이얼로그를 생성
@@ -325,11 +376,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) { //** 액티비티의 상태를 저장
+        String text="저장되라";
+        outState.putString("text",text);
         super.onSaveInstanceState(outState);
+
+
+//        outState.putParcelable(ALL,vm_data_add);
     }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) { //** 액티비티의 상태를 복원
-        super.onRestoreInstanceState(savedInstanceState);
-    }
+
 }

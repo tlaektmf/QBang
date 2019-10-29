@@ -43,7 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" /> <!-- 사진 촬영을 위한 provide -->
+        <activity android:name=".MainActivity" />
+
+        <!-- 사진 촬영을 위한 provide -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.visualmath.provider"

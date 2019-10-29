@@ -2,6 +2,7 @@ package com.example.visualmath;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,15 +21,19 @@ import androidx.navigation.ui.NavigationUI;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final String TAG ="HomeActivity" ;
     ImageButton buttonAlarm;
     ImageButton buttonLive;
-
+    Intent intent;
+    String currentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
+        init();
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
@@ -78,6 +83,11 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public void init(){
+        intent=getIntent();
+        currentID=intent.getStringExtra("UID");
+
+    }
     public void replaceFragment(){
 
         //** SettingsFragment 등록

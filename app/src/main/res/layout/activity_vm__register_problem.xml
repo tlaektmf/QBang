@@ -21,16 +21,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:background="@null"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:id="@+id/tv_title"
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1.5"
+            android:background="@null"
             android:fontFamily="@font/bmdohyeon_ttf"
-            android:textAlignment="center"
-            android:hint="문제 제목" />
+            android:hint="문제 제목"
+            android:textAlignment="center" />
 
         <Button
             android:background="@drawable/layout_border"

@@ -21,13 +21,20 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,14 +57,20 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private static final int NOTHING=-1;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
+    private final CharSequence[] gradeItems = {"초등", "중등", "고등"};
 
-    final CharSequence[] gradeItems = {"초등", "중등", "고등"};
+    private EditText editTextTitle;
+    private Button buttonGrade;
+    private Button buttonGoOther;
+    private ImageView imageViewProblem;
+    private VM_Data_ADD receiveData;
+    private VM_Data_ADD sendData;
+    private VM_Data_BASIC vmDataBasic;
 
-    Button buttonGrade;
-    Button buttonGoOther;
-    ImageView imageViewProblem;
-
-
+    private FirebaseAuth firebaseAuth;
+    private StorageReference storageReference;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +92,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         buttonGrade=findViewById(R.id.btn_grade);
         imageViewProblem=findViewById(R.id.iv_file_problem);
         buttonGoOther=findViewById(R.id.btn_goOther);
+        editTextTitle=findViewById(R.id.et_title);
         returnResult=NOTHING;
+        firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
+        storageReference = FirebaseStorage.getInstance().getReference(); //파이어베이스 저장소
+        firebaseDatabase = FirebaseDatabase.getInstance();//파이어베이스 데이터 베이스
+        vmDataBasic=new VM_Data_BASIC();
     }
 
 
@@ -141,6 +159,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 buttonGrade.setText(gradeItems[which]);
+               String grade=gradeItems[which].toString();
+               vmDataBasic.setGrade(grade);
             }
         }).setCancelable(true)
                 .show();
@@ -149,6 +169,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
+        sendData=receiveData;
+        intent.putExtra(ALL,sendData); //Parcel객체인 sendData intent에 추가
         startActivityForResult(intent,OTHER_DATA_LOAD);
     }
 
@@ -225,19 +247,29 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     cursor.close();
                 }
             }
+            vmDataBasic.setProblem(photo_problem);
 
             //데이터 등록
-
             setImage();
         }
         else if (requestCode == PICK_FROM_CAMERA) {
+            Uri photoUri;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.example.visualmath.provider", galleryFile);
 
+            }
+            else {
+                photoUri = Uri.fromFile(galleryFile);
+            }
+            vmDataBasic.setProblem(photoUri);
             setImage();
         }
         else if(requestCode==OTHER_DATA_LOAD){
             if(resultCode==RESULT_OK){
                 String notice="";
-                VM_Data_ADD receiveData=data.getParcelableExtra(ALL);
+                //VM_Data_ADD receiveData=data.getParcelableExtra(ALL);
+                receiveData=data.getParcelableExtra(ALL);
 
                 if(!receiveData.getDetail().equals("")){
                     notice="추가 설명 등록.";
@@ -248,7 +280,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
                     if(receiveData.getFilePathElement(i)!=null){
                         count++;
-                        Log.i(TAG,receiveData.getFilePathElement(i).toString());
+                        Log.i(TAG,receiveData.getFilePathElement(i).toString()+"사진?");
                     }
                 }
                 if(count!=0){
@@ -264,7 +296,23 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
                 Log.i(TAG,count+"");
             }
+
+//
+//            try {
+//                Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), receiveData.getFilePathElement(0));
+//                imageViewProblem.setImageBitmap(bm);
+//            } catch (FileNotFoundException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
         }
+
+
+
+
     }
 
     private void showPickDialog(){
@@ -335,10 +383,17 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void registerProblem(View view) {
+        //** 데이터베이스에 저장
+        vmDataBasic.setTitle(editTextTitle.getText().toString());
+        VM_DB vmDb=new VM_DB();
+        vmDb.createPost(receiveData,vmDataBasic);
+
         finish();
     }
 
     public void cancel(View view) {
         finish();
     }
+
+
 }
