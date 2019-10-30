@@ -6,74 +6,12 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/colorWhite">
 
+<CalendarView
 
-    <TabHost
-        android:id="@+id/tabHost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-        <LinearLayout
-            android:id="@+id/showView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+</CalendarView>
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- 첫 번째 페이지. content1 -->
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/content1"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="#8BC34A"-->
-<!--                        android:gravity="center"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:text="TAB CONTENT 1" />-->
-
-<!--                 </LinearLayout>-->
-                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/view"
-                    tools:context=".TabFragment">
-
-
-
-                </FrameLayout>
-
-<!--                &lt;!&ndash; 두 번째 페이지. content2 &ndash;&gt;-->
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/content1"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="#009688"-->
-<!--                        android:gravity="center"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:text="TAB CONTENT 2" />-->
-
-<!--                </LinearLayout>-->
-
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
 </androidx.constraintlayout.widget.ConstraintLayout>

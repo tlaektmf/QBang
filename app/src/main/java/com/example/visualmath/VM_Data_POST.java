@@ -10,8 +10,8 @@ public class VM_Data_POST {
     private String liveTime; //live 시간
     private String[] matchSet; // student-teacher match set
     private String uploadDate; //업로드 날짜
-    private ArrayList<VM_Data_CHAT> chatList;
 
+    private ArrayList<VM_Data_CHAT> chatList;
     private VM_Data_BASIC data_basic;
     private VM_Data_ADD data_add;
 //    private String content;// detail content

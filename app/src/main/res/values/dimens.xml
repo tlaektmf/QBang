@@ -7,4 +7,17 @@
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <!-- 채팅창 관련-->
+    <dimen name="dp72">72dp</dimen>
+    <dimen name="dp64">64dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp8">8dp</dimen>
+    <dimen name="dp4">4dp</dimen>
+
+    <dimen name="img_btn_length">48dp</dimen>
+
+    <dimen name="title">32sp</dimen>
+    <dimen name="input">20sp</dimen>
+    <dimen name="small">18sp</dimen>
+
 </resources>

@@ -45,7 +45,7 @@ public class VM_DBHandler {
 
         if(vm_data_post!=null){
             Log.i(TAG,vm_data_post.getState()+"");
-            databaseReference.child(vm_data_post.getP_id()).setValue(vm_data_post);
+            databaseReference.child(vm_data_post.getP_id()).setValue(_vmDataBasic);
 
 
         }
