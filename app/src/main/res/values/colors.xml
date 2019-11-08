@@ -35,6 +35,8 @@
     <color name="subBlack">#FF231815</color>
     <color name="subTxtColor">#FF969696</color>
 
-
+    <!-- bottom nav btn -->
+    <color name="pressed">#016a96</color>
+    <color name="unpressed">#000000</color>
 
 </resources>

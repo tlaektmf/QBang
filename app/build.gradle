@@ -45,7 +45,7 @@ dependencies {
 
     //**카메라 권한
     implementation "gun0912.ted:tedpermission:2.0.0"
-
+    implementation 'com.ssomai:android.scalablelayout:2.1.6'
 
 }
 
