@@ -1,51 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:ignore="missingPrefix"
+    android:background="@android:color/transparent">
 
-    <TextView
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="125"
+        android:background="@drawable/select_pic">
 
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:textSize="16dp"
-        android:text="사진을 가져올 방법을 선택해 주세요"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:background="@color/colorAzure"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
+            android:text="사진 가져오기"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#016a96"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="4"
+            app:scale_width="200"
+            app:scale_height="22"/>
 
         <ImageButton
             android:id="@+id/takePhoto"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@color/colorWhite"
-           android:src="@drawable/ic_big_digital_camera_svgrepo_com"
-            android:scaleType="fitCenter"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pic_from_cam"
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            app:scale_left="15"
+            app:scale_top="35"
+            app:scale_width="80"
+            app:scale_height="80"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카메라"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="10"
+            android:textAlignment="center"
+
+            app:scale_left="13"
+            app:scale_top="93"
+            app:scale_width="80"
+            app:scale_height="22"/>
 
         <ImageButton
             android:id="@+id/getAlbumFile"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_gallery_photo_svgrepo_com"
-            android:scaleType="fitCenter"
-            android:background="@color/colorWhite"
-            />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pic_from_gallery"
 
+            app:scale_left="102"
+            app:scale_top="35"
+            app:scale_width="80"
+            app:scale_height="80"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="갤러리"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="10"
+            android:textAlignment="center"
 
-</LinearLayout>
+            app:scale_left="100"
+            app:scale_top="93"
+            app:scale_width="80"
+            app:scale_height="22"/>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+</RelativeLayout>

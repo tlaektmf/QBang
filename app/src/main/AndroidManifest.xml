@@ -10,10 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VM_RegisterUserActivity"></activity>
-        <activity android:name=".VM_RegiserOtherThingsActivity" />
+        <activity android:name=".VM_RegisterUserActivity"
+            android:theme="@style/AppTheme.notitlebar"></activity>
+        <activity android:name=".VM_RegiserOtherThingsActivity"
+            android:theme="@style/AppTheme.notitlebar"/>
         <activity android:name=".VM_FullViewActivity" />
-        <activity android:name=".VM_RegisterProblemActivity" />
+        <activity android:name=".VM_RegisterProblemActivity"/>
         <activity
             android:name=".VM_SettingsActivity"
             android:label="@string/title_activity_vm__settings" />
@@ -33,7 +35,7 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"/>
         <activity android:name=".VM_AutoLoginCheckActivity" />
         <activity android:name=".VM_LoginActivity" />
         <activity android:name=".VM_LauncherActivity">

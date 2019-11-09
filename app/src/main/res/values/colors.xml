@@ -39,4 +39,6 @@
     <color name="pressed">#016a96</color>
     <color name="unpressed">#000000</color>
 
+    <color name="transparent">#00000000</color>
+
 </resources>

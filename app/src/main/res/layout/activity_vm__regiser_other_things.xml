@@ -9,6 +9,127 @@
     tools:ignore="missingPrefix"
     android:background="#f2f2f4">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/post_back">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:scale_base_width="200"
+            app:scale_base_height="300"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/tv_notice2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_line"
+
+                android:text="질문 내용을 상세히 입력해주세요"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#404040"
+                app:scale_textsize="9"
+                android:gravity="center_vertical"
+
+                app:scale_left="14"
+                app:scale_top="14"
+                app:scale_width="170"
+                app:scale_height="22"/>
+
+            <EditText
+                android:id="@+id/tv_detail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/detail_back"
+
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textColor="#016a96"
+                app:scale_textsize="7"
+                android:padding="5dp"
+
+                app:scale_left="12"
+                app:scale_top="43"
+                app:scale_width="175"
+                app:scale_height="140" />
+
+            <TextView
+                android:id="@+id/tv_notice1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/text_line"
+
+                android:text="추가로 등록할 답지 사진을 첨부해주세요"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#404040"
+                app:scale_textsize="9"
+                android:gravity="center_vertical"
+
+                app:scale_left="14"
+                app:scale_top="185"
+                app:scale_width="170"
+                app:scale_height="22"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+
+                android:text="더 정확하고 빠른 답변이 가능합니다"
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textColor="#b8bcbb"
+                app:scale_textsize="7"
+                android:gravity="center_vertical"
+
+                app:scale_left="15"
+                app:scale_top="207"
+                app:scale_width="170"
+                app:scale_height="22"/>
+
+            <ImageView
+                android:id="@+id/iv_picture1"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+
+                app:scale_left="12"
+                app:scale_top="230"
+                app:scale_width="52"
+                app:scale_height="52"/>
+            <ImageView
+                android:id="@+id/iv_picture2"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+
+                app:scale_left="74"
+                app:scale_top="230"
+                app:scale_width="52"
+                app:scale_height="52" />
+            <ImageView
+                android:id="@+id/iv_picture3"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+
+                app:scale_left="135"
+                app:scale_top="230"
+                app:scale_width="52"
+                app:scale_height="52"/>
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    </RelativeLayout>
+
     <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,124 +165,6 @@
             app:scale_height="22"/>
 
     </com.ssomai.android.scalablelayout.ScalableLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/post_back">
-
-        <com.ssomai.android.scalablelayout.ScalableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:scale_base_width="200"
-            app:scale_base_height="230"
-            android:layout_centerInParent="true">
-
-            <TextView
-                android:id="@+id/tv_notice2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_line"
-
-                android:text="질문 내용을 상세히 입력해주세요"
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textColor="#404040"
-                app:scale_textsize="9"
-                android:gravity="center_vertical"
-
-                app:scale_left="14"
-                app:scale_top="5"
-                app:scale_width="170"
-                app:scale_height="22"/>
-
-            <EditText
-                android:id="@+id/tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/detail_back"
-
-                android:fontFamily="@font/nanumsquaure_r"
-                android:textColor="#016a96"
-                app:scale_textsize="7"
-                android:padding="5dp"
-
-                app:scale_left="12"
-                app:scale_top="32"
-                app:scale_width="175"
-                app:scale_height="125" />
-
-            <TextView
-                android:id="@+id/tv_notice1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/text_line"
-
-                android:text="추가로 등록할 답지 사진을 첨부해주세요"
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textColor="#404040"
-                app:scale_textsize="9"
-                android:gravity="center_vertical"
-
-                app:scale_left="14"
-                app:scale_top="157"
-                app:scale_width="170"
-                app:scale_height="22"/>
-
-        </com.ssomai.android.scalablelayout.ScalableLayout>
-
-    </RelativeLayout>
-
-<!--    <LinearLayout-->
-<!--        android:background="@drawable/layout_border"-->
-<!--        android:id="@+id/linearLayout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginRight="30dp"-->
-<!--        android:layout_marginLeft="30dp"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_marginLeft="5dp"-->
-<!--            android:layout_marginRight="5dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:orientation="horizontal">-->
-
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_picture1"-->
-<!--                android:onClick="changeAddFile"-->
-<!--                android:src="@drawable/img_attach_answer"-->
-<!--                android:scaleType="fitCenter"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_weight="1" />-->
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_picture2"-->
-<!--                android:onClick="changeAddFile"-->
-<!--                android:src="@drawable/img_attach_answer"-->
-<!--                android:scaleType="fitCenter"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_weight="1" />-->
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_picture3"-->
-<!--                android:onClick="changeAddFile"-->
-<!--                android:src="@drawable/img_attach_answer"-->
-<!--                android:scaleType="fitCenter"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_weight="1" />-->
-
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
 
     <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="wrap_content"

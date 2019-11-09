@@ -1,57 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLight"
-    tools:context=".VM_LauncherActivity">
+    tools:context=".VM_LauncherActivity"
+    tools:ignore="missingPrefix"
+    android:background="#1097d0">
 
-    <ImageView
-        android:id="@+id/iv_visual"
-        android:layout_width="170dp"
-        android:layout_height="179dp"
-        android:layout_marginTop="196dp"
-        android:src="@drawable/img_video"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-
-    </ImageView>
-
-    <TextView
+    <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="영상수학"
-        android:textColor="@color/colorLightSlateGray"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_english"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
-        app:layout_constraintHorizontal_weight="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_visual"
-        app:layout_constraintVertical_bias="0.0">
+        app:scale_base_width="200"
+        app:scale_base_height="355">
 
-    </TextView>
+        <ImageView
+            android:id="@+id/iv_visual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/launcher_logo"
+            app:scale_left="55"
+            app:scale_top="100"
+            app:scale_width="90"
+            app:scale_height="90"/>
 
-    <TextView
-        android:id="@+id/tv_english"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="228dp"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="Visual Math(VM)"
-        android:textColor="@color/colorLightSlateGray"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
-        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/tv_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    </TextView>
+            android:text="Visual Math"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#ffffff"
+            app:scale_textsize="15"
+            android:textAlignment="center"
 
+            app:scale_left="0"
+            app:scale_top="200"
+            app:scale_width="200"
+            app:scale_height="30"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+</RelativeLayout>
