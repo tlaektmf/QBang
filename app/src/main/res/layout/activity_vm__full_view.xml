@@ -1,132 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VM_FullViewActivity">
+    tools:context=".VM_FullViewActivity"
+    tools:ignore="missingPrefix"
+    android:background="#f2f2f4">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-            android:background="@drawable/layout_border"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="10dp">
+        android:layout_height="match_parent">
+    </FrameLayout>
 
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="55"
+        android:background="@drawable/top_menu_back02">
 
-            <LinearLayout
-                android:id="@+id/ll_choice"
-                android:layout_width="411dp"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/ib_goLive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/home_top_left"
 
-                <Button
-                    android:onClick="showUsersLoad"
-                    android:id="@+id/btn_full_problem"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorLightSteelBlue"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:text="문제/답"
-                    android:textSize="10dp" />
+            app:scale_left="5"
+            app:scale_top="2"
+            app:scale_width="22"
+            app:scale_height="22"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문제 상세보기"
+            android:textColor="@color/colorBlack"
+            app:scale_textsize="12"
+            android:gravity="center"
+            android:fontFamily="@font/nanumsquaure_eb"
 
-                <Button
-                    android:onClick="showSolve"
-                    android:id="@+id/btn_full_solve"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorLightSteelBlue"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:text="풀이만"
-                    android:textSize="10dp" />
+            app:scale_left="64"
+            app:scale_top="3"
+            app:scale_width="70"
+            app:scale_height="22"/>
+        <ImageButton
+            android:id="@+id/ib_goBack"
+            android:layout_width="70dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/complete_btn"
 
-                <Button
-                    android:onClick="showBoth"
-                    android:id="@+id/btn_both"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorLightSteelBlue"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:text="모두보기"
-                    android:textSize="10dp" />
+            app:scale_left="175"
+            app:scale_top="4"
+            app:scale_width="20"
+            app:scale_height="20"/>
 
-            </LinearLayout>
+        <TextView
+            android:onClick="showUsersLoad"
+            android:id="@+id/btn_full_problem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            android:text="문제 답"
+            android:textColor="#404040"
+            app:scale_textsize="10"
+            android:textAlignment="center"
+            android:fontFamily="@font/nanumsquaure_b"
 
-            <LinearLayout
-                android:id="@+id/ll_top"
-                android:layout_width="411dp"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+            app:scale_left="7"
+            app:scale_top="30"
+            app:scale_width="60"
+            app:scale_height="18"/>
+        <TextView
+            android:onClick="showSolve"
+            android:id="@+id/btn_full_solve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:gravity="center"
-                    android:text="2015년 3월 교육청 1번"
-                    android:textStyle="bold" />
+            android:text="질문 내용"
+            android:textColor="#404040"
+            app:scale_textsize="10"
+            android:textAlignment="center"
+            android:fontFamily="@font/nanumsquaure_b"
 
-                <Button
-                    android:id="@+id/ib_goBack"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorRedAbsentPrimary"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:text="라이브 신청"
-                    android:textSize="10dp" />
-                <Button
-                    android:id="@+id/ib_goLive"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorYellowLatePrimary"
-                    android:fontFamily="@font/bmdohyeon_ttf"
-                    android:text="완료"
-                    android:textSize="10dp" />
+            app:scale_left="69"
+            app:scale_top="30"
+            app:scale_width="60"
+            app:scale_height="18"/>
+        <TextView
+            android:onClick="showBoth"
+            android:id="@+id/btn_both"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-            </LinearLayout>
+            android:text="풀이만"
+            android:textColor="#404040"
+            app:scale_textsize="10"
+            android:textAlignment="center"
+            android:fontFamily="@font/nanumsquaure_b"
 
+            app:scale_left="132"
+            app:scale_top="30"
+            app:scale_width="60"
+            app:scale_height="18"/>
 
-        </LinearLayout>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
 
-<FrameLayout
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-<!--    <fragment-->
-<!--        android:id="@+id/fragment1"-->
-<!--        android:name="com.example.visualmath.SolveFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--       />-->
-
-</FrameLayout>
-
-<!--        tools:layout="@layout/fragment_solve"-->
-        <!--        <FrameLayout-->
-        <!--            android:id="@+id/details"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:layout_weight="1" />-->
-
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
