@@ -1,119 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VM_RegisterProblemActivity">
+    tools:context=".VM_RegisterProblemActivity"
+    tools:ignore="missingPrefix"
+    android:background="#f2f2f4">
 
-    <LinearLayout
-        android:background="@drawable/layout_border"
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btn_goback"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/et_title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1.5"
-            android:background="@null"
-            android:fontFamily="@font/bmdohyeon_ttf"
-            android:hint="문제 제목"
-            android:textAlignment="center" />
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/home_top_back"
+        app:scale_base_width="200"
+        app:scale_base_height="35"
+        android:layout_alignParentTop="true">
 
         <Button
-            android:background="@drawable/layout_border"
-            android:id="@+id/btn_grade"
-            android:onClick="changeGrade"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="match_parent"
+            android:onClick="cancel"
+            android:id="@+id/btn_goback"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="학년 선택"
-            android:fontFamily="@font/bmdohyeon_ttf"
-            />
+            android:background="@drawable/close"
 
+            app:scale_left="7"
+            app:scale_top="9"
+            app:scale_width="10"
+            app:scale_height="10"/>
 
-        <LinearLayout
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="10"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="영상으로 답변받기"
+            android:textColor="@color/colorBlack"
+            app:scale_textsize="10"
+            android:gravity="center"
+            android:fontFamily="@font/nanumsquaure_eb"
+
+            app:scale_left="50"
+            app:scale_top="3"
+            app:scale_width="100"
+            app:scale_height="22"/>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/post_back">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:scale_base_width="200"
+            app:scale_base_height="230"
+            android:layout_centerInParent="true">
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_line"
+
+                android:hint="문제 제목"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColorHint="#c9c9d1"
+                app:scale_textsize="10"
+
+                app:scale_left="14"
+                app:scale_top="5"
+                app:scale_width="170"
+                app:scale_height="22"/>
+
+            <Button
+                android:background="@drawable/popup_btn"
+                android:id="@+id/btn_grade"
+                android:onClick="changeGrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
+
+                android:text="학년 선택"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#016a96"
+                app:scale_textsize="9"
+                android:textAlignment="center"
+
+                app:scale_left="10"
+                app:scale_top="35"
+                app:scale_width="180"
+                app:scale_height="28" />
 
             <ImageView
                 android:id="@+id/iv_file_problem"
                 android:onClick="changeProblemFile"
-                android:src="@drawable/img_attach_problem"
-                android:scaleType="fitCenter"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-            
-            <Button
-                android:onClick="addOther"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/layout_border"
-                android:id="@+id/btn_goOther"
-                android:layout_width="match_parent"
+                android:src="@drawable/add_img"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_question"
-                android:fontFamily="@font/bmdohyeon_ttf"/>
+                android:scaleType="centerCrop"
 
+                app:scale_left="10"
+                app:scale_top="65"
+                app:scale_width="180"
+                app:scale_height="125" />
 
-        </LinearLayout>
+            <Button
+                android:background="@drawable/popup_btn"
+                android:id="@+id/btn_goOther"
+                android:onClick="addOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
 
-<!--        <EditText-->
-<!--            android:layout_marginLeft="5dp"-->
-<!--            android:layout_marginRight="5dp"-->
-<!--            android:id="@+id/tv_contents"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="5"-->
-<!--            android:fontFamily="@font/bmdohyeon_ttf"-->
-<!--            android:textAlignment="center"-->
-<!--            android:hint="질문 내용을 적어주세요" />-->
+                android:text="본인 풀이 / 질문 내용 추가"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#016a96"
+                app:scale_textsize="9"
+                android:textAlignment="center"
 
-    </LinearLayout>
+                app:scale_left="10"
+                app:scale_top="193"
+                app:scale_width="180"
+                app:scale_height="28" />
 
-    <Button
-        android:onClick="registerProblem"
-        android:id="@+id/btn_register"
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </RelativeLayout>
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
-        android:layout_marginBottom="3dp"
-        android:backgroundTint="@color/colorLightSteelBlue"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="문제 등록"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_goback"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_goneMarginBottom="10dp" />
+        app:scale_base_width="200"
+        app:scale_base_height="30"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_btn">
 
-    <Button
-        android:onClick="cancel"
-        android:id="@+id/btn_goback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="3dp"
-        android:backgroundTint="@color/colorLightSteelBlue"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="취소"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:onClick="registerProblem"
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="문제 등록하기"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#ffffff"
+            app:scale_textsize="9"
+            android:textAlignment="center"
+
+            app:scale_left="10"
+            app:scale_top="0"
+            app:scale_width="180"
+            app:scale_height="33" />
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+</RelativeLayout>

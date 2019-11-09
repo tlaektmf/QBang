@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/home_top_back"
         app:scale_base_width="200"
-        app:scale_base_height="40"
+        app:scale_base_height="35"
         android:layout_alignParentTop="true">
 
         <ImageButton
@@ -27,7 +27,7 @@
             android:src="@drawable/home_top_left"
 
             app:scale_left="5"
-            app:scale_top="3"
+            app:scale_top="2"
             app:scale_width="22"
             app:scale_height="22"/>
         <TextView
@@ -40,7 +40,7 @@
             android:fontFamily="@font/nanumsquaure_eb"
 
             app:scale_left="64"
-            app:scale_top="5"
+            app:scale_top="3"
             app:scale_width="70"
             app:scale_height="22"/>
 
@@ -54,7 +54,7 @@
             android:src="@drawable/home_top_right"
 
             app:scale_left="175"
-            app:scale_top="6"
+            app:scale_top="4"
             app:scale_width="20"
             app:scale_height="20"/>
 
