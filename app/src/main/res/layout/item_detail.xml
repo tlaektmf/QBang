@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/item_detail"
     android:orientation="vertical"
-    tools:context=".ItemDetailFragment"
-
-    >
+    tools:context=".ItemDetailFragment">
 
     <TextView
         android:fontFamily="@font/nanumsquaure_r"

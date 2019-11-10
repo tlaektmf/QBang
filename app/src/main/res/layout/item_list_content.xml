@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="missingPrefix">
 
 <!--    <TextView-->
 <!--        android:id="@+id/id_text"-->
@@ -11,25 +15,40 @@
 <!--        android:layout_margin="@dimen/text_margin"-->
 <!--        android:textAppearance="?attr/textAppearanceListItem" />-->
 
-    <ImageButton
-        android:id="@+id/ib_lighton"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp"
-        android:backgroundTint="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/img_bulbon"/>
+    <LinearLayout
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/content"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:layout_width="0dp"
-        android:layout_weight="2"
-        android:layout_height="74dp"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+
+            android:fontFamily="@font/nanumsquaure_b"
+            android:text="교육청 1"
+            android:textColor="#404040"
+            android:textSize="17dp" />
+
+
+        <ImageButton
+            android:id="@+id/ib_lighton"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/complete_btn"
+            android:layout_marginTop="1dp"/>
+    </LinearLayout>
+
+
 
 <!--    <TextView-->
 <!--        android:id="@+id/content"-->

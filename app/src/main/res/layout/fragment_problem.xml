@@ -39,11 +39,11 @@
                     android:text="문제 제목"
                     android:fontFamily="@font/nanumsquaure_b"
                     android:textColor="#016a96"
-                    app:scale_textsize="10"
+                    app:scale_textsize="9"
                     android:textAlignment="center"
 
                     app:scale_left="62"
-                    app:scale_top="9"
+                    app:scale_top="10"
                     app:scale_width="80"
                     app:scale_height="15"/>
                 <ImageView
@@ -52,9 +52,9 @@
                     android:src="@drawable/chat_title_line"
 
                     app:scale_left="0"
-                    app:scale_top="21"
+                    app:scale_top="23"
                     app:scale_width="200"
-                    app:scale_height="15"/>
+                    app:scale_height="10"/>
 
                 <!--        <View-->
                 <!--            android:id="@+id/splitView"-->

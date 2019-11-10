@@ -5,10 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
 
+    <!--    다른 사람이 보내는 메세지-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/friendChatLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,6 +19,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/friendImgView"
             android:layout_margin="@dimen/dp8"
             android:src="@drawable/img_contract"
@@ -32,26 +35,38 @@
             android:id="@+id/txtParentLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
+
             app:layout_constraintTop_toTopOf="@+id/friendChatLayout"
             app:layout_constraintStart_toEndOf="@id/friendImgView"
+
             app:layout_constraintEnd_toEndOf="@+id/friendChatLayout"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginEnd="16dp">
 
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="asdasdsadsadasdsadas"
-                android:background="@drawable/you_chat_bubble"
                 android:id="@+id/friendMsgTxtView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/your_bubble"
+                android:fontFamily="@font/nanumsquaure_r"
+                android:gravity="center"
+
+                android:paddingLeft="20dp"
+                android:paddingRight="18dp"
+                android:paddingBottom="2dp"
+                android:textAlignment="center"
+                android:textColor="#016a96"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="asdf" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    내가 보내는 메세지-->
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:id="@+id/myChatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,12 +88,20 @@
                 android:id="@+id/myMsgTxtView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/my_chat_bubble"
+                android:background="@drawable/my_bubble"
                 app:layout_constraintEnd_toEndOf="@+id/myParent"
-                app:layout_constraintHorizontal_bias="0.947"
+                app:layout_constraintHorizontal_bias="0.99"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="asdasdsad" />
+                tools:text="dafsdf"
+
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textColor="#016a96"
+                android:paddingLeft="18dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="2dp"
+                android:textAlignment="center"
+                android:gravity="center" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

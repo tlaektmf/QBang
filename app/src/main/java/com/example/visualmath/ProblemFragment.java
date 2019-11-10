@@ -57,9 +57,9 @@ public class ProblemFragment extends Fragment {
         adapter = new VM_ChatAdapter( chats,getActivity());
         recyclerView.setAdapter(adapter);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                linearLayoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                linearLayoutManager.getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         msgEditText=rootView.findViewById(R.id.msgEditText);
         sendMsgBtn=rootView.findViewById(R.id.sendMsgBtn);

@@ -1,45 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ItemListActivity">
+    tools:context=".ItemListActivity"
+    tools:ignore="missingPrefix"
+    android:background="#f2f2f4">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <include layout="@layout/item_list" />
-    </FrameLayout>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        android:layout_height="match_parent">
+        <com.ssomai.android.scalablelayout.ScalableLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            app:scale_base_width="200"
+            app:scale_base_height="335"
+            android:layout_alignParentTop="true">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home_top_back"
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:fabSize="normal"
-        android:backgroundTint="@color/colorLightSteelBlue"
-        android:scaleType="fitXY"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+                app:scale_left="0"
+                app:scale_top="0"
+                app:scale_width="200"
+                app:scale_height="35"/>
+
+            <!--        android:onClick="slide_menu"-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ham_menu"
+
+                app:scale_left="7"
+                app:scale_top="9"
+                app:scale_width="10"
+                app:scale_height="10"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="질문답변 확인하기"
+                android:textColor="@color/colorBlack"
+                app:scale_textsize="10"
+                android:gravity="center"
+                android:fontFamily="@font/nanumsquaure_eb"
+
+                app:scale_left="50"
+                app:scale_top="3"
+                app:scale_width="100"
+                app:scale_height="22"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:scale_left="0"
+                app:scale_top="30"
+                app:scale_width="200"
+                app:scale_height="325">
+                <FrameLayout
+                    android:id="@+id/frameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <include layout="@layout/item_list" />
+                </FrameLayout>
+            </ScrollView>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </RelativeLayout>
+
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:id="@+id/app_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/AppTheme.AppBarOverlay">-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_margin="@dimen/fab_margin"-->
+<!--        app:fabSize="normal"-->
+<!--        android:backgroundTint="@color/colorLightSteelBlue"-->
+<!--        android:scaleType="fitXY"-->
+<!--        app:srcCompat="@android:drawable/ic_menu_edit" />-->
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

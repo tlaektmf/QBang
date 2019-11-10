@@ -49,22 +49,22 @@ public class ItemListActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-                //intent.putExtra("UID", userId);//문제 고유 id를 가져와야됨
-                startActivity(intent);
-                //finish();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
+//                //intent.putExtra("UID", userId);//문제 고유 id를 가져와야됨
+//                startActivity(intent);
+//                //finish();
+//            }
+//        });
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
