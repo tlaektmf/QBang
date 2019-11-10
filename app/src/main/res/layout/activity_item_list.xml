@@ -32,6 +32,7 @@
 
             <!--        android:onClick="slide_menu"-->
             <Button
+                android:id="@+id/menuBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ham_menu"

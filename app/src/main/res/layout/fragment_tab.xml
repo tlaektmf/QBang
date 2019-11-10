@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabFragment">
+    tools:context=".TabFragment"
+    tools:ignore="missingPrefix">
 
     <!-- TODO: Update blank fragment layout -->
 <!--    <TextView-->
@@ -11,70 +14,70 @@
 <!--        android:layout_height="match_parent"-->
 <!--        android:text="임시 프렉극ㄱㄱ" />-->
 
-
-<!--    <androidx.drawerlayout.widget.DrawerLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-<!--&lt;!&ndash;        배경이 될 레이아웃&ndash;&gt;-->
-<!--                <FrameLayout-->
-<!--                    android:id="@+id/item_detail_container"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@drawable/back_img" />-->
-
-<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:baselineAligned="false"
-        android:divider="?android:attr/dividerHorizontal"
-        android:orientation="horizontal"
-        android:showDividers="middle"
-        tools:context=".ItemListActivity">
+        android:layout_height="match_parent">
+
+<!--        배경이 될 레이아웃-->
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_width="200"
+            app:scale_base_height="325">
+
+            <FrameLayout
+                android:id="@+id/item_detail_container"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/back_img"
+
+                app:scale_left="0"
+                app:scale_top="0"
+                app:scale_width="200"
+                app:scale_height="325" />
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+<!--        슬라이드 메뉴 레이아웃-->
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:id="@+id/drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_width="105"
+            app:scale_base_height="355"
+            android:background="#ffffff">
+            <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/item_list"
+                android:name="com.example.visualmath.ItemListFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.example.visualmath.ItemListActivity"
+                tools:listitem="@layout/item_list_content"
+
+                app:scale_left="0"
+                app:scale_top="0"
+                app:scale_width="200"
+                app:scale_height="355"/>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 
-        <!--    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--        xmlns:tools="http://schemas.android.com/tools"-->
-        <!--        android:id="@+id/item_list"-->
-        <!--        android:name="com.example.visualmath.ItemListFragment"-->
-        <!--        android:layout_width="@dimen/item_width"-->
-        <!--        android:layout_height="match_parent"-->
-        <!--        android:layout_marginLeft="16dp"-->
-        <!--        android:layout_marginRight="16dp"-->
-        <!--        app:layoutManager="LinearLayoutManager"-->
-        <!--        tools:context="com.example.visualmath.ItemListActivity"-->
-        <!--        tools:listitem="@layout/item_list_content" />-->
+<!--    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginLeft="16dp"-->
+<!--        android:layout_marginRight="16dp"-->
+<!--        android:baselineAligned="false"-->
+<!--        android:divider="?android:attr/dividerHorizontal"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:showDividers="middle"-->
+<!--        tools:context=".ItemListActivity">-->
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_list"
-            android:name="com.example.visualmath.ItemListFragment"
-            android:layout_width="0dp"
-            android:layout_weight="0.8"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.example.visualmath.ItemListActivity"
-            tools:listitem="@layout/item_list_content" />
-    <FrameLayout
-        android:id="@+id/item_detail_container"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:background="@drawable/back_img" />
-
-
-    </LinearLayout>
 
 </FrameLayout>
