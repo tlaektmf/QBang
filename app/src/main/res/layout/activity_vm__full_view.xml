@@ -7,20 +7,35 @@
     android:layout_height="match_parent"
     tools:context=".VM_FullViewActivity"
     tools:ignore="missingPrefix"
-    android:background="#f2f2f4">
+    android:background="#f2f2f4"
+    android:layout_gravity="center">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:paddingTop="100dp">
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </ScrollView>
 
     <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:scale_base_width="200"
-        app:scale_base_height="55"
-        android:background="@drawable/top_menu_back02">
+        app:scale_base_height="320">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/top_menu_back02"
+
+            app:scale_left="0"
+            app:scale_top="0"
+            app:scale_width="200"
+            app:scale_height="60"/>
 
         <ImageButton
             android:id="@+id/ib_goLive"
@@ -39,12 +54,12 @@
             android:layout_height="wrap_content"
             android:text="문제 상세보기"
             android:textColor="@color/colorBlack"
-            app:scale_textsize="12"
+            app:scale_textsize="10"
             android:gravity="center"
             android:fontFamily="@font/nanumsquaure_eb"
 
             app:scale_left="64"
-            app:scale_top="3"
+            app:scale_top="4"
             app:scale_width="70"
             app:scale_height="22"/>
         <ImageButton
@@ -69,14 +84,14 @@
 
             android:text="문제 답"
             android:textColor="#404040"
-            app:scale_textsize="10"
+            app:scale_textsize="8"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
 
             app:scale_left="7"
-            app:scale_top="30"
+            app:scale_top="33"
             app:scale_width="60"
-            app:scale_height="18"/>
+            app:scale_height="15"/>
         <TextView
             android:onClick="showSolve"
             android:id="@+id/btn_full_solve"
@@ -85,14 +100,14 @@
 
             android:text="질문 내용"
             android:textColor="#404040"
-            app:scale_textsize="10"
+            app:scale_textsize="8"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
 
             app:scale_left="69"
-            app:scale_top="30"
+            app:scale_top="33"
             app:scale_width="60"
-            app:scale_height="18"/>
+            app:scale_height="15"/>
         <TextView
             android:onClick="showBoth"
             android:id="@+id/btn_both"
@@ -101,14 +116,14 @@
 
             android:text="풀이만"
             android:textColor="#404040"
-            app:scale_textsize="10"
+            app:scale_textsize="8"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
 
             app:scale_left="132"
-            app:scale_top="30"
+            app:scale_top="33"
             app:scale_width="60"
-            app:scale_height="18"/>
+            app:scale_height="15"/>
 
     </com.ssomai.android.scalablelayout.ScalableLayout>
 
