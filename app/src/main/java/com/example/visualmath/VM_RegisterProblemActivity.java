@@ -1,5 +1,6 @@
 package com.example.visualmath;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -8,6 +9,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,11 +27,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -67,10 +72,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private VM_Data_ADD sendData;
     private VM_Data_BASIC vmDataBasic;
 
+
     private FirebaseAuth firebaseAuth;
     private StorageReference storageReference;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +105,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference(); //파이어베이스 저장소
         firebaseDatabase = FirebaseDatabase.getInstance();//파이어베이스 데이터 베이스
         vmDataBasic=new VM_Data_BASIC();
+
     }
 
 
@@ -383,7 +391,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void registerProblem(View view) {
-        //** 데이터베이스에 저장
+        //** 데이터베이스에 저장 && storage에 upload
         vmDataBasic.setTitle(editTextTitle.getText().toString());
         VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
         vmDbHandler.newPost(receiveData,vmDataBasic);

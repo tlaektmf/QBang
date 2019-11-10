@@ -2,40 +2,68 @@ package com.example.visualmath;
 
 import android.net.Uri;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VM_Data_POST {
     private String p_id;//게시글 고유 id
     private int state;
     private int live_state;
     private String liveTime; //live 시간
-    private String[] matchSet; // student-teacher match set
+    private String matchSet_teacher; // student-teacher match set
+    private String matchSet_student; // student-teacher match set
     private String uploadDate; //업로드 날짜
 
-    private ArrayList<VM_Data_CHAT> chatList;
+    private List<VM_Data_CHAT> chatList;
     private VM_Data_BASIC data_basic;
-    private VM_Data_ADD data_add;
-//    private String content;// detail content
-//    private Uri[] add_pictures;
-//    private Uri main_problem;
+    private VM_Data_EXTRA data_extra;
 
-    public VM_Data_POST(VM_Data_BASIC _vm_data_basic,VM_Data_ADD _vm_data_add,
-                        String _s_id,Uri _main_problem,String _key,String _uploadDate,int _live_state){
+    //** data_add 부분이 Parcelable 객체로 되어 있어서 firebase에 데이터를 바로 넣을 수 없음
+    ///private VM_Data_ADD data_add;
+//    private String content;
+//    private Uri add_picture1;
+//    private Uri add_picture2;
+//    private Uri add_picture3;
+
+    //**
+
+    public VM_Data_POST(VM_Data_BASIC _vm_data_basic,
+                        VM_Data_EXTRA _vm_data_extra,
+                        /*VM_Data_ADD _vm_data_add,*/
+                        /*String _content, Uri[] _add_pictures,*/
+                        String _s_id,String _key,String _uploadDate,int _live_state){
         p_id=_key;
         state=VM_ENUM.BEFORE_MATH;
         live_state=_live_state;
         uploadDate=_uploadDate;
-        matchSet=new String[2];
-        matchSet[0]=_s_id;
+        matchSet_student=_s_id;
+        matchSet_teacher=null;
 
         // 필수 아닌 것
         liveTime=null;
         chatList=new ArrayList<>();
+        VM_Data_CHAT chat=new VM_Data_CHAT("다슬","sdfsd",0,0);
+        chatList.add(chat);
 
-//        main_problem=_main_problem;
-//        content=null;
-//        add_pictures=new Uri[3];
-        //this.data_add=_vm_data_add;
+        //** data_add 부분이 Parcelable 객체로 되어 있어서 firebase에 데이터를 바로 넣을 수 없음
+        ///data_add=_vm_data_add;
+
+//        if(_vm_data_add!=null&&_vm_data_add.getDetail()!=null){
+//            content=_vm_data_add.getDetail();
+//        }
+//
+//        if(_vm_data_add!=null){
+//            if(_vm_data_add.getFilePathElement(0)!=null){
+//                add_picture1=_vm_data_add.getFilePathElement(0);
+//            }else  if(_vm_data_add.getFilePathElement(1)!=null){
+//                add_picture2=_vm_data_add.getFilePathElement(1);
+//            }else  if(_vm_data_add.getFilePathElement(2)!=null){
+//                add_picture3=_vm_data_add.getFilePathElement(2);
+//            }
+//        }
+        //**
+
         data_basic=_vm_data_basic;
+        data_extra=_vm_data_extra;
 
     }
 
@@ -47,45 +75,24 @@ public class VM_Data_POST {
         this.p_id = p_id;
     }
 
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(String content) {
-//        this.content = content;
-//    }
-//
-//    public Uri[] getAdd_pictures() {
-//        return add_pictures;
-//    }
-//
-//    public void setAdd_pictures(Uri[] add_pictures) {
-//        this.add_pictures = add_pictures;
-//    }
-//
-//    public Uri getMain_problem() {
-//        return main_problem;
-//    }
-//
-//    public void setMain_problem(Uri main_problem) {
-//        this.main_problem = main_problem;
-//    }
+
 
     public VM_Data_BASIC getData_basic() {
         return data_basic;
+    }
+
+    public VM_Data_EXTRA getData_extra() {
+        return data_extra;
+    }
+
+    public void setData_extra(VM_Data_EXTRA data_extra) {
+        this.data_extra = data_extra;
     }
 
     public void setData_basic(VM_Data_BASIC data_basic) {
         this.data_basic = data_basic;
     }
 
-    public VM_Data_ADD getData_add() {
-        return data_add;
-    }
-
-    public void setData_add(VM_Data_ADD data_add) {
-        this.data_add = data_add;
-    }
 
     public int getState() {
         return state;
@@ -111,13 +118,6 @@ public class VM_Data_POST {
         this.liveTime = liveTime;
     }
 
-    public String[] getMatchSet() {
-        return matchSet;
-    }
-
-    public void setMatchSet(String[] matchSet) {
-        this.matchSet = matchSet;
-    }
 
     public String getUploadDate() {
         return uploadDate;
@@ -127,11 +127,63 @@ public class VM_Data_POST {
         this.uploadDate = uploadDate;
     }
 
-    public ArrayList<VM_Data_CHAT> getChatList() {
+    public List<VM_Data_CHAT> getChatList() {
         return chatList;
     }
 
-    public void setChatList(ArrayList<VM_Data_CHAT> chatList) {
+    public void setChatList(List<VM_Data_CHAT> chatList) {
         this.chatList = chatList;
     }
+
+    public String getMatchSet_teacher() {
+        return matchSet_teacher;
+    }
+
+    public void setMatchSet_teacher(String matchSet_teacher) {
+        this.matchSet_teacher = matchSet_teacher;
+    }
+
+    public String getMatchSet_student() {
+        return matchSet_student;
+    }
+
+    public void setMatchSet_student(String matchSet_student) {
+        this.matchSet_student = matchSet_student;
+    }
+
+
+
+//    public String getContent() {
+//        return content;
+//    }
+//
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
+//
+//    public Uri getAdd_picture1() {
+//        return add_picture1;
+//    }
+//
+//    public void setAdd_picture1(Uri add_picture1) {
+//        this.add_picture1 = add_picture1;
+//    }
+//
+//    public Uri getAdd_picture2() {
+//        return add_picture2;
+//    }
+//
+//    public void setAdd_picture2(Uri add_picture2) {
+//        this.add_picture2 = add_picture2;
+//    }
+//
+//    public Uri getAdd_picture3() {
+//        return add_picture3;
+//    }
+//
+//    public void setAdd_picture3(Uri add_picture3) {
+//        this.add_picture3 = add_picture3;
+//    }
+
+
 }

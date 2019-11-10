@@ -73,6 +73,7 @@ public class VM_Data_ADD implements Parcelable {
         for(int i=0;i<3;i++){
             filePathList[i]=null;
         }
+        detail=null;
     }
 
     public Uri[] getFilePathList() {
