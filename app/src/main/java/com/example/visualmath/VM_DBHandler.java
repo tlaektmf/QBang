@@ -62,19 +62,21 @@ public class VM_DBHandler {
         String uploadDate=dateFormat.format(time);
         Log.i(TAG,uploadDate);
 
+        //** VM_Data_Extra 생성
         vm_data_extra=new VM_Data_EXTRA(_vmDataAdd);
+        if(_vmDataAdd.getFilePathElement(0)!=null){
+            vm_data_extra.setAdd_picture1(_vmDataAdd.getFilePathElement(0).toString());
+        }
+        if(_vmDataAdd.getFilePathElement(1)!=null){
+            vm_data_extra.setAdd_picture2(_vmDataAdd.getFilePathElement(1).toString());
+        }
+        if(_vmDataAdd.getFilePathElement(2)!=null){
+            vm_data_extra.setAdd_picture3(_vmDataAdd.getFilePathElement(2).toString());
+        }
 
+
+        //** VM_Data_Default 생성
         vm_data_default=new VM_Data_Default(_vmDataBasic.getTitle(),_vmDataBasic.getGrade(),_vmDataBasic.getProblem().toString());
-
-
-//        vm_data_post=
-//                new VM_Data_POST
-//                        (_vmDataBasic
-//                                ,vm_data_extra
-//                                , user
-//                                , time+""
-//                                , dateFormat.toString()
-//                                ,VM_ENUM.LIVE_NONE);
 
         vm_data_post=
                 new VM_Data_POST
@@ -103,13 +105,13 @@ public class VM_DBHandler {
 
         if(_vmDataAdd!=null){
             if(_vmDataAdd.getFilePathElement(0)!=null){
-                goLoad(_vmDataAdd.getFilePathElement(0),"add_picture1");
+                goLoad(_vmDataAdd.getFilePathElement(0),"picture1");
             }
             if(_vmDataAdd.getFilePathElement(1)!=null){
-                goLoad(_vmDataAdd.getFilePathElement(1),"add_picture2");
+                goLoad(_vmDataAdd.getFilePathElement(1),"picture2");
             }
             if(_vmDataAdd.getFilePathElement(2)!=null){
-                goLoad(_vmDataAdd.getFilePathElement(2),"add_picture3");
+                goLoad(_vmDataAdd.getFilePathElement(2),"picture3");
             }
         }
 
@@ -120,7 +122,7 @@ public class VM_DBHandler {
         StorageReference riversRef = storageReference.child
                 (user+"/"+
                 vm_data_post.getP_id()+"/"+
-                fileName+".jpg");
+                fileName);
 
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

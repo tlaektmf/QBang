@@ -372,15 +372,35 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         //** 문제 등록의 최소 요건 확인
         ///checkAbility(); //launch시 open
 
-        //** 데이터베이스에 저장 && storage에 upload
+        //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
         vmDataBasic.setTitle(editTextTitle.getText().toString());
 
+        wrapContentProvider();
+
+        //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
         VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
         vmDbHandler.newPost(receiveData,vmDataBasic);
 
         finish();
     }
 
+    public void wrapContentProvider(){
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+
+            for(int i=0;i<3;i++){
+                if(receiveData.getFilePathElement(i)!=null){
+                    Uri photoUri = FileProvider.getUriForFile(this,
+                            "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
+                    receiveData.setFilePathElement(photoUri,i);
+                }
+            }
+
+        } else {
+
+
+        }
+    }
     public void cancel(View view) {
         finish();
     }

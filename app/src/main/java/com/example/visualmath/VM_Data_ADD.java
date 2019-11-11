@@ -10,8 +10,9 @@ import java.net.URI;
 import java.util.ArrayList;
 
 /**
- * 1. 사진 url 최대 3장
+ * 1. 사진 url 최대 3장 -> content provider 사용해야됨 (미정)
  * 2. 텍스트 1개
+ * 3. 사진 url 최대 3장
  */
 
 public class VM_Data_ADD implements Parcelable {

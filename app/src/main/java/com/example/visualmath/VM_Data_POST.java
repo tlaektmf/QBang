@@ -51,15 +51,21 @@ public class VM_Data_POST {
 
             ///** DB저장할때, storage uri로 변경해서 저장 필요
             ///그냥 content uri 사용 시 보안문제로 error
-            data_extra.setAdd_picture1(matchSet_student+"/"+
-                    p_id+"/"+
-                    "picture1"+".jpg");
-            data_extra.setAdd_picture2(matchSet_student+"/"+
-                    p_id+"/"+
-                    "picture2"+".jpg");
-            data_extra.setAdd_picture3(matchSet_student+"/"+
-                    p_id+"/"+
-                    "picture3"+".jpg");
+            if(_vm_data_extra.getAdd_picture1()!=null){
+                data_extra.setAdd_picture1(matchSet_student+"/"+
+                        p_id+"/"+
+                        "picture1");
+            }
+            if(_vm_data_extra.getAdd_picture2()!=null){
+                data_extra.setAdd_picture2(matchSet_student+"/"+
+                        p_id+"/"+
+                        "picture2");
+            }
+           if(_vm_data_extra.getAdd_picture3()!=null){
+               data_extra.setAdd_picture3(matchSet_student+"/"+
+                       p_id+"/"+
+                       "picture3");
+           }
             ///**
         }
 
@@ -68,7 +74,7 @@ public class VM_Data_POST {
         ///그냥 content uri 사용 시 보안문제로 error
         data_default.setProblem(matchSet_student+"/"+
                 p_id+"/"+
-                "problem"+".jpg"
+                "problem"
         );
         ///**
 
