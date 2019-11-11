@@ -14,7 +14,9 @@ public class VM_Data_POST {
     private String uploadDate; //업로드 날짜
 
     private List<VM_Data_CHAT> chatList;
-    private VM_Data_BASIC data_basic;
+//    private VM_Data_BASIC data_basic;
+
+    private VM_Data_Default data_default;
     private VM_Data_EXTRA data_extra;
 
     //** data_add 부분이 Parcelable 객체로 되어 있어서 firebase에 데이터를 바로 넣을 수 없음
@@ -26,10 +28,8 @@ public class VM_Data_POST {
 
     //**
 
-    public VM_Data_POST(VM_Data_BASIC _vm_data_basic,
+    public VM_Data_POST(VM_Data_Default _vm_data_default,
                         VM_Data_EXTRA _vm_data_extra,
-                        /*VM_Data_ADD _vm_data_add,*/
-                        /*String _content, Uri[] _add_pictures,*/
                         String _s_id,String _key,String _uploadDate,int _live_state){
         p_id=_key;
         state=VM_ENUM.BEFORE_MATH;
@@ -44,26 +44,33 @@ public class VM_Data_POST {
         VM_Data_CHAT chat=new VM_Data_CHAT("다슬","sdfsd",0,0);
         chatList.add(chat);
 
-        //** data_add 부분이 Parcelable 객체로 되어 있어서 firebase에 데이터를 바로 넣을 수 없음
-        ///data_add=_vm_data_add;
+        data_default=_vm_data_default;
 
-//        if(_vm_data_add!=null&&_vm_data_add.getDetail()!=null){
-//            content=_vm_data_add.getDetail();
-//        }
-//
-//        if(_vm_data_add!=null){
-//            if(_vm_data_add.getFilePathElement(0)!=null){
-//                add_picture1=_vm_data_add.getFilePathElement(0);
-//            }else  if(_vm_data_add.getFilePathElement(1)!=null){
-//                add_picture2=_vm_data_add.getFilePathElement(1);
-//            }else  if(_vm_data_add.getFilePathElement(2)!=null){
-//                add_picture3=_vm_data_add.getFilePathElement(2);
-//            }
-//        }
-        //**
+        if(_vm_data_extra!=null){
+            data_extra=_vm_data_extra;
 
-        data_basic=_vm_data_basic;
-        data_extra=_vm_data_extra;
+            ///** DB저장할때, storage uri로 변경해서 저장 필요
+            ///그냥 content uri 사용 시 보안문제로 error
+            data_extra.setAdd_picture1(matchSet_student+"/"+
+                    p_id+"/"+
+                    "picture1"+".jpg");
+            data_extra.setAdd_picture2(matchSet_student+"/"+
+                    p_id+"/"+
+                    "picture2"+".jpg");
+            data_extra.setAdd_picture3(matchSet_student+"/"+
+                    p_id+"/"+
+                    "picture3"+".jpg");
+            ///**
+        }
+
+
+        ///** DB저장할때, storage uri로 변경해서 저장 필요
+        ///그냥 content uri 사용 시 보안문제로 error
+        data_default.setProblem(matchSet_student+"/"+
+                p_id+"/"+
+                "problem"+".jpg"
+        );
+        ///**
 
     }
 
@@ -77,10 +84,6 @@ public class VM_Data_POST {
 
 
 
-    public VM_Data_BASIC getData_basic() {
-        return data_basic;
-    }
-
     public VM_Data_EXTRA getData_extra() {
         return data_extra;
     }
@@ -89,10 +92,13 @@ public class VM_Data_POST {
         this.data_extra = data_extra;
     }
 
-    public void setData_basic(VM_Data_BASIC data_basic) {
-        this.data_basic = data_basic;
+    public VM_Data_Default getData_default() {
+        return data_default;
     }
 
+    public void setData_default(VM_Data_Default data_default) {
+        this.data_default = data_default;
+    }
 
     public int getState() {
         return state;

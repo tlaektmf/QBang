@@ -255,7 +255,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     cursor.close();
                 }
             }
+
             vmDataBasic.setProblem(photo_problem);
+
 
             //데이터 등록
             setImage();
@@ -288,7 +290,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
                     if(receiveData.getFilePathElement(i)!=null){
                         count++;
-                        Log.i(TAG,receiveData.getFilePathElement(i).toString()+"사진?");
+                        Log.i(TAG,"receiveDatacheck: "+i+",,"+receiveData.getFilePathElement(i).toString());
                     }
                 }
                 if(count!=0){
@@ -302,20 +304,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
                 }
 
-                Log.i(TAG,count+"");
             }
 
-//
-//            try {
-//                Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), receiveData.getFilePathElement(0));
-//                imageViewProblem.setImageBitmap(bm);
-//            } catch (FileNotFoundException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
+
         }
 
 
@@ -346,19 +337,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
         });
         dialog.callFunction();// 커스텀 다이얼로그를 호출
-//        Log.i(TAG,dialog.getReturnResult()+"");
-//        Log.i(TAG,returnResult+"");
-
-//                if(dialog.getReturnResult()==GALLERY){
-//                    getAlbumFile();
-//
-//                }else if(dialog.getReturnResult()==CAMERA){
-//                    takePhoto();
-//
-//                }else if(dialog.getReturnResult()==NOTHING){
-//
-//                }
-
 
     }
     private void tedPermission() {
@@ -391,8 +369,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void registerProblem(View view) {
+        //** 문제 등록의 최소 요건 확인
+        ///checkAbility(); //launch시 open
+
         //** 데이터베이스에 저장 && storage에 upload
         vmDataBasic.setTitle(editTextTitle.getText().toString());
+
         VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
         vmDbHandler.newPost(receiveData,vmDataBasic);
 
@@ -403,5 +385,20 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         finish();
     }
 
+    /***
+     * 문제 등록 최소 요구조건 확인
+     * - 문제 제목
+     * - 학년
+     * - 문제 사진
+     *
+     * @return
+     */
+    public boolean checkAbility(){
+        if(vmDataBasic.getTitle()!=null
+        && vmDataBasic.getProblem()!=null){
+            return true;
+        }
+        return false;
+    }
 
 }

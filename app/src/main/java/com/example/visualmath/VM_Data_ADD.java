@@ -19,21 +19,26 @@ public class VM_Data_ADD implements Parcelable {
     private String detail; //질문 사항
     private Uri[] filePathList;
 
+
     protected VM_Data_ADD(Parcel in) {// writeToParcel()에 기록된 순서와 동일하게 복원
         detail = in.readString();
 
         Uri.Builder builder = new Uri.Builder();
         int lenght =3;
         filePathList=new Uri[lenght];
-        for(int i=0;i<lenght;i++){
-            filePathList[i]=(Uri)in.readParcelable(null);//Parcelable로 읽어서 Uri로 캐스트하여 데이터를 복원함
-        }
+
+        //** 사진을 0번째부터 정렬하고 싶으면 이 코드 오픈
+//        for(int i=0;i<lenght;i++){
+//            filePathList[i]=(Uri)in.readParcelable(null);//Parcelable로 읽어서 Uri로 캐스트하여 데이터를 복원함
+//        }
 
     }
 
     public static final Creator<VM_Data_ADD> CREATOR = new Creator<VM_Data_ADD>() {
         @Override
         public VM_Data_ADD createFromParcel(Parcel in) {//Parcel 객체에서 데이터 복원
+
+
             return new VM_Data_ADD(in);
         }
 
@@ -60,11 +65,6 @@ public class VM_Data_ADD implements Parcelable {
             }
         }
 
-//        for(int i=0; i<3; i++){
-//            if(filePathList[i]!=null){
-//                dest.writeString(filePathList[i].toString());
-//            }
-//        }
     }
 
 

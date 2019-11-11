@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -46,7 +47,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
 
     private static final String ALL="all";
-//    private static final String SAVE_DATA="save_data";
     private EditText editTextdetail;
     private ImageView[] imageViewsOtherPictureList;
 
@@ -54,7 +54,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
     private VM_Data_ADD vm_data_add;
-
+    private VM_Data_ADD receiveData;
 
 
     @Override
@@ -63,14 +63,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vm__regiser_other_things);
 
         init();
-
-        //** 화면 회전 시에도 데이터 유지
-//        if(savedInstanceState!=null){
-//            //vm_data_add=savedInstanceState.getParcelable(SAVE_DATA);
-//            //init_set();
-//            Log.i(TAG,savedInstanceState.getString("text"));
-//        }
-        //
 
     }
 
@@ -86,15 +78,19 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         //** 데이터 넘어온 게 있는 지 확인
         Intent intent=getIntent();
-        VM_Data_ADD receiveData=intent.getParcelableExtra(ALL);
-        receiveData=intent.getParcelableExtra(ALL);
-        if(receiveData!= null){
-            vm_data_add=receiveData;
-            init_set();
+        if(intent!=null){// 넘어온 데이터가 있는 경우
+            receiveData=intent.getParcelableExtra(ALL);
+
+            if(receiveData!=null){//혹시 모르니 한번 더 확인
+                vm_data_add=receiveData;
+                init_set();
+            }
+
         }
 
-
     }
+
+
     public void init_set(){
         //1. edittext 채우기
         editTextdetail.setText(vm_data_add.getDetail());
@@ -102,9 +98,12 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         //2. picture 채우기
         for(int i=0;i<3;i++){
             Uri path=vm_data_add.getFilePathElement(i);
-            if(path!=null){
-                setImageByIndex(i,path);
 
+            if(path!=null){
+                Log.i(TAG,"init_set: "+i);
+                setImageByIndex(i);
+            }else{
+                Log.i(TAG,"init_set: "+"파일 없음");
             }
         }
     }
@@ -135,7 +134,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-//        intent.putExtra(VIEW_ID,_imageviewID);
         startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
 
         /*
@@ -162,13 +160,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 Uri photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", galleryFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                //intent.putExtra(VIEW_ID,_imageviewID);
                 startActivityForResult(intent, PICK_FROM_CAMERA);
 
             } else {
                 Uri photoUri = Uri.fromFile(galleryFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //galleryFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
-                //intent.putExtra(VIEW_ID,_imageviewID);
                 startActivityForResult(intent, PICK_FROM_CAMERA);
 
             }
@@ -227,8 +223,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         else if(requestCode==PICK_FROM_ALBUM){
             Uri photo_problem=data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
             Cursor cursor=null;
-//            int viewID=data.getIntExtra(VIEW_ID,-1);
-//            Log.i(TAG,"request: "+data.getIntExtra("temp",-1));
 
             //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
             try {
@@ -245,7 +239,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 }
             }
 
-            createData(photo_problem);
+            createData(Uri.parse(galleryFile.getAbsolutePath()));
+            ///createData(photo_problem);
             setImage(imageviewID);
         }
         else if (requestCode == PICK_FROM_CAMERA) {
@@ -258,7 +253,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             else {
                 photoUri = Uri.fromFile(galleryFile);
             }
-            createData(photoUri);
+            ///createData(photoUri);
+            createData(Uri.parse(galleryFile.getAbsolutePath()));
             setImage(imageviewID);
         }
 
@@ -278,7 +274,9 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 break;
         }
 
+        Log.i(TAG,"createdata: "+index);
         vm_data_add.setFilePathElement(_uri,index);
+
     }
 
     private void setImage(final int _imageviewID) {
@@ -301,23 +299,26 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
     }
 
-    //setImage override
-    private void setImageByIndex(int index,Uri path) {
-//        try {
-//            Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-//            imageViewsOtherPictureList[index].setImageBitmap(bm);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-        Log.i(TAG,path.toString());
+
+    /***
+     * setImage override
+     * 이전 Activity인 RegisterProblemAcitivy 에서 RegisterOtherActivity로 다시 넘어오는 경우
+     * RegisterOtherActivity의 정보를 지우지 않고 유지시킨다.
+     *
+     * @param index
+     *
+     */
+    private void setImageByIndex(int index) {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(receiveData.getFilePathElement(index).toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+        imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
+
     }
 
     private void showPickDialog(final int _imageviewID){
         //** 다이얼로그 실행
+
         // 커스텀 다이얼로그를 생성
         final VM_Dialog_PickHowToGetPicture dialog = new VM_Dialog_PickHowToGetPicture(VM_RegiserOtherThingsActivity.this);
 
@@ -341,6 +342,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
 
     }
+
     private void tedPermission(final int _imageviewID) {
 
         PermissionListener permissionListener = new PermissionListener() {
@@ -372,16 +374,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     public void cancel(View view) {
         finish();
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) { //** 액티비티의 상태를 저장
-        String text="저장되라";
-        outState.putString("text",text);
-        super.onSaveInstanceState(outState);
-
-
-//        outState.putParcelable(ALL,vm_data_add);
     }
 
 

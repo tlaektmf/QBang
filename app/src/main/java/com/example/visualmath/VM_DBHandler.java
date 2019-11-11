@@ -32,6 +32,8 @@ public class VM_DBHandler {
     private StorageReference storageReference;
     private VM_Data_POST vm_data_post;
     private VM_Data_EXTRA vm_data_extra;
+    private VM_Data_Default vm_data_default;
+
     private String user;
 
     public VM_DBHandler(String TABLE){//default constructor
@@ -55,43 +57,62 @@ public class VM_DBHandler {
         user=currentUserEmail.split("@")[0]+"_"+currentUserEmail.split("@")[1];//이메일 형식은 파이어베이스 정책상 불가
        /// Log.i(TAG,user);
 
-        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
         long time=System.currentTimeMillis();
-
+        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        String uploadDate=dateFormat.format(time);
+        Log.i(TAG,uploadDate);
 
         vm_data_extra=new VM_Data_EXTRA(_vmDataAdd);
+
+        vm_data_default=new VM_Data_Default(_vmDataBasic.getTitle(),_vmDataBasic.getGrade(),_vmDataBasic.getProblem().toString());
+
+
+//        vm_data_post=
+//                new VM_Data_POST
+//                        (_vmDataBasic
+//                                ,vm_data_extra
+//                                , user
+//                                , time+""
+//                                , dateFormat.toString()
+//                                ,VM_ENUM.LIVE_NONE);
+
         vm_data_post=
                 new VM_Data_POST
-                        (_vmDataBasic
+                        (vm_data_default
                                 ,vm_data_extra
                                 , user
                                 , time+""
-                                , dateFormat.toString()
+                                , uploadDate
                                 ,VM_ENUM.LIVE_NONE);
 
+
         if(vm_data_post!=null){
-            databaseReference.child(vm_data_post.getP_id()).setValue(_vmDataBasic.getTitle());
-            StartupLoadFile();
+            databaseReference.child(vm_data_post.getP_id()).setValue(vm_data_post);
+            StartupLoadFile(_vmDataAdd,_vmDataBasic);
         }
 
         return true;
     }
 
-    public void StartupLoadFile(){
+    public void StartupLoadFile(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic){
         //** 업로드
-        if(vm_data_post.getData_basic().getProblem()!=null){
+        if(_vmDataBasic.getProblem()!=null){
             Log.i(TAG,"problem");
-            goLoad(vm_data_post.getData_basic().getProblem(),"problem");
+            goLoad(_vmDataBasic.getProblem(),"problem");
         }
-        if(vm_data_post.getData_extra().getAdd_picture1()!=null){
-            goLoad(vm_data_post.getData_extra().getAdd_picture1(),"add_picture1");
+
+        if(_vmDataAdd!=null){
+            if(_vmDataAdd.getFilePathElement(0)!=null){
+                goLoad(_vmDataAdd.getFilePathElement(0),"add_picture1");
+            }
+            if(_vmDataAdd.getFilePathElement(1)!=null){
+                goLoad(_vmDataAdd.getFilePathElement(1),"add_picture2");
+            }
+            if(_vmDataAdd.getFilePathElement(2)!=null){
+                goLoad(_vmDataAdd.getFilePathElement(2),"add_picture3");
+            }
         }
-        if(vm_data_post.getData_extra().getAdd_picture2()!=null){
-            goLoad(vm_data_post.getData_extra().getAdd_picture2(),"add_picture2");
-        }
-        if(vm_data_post.getData_extra().getAdd_picture3()!=null){
-            goLoad(vm_data_post.getData_extra().getAdd_picture3(),"add_picture3");
-        }
+
     }
 
     public void goLoad(Uri uri, String fileName){
