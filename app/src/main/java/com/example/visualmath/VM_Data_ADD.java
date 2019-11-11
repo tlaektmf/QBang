@@ -36,8 +36,7 @@ public class VM_Data_ADD implements Parcelable {
 
     public static final Creator<VM_Data_ADD> CREATOR = new Creator<VM_Data_ADD>() {
         @Override
-        public VM_Data_ADD createFromParcel(Parcel in) {//Parcel 객체에서 데이터 복원
-
+        public VM_Data_ADD createFromParcel(Parcel in) {
 
             return new VM_Data_ADD(in);
         }
