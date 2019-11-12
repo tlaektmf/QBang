@@ -14,10 +14,12 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.visualmath.dummy.DummyContent;
@@ -81,17 +83,18 @@ public class ItemListActivity extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
 
         //** detailView 클릭 이벤트
-        ViewGroup layout = (ViewGroup) findViewById(R.id.item_detail_container);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-//                intent.putExtra("UID", userId);
-                startActivity(intent);
-//                finish();
-            }
-        });
+
+//        ViewGroup layout = (ViewGroup) findViewById(R.id.item_detail_container);
+//        layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
+////                intent.putExtra("UID", userId);
+//                startActivity(intent);
+////                finish();
+//            }
+//        });
 
     }
 

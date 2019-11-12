@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,62 +9,91 @@
     android:id="@+id/item_detail"
     android:orientation="vertical"
     tools:context=".ItemDetailFragment"
-    tools:ignore="missingPrefix"
     android:background="#f2f2f4">
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:scale_base_width="200"
-        app:scale_base_height="355">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/post_back"
+        android:orientation="vertical"
+        android:background="@drawable/post_back"
 
-            app:scale_left="0"
-            app:scale_top="6"
-            app:scale_width="200"
-            app:scale_height="348"/>
+        android:padding="20dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center">
+
         <TextView
             android:id="@+id/tv_title"
             android:textIsSelectable="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_line"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
 
-            android:text="고등"
+            android:text="교육청1에서 답변이 도착하였습니다"
+            android:textSize="20dp"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#404040"/>
+
+        <ImageView
+            android:layout_width="330dp"
+            android:layout_height="3dp"
+            android:src="@drawable/chat_title_line"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"/>
+        <TextView
+            android:textIsSelectable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginBottom="8dp"
+
+            android:text="2015년 3월 교육청 5번"
+            android:textSize="15dp"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#016a96"/>
+        <TextView
+            android:textIsSelectable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginBottom="8dp"
+
+            android:text="고    등"
+            android:textSize="24dp"
             android:fontFamily="@font/nanumsquaure_eb"
-            android:textColor="#404040"
-            app:scale_textsize="12"
-            android:textAlignment="center"
+            android:textColor="#404040"/>
 
-            app:scale_left="14"
-            app:scale_top="38"
-            app:scale_width="170"
-            app:scale_height="22"/>
         <ImageView
             android:id="@+id/iv_problem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="330dp"
+            android:layout_height="330dp"
 
-            android:src="@drawable/problem"
             android:scaleType="centerCrop"
-
-            app:scale_left="12"
-            app:scale_top="65"
-            app:scale_width="173"
-            app:scale_height="173" />
-    </com.ssomai.android.scalablelayout.ScalableLayout>
-
-</RelativeLayout>
-
-
-<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:id="@+id/item_detail"-->
-<!--    style="?android:attr/textAppearanceLarge"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:padding="16dp"-->
-<!--    android:textIsSelectable="true"-->
-<!--    tools:context=".ItemDetailFragment" />-->
+            android:layout_marginBottom="12dp"/>
+        <ImageView
+            android:layout_width="330dp"
+            android:layout_height="2.2dp"
+            android:src="@drawable/chat_title_line"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="20dp"/>
+        <Button
+            android:id="@+id/show_detail_btn"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:background="@drawable/detail_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="문제 상세보기"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textSize="20dp"/>
+    </LinearLayout>
+</LinearLayout>
