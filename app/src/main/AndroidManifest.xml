@@ -36,9 +36,12 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"/>
-        <activity android:name=".VM_AutoLoginCheckActivity" />
-        <activity android:name=".VM_LoginActivity" />
-        <activity android:name=".VM_LauncherActivity">
+        <activity android:name=".VM_AutoLoginCheckActivity"
+            android:theme="@style/AppTheme.blueStatusBar"/>
+        <activity android:name=".VM_LoginActivity"
+            android:theme="@style/AppTheme.blueStatusBar"/>
+        <activity android:name=".VM_LauncherActivity"
+            android:theme="@style/AppTheme.blueStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

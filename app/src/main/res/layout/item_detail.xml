@@ -1,34 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/item_detail"
     android:orientation="vertical"
-    tools:context=".ItemDetailFragment">
+    tools:context=".ItemDetailFragment"
+    tools:ignore="missingPrefix"
+    android:background="#f2f2f4">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="355">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/post_back"
 
-    <TextView
-        android:fontFamily="@font/nanumsquaure_r"
-        android:layout_marginTop="50dp"
-        android:id="@+id/tv_title"
-        android:textIsSelectable="true"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+            app:scale_left="0"
+            app:scale_top="6"
+            app:scale_width="200"
+            app:scale_height="348"/>
+        <TextView
+            android:id="@+id/tv_title"
+            android:textIsSelectable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_line"
 
-    <ImageView
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:id="@+id/iv_problem"
-        android:layout_marginBottom="30dp"
-        android:scaleType="fitXY"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"/>
+            android:text="고등"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#404040"
+            app:scale_textsize="12"
+            android:textAlignment="center"
 
-</LinearLayout>
+            app:scale_left="14"
+            app:scale_top="38"
+            app:scale_width="170"
+            app:scale_height="22"/>
+        <ImageView
+            android:id="@+id/iv_problem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/problem"
+            android:scaleType="centerCrop"
+
+            app:scale_left="12"
+            app:scale_top="65"
+            app:scale_width="173"
+            app:scale_height="173" />
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+</RelativeLayout>
 
 
 <!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->

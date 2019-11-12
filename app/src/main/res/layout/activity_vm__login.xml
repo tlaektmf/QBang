@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VM_LoginActivity"
-    android:background="#1097d0">
+    android:background="#1097d0"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center">
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorLightSteelBlue"
-        android:text="로그인"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/cb_AutoLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_userPw" />
+        <ImageView
+            android:id="@+id/iv_mainLogo"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:src="@drawable/launcher_logo"/>
+        <TextView
+            android:id="@+id/tv_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            android:text="Visual Math"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"/>
+
+
+        <EditText
+            android:id="@+id/et_userID"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorMedium"
+
+            android:hint="아이디"
+            android:fontFamily="@font/nanumsquaure_r"
+            android:inputType="textPersonName"
+            android:textSize="17dp"
+
+            android:paddingLeft="20dp"
+            android:layout_margin="15dp"/>
+
+        <EditText
+            android:id="@+id/et_userPw"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorMedium"
+
+            android:hint="비밀번호"
+            android:fontFamily="@font/nanumsquaure_r"
+            android:inputType="textPassword"
+            android:textSize="17dp"
+
+            android:paddingLeft="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"/>
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorLightSteelBlue"
+
+            android:text="로 그 인"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textSize="20dp"
+
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"/>
     <CheckBox
         android:id="@+id/cb_AutoLogin"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="156dp"
         android:checked="false"
-        android:text="자동 로그인"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="left"
 
-    <EditText
-        android:id="@+id/et_userID"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@color/colorMedium"
-        android:hint="아이디"
-        android:inputType="textPersonName"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/et_userPw"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_mainLogo" />
+        android:text="  자동 로그인"
+        android:fontFamily="@font/nanumsquaure_b"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
 
-    <EditText
-        android:id="@+id/et_userPw"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="13dp"
-        android:background="@color/colorMedium"
-        android:hint="비밀번호"
-        android:inputType="textPassword"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_userID" />
-
-    <ImageView
-        android:id="@+id/iv_mainLogo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="71dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="71dp"
-        android:layout_marginBottom="55dp"
-        android:src="@drawable/img_video"
-        app:layout_constraintBottom_toTopOf="@+id/et_userID"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:button="@drawable/checkbox_custom"/>
+</LinearLayout>

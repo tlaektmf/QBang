@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VM_LauncherActivity"
-    tools:ignore="missingPrefix"
-    android:background="#1097d0">
-
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:scale_base_width="200"
-        app:scale_base_height="355">
+    android:background="#1097d0"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_visual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/launcher_logo"
-            app:scale_left="55"
-            app:scale_top="100"
-            app:scale_width="90"
-            app:scale_height="90"/>
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:src="@drawable/launcher_logo"/>
 
         <TextView
             android:id="@+id/tv_english"
@@ -33,14 +25,8 @@
             android:text="Visual Math"
             android:fontFamily="@font/nanumsquaure_eb"
             android:textColor="#ffffff"
-            app:scale_textsize="15"
+            android:textSize="30dp"
             android:textAlignment="center"
-
-            app:scale_left="0"
-            app:scale_top="200"
-            app:scale_width="200"
-            app:scale_height="30"/>
-
-    </com.ssomai.android.scalablelayout.ScalableLayout>
-
-</RelativeLayout>
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"/>
+</LinearLayout>

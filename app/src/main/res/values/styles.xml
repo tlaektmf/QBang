@@ -23,6 +23,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="AppTheme.blueStatusBar">
+        <item name="android:statusBarColor">#1097d0</item>
+    </style>
+
 <!--    <style name="AppTheme.whiteStatusBar">-->
 <!--        <item name="android:statusBarColor">#f5f5f7</item>-->
 <!--        &lt;!&ndash;Status Bar 글자색깔&ndash;&gt;-->
