@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -93,6 +97,17 @@ public class ItemListActivity extends AppCompatActivity {
 ////                intent.putExtra("UID", userId);
 //                startActivity(intent);
 ////                finish();
+//            }
+//        });
+
+//        drawerlayout 메뉴
+//        Button drawer_menu_btn = findViewById(R.id.drawer_menu_btn);
+//        drawer_menu_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                Fragment item_list_frag = (Fragment)getSupportFragmentManager().findFragmentById(R.id.item_list);
+//                ft.hide(item_list_frag);
 //            }
 //        });
 

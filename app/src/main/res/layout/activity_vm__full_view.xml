@@ -76,54 +76,63 @@
             app:scale_width="20"
             app:scale_height="20"/>
 
-        <TextView
+        <Button
             android:onClick="showUsersLoad"
             android:id="@+id/btn_full_problem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:text="문제 답"
-            android:textColor="#404040"
-            app:scale_textsize="8"
+            android:textColor="@drawable/changing_tab_textcolor"
+            app:scale_textsize="9"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
+            android:background="@drawable/changing_tab_menu_back"
+            style="?android:attr/borderlessButtonStyle"
+            android:paddingBottom="15dp"
 
             app:scale_left="7"
-            app:scale_top="33"
+            app:scale_top="30"
             app:scale_width="60"
-            app:scale_height="15"/>
-        <TextView
+            app:scale_height="19"/>
+        <Button
             android:onClick="showSolve"
             android:id="@+id/btn_full_solve"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:text="질문 내용"
-            android:textColor="#404040"
-            app:scale_textsize="8"
+            android:textColor="@drawable/changing_tab_textcolor"
+            app:scale_textsize="9"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
+            android:background="@drawable/changing_tab_menu_back"
+            style="?android:attr/borderlessButtonStyle"
+            android:paddingBottom="15dp"
 
             app:scale_left="69"
-            app:scale_top="33"
+            app:scale_top="30"
             app:scale_width="60"
-            app:scale_height="15"/>
-        <TextView
+            app:scale_height="19"/>
+        <Button
             android:onClick="showBoth"
             android:id="@+id/btn_both"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:text="풀이만"
-            android:textColor="#404040"
-            app:scale_textsize="8"
+            android:textColor="@drawable/changing_tab_textcolor"
+            app:scale_textsize="9"
             android:textAlignment="center"
             android:fontFamily="@font/nanumsquaure_b"
+            android:background="@drawable/changing_tab_menu_back"
+            style="?android:attr/borderlessButtonStyle"
+            android:paddingBottom="15dp"
 
             app:scale_left="132"
-            app:scale_top="33"
+            app:scale_top="30"
             app:scale_width="60"
-            app:scale_height="15"/>
+            app:scale_height="19"/>
 
     </com.ssomai.android.scalablelayout.ScalableLayout>
 

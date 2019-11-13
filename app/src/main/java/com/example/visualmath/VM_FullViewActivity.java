@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.PointerIcon;
 import android.view.View;
+import android.widget.Button;
 
 public class VM_FullViewActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
@@ -38,16 +39,40 @@ public class VM_FullViewActivity extends AppCompatActivity {
         transaction.replace(R.id.container,solveFragment).commitAllowingStateLoss();
 
     }
+
     public void showUsersLoad(View view) {
+        Button btn01 = findViewById(R.id.btn_full_problem);
+        Button btn02 = findViewById(R.id.btn_full_solve);
+        Button btn03 = findViewById(R.id.btn_both);
+
+        btn01.setSelected(true);
+        btn02.setSelected(false);
+        btn03.setSelected(false);
+
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, solveFragment).commitAllowingStateLoss();
     }
 
     public void showSolve(View view) {
+        Button btn01 = findViewById(R.id.btn_full_problem);
+        Button btn02 = findViewById(R.id.btn_full_solve);
+        Button btn03 = findViewById(R.id.btn_both);
+
+        btn01.setSelected(false);
+        btn02.setSelected(true);
+        btn03.setSelected(false);
+
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }
 
     public void showBoth(View view) {
+        Button btn01 = findViewById(R.id.btn_full_problem);
+        Button btn02 = findViewById(R.id.btn_full_solve);
+        Button btn03 = findViewById(R.id.btn_both);
+
+        btn01.setSelected(false);
+        btn02.setSelected(false);
+        btn03.setSelected(true);
     }
 }

@@ -14,7 +14,8 @@
             android:theme="@style/AppTheme.notitlebar"></activity>
         <activity android:name=".VM_RegiserOtherThingsActivity"
             android:theme="@style/AppTheme.notitlebar"/>
-        <activity android:name=".VM_FullViewActivity" />
+        <activity android:name=".VM_FullViewActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".VM_RegisterProblemActivity"/>
         <activity
             android:name=".VM_SettingsActivity"
