@@ -125,10 +125,17 @@ public class VM_LoginActivity extends AppCompatActivity {
                             }
 
                             // 계정확인이 완료되면, user 정보를 가지고 HomeActivity 이동
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            intent.putExtra("UID", userId);
+                            Intent intent=null;
+                            if(editTextUserId.getText().toString().equals("dazzel0826@gmail.com")){
+                                intent= new Intent(getApplicationContext(), HomeActivity.class);
+                            }
+                            else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
+                                intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
+                            }
+                            //intent.putExtra("UID", userId);
                             startActivity(intent);
                             finish();
+
                         } else {
                             //로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
