@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.visualmath.dummy.DummyContent;
@@ -115,6 +116,21 @@ public class ItemListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+    }
+
+    /**
+     * itemListView 활성화 비활성화
+     * @param view
+     */
+    public void showItemList(View view) {
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.drawer_menu);
+        if(layout.getVisibility()==View.VISIBLE){
+            //현재 뷰가 보이면
+            layout.setVisibility(View.GONE);
+        }else{
+            //뷰가 보이지 않으면
+            layout.setVisibility(View.VISIBLE);
+        }
     }
 
     public static class SimpleItemRecyclerViewAdapter

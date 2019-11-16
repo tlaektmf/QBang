@@ -35,6 +35,7 @@
             android:orientation="horizontal">
             <Button
                 android:id="@+id/drawer_menu_btn"
+                android:onClick="showItemList"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ham_menu"
