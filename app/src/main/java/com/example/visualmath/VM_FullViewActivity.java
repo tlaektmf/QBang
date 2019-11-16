@@ -15,6 +15,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
     private FragmentTransaction transaction;
     SolveFragment solveFragment;
     ProblemFragment problemFragment;
+    problem_detail problemDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,9 @@ public class VM_FullViewActivity extends AppCompatActivity {
         fragmentManager=getSupportFragmentManager();
         solveFragment=new SolveFragment();
         problemFragment=new ProblemFragment();
+        problemDetailFragment = new problem_detail();
         transaction=fragmentManager.beginTransaction();
         transaction.replace(R.id.container,solveFragment).commitAllowingStateLoss();
-
     }
 
     public void showUsersLoad(View view) {
@@ -63,7 +64,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
         btn03.setSelected(false);
 
         transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.container, problemDetailFragment).commitAllowingStateLoss();
     }
 
     public void showBoth(View view) {
@@ -74,5 +75,8 @@ public class VM_FullViewActivity extends AppCompatActivity {
         btn01.setSelected(false);
         btn02.setSelected(false);
         btn03.setSelected(true);
+
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }
 }

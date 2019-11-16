@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".problem_detail"
+    tools:ignore="missingPrefix"
+    android:background="#f2f2f4">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="355">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/post_back"
+
+            app:scale_left="0"
+            app:scale_top="6"
+            app:scale_width="200"
+            app:scale_height="348"/>
+
+        <TextView
+            android:hint="문제 제목"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="2015년 3월 교육청 1번"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#016a96"
+            app:scale_textsize="7"
+            android:gravity="center_vertical"
+
+            app:scale_left="15"
+            app:scale_top="8"
+            app:scale_width="170"
+            app:scale_height="22"/>
+        <TextView
+            android:hint="학년"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_line"
+
+            android:text="고등"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#404040"
+            app:scale_textsize="12"
+            android:textAlignment="center"
+
+            app:scale_left="14"
+            app:scale_top="38"
+            app:scale_width="170"
+            app:scale_height="22"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/text_line"
+
+            android:text="질문 내용"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#404040"
+            app:scale_textsize="10"
+            android:paddingLeft="5dp"
+
+            app:scale_left="14"
+            app:scale_top="66"
+            app:scale_width="170"
+            app:scale_height="17"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/detail_back"
+
+            app:scale_left="14"
+            app:scale_top="90"
+            app:scale_width="170"
+            app:scale_height="130" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/text_line"
+
+            android:text="추가로 등록한 답지 사진"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#404040"
+            app:scale_textsize="10"
+            android:paddingLeft="5dp"
+
+            app:scale_left="14"
+            app:scale_top="225"
+            app:scale_width="170"
+            app:scale_height="17"/>
+
+        <ImageView
+            android:src="@drawable/add_extra_img"
+            android:scaleType="fitCenter"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+
+            app:scale_left="15"
+            app:scale_top="250"
+            app:scale_width="52"
+            app:scale_height="52"/>
+        <ImageView
+            android:src="@drawable/add_extra_img"
+            android:scaleType="fitCenter"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+
+            app:scale_left="73.5"
+            app:scale_top="250"
+            app:scale_width="52"
+            app:scale_height="52" />
+        <ImageView
+            android:src="@drawable/add_extra_img"
+            android:scaleType="fitCenter"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+
+            app:scale_left="132"
+            app:scale_top="250"
+            app:scale_width="52"
+            app:scale_height="52"/>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+</RelativeLayout>
