@@ -57,7 +57,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private static final int NOTHING=-1;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
-    private final CharSequence[] gradeItems = {"초등", "중등", "고등"};
+    private final CharSequence[] gradeItems = {"초       등", "중       등", "고       등"};
 
     private EditText editTextTitle;
     private Button buttonGrade;
@@ -143,27 +143,57 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             }
 
-
         }
 
     }
     public void changeGrade(View view) {
         //**초등, 중등, 고등 선택
-        AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
-                android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+//        AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
+//                android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         ///oDialog.setPositiveButton("선택",null);
         ///oDialog.setNeutralButton("취소",null);
-        oDialog.setTitle("학년을 선택해 주세요.");
+//        oDialog.setTitle("학년을 선택해 주세요.");
 
-        oDialog.setItems(gradeItems, new DialogInterface.OnClickListener() {
+//        oDialog.setItems(gradeItems, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                buttonGrade.setText(gradeItems[which]);
+//               String grade=gradeItems[which].toString();
+//               vmDataBasic.setGrade(grade);
+//            }
+//        }).setCancelable(true)
+//                .show();
+
+        //**초,중,고 선택 _ 커스텀 다이얼로그
+        final VM_Dialog_PickGrade gradeDialog= new VM_Dialog_PickGrade(VM_RegisterProblemActivity.this);
+
+        gradeDialog.setDialogListener(new VM_DialogLIstener_PickGrade() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                buttonGrade.setText(gradeItems[which]);
-               String grade=gradeItems[which].toString();
-               vmDataBasic.setGrade(grade);
+            public void onButtonPrimary() {
+                returnResult=0;
+                buttonGrade.setText(gradeItems[returnResult]);
+                String grade=gradeItems[returnResult].toString();
+                vmDataBasic.setGrade(grade);
             }
-        }).setCancelable(true)
-                .show();
+
+            @Override
+            public void onButtonMiddle() {
+                returnResult=1;
+                buttonGrade.setText(gradeItems[returnResult]);
+                String grade=gradeItems[returnResult].toString();
+                vmDataBasic.setGrade(grade);
+            }
+
+            @Override
+            public void onButtonHigh() {
+                returnResult=2;
+                buttonGrade.setText(gradeItems[returnResult]);
+                String grade=gradeItems[returnResult].toString();
+                vmDataBasic.setGrade(grade);
+            }
+        });
+
+        gradeDialog.callFunction();
     }
 
     public void addOther(View view) {

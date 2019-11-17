@@ -2,6 +2,7 @@ package com.example.visualmath;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -47,6 +48,7 @@ public class VM_Dialog_PickHowToGetPicture extends Dialog implements View.OnClic
 
         // 커스텀 다이얼로그의 레이아웃을 설정
         dlg.setContentView(R.layout.layout_dialog_pick_how_to_get_picture);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         // 커스텀 다이얼로그를 노출
         dlg.show();

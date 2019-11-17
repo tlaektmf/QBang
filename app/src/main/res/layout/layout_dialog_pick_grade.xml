@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="7dp"
+    tools:ignore="missingPrefix">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="155"
+        android:background="@drawable/select_pic">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:text="사진 가져오기"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#016a96"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="9"
+            app:scale_width="200"
+            app:scale_height="22"/>
+        <Button
+            android:id="@+id/btn_primary"
+            android:layout_width="350dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:background="@drawable/pick_grade_back"
+            style="?android:attr/borderlessButtonStyle"
+
+            android:text="초        등"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="40"
+            app:scale_width="180"
+            app:scale_height="35" />
+        <Button
+            android:id="@+id/btn_middle"
+            android:layout_width="350dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:background="@drawable/pick_grade_back"
+            style="?android:attr/borderlessButtonStyle"
+
+            android:text="중        등"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="75"
+            app:scale_width="180"
+            app:scale_height="35"/>
+        <Button
+            android:id="@+id/btn_high"
+            android:layout_width="350dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:background="@drawable/pick_grade_back"
+            style="?android:attr/borderlessButtonStyle"
+
+            android:text="고        등"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="110"
+            app:scale_width="180"
+            app:scale_height="35"/>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+</RelativeLayout>
