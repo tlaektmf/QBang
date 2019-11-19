@@ -7,11 +7,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class TeacherHomeActivity extends AppCompatActivity {
+
+    ImageButton buttonAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +25,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.teacher_nav_view);
 
-        //init();
+        init();
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
@@ -38,5 +43,16 @@ public class TeacherHomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+    }
+
+    public void init(){
+        buttonAlarm = findViewById(R.id.teacher_ib_alarm);
+    }
+
+    public void clickAlarm(View view) {
+        Intent intent;
+        intent = new Intent(TeacherHomeActivity.this, TeacherItemListActivity.class);
+        startActivity(intent);
     }
 }
