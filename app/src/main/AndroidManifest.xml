@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TeacherItemListActivity"></activity>
+        <activity android:name=".VM_TeacherSolveProblemActivity"></activity>
+        <activity android:name=".VM_ProblemListActivity" />
+        <activity android:name=".TeacherItemListActivity" />
         <activity android:name=".TeacherHomeActivity" />
         <activity android:name=".VM_RegisterUserActivity" />
         <activity android:name=".VM_RegiserOtherThingsActivity" />
@@ -56,11 +58,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <dist:module dist:instant="true" />
 
