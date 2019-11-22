@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.visualmath.dummy.DummyContent;
@@ -17,27 +19,38 @@ import java.util.List;
 
 public class TeacherItemListActivity extends AppCompatActivity {
     View recyclerView;
+    ViewGroup layout;
+
+    public static String TAG="TeacherItemList";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_item_list);
 
         init();
+
+        //** detailView 클릭 이벤트
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
+                startActivity(intent);
+//                finish();
+            }
+        });
     }
 
-    /**
-     * 알람 종류에 따라서 각기 다른 Activity로 이동해야됨
-     * @param view
-     */
-    public void showItemList(View view) {
-        Intent intent;
-        intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-        startActivity(intent);
+
+    public void activateList(View view) {
+
+        // 메뉴 리스트 활성 비활성
 
     }
 
     public void init(){
         recyclerView = findViewById(R.id.teacher_item_list);
+        layout = (ViewGroup) findViewById(R.id.teacher_item_detail_container);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
     }
@@ -45,6 +58,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new TeacherItemListActivity.SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS));
     }
+
 
 
     /**
@@ -56,9 +70,13 @@ public class TeacherItemListActivity extends AppCompatActivity {
         private final TeacherItemListActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
 
+        /**
+         * 알람 종류에 따라서 각기 다른 Activity로 이동해야됨
+         */
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG,"클릭함");
                 DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
 
                 Bundle arguments = new Bundle();
@@ -92,6 +110,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
             holder.mIdView.setText(mValues.get(position).details);
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
+
         }
 
         @Override
@@ -102,12 +121,14 @@ public class TeacherItemListActivity extends AppCompatActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
+            final ImageView mImageView;
 
 
             ViewHolder(View view) {
                 super(view);
                 mIdView = (TextView) view.findViewById(R.id.teacher_content_detail);
                 mContentView = (TextView) view.findViewById(R.id.teacher_content_title);
+                mImageView=(ImageView)view.findViewById(R.id.teacher_content_icon);
             }
         }
     }

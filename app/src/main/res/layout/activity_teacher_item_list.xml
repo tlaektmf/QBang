@@ -20,7 +20,7 @@
             android:layout_height="24dp"
             android:layout_marginLeft="15dp"
             android:background="@drawable/ic_menu_black_24dp"
-            android:onClick="showItemList" />
+            android:onClick="activateList" />
 
         <FrameLayout
             android:id="@+id/teacherframeLayout"
