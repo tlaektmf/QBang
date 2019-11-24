@@ -14,12 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.dummy.TestContent;
 
 import java.util.List;
 
 public class VM_ProblemListActivity extends AppCompatActivity {
     View recyclerView;
     ViewGroup layout;
+    public static String TAG="VM_ProblemList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,12 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
     }
 
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS));
+        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, new TestContent().getITEMS()));
     }
 
 
@@ -60,7 +63,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<VM_ProblemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final VM_ProblemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<TestContent.TestItem> mValues;
 
         /**
          * 문제 상세뷰로 이동
@@ -68,10 +71,12 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                TestContent.TestItem item = (TestContent.TestItem) view.getTag();
 
                 Bundle arguments = new Bundle();
-                arguments.putString(TeacherItemDetailFragment.ARG_ITEM_ID, item.id);
+                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_ID, item.getId());
+                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_CONTENT, item.getContent());
+                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_DETAIL, item.getDetails());
                 ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
                 fragment.setArguments(arguments);
                 mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -81,7 +86,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(VM_ProblemListActivity parent,
-                                      List<DummyContent.DummyItem> items) {
+                                      List<TestContent.TestItem> items) {
             mValues = items;
             mParentActivity = parent;
 
@@ -97,8 +102,8 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final VM_ProblemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
 
-            holder.mDetailView.setText(mValues.get(position).content);
-            holder.mtitleView.setText(mValues.get(position).details);
+            holder.mDetailView.setText(mValues.get(position).getDetails());
+            holder.mtitleView.setText(mValues.get(position).getContent());
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
 
@@ -127,12 +132,35 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     public void activateList(View view) {
     }
 
+
+    private void setData(@NonNull RecyclerView recyclerView,List<TestContent.TestItem> items) {
+        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, items));
+    }
+
     public void showElementary(View view) {
+        //** 초등
+        Log.i(TAG,"클릭");
+        TestContent testContent=new TestContent();
+        for(int i=0;i<3;i++){
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","초등"+i,"detail"+i));
+        }
+        setData((RecyclerView) recyclerView,testContent.getITEMS());
     }
 
     public void showMid(View view) {
+        TestContent testContent=new TestContent();
+        for(int i=0;i<15;i++){
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","중등"+i,"detail"+i));
+        }
+        setData((RecyclerView) recyclerView,testContent.getITEMS());
+
     }
 
     public void showHigh(View view) {
+        TestContent testContent=new TestContent();
+        for(int i=0;i<15;i++){
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","고등"+i,"detail"+i));
+        }
+        setData((RecyclerView) recyclerView,testContent.getITEMS());
     }
 }
