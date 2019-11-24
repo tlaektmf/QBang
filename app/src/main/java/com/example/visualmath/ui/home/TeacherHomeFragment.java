@@ -36,8 +36,8 @@ public class TeacherHomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_teacher_home, container, false);
 
-        final ImageButton buttonPickProblem=root.findViewById(R.id.ib_qText);
-        final ImageButton buttonSolveProblem=root.findViewById(R.id.ib_qVideo);
+        final ImageButton buttonPickProblem=root.findViewById(R.id.ib_pickProblem);
+        final ImageButton buttonSolveProblem=root.findViewById(R.id.ib_solveProblem);
 
 
 
