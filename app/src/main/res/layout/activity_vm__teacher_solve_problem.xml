@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VM_TeacherSolveProblemActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_border"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="10dp">
+
+
+            <LinearLayout
+                android:id="@+id/ll_choice"
+                android:layout_width="411dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:onClick="showUsersLoad"
+                    android:id="@+id/btn_full_problem"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorLightSteelBlue"
+                    android:fontFamily="@font/bmdohyeon_ttf"
+                    android:text="문제/답"
+                    android:textSize="10dp" />
+
+                <Button
+                    android:onClick="showSolve"
+                    android:id="@+id/btn_full_solve"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorLightSteelBlue"
+                    android:fontFamily="@font/bmdohyeon_ttf"
+                    android:text="풀이만"
+                    android:textSize="10dp" />
+
+                <Button
+                    android:onClick="showBoth"
+                    android:id="@+id/btn_both"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorLightSteelBlue"
+                    android:fontFamily="@font/bmdohyeon_ttf"
+                    android:text="모두보기"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_top"
+                android:layout_width="411dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/bmdohyeon_ttf"
+                    android:gravity="center"
+                    android:text="2015년 3월 교육청 1번"
+                    android:textStyle="bold" />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/teacher_solve_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

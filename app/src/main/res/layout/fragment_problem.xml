@@ -56,11 +56,6 @@
                     app:scale_width="200"
                     app:scale_height="10"/>
 
-                <!--        <View-->
-                <!--            android:id="@+id/splitView"-->
-                <!--            android:layout_width="match_parent"-->
-                <!--            android:layout_height="1dp"-->
-                <!--            android:background="@color/subTxtColor"/>-->
 
                 <!--        채팅 부분-->
                 <androidx.recyclerview.widget.RecyclerView
@@ -125,7 +120,7 @@
             app:scale_height="22"/>
 
         <Button
-            android:id="@+id/sendMsgBtn"
+            android:id="@+id/showActionDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/tick"
@@ -136,29 +131,5 @@
             app:scale_width="9"
             app:scale_height="9"/>
     </com.ssomai.android.scalablelayout.ScalableLayout>
-<!--        </LinearLayout>-->
-<!--    </ScrollView>-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/menuChatRoomImgView"-->
-<!--            android:contentDescription="@string/app_name"-->
-<!--            android:layout_marginEnd="@dimen/dp8"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/titleLayout"-->
-<!--            app:layout_constraintTop_toTopOf="@id/titleLayout"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/titleLayout"-->
-<!--            android:src="@drawable/ic_menu_black_24dp"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:layout_width="36dp"-->
-<!--            android:layout_height="36dp" />-->
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        app:layout_constraintTop_toBottomOf="@id/chatRoomListView"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:id="@+id/bottomMsgLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:background="@color/subTxtColor"-->
-<!--        android:layout_height="48dp">-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </RelativeLayout>
