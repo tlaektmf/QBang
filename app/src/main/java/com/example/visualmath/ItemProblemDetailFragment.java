@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.visualmath.dummy.DummyContent;
 import com.example.visualmath.dummy.TestContent;
@@ -80,6 +81,15 @@ public class ItemProblemDetailFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent=new Intent(getActivity(),VM_ProblemDetailActivity.class);
                     startActivity(intent);
+                }
+            });
+
+            Button buttonMatch=rootView.findViewById(R.id.bt_match);
+            buttonMatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   //** 매칭완료 다이얼로그 생성
+                    Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
                 }
             });
 

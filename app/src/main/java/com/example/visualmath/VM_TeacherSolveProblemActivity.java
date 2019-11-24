@@ -10,5 +10,6 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__teacher_solve_problem);
+
     }
 }
