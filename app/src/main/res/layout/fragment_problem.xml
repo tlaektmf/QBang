@@ -89,7 +89,7 @@
             app:scale_height="30"/>
 
         <ImageView
-            android:id="@+id/addPhotoImgView"
+            android:id="@+id/showActionDialog"
             android:contentDescription="@string/app_name"
 
             android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
             app:scale_height="22"/>
 
         <Button
-            android:id="@+id/showActionDialog"
+            android:id="@+id/sendMsgBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/tick"

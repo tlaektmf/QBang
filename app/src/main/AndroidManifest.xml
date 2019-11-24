@@ -12,11 +12,14 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".VM_RegisterUserActivity"
-            android:theme="@style/AppTheme.notitlebar">
+            android:theme="@style/AppTheme.notitlebar"></activity>
+
         <activity android:name=".VM_RegiserOtherThingsActivity"
-            android:theme="@style/AppTheme.notitlebar"/>
+            android:theme="@style/AppTheme.notitlebar"></activity>
+
         <activity android:name=".VM_FullViewActivity"
             android:windowSoftInputMode="adjustNothing"/>
+
         <activity android:name=".VM_RegisterProblemActivity"/>
         <activity android:name=".VM_ProblemDetailActivity"/>
         <activity android:name=".VM_TeacherSolveProblemActivity" />
@@ -27,11 +30,14 @@
         <activity
             android:name=".VM_SettingsActivity"
             android:label="@string/title_activity_vm__settings" />
+
         <activity android:name=".VM_WebViewActivity" />
+
         <activity
             android:name=".ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ItemDetailActivity"
             android:label="@string/title_item_detail"
@@ -39,15 +45,22 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.visualmath.ItemListActivity" />
+                android:value="com.example.visualmath.ItemListActivity">
+
+            </meta-data>
+        </activity>
+
 
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"/>
+
         <activity android:name=".VM_AutoLoginCheckActivity"
             android:theme="@style/AppTheme.blueStatusBar"/>
+
         <activity android:name=".VM_LoginActivity"
             android:theme="@style/AppTheme.blueStatusBar"/>
+
         <activity android:name=".VM_LauncherActivity"
             android:theme="@style/AppTheme.blueStatusBar">
             <intent-filter>

@@ -126,7 +126,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                             // 계정확인이 완료되면, user 정보를 가지고 HomeActivity 이동
                             Intent intent=null;
-                            if(editTextUserId.getText().toString().equals("dazzel0826@gmail.com")){
+                            if(editTextUserId.getText().toString().equals("student@gmail.com")){
                                 intent= new Intent(getApplicationContext(), HomeActivity.class);
                             }
                             else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
