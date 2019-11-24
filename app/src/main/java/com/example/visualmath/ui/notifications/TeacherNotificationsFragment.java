@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_SettingsActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +27,11 @@ public class TeacherNotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.settings, new VM_SettingsActivity.SettingsFragment())
+                .commit();
+
         return inflater.inflate(R.layout.fragment_teacher_notifications, container, false);
     }
 
