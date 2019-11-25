@@ -88,8 +88,10 @@ public class ItemProblemDetailFragment extends Fragment {
             buttonMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   //** 매칭완료 다이얼로그 생성
-                    Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
+                    //** 매칭완료 다이얼로그 생성
+                    // Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
+
+
                 }
             });
 

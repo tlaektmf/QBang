@@ -88,13 +88,14 @@
             app:scale_width="200"
             app:scale_height="30"/>
 
-        <ImageView
+        <Button
             android:id="@+id/showActionDialog"
             android:contentDescription="@string/app_name"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/chat_plusmenu_btn"
+            android:background="@drawable/chat_plusmenu_btn"
+            style="?android:attr/borderlessButtonStyle"
 
             app:scale_left="7"
             app:scale_top="13"

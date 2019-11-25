@@ -108,7 +108,7 @@ public class SolveFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
             }
         });
     }
