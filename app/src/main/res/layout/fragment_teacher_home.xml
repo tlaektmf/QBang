@@ -1,63 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.TeacherHomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.TeacherHomeFragment">
+    android:background="#f2f2f4"
+    tools:ignore="missingPrefix">
 
-    <ImageButton
-        android:id="@+id/ib_pickProblem"
-        android:layout_width="193dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginBottom="119dp"
-        android:backgroundTint="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@android:drawable/ic_btn_speak_now"
-        app:layout_constraintBottom_toTopOf="@+id/ib_solveProblem"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scale_base_width="200"
+        app:scale_base_height="220">
 
-    <ImageButton
-        android:id="@+id/ib_solveProblem"
-        android:layout_width="217dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="215dp"
-        android:backgroundTint="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@android:drawable/ic_btn_speak_now"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ib_pickProblem" />
+        <ImageButton
+            android:id="@+id/ib_pickProblem"
+            android:background="@drawable/teacher_main_btn01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_left="5"
+            app:scale_top="27"
+            app:scale_width="190"
+            app:scale_height="80"/>
 
+        <ImageButton
+            android:id="@+id/ib_solveProblem"
+            android:background="@drawable/teacher_main_btn02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_left="5"
+            app:scale_top="110"
+            app:scale_width="190"
+            app:scale_height="80"/>
 
-    <TextView
-        android:id="@+id/tv_qText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="64dp"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="문제 풀기"
-        android:textColor="@color/colorLightSlateGray"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/ib_solveProblem"
-        app:layout_constraintTop_toBottomOf="@+id/ib_solveProblem" />
+    </com.ssomai.android.scalablelayout.ScalableLayout>
 
-    <TextView
-        android:id="@+id/tv_qVideo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/bmdohyeon_ttf"
-        android:text="문제 선택"
-        android:textColor="@color/colorLightSlateGray"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/ib_pickProblem"
-        app:layout_constraintTop_toBottomOf="@+id/ib_pickProblem" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
