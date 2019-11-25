@@ -11,63 +11,63 @@
 
 
     <!-- TODO: Update blank fragment layout -->
-            <com.ssomai.android.scalablelayout.ScalableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:scale_base_width="200"
-                app:scale_base_height="325">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="325">
 
-                <!--        채팅 상단 부분-->
-                <ImageView
-                    android:id="@+id/backChatRoomListImgView"
-                    android:contentDescription="@string/app_name"
+        <!--        채팅 상단 부분-->
+        <ImageView
+            android:id="@+id/backChatRoomListImgView"
+            android:contentDescription="@string/app_name"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/chat_backbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chat_backbtn"
 
-                    app:scale_left="10"
-                    app:scale_top="10"
-                    app:scale_width="10"
-                    app:scale_height="10"/>
-                <TextView
-                    android:id="@+id/chatRoomFriendNameTxtView"
+            app:scale_left="10"
+            app:scale_top="10"
+            app:scale_width="10"
+            app:scale_height="10"/>
+        <TextView
+            android:id="@+id/chatRoomFriendNameTxtView"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                    android:text="문제 제목"
-                    android:fontFamily="@font/nanumsquaure_b"
-                    android:textColor="#016a96"
-                    app:scale_textsize="9"
-                    android:textAlignment="center"
+            android:text="문제 제목"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#016a96"
+            app:scale_textsize="9"
+            android:textAlignment="center"
 
-                    app:scale_left="62"
-                    app:scale_top="10"
-                    app:scale_width="80"
-                    app:scale_height="15"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/chat_title_line"
+            app:scale_left="62"
+            app:scale_top="10"
+            app:scale_width="80"
+            app:scale_height="15"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chat_title_line"
 
-                    app:scale_left="0"
-                    app:scale_top="23"
-                    app:scale_width="200"
-                    app:scale_height="10"/>
+            app:scale_left="0"
+            app:scale_top="23"
+            app:scale_width="200"
+            app:scale_height="10"/>
 
 
-                <!--        채팅 부분-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/chatRoomListView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+        <!--        채팅 부분-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRoomListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                    app:scale_left="0"
-                    app:scale_top="37"
-                    app:scale_width="200"
-                    app:scale_height="230"/>
-            </com.ssomai.android.scalablelayout.ScalableLayout>
+            app:scale_left="0"
+            app:scale_top="37"
+            app:scale_width="200"
+            app:scale_height="230"/>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
 
 
     <com.ssomai.android.scalablelayout.ScalableLayout
