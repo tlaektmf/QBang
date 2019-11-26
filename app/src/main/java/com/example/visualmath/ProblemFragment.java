@@ -46,8 +46,11 @@ public class ProblemFragment extends Fragment {
     private Button showActionDialog;
 
     private int returnResult;
-    private static final int GALLERY=1;
-    private static final int CAMERA=2;
+    private static final int CAMERA=1;
+    private static final int GALLERY=2;
+    private static final int LIVE=3;
+    private static final int VIDEO=4;
+    private static final int COMPLETE=5;
     private static final int NOTHING=-1;
 
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
@@ -119,34 +122,34 @@ public class ProblemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView=(ViewGroup)inflater.inflate(R.layout.fragment_problem, container, false);
-        View view=inflater.inflate(R.layout.fragment_problem, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_problem, container, false);
+        View view = inflater.inflate(R.layout.fragment_problem, container, false);
 
-        RecyclerView recyclerView=(RecyclerView)rootView.findViewById(R.id.chatRoomListView);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.chatRoomListView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         chats = new Vector<>();
 
-       ceateData();
+        ceateData();
 
-        adapter = new VM_ChatAdapter( chats,getActivity());
+        adapter = new VM_ChatAdapter(chats, getActivity());
         recyclerView.setAdapter(adapter);
 
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
 //                linearLayoutManager.getOrientation());
 //        recyclerView.addItemDecoration(dividerItemDecoration);
 
-        msgEditText=rootView.findViewById(R.id.msgEditText);
-        sendMsgBtn=rootView.findViewById(R.id.sendMsgBtn);
-        showActionDialog=rootView.findViewById(R.id.showActionDialog);
+        msgEditText = rootView.findViewById(R.id.msgEditText);
+        sendMsgBtn = rootView.findViewById(R.id.sendMsgBtn);
+        showActionDialog = rootView.findViewById(R.id.showActionDialog);
 
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG,"okay");
+                Log.i(TAG, "okay");
                 count++;
 
-                VM_Data_CHAT data=new VM_Data_CHAT("근육몬", msgEditText.getText().toString(),0, 0);
+                VM_Data_CHAT data = new VM_Data_CHAT("근육몬", msgEditText.getText().toString(), 0, 0);
                 chats.add(data);
                 adapter.notifyDataSetChanged();
             }
@@ -158,53 +161,62 @@ public class ProblemFragment extends Fragment {
                 //** 다이얼로그 위치
                 //Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
 
-                final VM_Dialog_PickHowToGetPicture dialog = new VM_Dialog_PickHowToGetPicture(getContext());
+                final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
 
-                // 커스텀 다이얼로그의 결과를 담을 매개변수로 같이 넘겨준다.
-
-                dialog.setDialogListener(new VM_DialogListener_PickHowToGetPicture() {
+                dig.setDialogListener(new VM_DialogLIstener_chatMenu() {
                     @Override
-                    public void onButtonTakePhotoClicked() {
-                        returnResult=CAMERA;
-                        dialog.setReturnResult(CAMERA);
-                        takePhoto();
+                    public void onButtonCamera() {
+                        Toast.makeText(getActivity(),"카메라버튼",Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onButtonGetAlbumFileClicked() {
-                        returnResult=GALLERY;
-                        dialog.setReturnResult(GALLERY);
-                        getAlbumFile();
+                    public void onButtonGallery() {
+                        Toast.makeText(getActivity(),"갤러리버튼",Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onButtonLive() {
+                        Toast.makeText(getActivity(),"라이브버튼",Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onButtonVoice() {
+                        Toast.makeText(getActivity(),"음성버튼",Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onButtonComplete() {
+                        Toast.makeText(getActivity(),"완료버튼",Toast.LENGTH_LONG).show();
+
                     }
                 });
-                dialog.callFunction();// 커스텀 다이얼로그를 호출
+                dig.callFunction();
             }
         });
-
         return rootView;
-        //return inflater.inflate(R.layout.fragment_problem, container, false);
     }
 
 
-    public void ceateData(){
+            public void ceateData() {
 
-        //** 더미 데이터
-        String fName="근육몬";
-        switch (fName) {
-            case "근육몬":
-                chats.add(new VM_Data_CHAT("근육몬", "어떤 문제를 도와줄까요?",0, 0));
-                chats.add(new VM_Data_CHAT("근육몬", "안녕~",1, R.drawable.img_video));
-                chats.add(new VM_Data_CHAT("근육몬", "반가워요.",0, 0));
-                chats.add(new VM_Data_CHAT("근육몬", "이렇게 푸세용~",1, R.drawable.img_video));
-                break;
-            case "괴력몬":
-                chats.add(new VM_Data_CHAT("괴력몬", "안녕하세요",0 ,0));
-                chats.add(new VM_Data_CHAT("괴력몬", "이문제를 잘 모르겠어요~",1,R.drawable.img_contract));
-                chats.add(new VM_Data_CHAT("괴력몬", "감사합니다",0,0));
-                break;
-        }
-
-    }
-
+                //** 더미 데이터
+                String fName = "근육몬";
+                switch (fName) {
+                    case "근육몬":
+                        chats.add(new VM_Data_CHAT("근육몬", "어떤 문제를 도와줄까요?", 0, 0));
+                        chats.add(new VM_Data_CHAT("근육몬", "안녕~", 1, R.drawable.img_video));
+                        chats.add(new VM_Data_CHAT("근육몬", "반가워요.", 0, 0));
+                        chats.add(new VM_Data_CHAT("근육몬", "이렇게 푸세용~", 1, R.drawable.img_video));
+                        break;
+                    case "괴력몬":
+                        chats.add(new VM_Data_CHAT("괴력몬", "안녕하세요", 0, 0));
+                        chats.add(new VM_Data_CHAT("괴력몬", "이문제를 잘 모르겠어요~", 1, R.drawable.img_contract));
+                        chats.add(new VM_Data_CHAT("괴력몬", "감사합니다", 0, 0));
+                        break;
+                }
+            }
 
 }
