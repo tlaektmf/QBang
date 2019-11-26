@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherItemListActivity">
+    tools:context=".TeacherItemListActivity"
+    android:background="#f2f2f4">
 
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/constraintLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/ib_menu"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/ic_menu_black_24dp"
-            android:onClick="activateList" />
-
+<!--        뒤에 부분-->
         <FrameLayout
             android:id="@+id/teacherframeLayout"
             android:layout_width="match_parent"
@@ -32,8 +22,36 @@
 
         </FrameLayout>
 
+<!--        상단바 부분-->
+        <LinearLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/home_top_back"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    </LinearLayout>
-
-
+            <Button
+                android:id="@+id/ib_menu"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_menu_black_24dp"
+                android:onClick="activateList"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="15dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="문제 확인하기"
+                android:textColor="@color/colorBlack"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:paddingRight="20dp"
+                android:fontFamily="@font/nanumsquaure_eb"
+                android:layout_gravity="center"
+                android:layout_marginBottom="6dp"/>
+        </LinearLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/item_detail"
     android:orientation="vertical"
-    tools:context=".TeacherItemDetailFragment"
-
-    >
+    tools:context=".TeacherItemDetailFragment">
 
     <TextView
         android:fontFamily="@font/bmdohyeon_ttf"
