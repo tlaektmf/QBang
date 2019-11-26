@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:baselineAligned="false"
-    android:divider="?android:attr/dividerHorizontal"
-    android:orientation="horizontal"
-    android:showDividers="middle"
-    tools:context=".TeacherItemListActivity">
+    android:layout_gravity="start">
 
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/teacher_item_list"
-        android:name="com.example.visualmath.TeacherItemListFragment"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.example.visualmath.TeacherItemListActivity"
-        tools:listitem="@layout/teacher_item_list_content" />
-
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/teacher_item_detail_container"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="match_parent"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--        메인 화면-->
+        <FrameLayout
+            android:id="@+id/item_detail_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/back_img" />
+    </RelativeLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/drawer_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <!--        슬라이드 메뉴-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/teacher_item_list"
+            android:name="com.example.visualmath.TeacherItemListFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            android:paddingTop="65dp"
+            tools:context="com.example.visualmath.TeacherItemListActivity"
+            tools:listitem="@layout/teacher_item_list_content"
+            android:background="#ffffff"/>
+    </RelativeLayout>
+</FrameLayout>
+

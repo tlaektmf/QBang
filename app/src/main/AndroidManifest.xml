@@ -24,7 +24,8 @@
         <activity android:name=".VM_ProblemDetailActivity"/>
         <activity android:name=".VM_TeacherSolveProblemActivity" />
         <activity android:name=".VM_ProblemListActivity" />
-        <activity android:name=".TeacherItemListActivity" />
+        <activity android:name=".TeacherItemListActivity"
+            android:theme="@style/AppTheme.notitlebar"/>
         <activity android:name=".TeacherHomeActivity" />
 
         <activity
