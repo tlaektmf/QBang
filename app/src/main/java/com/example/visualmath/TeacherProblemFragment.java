@@ -33,7 +33,6 @@ public class TeacherProblemFragment extends Fragment {
     private Button sendMsgBtn;
     private Button showActionDialog;
 
-
     public TeacherProblemFragment() {
         // Required empty public constructor
     }
@@ -79,12 +78,37 @@ public class TeacherProblemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //** 다이얼로그 위치
-                Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
+
+                final  VM_Dialog_chatMenu_teacher dig = new VM_Dialog_chatMenu_teacher(getContext());
+
+                dig.setDialogListener(new VM_DialogLIstener_chatMenu_teacher() {
+
+                    @Override
+                    public void onButtonCamera() {
+                        Toast.makeText(getActivity(),"카메라버튼",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onButtonGallery() {
+                        Toast.makeText(getActivity(),"갤러리버튼",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onButtonSetTime() {
+                        Toast.makeText(getActivity(),"시간정하기버튼",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onButtonVoice() {
+                        Toast.makeText(getActivity(),"음성버튼",Toast.LENGTH_LONG).show();
+                    }
+                });
+                dig.callFunction();
+
             }
         });
 
         return rootView;
-
 
     }
 

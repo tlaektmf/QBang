@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="7dp"
+    tools:ignore="missingPrefix">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="200"
+        app:scale_base_height="155"
+        android:background="@drawable/select_pic">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:text="내용 추가하기"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textColor="#016a96"
+            app:scale_textsize="10"
+
+            app:scale_left="0"
+            app:scale_top="9"
+            app:scale_width="200"
+            app:scale_height="22"/>
+        <Button
+            android:id="@+id/dig_btnCamera_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@drawable/d_cam"
+            style="?android:attr/borderlessButtonStyle"
+
+            app:scale_left="20"
+            app:scale_top="40"
+            app:scale_width="35"
+            app:scale_height="35" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center"
+
+            android:text="카메라"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="8"
+
+            app:scale_left="20"
+            app:scale_top="76"
+            app:scale_width="35"
+            app:scale_height="10" />
+        <Button
+            android:id="@+id/dig_btnVoice_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@drawable/d_voice"
+            style="?android:attr/borderlessButtonStyle"
+
+            app:scale_left="20"
+            app:scale_top="95"
+            app:scale_width="35"
+            app:scale_height="35" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center"
+
+            android:text="음 성"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="8"
+
+            app:scale_left="20"
+            app:scale_top="131"
+            app:scale_width="35"
+            app:scale_height="10" />
+        <Button
+            android:id="@+id/dig_btnGallery_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/d_gallery"
+            style="?android:attr/borderlessButtonStyle"
+
+            app:scale_left="-1"
+            app:scale_top="40"
+            app:scale_width="35"
+            app:scale_height="35" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+
+            android:text="갤러리"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="8"
+
+            app:scale_left="-1"
+            app:scale_top="76"
+            app:scale_width="35"
+            app:scale_height="10" />
+        <Button
+            android:id="@+id/dig_btnSettime_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/d_settime"
+            style="?android:attr/borderlessButtonStyle"
+
+            app:scale_left="60"
+            app:scale_top="40"
+            app:scale_width="35"
+            app:scale_height="35" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+
+            android:text="라이브 시간"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            app:scale_textsize="8"
+
+            app:scale_left="60"
+            app:scale_top="76"
+            app:scale_width="50"
+            app:scale_height="10" />
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+</RelativeLayout>
