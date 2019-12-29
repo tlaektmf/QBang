@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.visualmath.dummy.DummyContent;
@@ -54,7 +55,6 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, new TestContent().getITEMS()));
     }
-
 
     /**
      * class SimpleItemRecyclerViewAdapter
@@ -130,6 +130,14 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     //**
     public void activateList(View view) {
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.choose_drawer_menu);
+        if(layout.getVisibility()==View.VISIBLE){
+            //현재 뷰가 보이면
+            layout.setVisibility(View.GONE);
+        }else{
+            //뷰가 보이지 않으면
+            layout.setVisibility(View.VISIBLE);
+        }
     }
 
 
