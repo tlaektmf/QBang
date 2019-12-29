@@ -38,6 +38,9 @@
             android:paddingTop="100dp"
             tools:context="com.example.visualmath.VM_ProblemListActivity"
             tools:listitem="@layout/item_problem_list_content"
-            android:background="#ffffff"/>
+
+            android:layout_marginRight="20dp"
+            android:background="#ffffff"
+            android:elevation="10dp"/>
     </RelativeLayout>
 </FrameLayout>
