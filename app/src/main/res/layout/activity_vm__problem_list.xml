@@ -26,16 +26,17 @@
 <!--        상단바-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="110dp"
             android:orientation="vertical"
             android:background="@drawable/top_menu_back02">
             <LinearLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="12.8dp">
 
                 <Button
                     android:id="@+id/ib_menu"
@@ -43,7 +44,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginBottom="6dp"
                     android:background="@drawable/ic_menu_black_24dp"
                     android:onClick="activateList" />
                 <TextView
@@ -53,10 +53,9 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="20dp"
                     android:textAlignment="center"
-                    android:paddingRight="20dp"
+                    android:paddingRight="25dp"
                     android:fontFamily="@font/nanumsquaure_eb"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="6dp"/>
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
             <LinearLayout
@@ -67,7 +66,8 @@
                     android:id="@+id/ib_element"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="24dp"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:text="초     등"
                     android:textSize="17dp"
@@ -80,7 +80,8 @@
                     android:id="@+id/ib_mid"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="24dp"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:text="중     등"
                     android:textSize="17dp"
@@ -93,7 +94,8 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="24dp"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:text="고     등"
                     android:textSize="17dp"

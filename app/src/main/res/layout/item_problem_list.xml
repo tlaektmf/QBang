@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            android:paddingTop="65dp"
+            android:paddingTop="100dp"
             tools:context="com.example.visualmath.VM_ProblemListActivity"
             tools:listitem="@layout/item_problem_list_content"
             android:background="#ffffff"/>

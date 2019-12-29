@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -147,27 +148,51 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     public void showElementary(View view) {
         //** 초등
+        Button btn01 = findViewById(R.id.ib_element);
+        Button btn02 = findViewById(R.id.ib_mid);
+        Button btn03 = findViewById(R.id.ib_high);
+
+        btn01.setSelected(true);
+        btn02.setSelected(false);
+        btn03.setSelected(false);
+
         Log.i(TAG,"클릭");
         TestContent testContent=new TestContent();
         for(int i=0;i<3;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","초등"+i,"detail"+i));
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","초     등"+i,"detail"+i));
         }
         setData((RecyclerView) recyclerView,testContent.getITEMS());
     }
 
     public void showMid(View view) {
+        Button btn01 = findViewById(R.id.ib_element);
+        Button btn02 = findViewById(R.id.ib_mid);
+        Button btn03 = findViewById(R.id.ib_high);
+
+        btn01.setSelected(false);
+        btn02.setSelected(true);
+        btn03.setSelected(false);
+
         TestContent testContent=new TestContent();
         for(int i=0;i<15;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","중등"+i,"detail"+i));
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","중     등"+i,"detail"+i));
         }
         setData((RecyclerView) recyclerView,testContent.getITEMS());
 
     }
 
     public void showHigh(View view) {
+        Button btn01 = findViewById(R.id.ib_element);
+        Button btn02 = findViewById(R.id.ib_mid);
+        Button btn03 = findViewById(R.id.ib_high);
+
+        btn01.setSelected(false);
+        btn02.setSelected(false);
+        btn03.setSelected(true);
+
         TestContent testContent=new TestContent();
         for(int i=0;i<15;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","고등"+i,"detail"+i));
+            testContent.getITEMS().add(new TestContent.TestItem(i+"","고     등"+i,"detail"+i));
         }
         setData((RecyclerView) recyclerView,testContent.getITEMS());
     }
