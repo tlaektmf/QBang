@@ -2,6 +2,7 @@ package com.example.visualmath;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,6 +74,18 @@ public class TeacherItemDetailFragment extends Fragment {
             int resID = getResources().getIdentifier(res_name, "drawable",  getActivity().getPackageName());
             imageView.setImageResource(resID);
         }
+
+        Button goto_detal_btn = (Button)rootView.findViewById(R.id.teacher_show_detail_btn);
+        goto_detal_btn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getContext(), VM_FullViewActivity.class);
+//                intent.putExtra("UID", userId);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
