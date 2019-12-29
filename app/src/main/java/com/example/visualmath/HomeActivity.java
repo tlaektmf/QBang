@@ -1,11 +1,15 @@
 package com.example.visualmath;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -101,7 +105,23 @@ public class HomeActivity extends AppCompatActivity {
 //        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
     }
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
 
-
+        new AlertDialog.Builder(this)
+                .setTitle("VM")
+                .setMessage("정말 종료하시겠습니까?")
+                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        moveTaskToBack(true);
+                        finish();
+                    }
+                })
+                .setNegativeButton("아니오",null)
+                .show();
+        ///super.onBackPressed();
+    }
 }
 
