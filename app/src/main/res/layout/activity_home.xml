@@ -9,7 +9,29 @@
     android:layout_height="match_parent"
     tools:ignore="missingPrefix"
     android:background="#f2f2f4">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scale_base_width="200"
+        app:scale_base_height="300"
+        android:layout_centerInParent="true">
 
+        <fragment
+            android:layout_marginTop="55dp"
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/mobile_navigation"
+            app:scale_left="0"
+            app:scale_top="0"
+            app:scale_width="200"
+            app:scale_height="300"
+            android:layout_gravity="center"
+            android:background="#ff0000"/>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
     <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,28 +82,7 @@
 
     </com.ssomai.android.scalablelayout.ScalableLayout>
 
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:scale_base_width="200"
-        app:scale_base_height="220"
-        android:layout_centerInParent="true">
 
-        <fragment
-            android:layout_marginTop="55dp"
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/mobile_navigation"
-            app:scale_left="0"
-            app:scale_top="0"
-            app:scale_width="200"
-            app:scale_height="220"
-            android:layout_gravity="center" />
-
-    </com.ssomai.android.scalablelayout.ScalableLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"

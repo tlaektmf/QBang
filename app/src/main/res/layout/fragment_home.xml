@@ -14,27 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:scale_base_width="200"
-        app:scale_base_height="220">
+        app:scale_base_height="300">
 
         <ImageButton
             android:id="@+id/ib_qVideo"
             android:background="@drawable/home_btn01"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:scale_left="5"
-            app:scale_top="27"
+            app:scale_left="0"
+            app:scale_top="70"
             app:scale_width="190"
-            app:scale_height="80"/>
+            app:scale_height="80"
+            android:layout_gravity="center_horizontal"/>
 
         <ImageButton
             android:id="@+id/ib_qText"
             android:background="@drawable/home_btn02"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:scale_left="5"
-            app:scale_top="110"
+            app:scale_left="0"
+            app:scale_top="155"
             app:scale_width="190"
-            app:scale_height="80"/>
+            app:scale_height="80"
+            android:layout_gravity="center_horizontal"/>
 
     </com.ssomai.android.scalablelayout.ScalableLayout>
 

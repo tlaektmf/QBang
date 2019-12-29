@@ -4,54 +4,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
+    android:layout_width="370dp"
     android:layout_height="70dp"
     tools:ignore="missingPrefix"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
     android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp"
-    android:background="@drawable/calendar_list_back">
+    android:background="@drawable/calendar_list_back"
+    android:gravity="center"
+    android:layout_gravity="center_horizontal">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp">
+            android:gravity="center"
+            android:layout_marginLeft="4dp">
             <TextView
                 android:id="@+id/startTime"
-                android:layout_width="80dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
 
                 android:text="2:00 PM"
-                android:fontFamily="@font/nanumsquaure_r"
+                android:fontFamily="@font/nanumsquaure_b"
                 android:textSize="12dp"
                 android:layout_marginBottom="3dp"
-                android:textColor="#cc3731"/>
+                android:textColor="#FF5D5D"/>
 
+<!--            색상 변경(빨강) : cc3731-->
             <TextView
                 android:id="@+id/endTime"
-                android:layout_width="80dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
 
                 android:text="3:00 PM"
-                android:fontFamily="@font/nanumsquaure_r"
+                android:fontFamily="@font/nanumsquaure_b"
                 android:textSize="12dp"
-                android:textColor="#cc3731"/>
+                android:textColor="#FF5D5D"/>
         </LinearLayout>
     <TextView
         android:id="@+id/problem_name"
-        android:layout_width="250dp"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
 
         android:text="교육청 1"
         android:fontFamily="@font/nanumsquaure_b"
-        android:textSize="20dp"
-        android:textColor="#016a96"/>
+        android:textSize="17dp"
+        android:textColor="#016a96"
+        android:layout_marginBottom="2dp"/>
     <ImageView
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:background="@drawable/complete_btn"
-        android:layout_marginTop="19dp"/>
+        android:layout_marginBottom="1dp"/>
 </LinearLayout>

@@ -15,11 +15,11 @@
         android:background="@drawable/search"
         style="?android:attr/borderlessButtonStyle"
         android:layout_marginRight="36dp"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="5dp"/>
     <CalendarView
         android:id="@+id/calendar"
         android:layout_width="400dp"
-        android:layout_height="320dp">
+        android:layout_height="wrap_content">
 
     </CalendarView>
     <TextView
@@ -28,7 +28,12 @@
         android:layout_height="wrap_content"
         android:text="확인"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:gravity="left"
+        android:layout_marginLeft="15dp"
+        android:textColor="#FF5D5D"
+        android:fontFamily="@font/nanumsquaure_b"
+        android:textSize="15dp"
+        android:layout_marginBottom="10dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendar_recyclerview"
         tools:listitem="@layout/item_list_calendar"
@@ -36,6 +41,6 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#ff0000"/>
+        android:overScrollMode="never"/>
 
 </LinearLayout>

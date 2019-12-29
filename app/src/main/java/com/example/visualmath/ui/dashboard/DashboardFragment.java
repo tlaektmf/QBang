@@ -78,7 +78,7 @@ public class DashboardFragment extends Fragment {
         this_day = day;
 
 //        final TextView datecheck = getView().findViewById(R.id.datecheck);
-        datecheck.setText(this_year+"년 "+this_month+"월 "+this_day+"일 날짜 확인");
+        datecheck.setText(this_year+"년 "+this_month+"월 "+this_day+"일 문제 목록");
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -86,7 +86,7 @@ public class DashboardFragment extends Fragment {
                 //선택한 날짜가 전돨됨
 
                 this_year = Integer.toString(year);
-                datecheck.setText(year+"년 "+month+"월 "+dayOfMonth+"일 날짜 확인");
+                datecheck.setText(year+"년 "+month+"월 "+dayOfMonth+"일 문제 목록");
             }
         });
     }
