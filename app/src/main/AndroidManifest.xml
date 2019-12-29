@@ -24,7 +24,8 @@
         <activity android:name=".VM_ProblemDetailActivity"/>
         <activity android:name=".VM_TeacherSolveProblemActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".VM_ProblemListActivity" />
+        <activity android:name=".VM_ProblemListActivity"
+            android:theme="@style/AppTheme.notitlebar"/>
         <activity android:name=".TeacherItemListActivity"
             android:theme="@style/AppTheme.notitlebar"/>
         <activity android:name=".TeacherHomeActivity" />
