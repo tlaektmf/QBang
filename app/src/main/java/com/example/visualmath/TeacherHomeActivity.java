@@ -64,19 +64,32 @@ public class TeacherHomeActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
 
-        new AlertDialog.Builder(this)
-                .setTitle("VM")
-                .setMessage("정말 종료하시겠습니까?")
-                .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        moveTaskToBack(true);
-                        ActivityCompat.finishAffinity(TeacherHomeActivity.this);
-
-                    }
-                })
-                .setNegativeButton("아니오",null)
-                .show();
+//        new AlertDialog.Builder(this)
+//                .setTitle("VM")
+//                .setMessage("정말 종료하시겠습니까?")
+//                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        moveTaskToBack(true);
+//                        ActivityCompat.finishAffinity(TeacherHomeActivity.this);
+//
+//                    }
+//                })
+//                .setNegativeButton("아니오",null)
+//                .show();
         ///super.onBackPressed();
+        final VM_Dialog_finish_app dialog = new VM_Dialog_finish_app(TeacherHomeActivity.this);
+
+        dialog.setDialogListener(new VM_DialogListener_finish_app(){
+            public void onButtonYes(){
+//                네 버튼
+                moveTaskToBack(true);
+                ActivityCompat.finishAffinity(TeacherHomeActivity.this);
+            }
+            public void onButtonNo(){
+//                아니오 버튼
+            }
+        });
+        dialog.callFunction();
     }
 }
