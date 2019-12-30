@@ -98,16 +98,6 @@ public class TeacherDashboardFragment extends Fragment {
 //        private final ItemListActivity mParentActivity;
 //        private final boolean mTwoPane;
 
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
-                Toast.makeText(view.getContext(),"목록 선택",Toast.LENGTH_LONG).show();
-
-        //                화면전환
-
-            }
-        };
         SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
             mValues = items;
 //            mParentActivity = parent;
@@ -126,7 +116,7 @@ public class TeacherDashboardFragment extends Fragment {
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
+//            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
@@ -142,6 +132,17 @@ public class TeacherDashboardFragment extends Fragment {
                 super(view);
                 //mIdView = (TextView) view.findViewById(R.id.id_text);
                 mContentView = (TextView) view.findViewById(R.id.problem_name);
+
+                view.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        int pos = getAdapterPosition();
+
+                        if(pos!=RecyclerView.NO_POSITION){
+                            Toast.makeText(v.getContext(),"확인"+pos,Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         }
     }
