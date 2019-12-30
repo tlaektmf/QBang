@@ -9,7 +9,28 @@
     tools:context=".TeacherHomeActivity"
     tools:ignore="missingPrefix"
     android:background="#f2f2f4">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scale_base_width="200"
+        app:scale_base_height="300"
+        android:layout_centerInParent="true">
 
+        <fragment
+            android:layout_marginTop="55dp"
+            android:id="@+id/teacher_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/teacher_mobile_navigation"
+
+            app:scale_left="0"
+            app:scale_top="0"
+            app:scale_width="200"
+            app:scale_height="300"/>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
     <com.ssomai.android.scalablelayout.ScalableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,28 +68,7 @@
             app:scale_width="20"
             app:scale_height="20"/>
     </com.ssomai.android.scalablelayout.ScalableLayout>
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:scale_base_width="200"
-        app:scale_base_height="220"
-        android:layout_centerInParent="true">
 
-    <fragment
-        android:layout_marginTop="55dp"
-        android:id="@+id/teacher_nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/teacher_mobile_navigation"
-
-        app:scale_left="0"
-        app:scale_top="0"
-        app:scale_width="200"
-        app:scale_height="220"/>
-
-    </com.ssomai.android.scalablelayout.ScalableLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/teacher_nav_view"
         android:layout_width="match_parent"
@@ -78,6 +78,9 @@
         android:layout_marginEnd="0dp"
         android:background="@drawable/bottom_nav_back"
         android:paddingTop="15dp"
-        app:menu="@menu/teacher_bottom_nav_menu" />
+        app:menu="@menu/teacher_bottom_nav_menu"
+
+        app:itemIconTint="@drawable/bottom_nav_selec"
+        app:itemTextColor="@drawable/bottom_nav_selec"/>
 
 </RelativeLayout>
