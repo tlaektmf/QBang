@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
 
         new AlertDialog.Builder(this)
                 .setTitle("VM")
