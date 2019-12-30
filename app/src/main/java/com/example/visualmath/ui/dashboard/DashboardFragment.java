@@ -100,23 +100,23 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS, mTwoPane));
     }
     public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>{
 
 //        private final ItemListActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
         private final boolean mTwoPane;
 
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
-                Toast.makeText(view.getContext(),"목록 선택",Toast.LENGTH_LONG).show();
-
-//                화면전환
-
-
-            }
-        };
+//        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+////                Toast.makeText(view.getContext(),"목록 선택",Toast.LENGTH_LONG).show();
+//
+////                화면전환
+//
+//
+//            }
+//        };
 
         SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items,boolean twoPane) {
             mValues = items;
@@ -136,7 +136,7 @@ public class DashboardFragment extends Fragment {
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
+//            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
@@ -144,7 +144,8 @@ public class DashboardFragment extends Fragment {
             return mValues.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
             //final TextView mIdView;
             final TextView mContentView;
 
@@ -152,6 +153,17 @@ public class DashboardFragment extends Fragment {
                 super(view);
                 //mIdView = (TextView) view.findViewById(R.id.id_text);
                 mContentView = (TextView) view.findViewById(R.id.problem_name);
+
+                view.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        int pos = getAdapterPosition();
+
+                        if(pos!=RecyclerView.NO_POSITION){
+                            Toast.makeText(v.getContext(),"확인"+pos,Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         }
     }
