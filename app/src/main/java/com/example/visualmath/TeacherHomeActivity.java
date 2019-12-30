@@ -72,6 +72,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
 //                    public void onClick(DialogInterface dialog, int which) {
 //                        moveTaskToBack(true);
 //                        ActivityCompat.finishAffinity(TeacherHomeActivity.this);
+
 //
 //                    }
 //                })

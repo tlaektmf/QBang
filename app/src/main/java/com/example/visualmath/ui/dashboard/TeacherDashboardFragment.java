@@ -1,6 +1,7 @@
 package com.example.visualmath.ui.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,11 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.visualmath.ItemListActivity;
 import com.example.visualmath.R;
+import com.example.visualmath.VM_FullViewActivity;
 import com.example.visualmath.dummy.DummyContent;
 
 import java.text.SimpleDateFormat;
@@ -52,7 +56,6 @@ public class TeacherDashboardFragment extends Fragment {
 
         dateInit();
         setupRecyclerView(recyclerView);
-
         return root;
     }
 
@@ -95,6 +98,16 @@ public class TeacherDashboardFragment extends Fragment {
 //        private final ItemListActivity mParentActivity;
 //        private final boolean mTwoPane;
 
+        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                Toast.makeText(view.getContext(),"목록 선택",Toast.LENGTH_LONG).show();
+
+        //                화면전환
+
+            }
+        };
         SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
             mValues = items;
 //            mParentActivity = parent;
@@ -113,7 +126,7 @@ public class TeacherDashboardFragment extends Fragment {
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.itemView.setTag(mValues.get(position));
-//            holder.itemView.setOnClickListener(mOnClickListener);
+            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
