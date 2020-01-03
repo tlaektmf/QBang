@@ -99,6 +99,10 @@ public class ItemProblemDetailFragment extends Fragment {
                             //네 버튼
 //                            Toast.makeText(getActivity(),"네",Toast.LENGTH_LONG).show();
 
+                            //매칭 완료 toast 뷰 형태로 띄우기
+                            Toast toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
+                            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
+                            toast.show();
                         }
                         public void onButtonNo(){
                             //아니오 버튼
