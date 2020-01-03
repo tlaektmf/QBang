@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -65,7 +66,7 @@ public class ItemProblemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =inflater.inflate(R.layout.fragment_item_problem_detail, container, false);
+        final View rootView =inflater.inflate(R.layout.fragment_item_problem_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
@@ -89,8 +90,23 @@ public class ItemProblemDetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //** 매칭완료 다이얼로그 생성
-                    // Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
+//                     Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
 
+                    final VM_Dialog_match dialog= new VM_Dialog_match(rootView.getContext());
+
+                    dialog.setDialogListener(new VM_DialogListener_matchComplete(){
+                        public void onButtonYes(){
+                            //네 버튼
+//                            Toast.makeText(getActivity(),"네",Toast.LENGTH_LONG).show();
+
+                        }
+                        public void onButtonNo(){
+                            //아니오 버튼
+//                            Toast.makeText(getActivity(),"아니오",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+                    dialog.callFunction();
 
                 }
             });
