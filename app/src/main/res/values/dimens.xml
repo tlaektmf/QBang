@@ -23,5 +23,15 @@
 <!--    전체-->
     <dimen name="bottom_nav_height">60dp</dimen>
     <dimen name="home_top_height">55dp</dimen>
+    <dimen name="bottom_btn_height">55dp</dimen>
+
     <dimen name="title_text">22dp</dimen>
+    <dimen name="input_text">20dp</dimen>
+    <dimen name="button_text">18dp</dimen>
+
+    <dimen name="input_padding">12dp</dimen>
+    <dimen name="button_padding">18dp</dimen>
+
+    <dimen name="input_margin">20dp</dimen>
+    <dimen name="button_margin">10dp</dimen>
 </resources>
