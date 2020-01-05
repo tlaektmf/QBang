@@ -1,74 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:background="#f2f2f4"
-    tools:ignore="missingPrefix"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center">
-
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:scale_base_width="200"
-        app:scale_base_height="300">
 
         <ImageButton
             android:id="@+id/ib_qVideo"
             android:background="@drawable/home_btn01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:scale_left="0"
-            app:scale_top="70"
-            app:scale_width="190"
-            app:scale_height="80"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_width="380dp"
+            android:layout_height="170dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/ib_qText"
             android:background="@drawable/home_btn02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:scale_left="0"
-            app:scale_top="155"
-            app:scale_width="190"
-            app:scale_height="80"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_width="380dp"
+            android:layout_height="170dp"
 
-    </com.ssomai.android.scalablelayout.ScalableLayout>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ib_qVideo"/>
 
-    <!--    <ImageButton-->
-    <!--            android:id="@+id/ib_qText"-->
-    <!--            android:layout_width="217dp"-->
-    <!--            android:layout_height="0dp"-->
-    <!--            android:layout_marginBottom="215dp"-->
-    <!--            android:backgroundTint="@android:color/transparent"-->
-    <!--            android:scaleType="fitXY"-->
-    <!--            android:src="@drawable/img_contract" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/tv_qText"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="13dp"-->
-    <!--            android:layout_marginEnd="19dp"-->
-    <!--            android:fontFamily="@font/bmdohyeon_ttf"-->
-    <!--            android:text="텍스트로 답변받기"-->
-    <!--            android:textColor="@color/colorLightSlateGray"-->
-    <!--            android:textSize="20dp"/>-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:fontFamily="@font/bmdohyeon_ttf"-->
-    <!--            android:text="영상으로 답변받기"-->
-    <!--            android:textColor="@color/colorLightSlateGray"-->
-    <!--            android:textSize="20dp"-->
-    <!--           />-->
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

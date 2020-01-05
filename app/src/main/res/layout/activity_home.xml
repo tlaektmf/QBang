@@ -9,25 +9,6 @@
     android:background="#f2f2f4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_top_lay"
-        app:layout_constraintBottom_toTopOf="@+id/home_bottom_lay">
-        <fragment
-            android:layout_marginTop="55dp"
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/mobile_navigation"
-            android:background="#ff0000"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_top_lay"
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_top_height"
@@ -75,7 +56,27 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
 
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_top_lay"
+        app:layout_constraintBottom_toTopOf="@+id/home_bottom_lay">
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/mobile_navigation"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_bottom_lay"
         android:layout_width="wrap_content"
@@ -91,7 +92,6 @@
             app:itemIconTint="@drawable/bottom_nav_selec"
             app:itemTextColor="@drawable/bottom_nav_selec"
             app:menu="@menu/bottom_nav_menu"
-            android:layout_marginTop="10dp"
             android:elevation="2dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
