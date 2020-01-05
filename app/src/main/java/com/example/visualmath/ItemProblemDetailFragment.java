@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
                             //매칭 완료 toast 뷰 형태로 띄우기
                             Toast toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER,0,0);
                             toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                             toast.show();
                         }

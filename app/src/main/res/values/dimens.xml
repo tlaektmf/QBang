@@ -20,4 +20,8 @@
     <dimen name="input">20sp</dimen>
     <dimen name="small">18sp</dimen>
 
+<!--    전체-->
+    <dimen name="bottom_nav_height">60dp</dimen>
+    <dimen name="home_top_height">55dp</dimen>
+    <dimen name="title_text">22dp</dimen>
 </resources>
