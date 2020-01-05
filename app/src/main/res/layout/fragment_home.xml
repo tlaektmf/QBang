@@ -12,8 +12,8 @@
         <ImageButton
             android:id="@+id/ib_qVideo"
             android:background="@drawable/home_btn01"
-            android:layout_width="380dp"
-            android:layout_height="170dp"
+            android:layout_width="370dp"
+            android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -22,8 +22,8 @@
         <ImageButton
             android:id="@+id/ib_qText"
             android:background="@drawable/home_btn02"
-            android:layout_width="380dp"
-            android:layout_height="170dp"
+            android:layout_width="370dp"
+            android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
