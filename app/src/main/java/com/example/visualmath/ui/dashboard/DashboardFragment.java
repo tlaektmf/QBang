@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.ItemListActivity;
+import com.example.visualmath.MainActivity;
 import com.example.visualmath.R;
 import com.example.visualmath.TabFragment;
 import com.example.visualmath.TeacherItemDetailFragment;
@@ -50,6 +51,10 @@ public class DashboardFragment extends Fragment {
     private CalendarView calendar;
     private RecyclerView recyclerView;
 
+    public static DashboardFragment newInstance(){
+        return new DashboardFragment();
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
 //        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -63,6 +68,16 @@ public class DashboardFragment extends Fragment {
 
 //        assert recyclerView != null;
         setupRecyclerView(recyclerView);
+
+        //캘린더 모드 변경
+        Button cal_mode_btn = root.findViewById(R.id.cal_mode_change);
+        cal_mode_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
 
         return root;
     }
