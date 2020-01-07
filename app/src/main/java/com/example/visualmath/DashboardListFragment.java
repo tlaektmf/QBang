@@ -4,10 +4,14 @@ package com.example.visualmath;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.visualmath.ui.dashboard.DashboardFragment;
 
 
 /**
@@ -15,14 +19,9 @@ import android.view.ViewGroup;
  */
 public class DashboardListFragment extends Fragment {
 
-    ViewGroup rootView;
+    View rootView;
     public DashboardListFragment() {
         // Required empty public constructor
-    }
-
-    // 각각의 Fragment마다 Instance를 반환해 줄 메소드
-    public static DashboardListFragment newInstance() {
-        return new DashboardListFragment();
     }
 
     @Override
@@ -30,14 +29,28 @@ public class DashboardListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_dashboard_list, container, false);
-        rootView=(ViewGroup)inflater.inflate(R.layout.fragment_dashboard_list, container, false);
-        init(rootView);
+        rootView=inflater.inflate(R.layout.fragment_dashboard_list, container, false);
+
+
+        //캘린더 모드 변경
+        Button btn = rootView.findViewById(R.id.button);
+
+
+        btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                //recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+                ((HomeActivity)getActivity()).replaceFragment(new DashboardFragment());
+
+
+            }
+        });
 
         return rootView;
 
     }
-    public void init(ViewGroup _rootView){
 
-    }
 
 }

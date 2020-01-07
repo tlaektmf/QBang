@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTabHost;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -48,19 +49,20 @@ public class DashboardFragment extends Fragment {
     private String this_year;
     private String this_month;
     private String this_day;
-
+    View root;
     private TextView datecheck;
     private CalendarView calendar;
     private RecyclerView recyclerView;
-
+    private Button cal_mode_btn;
     public DashboardFragment(){
 
     }
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
-//        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,container,false);
+         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+       // ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,container,false);
 
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
 
@@ -72,23 +74,31 @@ public class DashboardFragment extends Fragment {
         setupRecyclerView(recyclerView);
 
         //캘린더 모드 변경
-        Button cal_mode_btn = root.findViewById(R.id.cal_mode_change);
+        cal_mode_btn = root.findViewById(R.id.cal_mode_change);
+
+
         cal_mode_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-
-                //DashboardList Fragment 로 변경
-                // getActivity()로 MainActivity의 replaceFragment를 불러옵니다.
-                ((HomeActivity)getActivity()).replace2DashList(DashboardListFragment.newInstance());    // 새로 불러올 Fragment의 Instance를 Main으로 전달
-
+                //datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                //recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                Log.i("TAG","1");
+                ((HomeActivity)getActivity()).replaceFragment(new DashboardListFragment());
 
             }
         });
 
         return root;
     }
+
+//    @Override
+//    public void onClick(View v) {
+//        if(v.getId()==R.id.cal_mode_change){
+//            ((HomeActivity)getActivity()).replace2DashList(DashboardListFragment.newInstance());
+//        }
+//    }
+
+
     private void dateInit(){
         final long now = System.currentTimeMillis();//현재시간
         final Date date = new Date(now);//현재날짜
@@ -122,6 +132,10 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS, mTwoPane));
     }
+
+
+
+
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>{
 

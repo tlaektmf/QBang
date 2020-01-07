@@ -2,9 +2,11 @@ package com.example.visualmath;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.visualmath.ui.dashboard.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
@@ -87,24 +89,26 @@ public class HomeActivity extends AppCompatActivity {
         currentID=intent.getStringExtra("UID");
 
     }
-    public void replaceFragment(){
 
-        //** SettingsFragment 등록
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, new VM_SettingsActivity.SettingsFragment())
-                .commit();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();
-//        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
-    }
+//    public void replaceFragment(){
+//
+//        //** SettingsFragment 등록
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.nav_host_fragment, new VM_SettingsActivity.SettingsFragment())
+//                .commit();
+////        FragmentManager fragmentManager = getSupportFragmentManager();
+////        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+////        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();
+////        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
+//    }
 
 
-    public void replace2DashList(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();     // Fragment로 사용할 MainActivity내의 layout공간을 선택.
+        fragmentTransaction.replace(R.id.nav_host_fragment,fragment).commit();
     }
 
 
