@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visualmath.DashboardListFragment;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.ItemListActivity;
@@ -78,16 +79,10 @@ public class DashboardFragment extends Fragment {
                 datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                //필요없을 듯? 아마
-//                ViewGroup.LayoutParams clp = calendar.getLayoutParams();
-//                if(clp.height==0){
-//                    clp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    Toast.makeText(v.getContext(),"매치패런트",Toast.LENGTH_LONG).show();
-//                }else{
-//                    clp.height = 0;
-//                    Toast.makeText(v.getContext(),"0dp",Toast.LENGTH_LONG).show();
-//                }
-//                calendar.setLayoutParams(clp);
+                //DashboardList Fragment 로 변경
+                // getActivity()로 MainActivity의 replaceFragment를 불러옵니다.
+                ((HomeActivity)getActivity()).replace2DashList(DashboardListFragment.newInstance());    // 새로 불러올 Fragment의 Instance를 Main으로 전달
+
 
             }
         });

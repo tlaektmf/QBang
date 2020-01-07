@@ -14,7 +14,6 @@
         android:layout_height="20dp"
         android:background="@drawable/all_calendar_btn"
         style="?android:attr/borderlessButtonStyle"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/cal_search_btn"
         android:layout_marginTop="20dp"
