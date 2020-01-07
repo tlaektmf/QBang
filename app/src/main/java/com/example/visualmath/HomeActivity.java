@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.visualmath.ui.dashboard.DashboardFragment;
+import com.example.visualmath.ui.dashboard.DashboardsListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
@@ -85,6 +87,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     public void init(){
@@ -104,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();
 //        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
     }
+
 
     @Override
     public void onBackPressed() {

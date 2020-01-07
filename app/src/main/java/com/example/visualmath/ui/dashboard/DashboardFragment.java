@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTabHost;
 import androidx.lifecycle.Observer;
@@ -51,8 +52,8 @@ public class DashboardFragment extends Fragment {
     private CalendarView calendar;
     private RecyclerView recyclerView;
 
-    public static DashboardFragment newInstance(){
-        return new DashboardFragment();
+    public DashboardFragment(){
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +77,18 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                 datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+                //필요없을 듯? 아마
+//                ViewGroup.LayoutParams clp = calendar.getLayoutParams();
+//                if(clp.height==0){
+//                    clp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                    Toast.makeText(v.getContext(),"매치패런트",Toast.LENGTH_LONG).show();
+//                }else{
+//                    clp.height = 0;
+//                    Toast.makeText(v.getContext(),"0dp",Toast.LENGTH_LONG).show();
+//                }
+//                calendar.setLayoutParams(clp);
+
             }
         });
 
