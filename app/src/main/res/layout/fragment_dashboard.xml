@@ -4,9 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_gravity="center">
 
 <!--    <FrameLayout-->
@@ -107,7 +106,7 @@
     <CalendarView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
 
         app:layout_constraintTop_toBottomOf="@+id/cal_search_btn"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -133,11 +132,12 @@
         android:id="@+id/calendar_recyclerview"
         tools:listitem="@layout/item_list_calendar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/datecheck"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
