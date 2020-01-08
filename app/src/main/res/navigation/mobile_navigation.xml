@@ -24,10 +24,5 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_dashboard_list"-->
-<!--        android:name="com.example.visualmath.DashboardListFragment"-->
-<!--        android:label="@string/title_dashboard_list"-->
-<!--        tools:layout="@layout/fragment_dashboard_list" />-->
 
 </navigation>

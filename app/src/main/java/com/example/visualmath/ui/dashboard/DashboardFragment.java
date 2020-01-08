@@ -1,44 +1,27 @@
 package com.example.visualmath.ui.dashboard;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTabHost;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.visualmath.DashboardListFragment;
 import com.example.visualmath.HomeActivity;
-import com.example.visualmath.ItemDetailFragment;
-import com.example.visualmath.ItemListActivity;
-import com.example.visualmath.MainActivity;
 import com.example.visualmath.R;
-import com.example.visualmath.TabFragment;
-import com.example.visualmath.TeacherItemDetailFragment;
-import com.example.visualmath.VM_FullViewActivity;
 import com.example.visualmath.dummy.DummyContent;
-import com.example.visualmath.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

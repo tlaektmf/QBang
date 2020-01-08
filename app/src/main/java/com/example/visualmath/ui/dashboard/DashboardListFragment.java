@@ -1,4 +1,4 @@
-package com.example.visualmath;
+package com.example.visualmath.ui.dashboard;
 
 
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.visualmath.HomeActivity;
+import com.example.visualmath.R;
 import com.example.visualmath.ui.dashboard.DashboardFragment;
 
 

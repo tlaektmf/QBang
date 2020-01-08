@@ -2,12 +2,12 @@ package com.example.visualmath;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.visualmath.ui.dashboard.DashboardFragment;
+import com.example.visualmath.ui.dashboard.DashboardListFragment;
 import com.example.visualmath.ui.home.HomeFragment;
 import com.example.visualmath.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,13 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -37,7 +32,6 @@ public class HomeActivity extends AppCompatActivity {
     // 4개의 메뉴에 들어갈 Fragment들
     private HomeFragment homeFragment;
     private DashboardFragment dashboardFragment;
-    private DashboardListFragment dashboardListFragment;
     private NotificationsFragment notificationsFragment;
 
     @Override
@@ -130,7 +124,6 @@ public class HomeActivity extends AppCompatActivity {
 
         homeFragment = new HomeFragment();
         dashboardFragment = new DashboardFragment();
-        dashboardListFragment = new DashboardListFragment();
         notificationsFragment = new NotificationsFragment();
 
 
