@@ -3,12 +3,16 @@ package com.example.visualmath;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.visualmath.ui.dashboard.DashboardFragment;
+import com.example.visualmath.ui.home.HomeFragment;
+import com.example.visualmath.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,6 +32,14 @@ public class HomeActivity extends AppCompatActivity {
     Intent intent;
     String currentID;
 
+    //
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    // 4개의 메뉴에 들어갈 Fragment들
+    private HomeFragment homeFragment;
+    private DashboardFragment dashboardFragment;
+    private DashboardListFragment dashboardListFragment;
+    private NotificationsFragment notificationsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,18 +55,46 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        // 첫 화면 지정
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, homeFragment).commitAllowingStateLoss();
 
-        //ds.shim
+//
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+//                .build();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(navView, navController);
+//
+//        //ds.shim
 
 
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_home: {
+                        transaction.replace(R.id.nav_host_fragment, homeFragment).commitAllowingStateLoss();
+                        break;
+                    }
+                    case R.id.navigation_dashboard: {
+                        transaction.replace(R.id.nav_host_fragment, dashboardFragment).commitAllowingStateLoss();
+                        break;
+                    }
+                    case R.id.navigation_notifications: {
+                        transaction.replace(R.id.nav_host_fragment, notificationsFragment).commitAllowingStateLoss();
+                        break;
+                    }
+
+                }
+
+                return true;
+            }
+        });
 
         buttonAlarm = findViewById(R.id.ib_alarm);
         buttonLive = findViewById(R.id.ib_live);
@@ -88,6 +128,12 @@ public class HomeActivity extends AppCompatActivity {
         intent=getIntent();
         currentID=intent.getStringExtra("UID");
 
+        homeFragment = new HomeFragment();
+        dashboardFragment = new DashboardFragment();
+        dashboardListFragment = new DashboardListFragment();
+        notificationsFragment = new NotificationsFragment();
+
+
     }
 
 //    public void replaceFragment(){
@@ -108,6 +154,8 @@ public class HomeActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ///Fragment fg=fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
         fragmentTransaction.replace(R.id.nav_host_fragment,fragment).commit();
     }
 

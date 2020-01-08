@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import com.example.visualmath.TabFragment;
 import com.example.visualmath.TeacherItemDetailFragment;
 import com.example.visualmath.VM_FullViewActivity;
 import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +56,7 @@ public class DashboardFragment extends Fragment {
     private CalendarView calendar;
     private RecyclerView recyclerView;
     private Button cal_mode_btn;
+
     public DashboardFragment(){
 
     }
@@ -61,8 +64,8 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
-         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-       // ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,container,false);
+         //root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+       ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,container,false);
 
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
 
@@ -77,27 +80,56 @@ public class DashboardFragment extends Fragment {
         cal_mode_btn = root.findViewById(R.id.cal_mode_change);
 
 
+
         cal_mode_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 //recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                Log.i("TAG","1");
-                ((HomeActivity)getActivity()).replaceFragment(new DashboardListFragment());
 
+                //((HomeActivity)getActivity()).replaceFragment(new DashboardListFragment());
+                FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+
+                //Fragment frag = fm.findFragmentById(R.id.nav_host_fragment);     //현재 프래그먼트 가져오기
+
+                if(fm.findFragmentById(R.id.nav_host_fragment) instanceof DashboardFragment){
+                    Log.i("dashlist","현재 frag는 dash");
+                }else if(fm.findFragmentById(R.id.nav_host_fragment) instanceof DashboardListFragment){
+                    Log.i("dashlist","현재 frag는 dashlist");
+                }else if(fm.findFragmentById(R.id.nav_host_fragment) instanceof Fragment){
+                    Log.i("dashlist","현재 frag는 Fragment");
+
+                }
+
+                Log.i("dashlist: ",fm.getBackStackEntryCount()+"");
+
+                //대시보드에서 캘린더 모드 변경 클릭시
+                //스택안에 현재 프래그먼트와 중복 tag 존재시 삭제
+                //fm.popBackStack(fragID,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                //대시보드리스트 프레그먼트로 replace
+                //tran.hide(fm.findFragmentById(R.id.nav_host_fragment));
+                tran.replace(R.id.nav_host_fragment,new DashboardListFragment());
+                tran.commit();
             }
         });
 
         return root;
     }
+    public void checkFragName(){
+        FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
+        FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
 
-//    @Override
-//    public void onClick(View v) {
-//        if(v.getId()==R.id.cal_mode_change){
-//            ((HomeActivity)getActivity()).replace2DashList(DashboardListFragment.newInstance());
-//        }
-//    }
+        if(fm.findFragmentById(R.id.nav_host_fragment) instanceof DashboardFragment){
+            Log.i("dashlist","현재 frag는 dash");
+        }else if(fm.findFragmentById(R.id.nav_host_fragment) instanceof Fragment){
+            Log.i("dashlist","현재 frag는 Fragment");
+        }else if(fm.findFragmentById(R.id.nav_host_fragment) instanceof HomeFragment){
+            Log.i("dashlist","현재 HomeFragment");
 
+        }
+    }
 
     private void dateInit(){
         final long now = System.currentTimeMillis();//현재시간
@@ -203,5 +235,21 @@ public class DashboardFragment extends Fragment {
                 });
             }
         }
+    }
+
+    static View v; // 프래그먼트의 뷰 인스턴스
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("dashlist","dash 없어짐");
+
+//        if(v!=null){
+//            ViewGroup parent=(ViewGroup)v.getParent();
+//            if(parent!=null){
+//                parent.removeView(v);
+//                Log.i("dashlist","제거된 view id :"+v.getId()+"");
+//                Log.i("dashlist","host fragment id :"+R.id.nav_host_fragment+"");
+//            }
+//        }
     }
 }
