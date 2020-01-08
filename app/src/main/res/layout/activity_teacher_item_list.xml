@@ -8,7 +8,7 @@
     tools:context=".TeacherItemListActivity"
     android:background="#f2f2f4">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 <!--        뒤에 부분-->
@@ -23,35 +23,44 @@
         </FrameLayout>
 
 <!--        상단바 부분-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/home_top_back"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/home_top_height"
+            android:background="#fafafa"
+            android:elevation="5dp"
+            android:orientation="horizontal"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <Button
                 android:id="@+id/ib_menu"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:background="@drawable/ic_menu_black_24dp"
                 android:onClick="activateList"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="알람 확인하기"
                 android:textColor="@color/colorBlack"
-                android:textSize="20dp"
-                android:textAlignment="center"
-                android:paddingRight="20dp"
+                android:textSize="@dimen/title_text"
+                android:gravity="center"
                 android:fontFamily="@font/nanumsquaure_eb"
-                android:layout_gravity="center"
-                android:layout_marginBottom="6dp"/>
-        </LinearLayout>
-    </FrameLayout>
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        상단바 부분 끝-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
