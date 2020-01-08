@@ -38,28 +38,14 @@ public class DashboardListFragment extends Fragment {
         //캘린더 모드 변경
         Button btn = rootView.findViewById(R.id.button);
 
-        FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();
-
-
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //datecheck.setVisibility(datecheck.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 //recyclerView.setVisibility(recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                ///((HomeActivity)getActivity()).replaceFragment(new DashboardFragment());
                 FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
-
-
-                if(fm.findFragmentById(R.id.nav_host_fragment) instanceof DashboardListFragment){
-                    Log.i("dashlist","현재 frag는 dashlist");
-                }
-
-                Log.i("dashlist",fm.getBackStackEntryCount()+"");
-
-                //tran.addToBackStack(null).commit();
-
                 tran.replace(R.id.nav_host_fragment,new DashboardFragment()).commit();
 
             }
@@ -69,16 +55,4 @@ public class DashboardListFragment extends Fragment {
 
     }
 
-    static View v; // 프래그먼트의 뷰 인스턴스
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i("dashlist","dashlist 없어짐");
-//        if(v!=null){
-//            ViewGroup parent=(ViewGroup)v.getParent();
-//            if(parent!=null){
-//                parent.removeView(v);
-//            }
-//        }
-    }
 }

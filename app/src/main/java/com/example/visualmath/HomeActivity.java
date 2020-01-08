@@ -150,15 +150,6 @@ public class HomeActivity extends AppCompatActivity {
 //    }
 
 
-    public void replaceFragment(Fragment fragment) {
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ///Fragment fg=fragmentManager.findFragmentById(R.id.nav_host_fragment);
-
-        fragmentTransaction.replace(R.id.nav_host_fragment,fragment).commit();
-    }
-
 
     @Override
     public void onBackPressed() {
