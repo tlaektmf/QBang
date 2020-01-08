@@ -17,6 +17,7 @@
 
 <!--    검색창 부분-->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_input_lay"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="60dp"

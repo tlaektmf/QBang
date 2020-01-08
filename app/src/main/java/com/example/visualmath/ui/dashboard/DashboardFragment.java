@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,6 +41,11 @@ public class DashboardFragment extends Fragment {
     private RecyclerView recyclerView;
     private Button cal_mode_btn;
 
+//    검색창
+    private Button search_btn;
+    private Button search_cancel_btn;
+    private ConstraintLayout search_input_lay;
+
     public DashboardFragment(){
 
     }
@@ -56,13 +62,14 @@ public class DashboardFragment extends Fragment {
         calendar=root.findViewById(R.id.calendar);
         dateInit();
 
+        //검색창
+        search_input_lay=root.findViewById(R.id.search_input_lay);
+
 //        assert recyclerView != null;
         setupRecyclerView(recyclerView);
 
         //캘린더 모드 변경
         cal_mode_btn = root.findViewById(R.id.cal_mode_change);
-
-
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -79,6 +86,24 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        //검색 버튼
+        search_btn = root.findViewById(R.id.cal_search_btn);
+
+        search_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
+        //검색 취소 버튼
+        search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
+
+        search_cancel_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
         return root;
     }
 
