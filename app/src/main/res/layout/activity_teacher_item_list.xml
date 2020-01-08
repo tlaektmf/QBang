@@ -38,8 +38,8 @@
             <Button
                 android:id="@+id/ib_menu"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="@drawable/ic_menu_black_24dp"
                 android:onClick="activateList"
                 android:layout_marginLeft="15dp"

@@ -6,16 +6,26 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.R;
+import com.example.visualmath.calendarListAdapater;
+import com.example.visualmath.date_data;
 import com.example.visualmath.ui.dashboard.DashboardFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -23,6 +33,28 @@ import com.example.visualmath.ui.dashboard.DashboardFragment;
  */
 public class DashboardListFragment extends Fragment {
 
+    //lhj_0_start
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+    calendarListAdapater recyclerViewAdapter;
+
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+
+    //1. 현재 시간으로 가져오는 방법
+//    Integer year = Integer.parseInt(yearFormat.format(date));
+//    Integer month = Integer.parseInt(monthFormat.format(date));
+//    Integer day = Integer.parseInt(dayFormat.format(date));
+
+    //2. 무조건 1월부터 시작하는 방법
+    Integer year = Integer.parseInt(yearFormat.format(date));
+    Integer month = 0;
+    Integer day = 1;
+
+    //lhj_0_end
 
     ViewGroup rootView;
     public DashboardListFragment() {
@@ -52,6 +84,27 @@ public class DashboardListFragment extends Fragment {
 
             }
         });
+
+        //lhj_1_start
+        recyclerView = rootView.findViewById(R.id.continuous_cal_rview);
+        linearLayoutManager = new LinearLayoutManager(rootView.getContext());
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+//        달력에 데이터 넣는 부분
+        List<date_data> date_list = new ArrayList<>();
+//        한 개만 테스트로 넣어본 줄(97)
+//        date_list.add(new date_data(year,month,day));
+
+//        우선 그냥 for문으로 넣어둠
+        for(int i=0;i<12;i++){
+            date_list.add(new date_data(year,month+i,day));
+        }
+
+        recyclerViewAdapter = new calendarListAdapater(this,date_list);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        //lhj_1_end
 
         return rootView;
 

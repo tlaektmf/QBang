@@ -13,7 +13,6 @@
     <!--    android:layout_height="match_parent">-->
     <!--</FrameLayout>-->
 
-
     <Button
         android:id="@+id/button"
         android:layout_width="20dp"
@@ -37,5 +36,15 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="42dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/continuous_cal_rview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/cal_content"
+
+        app:layout_constraintTop_toBottomOf="@id/cal_search_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

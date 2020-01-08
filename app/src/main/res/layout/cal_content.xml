@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CalendarView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calendar_listitem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"/>

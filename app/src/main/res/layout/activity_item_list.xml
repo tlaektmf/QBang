@@ -36,8 +36,8 @@
             <Button
                 android:id="@+id/drawer_menu_btn"
                 android:onClick="showItemList"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="@drawable/ic_menu_black_24dp"
 
                 style="?android:attr/borderlessButtonStyle"
