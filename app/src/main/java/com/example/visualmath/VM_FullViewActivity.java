@@ -82,4 +82,8 @@ public class VM_FullViewActivity extends AppCompatActivity {
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }
+
+    public void cancel(View view) {
+        finish();
+    }
 }
