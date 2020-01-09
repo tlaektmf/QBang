@@ -13,7 +13,20 @@
         android:layout_marginRight="15dp">
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+
+            android:fontFamily="@font/nanumsquaure_b"
+            android:text="[도오착]"
+            android:textColor="#404040"
+            android:textSize="17dp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
@@ -26,16 +39,6 @@
             android:layout_gravity="center_vertical"/>
 
 
-        <ImageButton
-            android:id="@+id/ib_lighton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:background="@color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/complete_btn"
-            android:layout_marginTop="1dp"
-            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
 </LinearLayout>
