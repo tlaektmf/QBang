@@ -36,7 +36,7 @@ public class SolveFragment extends Fragment {
     TextView textViewTitle;
     TextView textViewGrade;
     ImageView imageViewProblem;
-    TextView textViewDetail;
+//    TextView textViewDetail;
 //    ImageView imageViewOther1;
 //    ImageView imageViewOther2;
 //    ImageView imageViewOther3;
@@ -67,7 +67,7 @@ public class SolveFragment extends Fragment {
          textViewTitle=_rootView.findViewById(R.id.tv_title);
          textViewGrade=_rootView.findViewById(R.id.tv_grade);
          imageViewProblem=_rootView.findViewById(R.id.iv_file_problem);
-         textViewDetail=_rootView.findViewById(R.id.tv_detail);
+//         textViewDetail=_rootView.findViewById(R.id.tv_detail);
 //         imageViewOther1=_rootView.findViewById(R.id.iv_picture1);
 //         imageViewOther2=_rootView.findViewById(R.id.iv_picture2);
 //         imageViewOther3=_rootView.findViewById(R.id.iv_picture3);
@@ -89,7 +89,7 @@ public class SolveFragment extends Fragment {
         //** 데이터베이스 read
         textViewTitle.setText("2019 10월 교육청 모의고사");
         textViewGrade.setText("고등");
-        textViewDetail.setText("답지를 봐도 잘 모르겠다. 답지 첨부 합니다");
+//        textViewDetail.setText("답지를 봐도 잘 모르겠다. 답지 첨부 합니다");
         //imageViewProblem.setImageResource(R.drawable.img_math1);
 //        imageViewOther1.setImageResource(R.drawable.img_math2);
 //        imageViewOther2.setImageResource(R.drawable.img_math3);

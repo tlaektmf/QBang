@@ -154,20 +154,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_answer"/>
 
-<!--        물어보고 삭제할지 말지 결정-->
-        <TextView
-            android:layout_gravity="center"
-            android:id="@+id/tv_detail"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1.5"
-            android:background="@drawable/layout_border_under"
-            android:fontFamily="@font/bmdohyeon_ttf"
-
-            android:visibility="invisible"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 <!--    내용 전체 감싸는 부분 끝-->
 
