@@ -8,21 +8,12 @@
     tools:context=".TeacherItemListActivity"
     android:background="#f2f2f4">
 
+<!--    전체 감싸기-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<!--        뒤에 부분-->
-        <FrameLayout
-            android:id="@+id/teacherframeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include layout="@layout/teacher_item_list" />
-
-        </FrameLayout>
-
-<!--        상단바 부분-->
+        <!--        상단바 부분-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
@@ -61,6 +52,29 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-<!--        상단바 부분 끝-->
+        <!--        상단바 부분 끝-->
+
+<!--        프레임 레이아웃-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+            <FrameLayout
+                android:id="@+id/teacherframeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <include layout="@layout/teacher_item_list" />
+
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        프레임 레이아웃 끝-->
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    전체 감싸기 끝-->
 </androidx.constraintlayout.widget.ConstraintLayout>

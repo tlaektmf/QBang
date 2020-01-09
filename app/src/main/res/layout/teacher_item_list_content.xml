@@ -12,15 +12,6 @@
         android:orientation="horizontal"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
-        <ImageView
-            android:id="@+id/teacher_content_icon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:background="@drawable/home_top_left"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginBottom="3dp"/>
 
         <TextView
             android:id="@+id/teacher_content_title"
@@ -32,7 +23,7 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:text="교육청 1"
+            android:text="[알람종류]"
             android:textColor="#404040"
             android:textSize="17dp"
             android:layout_marginLeft="5dp"
@@ -49,7 +40,7 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:text="문제 내용"
+            android:text="문항제목"
             android:textColor="#404040"
             android:textSize="17dp"
             android:layout_marginLeft="3dp"

@@ -129,14 +129,14 @@ public class TeacherItemListActivity extends AppCompatActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
-            final ImageView mImageView;
+//            final ImageView mImageView;
 
 
             ViewHolder(View view) {
                 super(view);
                 mIdView = (TextView) view.findViewById(R.id.teacher_content_detail);
                 mContentView = (TextView) view.findViewById(R.id.teacher_content_title);
-                mImageView=(ImageView)view.findViewById(R.id.teacher_content_icon);
+//                mImageView=(ImageView)view.findViewById(R.id.teacher_content_icon);
             }
         }
     }
