@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="140dp"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+    android:background="@drawable/matchcomplete">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알     림"
+        android:fontFamily="@font/nanumsquaure_eb"
+        android:textColor="#016a96"
+        android:textSize="21dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="매칭이 완료되었습니다"
+
+        android:gravity="center"
+        style="?android:attr/borderlessButtonStyle"
+
+        android:fontFamily="@font/nanumsquaure_b"
+        android:textColor="#014a67"
+        android:textSize="18dp"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

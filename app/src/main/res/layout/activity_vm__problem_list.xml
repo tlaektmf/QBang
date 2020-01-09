@@ -1,64 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".VM_ProblemListActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".VM_ProblemListActivity"
+    android:background="#f2f2f4">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/ib_element"
-            android:background="@color/colorLightSteelBlue"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="24dp"
-            android:layout_marginLeft="15dp"
-            android:text="초등"
-            android:onClick="showElementary" />
-        <Button
-            android:id="@+id/ib_mid"
-            android:background="@color/colorLightSteelBlue"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="24dp"
-            android:layout_marginLeft="15dp"
-            android:text="중등"
-            android:onClick="showMid" />
-        <Button
-            android:id="@+id/ib_high"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="24dp"
-            android:layout_marginLeft="15dp"
-            android:background="@color/colorLightSteelBlue"
-            android:text="고등"
-            android:onClick="showHigh" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/constraintLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/ib_menu"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/ic_menu_black_24dp"
-            android:onClick="activateList" />
-
+<!--        메인-->
         <FrameLayout
             android:id="@+id/teacherframeLayout"
             android:layout_width="match_parent"
@@ -68,9 +23,89 @@
             <include layout="@layout/item_problem_list" />
 
         </FrameLayout>
+<!--        상단바-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:orientation="vertical"
+            android:background="@drawable/top_menu_back02">
+            <LinearLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12.8dp">
 
+                <Button
+                    android:id="@+id/ib_menu"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/ic_menu_black_24dp"
+                    android:onClick="activateList" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="문제 선택하기"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:paddingRight="25dp"
+                    android:fontFamily="@font/nanumsquaure_eb"
+                    android:layout_gravity="center"/>
 
-    </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/ib_element"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="초     등"
+                    android:textSize="17dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanumsquaure_b"
+                    android:background="@drawable/changing_tab_menu_back"
+                    android:onClick="showElementary"
+                    style="?android:attr/borderlessButtonStyle"/>
+                <Button
+                    android:id="@+id/ib_mid"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="중     등"
+                    android:textSize="17dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanumsquaure_b"
+                    android:background="@drawable/changing_tab_menu_back"
+                    android:onClick="showMid" />
+                <Button
+                    android:id="@+id/ib_high"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="33dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="고     등"
+                    android:textSize="17dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanumsquaure_b"
+                    android:background="@drawable/changing_tab_menu_back"
+                    android:onClick="showHigh" />
 
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

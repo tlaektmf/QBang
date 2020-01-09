@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,189 +9,196 @@
     tools:ignore="missingPrefix"
     android:background="#f2f2f4">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/other_top_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/post_back">
-
-        <com.ssomai.android.scalablelayout.ScalableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:scale_base_width="200"
-            app:scale_base_height="300"
-            android:layout_centerInParent="true">
-
-            <TextView
-                android:id="@+id/tv_notice2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_line"
-
-                android:text="질문 내용을 상세히 입력해주세요"
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textColor="#404040"
-                app:scale_textsize="9"
-                android:gravity="center_vertical"
-
-                app:scale_left="14"
-                app:scale_top="14"
-                app:scale_width="170"
-                app:scale_height="22"/>
-
-            <EditText
-                android:id="@+id/tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/detail_back"
-
-                android:fontFamily="@font/nanumsquaure_r"
-                android:textColor="#016a96"
-                app:scale_textsize="7"
-                android:padding="5dp"
-
-                app:scale_left="12"
-                app:scale_top="43"
-                app:scale_width="175"
-                app:scale_height="140" />
-
-            <TextView
-                android:id="@+id/tv_notice1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/text_line"
-
-                android:text="추가로 등록할 답지 사진을 첨부해주세요"
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textColor="#404040"
-                app:scale_textsize="9"
-                android:gravity="center_vertical"
-
-                app:scale_left="14"
-                app:scale_top="185"
-                app:scale_width="170"
-                app:scale_height="22"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-
-                android:text="더 정확하고 빠른 답변이 가능합니다"
-                android:fontFamily="@font/nanumsquaure_r"
-                android:textColor="#b8bcbb"
-                app:scale_textsize="7"
-                android:gravity="center_vertical"
-
-                app:scale_left="15"
-                app:scale_top="207"
-                app:scale_width="170"
-                app:scale_height="22"/>
-
-            <ImageView
-                android:id="@+id/iv_picture1"
-                android:onClick="changeAddFile"
-                android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-
-                app:scale_left="12"
-                app:scale_top="230"
-                app:scale_width="52"
-                app:scale_height="52"/>
-            <ImageView
-                android:id="@+id/iv_picture2"
-                android:onClick="changeAddFile"
-                android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-
-                app:scale_left="74"
-                app:scale_top="230"
-                app:scale_width="52"
-                app:scale_height="52" />
-            <ImageView
-                android:id="@+id/iv_picture3"
-                android:onClick="changeAddFile"
-                android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-
-                app:scale_left="135"
-                app:scale_top="230"
-                app:scale_width="52"
-                app:scale_height="52"/>
-
-        </com.ssomai.android.scalablelayout.ScalableLayout>
-
-    </RelativeLayout>
-
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_top_back"
-        app:scale_base_width="200"
-        app:scale_base_height="35"
-        android:layout_alignParentTop="true">
-
+        android:layout_height="@dimen/home_top_height"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#fafafa"
+        android:elevation="5dp">
         <Button
             android:onClick="cancel"
             android:id="@+id/btn_goOrigin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:background="@drawable/close"
 
-            app:scale_left="7"
-            app:scale_top="9"
-            app:scale_width="10"
-            app:scale_height="10"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="15dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="질문내용 추가하기"
             android:textColor="@color/colorBlack"
-            app:scale_textsize="10"
+            android:textSize="@dimen/title_text"
             android:gravity="center"
             android:fontFamily="@font/nanumsquaure_eb"
 
-            app:scale_left="50"
-            app:scale_top="3"
-            app:scale_width="100"
-            app:scale_height="22"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.ssomai.android.scalablelayout.ScalableLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:background="#fff"
+        android:elevation="5dp"
 
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:scale_base_width="200"
-        app:scale_base_height="30"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bottom_btn">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/other_top_header"
+        app:layout_constraintBottom_toTopOf="@+id/btn_add"
+        android:layout_margin="20dp">
 
-        <Button
-            android:onClick="loadAddInfo"
-            android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_notice2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/borderlessButtonStyle"
+            android:paddingBottom="10dp"
+            android:background="@drawable/text_line"
 
-            android:text="문제 등록하기"
+            android:text="질문 내용을 상세히 입력해주세요"
             android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#ffffff"
-            app:scale_textsize="9"
-            android:textAlignment="center"
+            android:textColor="#404040"
+            android:textSize="@dimen/view_text"
 
-            app:scale_left="10"
-            app:scale_top="0"
-            app:scale_width="180"
-            app:scale_height="33" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_detail"
 
-    </com.ssomai.android.scalablelayout.ScalableLayout>
+            android:layout_marginTop="@dimen/input_margin"
+            android:layout_marginLeft="@dimen/input_margin"
+            android:layout_marginRight="@dimen/input_margin"/>
 
-</RelativeLayout>
+        <EditText
+            android:id="@+id/tv_detail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/detail_back"
+
+            android:fontFamily="@font/nanumsquaure_r"
+            android:textColor="#016a96"
+            android:textSize="@dimen/small_input_text"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notice2"
+            app:layout_constraintBottom_toTopOf="@+id/tv_notice1"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:id="@+id/tv_notice1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:background="@drawable/text_line"
+
+            android:text="추가로 등록할 답지 사진을 첨부해주세요"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#404040"
+            android:textSize="@dimen/view_text"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail"
+            app:layout_constraintBottom_toTopOf="@+id/fast_ans"
+
+            android:layout_marginTop="@dimen/input_margin"
+            android:layout_marginLeft="@dimen/input_margin"
+            android:layout_marginRight="@dimen/input_margin"/>
+
+        <TextView
+            android:id="@+id/fast_ans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="더 정확하고 빠른 답변이 가능합니다"
+            android:fontFamily="@font/nanumsquaure_r"
+            android:textColor="#b8bcbb"
+            android:textSize="15dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notice1"
+            app:layout_constraintBottom_toTopOf="@+id/add_pic_lay"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_pic_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fast_ans"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+            <ImageView
+                android:id="@+id/iv_picture1"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="105dp"
+                android:layout_width="105dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:id="@+id/iv_picture2"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="105dp"
+                android:layout_width="105dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:id="@+id/iv_picture3"
+                android:onClick="changeAddFile"
+                android:src="@drawable/add_extra_img"
+                android:scaleType="fitCenter"
+                android:layout_height="105dp"
+                android:layout_width="105dp"
+
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:onClick="loadAddInfo"
+        android:id="@+id/btn_add"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_btn_height"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="#f8c55a"
+        android:elevation="5dp"
+
+        android:text="문제 등록하기"
+        android:fontFamily="@font/nanumsquaure_b"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/title_text"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

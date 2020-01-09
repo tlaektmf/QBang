@@ -54,6 +54,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
 
+//    스위치 버튼
+    implementation 'com.kyleduo.switchbutton:library:2.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

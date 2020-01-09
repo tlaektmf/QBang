@@ -5,6 +5,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_dashboard_list">DashboardKist</string>
     <string name="title_teacher_home">TeacherHome</string>
     <string name="title_teacher_dashboard">TeacherDashboard</string>
     <string name="title_teacher_notifications">TeacherNotifications</string>

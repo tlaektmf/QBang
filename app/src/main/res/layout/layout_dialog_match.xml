@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="180dp"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+    android:background="@drawable/finish_app_back">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이 문제를 선택하시겠습니까"
+        android:fontFamily="@font/nanumsquaure_eb"
+        android:textColor="#016a96"
+        android:textSize="21dp"
+        android:layout_marginTop="16dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="40dp">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"/>
+        <Button
+            android:id="@+id/solve_yes_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="2"
+            android:text="네"
+
+            android:gravity="center"
+            android:background="@drawable/finish_app_btn"
+            style="?android:attr/borderlessButtonStyle"
+
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            android:textSize="18dp"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"/>
+        <Button
+            android:id="@+id/solve_no_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="2"
+            android:text="아니오"
+
+            android:gravity="center"
+            android:background="@drawable/finish_app_btn"
+            style="?android:attr/borderlessButtonStyle"
+
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#014a67"
+            android:textSize="18dp"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

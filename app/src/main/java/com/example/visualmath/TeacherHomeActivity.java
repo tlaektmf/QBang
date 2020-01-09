@@ -2,15 +2,19 @@ package com.example.visualmath;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -54,5 +58,39 @@ public class TeacherHomeActivity extends AppCompatActivity {
         Intent intent;
         intent = new Intent(TeacherHomeActivity.this, TeacherItemListActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
+
+//        new AlertDialog.Builder(this)
+//                .setTitle("VM")
+//                .setMessage("정말 종료하시겠습니까?")
+//                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        moveTaskToBack(true);
+//                        ActivityCompat.finishAffinity(TeacherHomeActivity.this);
+
+//
+//                    }
+//                })
+//                .setNegativeButton("아니오",null)
+//                .show();
+        ///super.onBackPressed();
+        final VM_Dialog_finish_app dialog = new VM_Dialog_finish_app(TeacherHomeActivity.this);
+
+        dialog.setDialogListener(new VM_DialogListener_finish_app(){
+            public void onButtonYes(){
+//                네 버튼
+                moveTaskToBack(true);
+                ActivityCompat.finishAffinity(TeacherHomeActivity.this);
+            }
+            public void onButtonNo(){
+//                아니오 버튼
+            }
+        });
+        dialog.callFunction();
     }
 }

@@ -35,7 +35,10 @@
             android:paddingTop="65dp"
             tools:context="com.example.visualmath.TeacherItemListActivity"
             tools:listitem="@layout/teacher_item_list_content"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+
+            android:layout_marginRight="20dp"
+            android:elevation="10dp"/>
     </RelativeLayout>
 </FrameLayout>
 
