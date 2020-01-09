@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:ignore="missingPrefix">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="225dp"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <TextView
             android:id="@+id/teacher_content_title"
@@ -24,8 +23,8 @@
 
             android:fontFamily="@font/nanumsquaure_b"
             android:text="[알람종류]"
-            android:textColor="#404040"
-            android:textSize="17dp"
+            android:textColor="#016a96"
+            android:textSize="16dp"
             android:layout_marginLeft="5dp"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -39,20 +38,20 @@
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceListItem"
 
-            android:fontFamily="@font/nanumsquaure_b"
+            android:fontFamily="@font/nanumsquaure_r"
             android:text="문항제목"
             android:textColor="#404040"
-            android:textSize="17dp"
+            android:textSize="15dp"
             android:layout_marginLeft="3dp"
             android:layout_gravity="center"
             android:gravity="left"
             android:layout_marginRight="13dp"/>
 
     </LinearLayout>
-    <ImageView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/list_underbar"
+        android:layout_height="1.5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="10dp"
+        android:background="#e6e6e6"/>
 </LinearLayout>
