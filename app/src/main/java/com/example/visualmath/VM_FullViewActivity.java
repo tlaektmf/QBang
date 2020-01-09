@@ -39,6 +39,9 @@ public class VM_FullViewActivity extends AppCompatActivity {
         problemDetailFragment = new problem_detail();
         transaction=fragmentManager.beginTransaction();
         transaction.replace(R.id.container,solveFragment).commitAllowingStateLoss();
+
+        Button btn01 = findViewById(R.id.btn_full_problem);
+        btn01.setSelected(true);
     }
 
     public void showUsersLoad(View view) {
