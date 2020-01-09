@@ -14,10 +14,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.visualmath.dummy.AlarmItem;
+import com.example.visualmath.dummy.TestContent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visualmath.dummy.DummyContent;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +57,11 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
+    public static String TAG="ItemListActivity";
+    public View recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +74,6 @@ public class ItemListActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.setTitle(getTitle());
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-//                //intent.putExtra("UID", userId);//문제 고유 id를 가져와야됨
-//                startActivity(intent);
-//                //finish();
-//            }
-//        });
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -84,39 +83,18 @@ public class ItemListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.item_list);
+        initData();
+
+        recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        //** detailView 클릭 이벤트
-
-//        ViewGroup layout = (ViewGroup) findViewById(R.id.item_detail_container);
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO Auto-generated method stub
-//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-////                intent.putExtra("UID", userId);
-//                startActivity(intent);
-////                finish();
-//            }
-//        });
-
-//        drawerlayout 메뉴
-//        Button drawer_menu_btn = findViewById(R.id.drawer_menu_btn);
-//        drawer_menu_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                Fragment item_list_frag = (Fragment)getSupportFragmentManager().findFragmentById(R.id.item_list);
-//                ft.hide(item_list_frag);
-//            }
-//        });
 
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this,alarms, mTwoPane));
     }
 
     /**
@@ -138,18 +116,21 @@ public class ItemListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<AlarmItem> mAlarms; //알람뿌려줄 데이터 리스트
         private final boolean mTwoPane;
+
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                AlarmItem item = (AlarmItem)view.getTag();
 
-                if (mTwoPane) {//태블릿 모드
+                if (mTwoPane) {//태블릿 모드 -> 태블릿에서 작동함
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId()); //** DetailFragment로 post_id 전달
+
+                    //** DetailFragment 프래그먼트 생성
                     ItemDetailFragment fragment = new ItemDetailFragment();
-                    fragment.setArguments(arguments);
+                    fragment.setArguments(arguments); //** 프래그먼트 초기 세팅
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
@@ -162,7 +143,7 @@ public class ItemListActivity extends AppCompatActivity {
 
                     //ds.shim >start<
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -174,9 +155,9 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<AlarmItem> items,
                                       boolean twoPane) {
-            mValues = items;
+            mAlarms=items;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
@@ -190,27 +171,61 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            //holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mDetailView.setText(mAlarms.get(position).getDetails());
+            holder.mTitleView.setText(mAlarms.get(position).getTitle());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(mAlarms.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return mAlarms.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            //final TextView mIdView;
-            final TextView mContentView;
+            final TextView mDetailView;
+            final TextView mTitleView;
 
             ViewHolder(View view) {
                 super(view);
-                //mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mDetailView = (TextView) view.findViewById(R.id.detail);
+                mTitleView = (TextView) view.findViewById(R.id.title);
             }
         }
+    }
+
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void initData(){
+        alarms=new ArrayList<AlarmItem>();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        reference=firebaseDatabase.getReference("STUDENTS");
+        reference=reference.child("user_name")
+                .child("posts").child("unsolved");
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    String post_id=snapshot.getKey();
+                    String post_title=snapshot.child("title").getValue().toString();
+                    alarms.add(new AlarmItem(post_id,post_title,VM_ENUM.SOLVED));
+
+                    Log.d(TAG, "ValueEventListener : " +post_id );
+
+                }
+                setupRecyclerView((RecyclerView) recyclerView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
     }
 }
