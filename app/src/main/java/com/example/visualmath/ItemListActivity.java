@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visualmath.dummy.DummyContent;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -47,7 +54,10 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    private ChildEventListener childEventListener;
+    public static String TAG="ItemListActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,22 +69,6 @@ public class ItemListActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.setTitle(getTitle());
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-//                //intent.putExtra("UID", userId);//문제 고유 id를 가져와야됨
-//                startActivity(intent);
-//                //finish();
-//            }
-//        });
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -84,34 +78,12 @@ public class ItemListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
+        initData();
+
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        //** detailView 클릭 이벤트
-
-//        ViewGroup layout = (ViewGroup) findViewById(R.id.item_detail_container);
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO Auto-generated method stub
-//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-////                intent.putExtra("UID", userId);
-//                startActivity(intent);
-////                finish();
-//            }
-//        });
-
-//        drawerlayout 메뉴
-//        Button drawer_menu_btn = findViewById(R.id.drawer_menu_btn);
-//        drawer_menu_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                Fragment item_list_frag = (Fragment)getSupportFragmentManager().findFragmentById(R.id.item_list);
-//                ft.hide(item_list_frag);
-//            }
-//        });
 
     }
 
@@ -212,5 +184,34 @@ public class ItemListActivity extends AppCompatActivity {
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
+    }
+
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void initData(){
+
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        reference=firebaseDatabase.getReference("STUDENTS");
+        reference=reference.child("user_name")
+                .child("posts").child("unsolved");
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String postID;
+                    Log.d(TAG, "ValueEventListener : " +snapshot.getKey() );
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
     }
 }
