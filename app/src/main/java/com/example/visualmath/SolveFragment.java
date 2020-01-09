@@ -37,9 +37,9 @@ public class SolveFragment extends Fragment {
     TextView textViewGrade;
     ImageView imageViewProblem;
     TextView textViewDetail;
-    ImageView imageViewOther1;
-    ImageView imageViewOther2;
-    ImageView imageViewOther3;
+//    ImageView imageViewOther1;
+//    ImageView imageViewOther2;
+//    ImageView imageViewOther3;
 
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
@@ -68,9 +68,9 @@ public class SolveFragment extends Fragment {
          textViewGrade=_rootView.findViewById(R.id.tv_grade);
          imageViewProblem=_rootView.findViewById(R.id.iv_file_problem);
          textViewDetail=_rootView.findViewById(R.id.tv_detail);
-         imageViewOther1=_rootView.findViewById(R.id.iv_picture1);
-         imageViewOther2=_rootView.findViewById(R.id.iv_picture2);
-         imageViewOther3=_rootView.findViewById(R.id.iv_picture3);
+//         imageViewOther1=_rootView.findViewById(R.id.iv_picture1);
+//         imageViewOther2=_rootView.findViewById(R.id.iv_picture2);
+//         imageViewOther3=_rootView.findViewById(R.id.iv_picture3);
 
         firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
         firebaseStorage = FirebaseStorage.getInstance();
@@ -91,8 +91,8 @@ public class SolveFragment extends Fragment {
         textViewGrade.setText("고등");
         textViewDetail.setText("답지를 봐도 잘 모르겠다. 답지 첨부 합니다");
         //imageViewProblem.setImageResource(R.drawable.img_math1);
-        imageViewOther1.setImageResource(R.drawable.img_math2);
-        imageViewOther2.setImageResource(R.drawable.img_math3);
+//        imageViewOther1.setImageResource(R.drawable.img_math2);
+//        imageViewOther2.setImageResource(R.drawable.img_math3);
 
         //** storage 파일 가져오기
 

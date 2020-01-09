@@ -119,10 +119,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--    뒤에 붙는 부분-->
+<!--    기존 framelayout-->
+
+    <ScrollView
+        android:id="@+id/container_scview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_top_header">
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="wrap_content"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
