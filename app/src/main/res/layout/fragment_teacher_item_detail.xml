@@ -30,13 +30,12 @@
 
             android:text="교육청1"
             android:textSize="24dp"
-            android:fontFamily="@font/nanumsquaure_b"
+            android:fontFamily="@font/nanumsquaure_eb"
             android:textColor="#404040"
 
             android:layout_marginTop="@dimen/input_margin"
             android:layout_marginLeft="@dimen/input_margin"
             android:layout_marginRight="@dimen/input_margin"
-            android:layout_marginBottom="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
