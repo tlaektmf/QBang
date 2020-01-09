@@ -6,130 +6,123 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VM_FullViewActivity"
-    tools:ignore="missingPrefix"
-    android:background="#f2f2f4"
-    android:layout_gravity="center">
+    android:background="#f2f2f4">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detail_top_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_height_thick"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#fafafa"
+        android:elevation="5dp">
 
-        <FrameLayout
-            android:id="@+id/container"
+<!--        상단-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_top_cons"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
+            android:layout_height="0dp"
 
-    <com.ssomai.android.scalablelayout.ScalableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:scale_base_width="200"
-        app:scale_base_height="320">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_bottom_cons">
+            <Button
+                android:id="@+id/btn_goback"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/close"
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/top_menu_back02"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문제 상세보기"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/title_text"
+                android:gravity="center"
+                android:fontFamily="@font/nanumsquaure_eb"
 
-            app:scale_left="0"
-            app:scale_top="0"
-            app:scale_width="200"
-            app:scale_height="60"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        상단 끝-->
 
-        <ImageButton
-            android:id="@+id/ib_goLive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/home_top_left"
+<!--        하단-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_bottom_cons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
 
-            app:scale_left="5"
-            app:scale_top="2"
-            app:scale_width="22"
-            app:scale_height="22"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="문제 상세보기"
-            android:textColor="@color/colorBlack"
-            app:scale_textsize="10"
-            android:gravity="center"
-            android:fontFamily="@font/nanumsquaure_eb"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_top_cons">
+            <Button
+                android:onClick="showUsersLoad"
+                android:id="@+id/btn_full_problem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
 
-            app:scale_left="64"
-            app:scale_top="4"
-            app:scale_width="70"
-            app:scale_height="22"/>
-<!--        <ImageButton-->
-<!--            android:id="@+id/ib_goBack"-->
-<!--            android:layout_width="70dp"-->
-<!--            android:layout_height="55dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:backgroundTint="@android:color/transparent"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/complete_btn"-->
+                android:text="문제 답"
+                android:textColor="@drawable/changing_tab_textcolor"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:background="@drawable/changing_tab_menu_back"
+                style="?android:attr/borderlessButtonStyle"
 
-<!--            app:scale_left="175"-->
-<!--            app:scale_top="4"-->
-<!--            app:scale_width="20"-->
-<!--            app:scale_height="20"/>-->
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/btn_full_solve"/>
+            <Button
+                android:onClick="showSolve"
+                android:id="@+id/btn_full_solve"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
 
-        <Button
-            android:onClick="showUsersLoad"
-            android:id="@+id/btn_full_problem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:text="질문 내용"
+                android:textColor="@drawable/changing_tab_textcolor"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:background="@drawable/changing_tab_menu_back"
+                style="?android:attr/borderlessButtonStyle"
 
-            android:text="문제 답"
-            android:textColor="@drawable/changing_tab_textcolor"
-            app:scale_textsize="9"
-            android:textAlignment="center"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:background="@drawable/changing_tab_menu_back"
-            style="?android:attr/borderlessButtonStyle"
-            android:paddingBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/btn_both"
+                app:layout_constraintLeft_toRightOf="@+id/btn_full_problem"/>
+            <Button
+                android:onClick="showBoth"
+                android:id="@+id/btn_both"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
 
-            app:scale_left="7"
-            app:scale_top="30"
-            app:scale_width="60"
-            app:scale_height="19"/>
-        <Button
-            android:onClick="showSolve"
-            android:id="@+id/btn_full_solve"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:text="풀이만"
+                android:textColor="@drawable/changing_tab_textcolor"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:background="@drawable/changing_tab_menu_back"
+                style="?android:attr/borderlessButtonStyle"
 
-            android:text="질문 내용"
-            android:textColor="@drawable/changing_tab_textcolor"
-            app:scale_textsize="9"
-            android:textAlignment="center"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:background="@drawable/changing_tab_menu_back"
-            style="?android:attr/borderlessButtonStyle"
-            android:paddingBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/btn_full_solve"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        하단 끝-->
 
-            app:scale_left="69"
-            app:scale_top="30"
-            app:scale_width="60"
-            app:scale_height="19"/>
-        <Button
-            android:onClick="showBoth"
-            android:id="@+id/btn_both"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            android:text="풀이만"
-            android:textColor="@drawable/changing_tab_textcolor"
-            app:scale_textsize="9"
-            android:textAlignment="center"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:background="@drawable/changing_tab_menu_back"
-            style="?android:attr/borderlessButtonStyle"
-            android:paddingBottom="15dp"
-
-            app:scale_left="132"
-            app:scale_top="30"
-            app:scale_width="60"
-            app:scale_height="19"/>
-
-    </com.ssomai.android.scalablelayout.ScalableLayout>
+<!--    뒤에 붙는 부분-->
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
