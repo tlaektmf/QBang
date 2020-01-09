@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            android:paddingTop="65dp"
+            android:paddingTop="20dp"
             tools:context="com.example.visualmath.ItemListActivity"
             tools:listitem="@layout/item_list_content"
             android:background="#ffffff"
