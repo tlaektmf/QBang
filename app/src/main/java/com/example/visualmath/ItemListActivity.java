@@ -14,6 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.visualmath.dummy.AlarmItem;
+import com.example.visualmath.dummy.TestContent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -37,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,8 +59,10 @@ public class ItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
-    private ChildEventListener childEventListener;
+    public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
     public static String TAG="ItemListActivity";
+    public View recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +85,7 @@ public class ItemListActivity extends AppCompatActivity {
 
         initData();
 
-        View recyclerView = findViewById(R.id.item_list);
+        recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
@@ -88,7 +93,8 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this,alarms, mTwoPane));
     }
 
     /**
@@ -110,18 +116,21 @@ public class ItemListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<AlarmItem> mAlarms; //알람뿌려줄 데이터 리스트
         private final boolean mTwoPane;
+
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                AlarmItem item = (AlarmItem)view.getTag();
 
-                if (mTwoPane) {//태블릿 모드
+                if (mTwoPane) {//태블릿 모드 -> 태블릿에서 작동함
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId()); //** DetailFragment로 post_id 전달
+
+                    //** DetailFragment 프래그먼트 생성
                     ItemDetailFragment fragment = new ItemDetailFragment();
-                    fragment.setArguments(arguments);
+                    fragment.setArguments(arguments); //** 프래그먼트 초기 세팅
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
@@ -134,7 +143,7 @@ public class ItemListActivity extends AppCompatActivity {
 
                     //ds.shim >start<
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -146,9 +155,9 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<AlarmItem> items,
                                       boolean twoPane) {
-            mValues = items;
+            mAlarms=items;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
@@ -162,26 +171,26 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            //holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mDetailView.setText(mAlarms.get(position).getDetails());
+            holder.mTitleView.setText(mAlarms.get(position).getTitle());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(mAlarms.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return mAlarms.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            //final TextView mIdView;
-            final TextView mContentView;
+            final TextView mDetailView;
+            final TextView mTitleView;
 
             ViewHolder(View view) {
                 super(view);
-                //mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mDetailView = (TextView) view.findViewById(R.id.detail);
+                mTitleView = (TextView) view.findViewById(R.id.title);
             }
         }
     }
@@ -191,7 +200,7 @@ public class ItemListActivity extends AppCompatActivity {
      * write
      */
     public void initData(){
-
+        alarms=new ArrayList<AlarmItem>();
         firebaseDatabase=FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
         reference=reference.child("user_name")
@@ -201,10 +210,15 @@ public class ItemListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String postID;
-                    Log.d(TAG, "ValueEventListener : " +snapshot.getKey() );
-                }
 
+                    String post_id=snapshot.getKey();
+                    String post_title=snapshot.child("title").getValue().toString();
+                    alarms.add(new AlarmItem(post_id,post_title,VM_ENUM.SOLVED));
+
+                    Log.d(TAG, "ValueEventListener : " +post_id );
+
+                }
+                setupRecyclerView((RecyclerView) recyclerView);
             }
 
             @Override
