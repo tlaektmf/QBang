@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_top_cons">
             <Button
-                android:onClick="showUsersLoad"
+                android:onClick="showProblem"
                 android:id="@+id/btn_full_problem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/btn_full_solve"/>
             <Button
-                android:onClick="showSolve"
+                android:onClick="showUsersLoad"
                 android:id="@+id/btn_full_solve"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 app:layout_constraintRight_toLeftOf="@+id/btn_both"
                 app:layout_constraintLeft_toRightOf="@+id/btn_full_problem"/>
             <Button
-                android:onClick="showBoth"
+                android:onClick="showSolve"
                 android:id="@+id/btn_both"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

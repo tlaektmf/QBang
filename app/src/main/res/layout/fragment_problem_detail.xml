@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="2015년 3월 교육청 5번"
             android:textSize="15dp"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#016a96"
@@ -49,7 +48,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="고    등"
             android:textSize="24dp"
             android:fontFamily="@font/nanumsquaure_eb"
             android:textColor="#404040"
@@ -100,7 +98,7 @@
             android:background="@drawable/answer_back"
             android:padding="20dp"
             
-            android:text="질문 내용입니다. 질문 내용입니다. 질문 내용입니다."
+
             android:textSize="@dimen/input_text"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#016a96"

@@ -30,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="2015년 3월 교육청 5번"
             android:textSize="15dp"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#016a96"
@@ -51,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="고    등"
             android:textSize="24dp"
             android:fontFamily="@font/nanumsquaure_eb"
             android:textColor="#404040"
@@ -80,7 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"
 
-            android:src="@drawable/problem"
             android:scaleType="centerCrop"
 
             app:layout_constraintTop_toBottomOf="@+id/detail_line_first"

@@ -8,6 +8,9 @@ public class VM_Data_EXTRA {
     private String add_picture2;
     private String add_picture3;
 
+    public VM_Data_EXTRA(){
+
+    }
     public VM_Data_EXTRA(VM_Data_ADD _vm_data_add){
         if(_vm_data_add!=null&&_vm_data_add.getDetail()!=null){
             content=_vm_data_add.getDetail();

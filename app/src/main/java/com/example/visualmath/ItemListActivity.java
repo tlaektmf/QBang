@@ -215,7 +215,7 @@ public class ItemListActivity extends AppCompatActivity {
                     String post_title=snapshot.child("title").getValue().toString();
                     alarms.add(new AlarmItem(post_id,post_title,VM_ENUM.SOLVED));
 
-                    Log.d(TAG, "ValueEventListener : " +post_id );
+                    ///Log.d(TAG, "ValueEventListener : " +post_id );
 
                 }
                 setupRecyclerView((RecyclerView) recyclerView);
