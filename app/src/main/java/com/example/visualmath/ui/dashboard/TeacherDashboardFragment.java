@@ -165,11 +165,20 @@ public class TeacherDashboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-//            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+//            기존 코드
+////            holder.mIdView.setText(mValues.get(position).id);
+//            holder.mContentView.setText(mValues.get(position).content);
+//
+//            holder.itemView.setTag(mValues.get(position));
+////            holder.itemView.setOnClickListener(mOnClickListener);
 
-            holder.itemView.setTag(mValues.get(position));
-//            holder.itemView.setOnClickListener(mOnClickListener);
+            if(holder.getAdapterPosition()!=RecyclerView.NO_POSITION){
+//                holder.mContentView.setText(mValues.get(position).content);
+//                holder.itemView.setTag(mValues.get(position));
+                holder.mContentView.setText(mValues.get(holder.getAdapterPosition()).content);
+                holder.itemView.setTag(mValues.get(holder.getAdapterPosition()));
+            }
+
         }
 
         @Override
