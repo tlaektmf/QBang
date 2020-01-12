@@ -177,7 +177,7 @@ public class ProblemFragment extends Fragment {
 
 
         mGlideRequestManager = Glide.with(this);
-
+        chatList =new ArrayList<>();
     }
 
     @Override
@@ -200,41 +200,14 @@ public class ProblemFragment extends Fragment {
         textViewChatRoomTitle.setText(post_title);
 
         //** chat 데이터 생성
-        ChildEventListener childEventListener=new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d(TAG, "onChildChanged : " +dataSnapshot );
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<VM_Data_CHAT>> tmp = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
 
-                chatList =new ArrayList<>();
+
                 chatList=dataSnapshot.getValue(tmp);
-                Log.d(TAG, "ValueEventListener : " +dataSnapshot );
+                Log.d("data", "ValueEventListener : " +dataSnapshot );
 
                 adapter = new VM_ChatAdapter(chatList, getActivity());
                 recyclerView.setAdapter(adapter);
@@ -258,7 +231,7 @@ public class ProblemFragment extends Fragment {
                 VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
                 chatList.add(data);
                 Log.d(TAG, msgEditText.getText().toString() );
-
+                msgEditText.setText("");//채팅창 초기화
                 adapter.notifyDataSetChanged();
             }
         });

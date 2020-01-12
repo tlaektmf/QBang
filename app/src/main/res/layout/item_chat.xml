@@ -60,7 +60,8 @@
                 android:textColor="#016a96"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="asdf" />
+
+                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -93,7 +94,7 @@
                 app:layout_constraintHorizontal_bias="0.99"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="dafsdf"
+
 
                 android:fontFamily="@font/nanumsquaure_r"
                 android:textColor="#016a96"
