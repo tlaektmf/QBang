@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemListActivity;
 import com.example.visualmath.R;
+import com.example.visualmath.TeacherHomeActivity;
 import com.example.visualmath.VM_FullViewActivity;
 import com.example.visualmath.dummy.DummyContent;
 
@@ -77,7 +78,7 @@ public class TeacherDashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentManager fm = ((TeacherHomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();//트랜잭션 가져오기
 
                 //대시보드리스트 프레그먼트로 replace
