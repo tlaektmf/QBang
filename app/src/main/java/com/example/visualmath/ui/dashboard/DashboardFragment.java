@@ -160,8 +160,9 @@ public class DashboardFragment extends Fragment {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
 
+
                 this_year = Integer.toString(year);
-                datecheck.setText(year + "년 " + month + "월 " + dayOfMonth + "일 문제 목록");
+                datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
 
                 subs=new ArrayList<VM_Data_Default>();
 
@@ -178,6 +179,7 @@ public class DashboardFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,(HomeActivity)getActivity()));
+
             }
         });
     }

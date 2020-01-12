@@ -88,24 +88,24 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:id="@+id/tv_answer_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+<!--        <TextView-->
+<!--            android:id="@+id/tv_answer_text"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
 
-            android:text="정답"
-            android:textSize="@dimen/input_text"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#404040"
-            android:gravity="left"
+<!--            android:text="정답"-->
+<!--            android:textSize="@dimen/input_text"-->
+<!--            android:fontFamily="@font/nanumsquaure_b"-->
+<!--            android:textColor="#404040"-->
+<!--            android:gravity="left"-->
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"-->
 
-            android:layout_marginLeft="@dimen/input_margin"
-            android:layout_marginRight="@dimen/input_margin"
-            android:layout_marginTop="10dp"/>
+<!--            android:layout_marginLeft="@dimen/input_margin"-->
+<!--            android:layout_marginRight="@dimen/input_margin"-->
+<!--            android:layout_marginTop="10dp"/>-->
         <View
             android:id="@+id/detail_line_second"
             android:layout_width="match_parent"
@@ -117,40 +117,40 @@
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_answer_text"/>
+            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"/>
 
-        <TextView
-            android:id="@+id/tv_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintHeight_default="wrap"
-            android:background="@drawable/answer_back"
-            android:padding="20dp"
+<!--        <TextView-->
+<!--            android:id="@+id/tv_answer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintHeight_default="wrap"-->
+<!--            android:background="@drawable/answer_back"-->
+<!--            android:padding="20dp"-->
 
-            android:text="x = 30, y = 4 "
-            android:textSize="@dimen/input_text"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#016a96"
-            android:gravity="left"
+<!--            android:text="x = 30, y = 4 "-->
+<!--            android:textSize="@dimen/input_text"-->
+<!--            android:fontFamily="@font/nanumsquaure_b"-->
+<!--            android:textColor="#016a96"-->
+<!--            android:gravity="left"-->
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"-->
 
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"/>
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:layout_marginRight="15dp"-->
+<!--            android:layout_marginTop="15dp"/>-->
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="19dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_answer"/>
+            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 <!--    내용 전체 감싸는 부분 끝-->

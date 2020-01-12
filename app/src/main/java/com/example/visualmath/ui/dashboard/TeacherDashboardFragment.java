@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,7 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class TeacherDashboardFragment extends Fragment {
+    private DashboardViewModel dashboardViewModel;
 
     private String this_year;
     private String this_month;
@@ -59,6 +61,8 @@ public class TeacherDashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_teacher_dashboard,container,false);
         recyclerView = root.findViewById(R.id.teacher_calendar_recyclerview);
@@ -130,8 +134,8 @@ public class TeacherDashboardFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
-                this_year = Integer.toString(year);
-                datecheck.setText(year+"년 "+month+"월 "+dayOfMonth+"일 문제 목록");
+//                this_year = Integer.toString(year);
+                datecheck.setText(year+"년 "+(month+1)+"월 "+dayOfMonth+"일 문제 목록");
             }
         });
     }
@@ -161,11 +165,20 @@ public class TeacherDashboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-//            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+//            기존 코드
+////            holder.mIdView.setText(mValues.get(position).id);
+//            holder.mContentView.setText(mValues.get(position).content);
+//
+//            holder.itemView.setTag(mValues.get(position));
+////            holder.itemView.setOnClickListener(mOnClickListener);
 
-            holder.itemView.setTag(mValues.get(position));
-//            holder.itemView.setOnClickListener(mOnClickListener);
+            if(holder.getAdapterPosition()!=RecyclerView.NO_POSITION){
+//                holder.mContentView.setText(mValues.get(position).content);
+//                holder.itemView.setTag(mValues.get(position));
+                holder.mContentView.setText(mValues.get(holder.getAdapterPosition()).content);
+                holder.itemView.setTag(mValues.get(holder.getAdapterPosition()));
+            }
+
         }
 
         @Override
