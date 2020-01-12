@@ -22,7 +22,7 @@
             android:id="@+id/chat_problem_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="문제 제목"
+
             android:textColor="#016a96"
             android:textSize="@dimen/title_text"
             android:gravity="center"

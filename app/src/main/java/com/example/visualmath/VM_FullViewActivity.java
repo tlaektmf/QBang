@@ -111,6 +111,9 @@ public class VM_FullViewActivity extends AppCompatActivity {
         btn03.setSelected(true);
 
         transaction = fragmentManager.beginTransaction();
+        arguments.putString(ItemDetailFragment.ARG_ITEM_ID, post_id);
+        arguments.putString(VM_FullViewActivity.ARG_ITEM_TITLE, post_title);
+        problemFragment.setArguments(arguments);
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }
 
