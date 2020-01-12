@@ -134,8 +134,8 @@ public class TeacherDashboardFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
-                this_year = Integer.toString(year);
-                datecheck.setText(year+"년 "+month+"월 "+dayOfMonth+"일 문제 목록");
+//                this_year = Integer.toString(year);
+                datecheck.setText(year+"년 "+(month+1)+"월 "+dayOfMonth+"일 문제 목록");
             }
         });
     }
