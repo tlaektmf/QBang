@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
 
 
-            android:textSize="24dp"
-            android:fontFamily="@font/nanumsquaure_eb"
+            android:textSize="@dimen/input_text"
+            android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#404040"
 
             android:layout_marginTop="@dimen/input_margin"
@@ -53,7 +53,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_alarm"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_detail"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_title"/>
         <TextView
             android:id="@+id/tv_title"
             android:textIsSelectable="true"
@@ -61,17 +61,16 @@
             android:layout_height="wrap_content"
 
             android:textSize="15dp"
-            android:fontFamily="@font/nanumsquaure_r"
-            android:textColor="#404040"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#016a96"
 
             android:layout_marginLeft="@dimen/input_margin"
             android:layout_marginRight="@dimen/input_margin"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_line_first"
-            app:layout_constraintBottom_toTopOf="@id/iv_problem"/>
-
+            app:layout_constraintBottom_toTopOf="@id/tv_grade"/>
 
         <TextView
             android:id="@+id/tv_grade"
@@ -99,7 +98,7 @@
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_grade"
             app:layout_constraintBottom_toTopOf="@+id/detail_line_second"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
