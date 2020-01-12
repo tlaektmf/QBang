@@ -3,6 +3,7 @@ package com.example.visualmath.ui.dashboard;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,10 +25,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.R;
+import com.example.visualmath.VM_Data_Default;
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.VM_FullViewActivity;
+import com.example.visualmath.dummy.AlarmItem;
 import com.example.visualmath.dummy.DummyContent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +50,7 @@ public class DashboardFragment extends Fragment {
     private String this_year;
     private String this_month;
     private String this_day;
-    View root;
+
     private TextView datecheck;
     private CalendarView calendar;
     private RecyclerView recyclerView;
@@ -50,29 +61,50 @@ public class DashboardFragment extends Fragment {
     private Button search_cancel_btn;
     private ConstraintLayout search_input_lay;
 
+    //  DB
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+
+    public List<VM_Data_Default> subs; //포스트 데이터 일부 리스트
+    public static List<VM_Data_Default> posts; //포스트 데이터 리스트
+    public static List<String> ids;//포스트 아이디를 따로 관리
+    public static List<String> dates;//포스트 완료 날짜를 따로 관리
+
+    public static String TAG="DashboardFrag";
+
+
     public DashboardFragment() {
 
     }
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
-
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
-
         datecheck = root.findViewById(R.id.datecheck);
         calendar = root.findViewById(R.id.calendar);
-        dateInit();
 
-        //검색창
+        //**검색창
         search_input_lay = root.findViewById(R.id.search_input_lay);
 
-//        assert recyclerView != null;
+        //**캘린더 모드 변경
+        cal_mode_btn = root.findViewById(R.id.cal_mode_change);
+
+        //검색 버튼
+        search_btn = root.findViewById(R.id.cal_search_btn);
+
+        //검색 취소 버튼
+        search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
+
+        dateInit();
+        readDataBase();
+
+
         setupRecyclerView(recyclerView);
 
-        //캘린더 모드 변경
-        cal_mode_btn = root.findViewById(R.id.cal_mode_change);
+
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,18 +119,12 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        //검색 버튼
-        search_btn = root.findViewById(R.id.cal_search_btn);
-
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
-
-        //검색 취소 버튼
-        search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
 
         search_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,24 +162,40 @@ public class DashboardFragment extends Fragment {
 
                 this_year = Integer.toString(year);
                 datecheck.setText(year + "년 " + month + "월 " + dayOfMonth + "일 문제 목록");
+
+                subs=new ArrayList<VM_Data_Default>();
+
+                String selectedDate=this_year+"-"+this_month+"-"+this_day;
+                Log.d(TAG,"선택한 날짜: "+selectedDate);
+
+                if(posts!=null){
+                    for(int i=0;i<posts.size();i++){
+                        Log.d(TAG,"포스트 날짜: "+dates.get(i));
+                        if(dates.get(i).contains(selectedDate)){
+                            subs.add(posts.get(i));
+                        }
+                    }
+                }
+
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,(HomeActivity)getActivity()));
             }
         });
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS, mTwoPane,(HomeActivity)getActivity()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(posts, mTwoPane,(HomeActivity)getActivity()));
     }
 
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<VM_Data_Default> mValues;
         private final boolean mTwoPane;
         private final HomeActivity mParentActivity;
 
-        SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items, boolean twoPane,HomeActivity parent) {
+        SimpleItemRecyclerViewAdapter(List<VM_Data_Default> items, boolean twoPane,HomeActivity parent) {
             mValues = items;
             mTwoPane = twoPane;
             mParentActivity = parent;
@@ -169,7 +211,7 @@ public class DashboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
 
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setText(mValues.get(position).getTitle());
             holder.itemView.setTag(mValues.get(position));
 
         }
@@ -199,10 +241,10 @@ public class DashboardFragment extends Fragment {
                             //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
                             // post_id 인자
                             Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, "1573491526806");
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,"2019 6월 평가원");
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,"고등");
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,"dazzel0826_gmail.com/1573491526806/problem.jpeg");
+                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, ids.get(pos));
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,posts.get(pos).getTitle());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,posts.get(pos).getGrade());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,posts.get(pos).getProblem());
 
                             mParentActivity.startActivity(intent);
                             Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
@@ -214,4 +256,48 @@ public class DashboardFragment extends Fragment {
     }
 
 
+
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void readDataBase(){
+        posts=new ArrayList<VM_Data_Default>();
+        ids=new ArrayList<String>();
+        dates=new ArrayList<String>();
+
+
+        firebaseDatabase= FirebaseDatabase.getInstance();
+        reference=firebaseDatabase.getReference("STUDENTS");
+        reference=reference.child("user_name")
+                .child("posts").child("done");
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    String post_id=snapshot.getKey();
+                    String post_date=snapshot.child("time").getValue().toString();
+                    String post_title=snapshot.child("title").getValue().toString();
+                    String post_grade=snapshot.child("grade").getValue().toString();
+                    String post_problem=snapshot.child("problem").getValue().toString();
+
+                    posts.add(new VM_Data_Default(post_title,post_grade,post_problem));
+                    ids.add(post_id);
+                    dates.add(post_date);
+
+                    Log.d(TAG, "ValueEventListener : " +post_date );
+
+                }
+                setupRecyclerView((RecyclerView) recyclerView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+    }
 }
