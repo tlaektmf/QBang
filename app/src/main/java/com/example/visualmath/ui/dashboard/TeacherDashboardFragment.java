@@ -6,7 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,7 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemListActivity;
 import com.example.visualmath.R;
 import com.example.visualmath.VM_FullViewActivity;
@@ -41,10 +45,16 @@ public class TeacherDashboardFragment extends Fragment {
     private CalendarView calendar;
     private RecyclerView recyclerView;
 
+//    모드 변경 버튼
+    private Button cal_mode_btn;
+//    검색창
+    private Button search_btn;
+    private Button search_cancel_btn;
+    private ConstraintLayout search_input_lay;
+
     public TeacherDashboardFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,9 +63,47 @@ public class TeacherDashboardFragment extends Fragment {
         recyclerView = root.findViewById(R.id.teacher_calendar_recyclerview);
         datecheck = root.findViewById(R.id.teacher_datecheck);
         calendar = root.findViewById(R.id.teacher_calendar);
-
         dateInit();
+
+//        검색창
+        search_input_lay = root.findViewById(R.id.teacher_search_input_lay);
+
         setupRecyclerView(recyclerView);
+
+        //캘린더 모드 변경
+        cal_mode_btn = root.findViewById(R.id.teacher_cal_mode_change);
+
+        cal_mode_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = ((HomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentTransaction tran = fm.beginTransaction();//트랜잭션 가져오기
+
+                //대시보드리스트 프레그먼트로 replace
+                tran.replace(R.id.teacher_nav_host_fragment,new TeacherDashboardListFragment());
+                tran.commit();
+            }
+        });
+
+        //검색 버튼
+        search_btn = root.findViewById(R.id.teacher_cal_search_btn);
+
+        search_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
+        //검색 취소 버튼
+        search_cancel_btn = root.findViewById(R.id.teacher_search_cancel_btn);
+
+        search_cancel_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
         return root;
     }
 
