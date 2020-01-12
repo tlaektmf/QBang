@@ -15,5 +15,7 @@ public class VM_ENUM {
     //** alarm type
     static final String SOLVED="SOLVED";//풀이된 문제가 도착 (학생)
     static final String SOLVED_ALARM_MESSAGE="문제 답변이 도착했습니다.";//풀이된 문제가 도착 (학생)
+    static final String LIVE_ALARM_MESSAGE="라이브 5분전입니다.";//풀이된 문제가 도착 (학생)
+
 }
 
