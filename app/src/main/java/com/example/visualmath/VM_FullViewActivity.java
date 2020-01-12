@@ -18,7 +18,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
     SolveFragment solveFragment;
     ProblemFragment problemFragment;
     problem_detail problemDetailFragment;
-    String post_id,post_title,post_grade,post_problem,post_content,post_add_pic1,post_add_pic2,post_add_pic3;
+    String post_id,post_title,post_grade,post_problem;
     Intent intent;
     Bundle arguments ;
 
@@ -39,7 +39,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        Log.d(TAG,"Activity 호출");
+       /// Log.d(TAG,"Activity 호출");
         init();
 
     }
@@ -111,6 +111,9 @@ public class VM_FullViewActivity extends AppCompatActivity {
         btn03.setSelected(true);
 
         transaction = fragmentManager.beginTransaction();
+        arguments.putString(ItemDetailFragment.ARG_ITEM_ID, post_id);
+        arguments.putString(VM_FullViewActivity.ARG_ITEM_TITLE, post_title);
+        problemFragment.setArguments(arguments);
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }
 

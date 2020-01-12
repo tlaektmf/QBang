@@ -3,10 +3,14 @@ package com.example.visualmath;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,13 +24,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -35,37 +54,59 @@ import java.util.Vector;
  */
 public class ProblemFragment extends Fragment {
 
+    //**
     private static final String TAG = "ProblemFragment";
-    ViewGroup rootView;
-    private Vector<VM_Data_CHAT> chats;
-    private VM_ChatAdapter adapter;
-    int count = -1;
+    private static final int CAMERA = 1;
+    private static final int GALLERY = 2;
+    private static final int LIVE = 3;
+    private static final int VIDEO = 4;
+    private static final int COMPLETE = 5;
+    private static final int NOTHING = -1;
 
+    private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
+    private static final int PICK_FROM_CAMERA = 2;
+    private static final int OTHER_DATA_LOAD = 3;
+
+
+    //** Glide Library Exception 처리
+    public RequestManager mGlideRequestManager;
+
+    //** DB
+    private StorageReference storageReference;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+
+    private List<VM_Data_CHAT> chatList;
+
+    //** 액티비티 넘어온 번들
+    private String post_id;
+    private String post_title;
+
+    //** 위젯
+    private TextView textViewChatRoomTitle;
     private EditText msgEditText;
     private Button sendMsgBtn;
     private Button showActionDialog;
 
-    private int returnResult;
-    private static final int CAMERA=1;
-    private static final int GALLERY=2;
-    private static final int LIVE=3;
-    private static final int VIDEO=4;
-    private static final int COMPLETE=5;
-    private static final int NOTHING=-1;
+    //>>>>>
 
-    private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
-    private static final int PICK_FROM_CAMERA = 2;
-    private static final int OTHER_DATA_LOAD=3;
+
+    private ViewGroup rootView;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+
+    private VM_ChatAdapter adapter;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
+
     private File createImageFile() throws IOException {
 
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-        String imageFileName = timeStamp ;
+        String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/"+"userID"+"/");
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "userID" + "/");
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성
@@ -74,7 +115,8 @@ public class ProblemFragment extends Fragment {
         return image;
 
     }
-    public void getAlbumFile(){
+
+    public void getAlbumFile() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
@@ -83,7 +125,8 @@ public class ProblemFragment extends Fragment {
         이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
          */
     }
-    public void takePhoto(){
+
+    public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
         try {
@@ -119,38 +162,76 @@ public class ProblemFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        post_id = getArguments().getString(ItemDetailFragment.ARG_ITEM_ID);
+        post_title = getArguments().getString(VM_FullViewActivity.ARG_ITEM_TITLE);
+
+        firebaseDatabase= FirebaseDatabase.getInstance();
+        storageReference= FirebaseStorage.getInstance().getReference();
+
+        reference=firebaseDatabase.getReference("POSTS");
+        reference=reference.child(post_id)
+                .child("chatList");
+
+
+        mGlideRequestManager = Glide.with(this);
+        chatList =new ArrayList<>();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_problem, container, false);
-        View view = inflater.inflate(R.layout.fragment_problem, container, false);
-
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.chatRoomListView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        chats = new Vector<>();
-
-        ceateData();
-
-        adapter = new VM_ChatAdapter(chats, getActivity());
-        recyclerView.setAdapter(adapter);
-
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                linearLayoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-
         msgEditText = rootView.findViewById(R.id.msgEditText);
         sendMsgBtn = rootView.findViewById(R.id.sendMsgBtn);
         showActionDialog = rootView.findViewById(R.id.showActionDialog);
+        textViewChatRoomTitle = rootView.findViewById(R.id.chat_problem_title);
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.chatRoomListView);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        //chatList =new ArrayList<>();
+
+        //** 채팅창 제목 설정
+        textViewChatRoomTitle.setText(post_title);
+
+        //** chat 데이터 생성
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<List<VM_Data_CHAT>> tmp = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+
+
+                chatList=dataSnapshot.getValue(tmp);
+                Log.d("data", "ValueEventListener : " +dataSnapshot );
+
+                adapter = new VM_ChatAdapter(chatList, getActivity());
+                recyclerView.setAdapter(adapter);
+
+                //** 리스트뷰에 반영
+                ///adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "okay");
-                count++;
-
-                VM_Data_CHAT data = new VM_Data_CHAT("근육몬", msgEditText.getText().toString(), 0, 0);
-                chats.add(data);
+                VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
+                chatList.add(data);
+                Log.d(TAG, msgEditText.getText().toString() );
+                msgEditText.setText("");//채팅창 초기화
                 adapter.notifyDataSetChanged();
             }
         });
@@ -159,64 +240,46 @@ public class ProblemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //** 다이얼로그 위치
-                //Toast.makeText(getActivity(),"다이얼로그 생성 위치",Toast.LENGTH_LONG).show();
 
                 final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
 
                 dig.setDialogListener(new VM_DialogLIstener_chatMenu() {
                     @Override
                     public void onButtonCamera() {
-                        Toast.makeText(getActivity(),"카메라버튼",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onButtonGallery() {
-                        Toast.makeText(getActivity(),"갤러리버튼",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onButtonLive() {
-                        Toast.makeText(getActivity(),"라이브버튼",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "라이브버튼", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onButtonVoice() {
-                        Toast.makeText(getActivity(),"음성버튼",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onButtonComplete() {
-                        Toast.makeText(getActivity(),"완료버튼",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "완료버튼", Toast.LENGTH_LONG).show();
 
                     }
                 });
                 dig.callFunction();
             }
         });
+
         return rootView;
     }
 
 
-            public void ceateData() {
-
-                //** 더미 데이터
-                String fName = "근육몬";
-                switch (fName) {
-                    case "근육몬":
-                        chats.add(new VM_Data_CHAT("근육몬", "어떤 문제를 도와줄까요?", 0, 0));
-                        chats.add(new VM_Data_CHAT("근육몬", "안녕~", 1, R.drawable.img_video));
-                        chats.add(new VM_Data_CHAT("근육몬", "반가워요.", 0, 0));
-                        chats.add(new VM_Data_CHAT("근육몬", "이렇게 푸세용~", 1, R.drawable.img_video));
-                        break;
-                    case "괴력몬":
-                        chats.add(new VM_Data_CHAT("괴력몬", "안녕하세요", 0, 0));
-                        chats.add(new VM_Data_CHAT("괴력몬", "이문제를 잘 모르겠어요~", 1, R.drawable.img_contract));
-                        chats.add(new VM_Data_CHAT("괴력몬", "감사합니다", 0, 0));
-                        break;
-                }
-            }
 
 }
