@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,7 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class TeacherDashboardFragment extends Fragment {
+    private DashboardViewModel dashboardViewModel;
 
     private String this_year;
     private String this_month;
@@ -59,6 +61,8 @@ public class TeacherDashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_teacher_dashboard,container,false);
         recyclerView = root.findViewById(R.id.teacher_calendar_recyclerview);

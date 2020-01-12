@@ -23,9 +23,9 @@ import com.example.visualmath.VM_TeacherSolveProblemActivity;
 public class TeacherHomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
-    public TeacherHomeFragment() {
-        // Required empty public constructor
-    }
+//    public TeacherHomeFragment() {
+//        // Required empty public constructor
+//    }
 
 
     @Override
