@@ -70,6 +70,7 @@ public class DashboardFragment extends Fragment {
     public static List<String> ids;//포스트 아이디를 따로 관리
     public static List<String> dates;//포스트 완료 날짜를 따로 관리
 
+    public HomeActivity parent;
     public static String TAG="DashboardFrag";
 
 
@@ -77,6 +78,12 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        parent=(HomeActivity)getActivity();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -110,7 +117,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentManager fm = ((HomeActivity) getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
 
                 //대시보드리스트 프레그먼트로 replace
@@ -162,11 +169,25 @@ public class DashboardFragment extends Fragment {
 
 
                 this_year = Integer.toString(year);
+
                 datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
 
                 subs=new ArrayList<VM_Data_Default>();
 
-                String selectedDate=this_year+"-"+this_month+"-"+this_day;
+                String selectedDate=year+"-";
+
+                if((month+1)<10){
+                    selectedDate+="0"+(month+1)+"-";
+                }else{
+                    selectedDate+=(month+1)+"-";
+                }
+
+                if((dayOfMonth+1)<10){
+                    selectedDate+="0"+(dayOfMonth);
+                }else{
+                    selectedDate+=dayOfMonth;
+                }
+
                 Log.d(TAG,"선택한 날짜: "+selectedDate);
 
                 if(posts!=null){
@@ -178,7 +199,7 @@ public class DashboardFragment extends Fragment {
                     }
                 }
 
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,(HomeActivity)getActivity()));
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
 
             }
         });
@@ -186,7 +207,8 @@ public class DashboardFragment extends Fragment {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(posts, mTwoPane,(HomeActivity)getActivity()));
+       /// recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(posts, mTwoPane,(HomeActivity)getActivity()));
+
     }
 
 
@@ -267,8 +289,26 @@ public class DashboardFragment extends Fragment {
         posts=new ArrayList<VM_Data_Default>();
         ids=new ArrayList<String>();
         dates=new ArrayList<String>();
+        subs=new ArrayList<VM_Data_Default>();
+
+        String today=this_year+"-";
+
+        if((Integer.parseInt(this_month)+1)<10){
+            today+="0"+(Integer.parseInt(this_month)+1)+"-";
+        }else{
+            today+=(Integer.parseInt(this_month)+1)+"-";
+        }
+
+        if((Integer.parseInt(this_day)+1)<10){
+            today+="0"+(Integer.parseInt(this_day)+1);
+        }else{
+            today+=Integer.parseInt(this_day)+1;
+        }
+
+        Log.d(TAG,"오늘 날짜: "+today);
 
 
+        //** 데이터 읽기
         firebaseDatabase= FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
         reference=reference.child("user_name")
@@ -301,5 +341,18 @@ public class DashboardFragment extends Fragment {
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
         });
+
+        //** 처음 DashBoard 세팀
+        if(posts!=null){
+            for(int i=0;i<posts.size();i++){
+                Log.d(TAG,"포스트 날짜: "+dates.get(i));
+                if(dates.get(i).contains(today)){
+                    subs.add(posts.get(i));
+                }
+            }
+        }
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+
     }
+
 }
