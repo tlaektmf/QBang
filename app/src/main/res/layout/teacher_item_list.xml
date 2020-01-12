@@ -21,6 +21,13 @@
             android:background="@drawable/back_img" />
     </RelativeLayout>
 
+    <View
+        android:id="@+id/clickview"
+        android:clickable="true"
+        android:background="#4D000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <RelativeLayout
         android:id="@+id/drawer_menu"
         android:layout_width="wrap_content"

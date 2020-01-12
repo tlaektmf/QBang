@@ -72,12 +72,17 @@ public class TeacherItemListActivity extends AppCompatActivity {
 
         // 메뉴 리스트 활성 비활성
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.drawer_menu);
+        View clickview = findViewById(R.id.clickview);
+
         if(layout.getVisibility()==View.VISIBLE){
             //현재 뷰가 보이면
             layout.setVisibility(View.GONE);
+            clickview.setVisibility(View.INVISIBLE);
         }else{
             //뷰가 보이지 않으면
             layout.setVisibility(View.VISIBLE);
+            clickview.setVisibility(View.VISIBLE);
+            clickview.setClickable(true);
         }
     }
 
