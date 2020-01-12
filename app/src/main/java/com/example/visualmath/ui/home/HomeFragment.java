@@ -24,15 +24,6 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
-//        final TextView textView = root.findViewById(R.id.);
-//        homeViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
         //ds.shim
         final ImageButton buttonQVideo=root.findViewById(R.id.ib_qText);
         final ImageButton buttonQText=root.findViewById(R.id.ib_qVideo);
