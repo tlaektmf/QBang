@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,12 @@ public class DashboardFragment extends Fragment {
     private Button search_cancel_btn;
     private ConstraintLayout search_input_lay;
 
+    //lhj_0
+//    로딩창
+    private ProgressBar cal_loading_bar;
+    private View cal_loading_back;
+    //lhj_0
+
     //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
@@ -101,6 +108,12 @@ public class DashboardFragment extends Fragment {
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
         datecheck = root.findViewById(R.id.datecheck);
         calendar = root.findViewById(R.id.calendar);
+
+        //lhj_1
+        //로딩창
+        cal_loading_bar = root.findViewById(R.id.cal_loading_bar);
+        cal_loading_back = root.findViewById(R.id.cal_loading_back);
+        //lhj_1
 
         //**검색창
         search_input_lay = root.findViewById(R.id.search_input_lay);
@@ -392,6 +405,11 @@ public class DashboardFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+
+                //lhj_3
+                cal_loading_back.setVisibility(View.INVISIBLE);
+                cal_loading_bar.setVisibility(View.INVISIBLE);
+                //lhj_3
 
             }
 
