@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,14 +63,19 @@ public class DashboardFragment extends Fragment {
     private Button search_cancel_btn;
     private ConstraintLayout search_input_lay;
 
-    //  DB
+    //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
 
-    public List<VM_Data_Default> subs; //포스트 데이터 일부 리스트
-    public static List<VM_Data_Default> posts; //포스트 데이터 리스트
-    public static List<String> ids;//포스트 아이디를 따로 관리
-    public static List<String> dates;//포스트 완료 날짜를 따로 관리
+    //** 포커싱된 곳 DB
+    ///public static List<VM_Data_Default> subs;
+    //** 전체 DB
+    ///public static List<VM_Data_Default> posts; //포스트 데이터 리스트
+    ///public static List<String> ids;//포스트 아이디를 따로 관리
+    ///public static List<String> dates;//포스트 완료 날짜를 따로 관리
+
+    public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
+    public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
 
     public HomeActivity parent;
     public static String TAG="DashboardFrag";
@@ -185,7 +191,7 @@ public class DashboardFragment extends Fragment {
 
                 datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
 
-                subs=new ArrayList<VM_Data_Default>();
+                subs=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
 
                 String selectedDate=year+"-";
 
@@ -201,13 +207,15 @@ public class DashboardFragment extends Fragment {
                     selectedDate+=dayOfMonth;
                 }
 
-                Log.d(TAG,"선택한 날짜: "+selectedDate);
+                Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
 
                 if(posts!=null){
                     for(int i=0;i<posts.size();i++){
-                        Log.d(TAG,"포스트 날짜: "+dates.get(i));
-                        if(dates.get(i).contains(selectedDate)){
-                            subs.add(posts.get(i));
+                        Log.d(TAG,"[클릭이벤트]포스트 날짜: "+posts.get(i).second.second);
+                        if(posts.get(i).second.second.contains(selectedDate)){
+                            ///subs.add(Pair.create(posts.get(i),Pair.create(ids.get(i),dates.get(i))));
+                            subs.add(Pair.create(posts.get(i).first,
+                                    Pair.create(posts.get(i).second.first,posts.get(i).second.second)));
                         }
                     }
                 }
@@ -228,11 +236,12 @@ public class DashboardFragment extends Fragment {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<VM_Data_Default> mValues;
+        ///private final List<VM_Data_Default> mValues;
+        private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
         private final boolean mTwoPane;
         private final HomeActivity mParentActivity;
 
-        SimpleItemRecyclerViewAdapter(List<VM_Data_Default> items, boolean twoPane,HomeActivity parent) {
+        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items, boolean twoPane,HomeActivity parent) {
             mValues = items;
             mTwoPane = twoPane;
             mParentActivity = parent;
@@ -248,8 +257,12 @@ public class DashboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
 
-            holder.mContentView.setText(mValues.get(position).getTitle());
+            holder.mContentView.setText(mValues.get(position).first.getTitle());//내용(post_title)
             holder.itemView.setTag(mValues.get(position));
+
+            //** Date 에서 시간만 표기 (시:분)
+            String token=mValues.get(position).second.second.split(" ")[1];
+            holder.mTimeView.setText(token);//시간
 
         }
 
@@ -280,11 +293,14 @@ public class DashboardFragment extends Fragment {
                             //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
                             // post_id 인자
                             Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, ids.get(pos));
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,posts.get(pos).getTitle());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,posts.get(pos).getGrade());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,posts.get(pos).getProblem());
-
+//                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, ids.get(pos));
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).getTitle());
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,posts.get(pos).getGrade());
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,posts.get(pos).getProblem());
+                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
                             mParentActivity.startActivity(intent);
                             Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
                         }
@@ -302,17 +318,6 @@ public class DashboardFragment extends Fragment {
      */
     public void readDataBase(){
 
-//
-
-
-//>>>>
-//        posts=new ArrayList<VM_Data_Default>();
-//        ids=new ArrayList<String>();
-//        dates=new ArrayList<String>();
-//        String today=this_year+"-"+this_month+"-"+this_day;
-//        Log.d(TAG,"오늘 날짜: "+today);
-//>>>
-
         //** 데이터 읽기
         firebaseDatabase= FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
@@ -323,24 +328,29 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                posts=new ArrayList<VM_Data_Default>();
-                ids=new ArrayList<String>();
-                dates=new ArrayList<String>();
-                subs=new ArrayList<VM_Data_Default>();
+                ///posts=new ArrayList<VM_Data_Default>();
+                ///ids=new ArrayList<String>();
+                ///dates=new ArrayList<String>();
+                ///subs=new ArrayList<VM_Data_Default>();
+
+                posts=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
+                String post_id,post_date,post_title,post_grade,post_problem;
+                String token;
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    String post_id=snapshot.getKey();
-                    String post_date=snapshot.child("time").getValue().toString();
-                    String post_title=snapshot.child("title").getValue().toString();
-                    String post_grade=snapshot.child("grade").getValue().toString();
-                    String post_problem=snapshot.child("problem").getValue().toString();
+                    post_id=snapshot.getKey();
+                    post_date=snapshot.child("time").getValue().toString();
+                    post_title=snapshot.child("title").getValue().toString();
+                    post_grade=snapshot.child("grade").getValue().toString();
+                    post_problem=snapshot.child("problem").getValue().toString();
+                    posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
+                            Pair.create(post_id,post_date)));
 
-                    posts.add(new VM_Data_Default(post_title,post_grade,post_problem));
-                    ids.add(post_id);
-                    dates.add(post_date);
-
-                    Log.d(TAG, "ValueEventListener : " +post_date );
+//                    posts.add(new VM_Data_Default(post_title,post_grade,post_problem));
+//                    ids.add(post_id);
+//                    dates.add(post_date);
+                    Log.d(TAG, "ValueEventListener : " +snapshot);
 
                 }
 
@@ -348,7 +358,8 @@ public class DashboardFragment extends Fragment {
 
                 //** 현재 포커싱된 날짜
 
-                subs=new ArrayList<VM_Data_Default>();
+                ///subs=new ArrayList<VM_Data_Default>();
+                subs=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
 
                 String today=this_year+"-"+this_month+"-"+this_day;
                 Log.d(TAG,"오늘 날짜: "+today);
@@ -365,15 +376,17 @@ public class DashboardFragment extends Fragment {
                 }else{
                     focusedDate+=focusedDay;
                 }
-                Log.d(TAG,"현재포지션 날짜:"+focusedDate);
+                Log.d(TAG,"[ValueListener]현재포지션 날짜:"+focusedDate);
 
 
                 if(posts!=null){
                     for(int i=0;i<posts.size();i++){
-                        Log.d(TAG,"포스트 날짜: "+dates.get(i));
-                        if(dates.get(i).contains(focusedDate)){
+                        Log.d(TAG,"[ValueListener]포스트 날짜: "+posts.get(i).second.second);
+                        if(posts.get(i).second.second.contains(focusedDate)){
 
-                            subs.add(posts.get(i));
+                            ///subs.add(posts.get(i));
+                            subs.add(Pair.create(posts.get(i).first,
+                                    Pair.create(posts.get(i).second.first,posts.get(i).second.second)));
                         }
                     }
                 }
