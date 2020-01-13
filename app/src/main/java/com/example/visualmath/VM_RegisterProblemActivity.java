@@ -49,17 +49,17 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 public class VM_RegisterProblemActivity extends AppCompatActivity {
 
-    private static final String TAG="RegisterProblem";
+    private static final String TAG = "RegisterProblem";
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     private static final int PICK_FROM_CAMERA = 2;
-    private static final int OTHER_DATA_LOAD=3;
-    private static final String DETAIL="detail";
-    private static final String ALL="all";
+    private static final int OTHER_DATA_LOAD = 3;
+    private static final String DETAIL = "detail";
+    private static final String ALL = "all";
 
     private int returnResult;
-    private static final int GALLERY=1;
-    private static final int CAMERA=2;
-    private static final int NOTHING=-1;
+    private static final int GALLERY = 1;
+    private static final int CAMERA = 2;
+    private static final int NOTHING = -1;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
     private final CharSequence[] gradeItems = {"초       등", "중       등", "고       등"};
@@ -86,7 +86,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         //** ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.hide();
         }
 
@@ -95,16 +95,16 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
-    public void init(){
-        buttonGrade=findViewById(R.id.btn_grade);
-        imageViewProblem=findViewById(R.id.iv_file_problem);
-        buttonGoOther=findViewById(R.id.btn_goOther);
-        editTextTitle=findViewById(R.id.et_title);
-        returnResult=NOTHING;
+    public void init() {
+        buttonGrade = findViewById(R.id.btn_grade);
+        imageViewProblem = findViewById(R.id.iv_file_problem);
+        buttonGoOther = findViewById(R.id.btn_goOther);
+        editTextTitle = findViewById(R.id.et_title);
+        returnResult = NOTHING;
         firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
         storageReference = FirebaseStorage.getInstance().getReference(); //파이어베이스 저장소
         firebaseDatabase = FirebaseDatabase.getInstance();//파이어베이스 데이터 베이스
-        vmDataBasic=new VM_Data_BASIC();
+        vmDataBasic = new VM_Data_BASIC();
 
     }
 
@@ -116,7 +116,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
-    public void getAlbumFile(){
+    public void getAlbumFile() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
@@ -125,7 +125,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
          */
     }
-    public void takePhoto(){
+
+    public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
         try {
@@ -154,49 +155,35 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }
 
     }
+
     public void changeGrade(View view) {
         //**초등, 중등, 고등 선택
-//        AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
-//                android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-        ///oDialog.setPositiveButton("선택",null);
-        ///oDialog.setNeutralButton("취소",null);
-//        oDialog.setTitle("학년을 선택해 주세요.");
-
-//        oDialog.setItems(gradeItems, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                buttonGrade.setText(gradeItems[which]);
-//               String grade=gradeItems[which].toString();
-//               vmDataBasic.setGrade(grade);
-//            }
-//        }).setCancelable(true)
-//                .show();
 
         //**초,중,고 선택 _ 커스텀 다이얼로그
-        final VM_Dialog_PickGrade gradeDialog= new VM_Dialog_PickGrade(VM_RegisterProblemActivity.this);
+        final VM_Dialog_PickGrade gradeDialog = new VM_Dialog_PickGrade(VM_RegisterProblemActivity.this);
 
         gradeDialog.setDialogListener(new VM_DialogLIstener_PickGrade() {
             @Override
             public void onButtonPrimary() {
-                returnResult=0;
+                returnResult = 0;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade=gradeItems[returnResult].toString();
+                String grade = gradeItems[returnResult].toString();
                 vmDataBasic.setGrade(grade);
             }
 
             @Override
             public void onButtonMiddle() {
-                returnResult=1;
+                returnResult = 1;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade=gradeItems[returnResult].toString();
+                String grade = gradeItems[returnResult].toString();
                 vmDataBasic.setGrade(grade);
             }
 
             @Override
             public void onButtonHigh() {
-                returnResult=2;
+                returnResult = 2;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade=gradeItems[returnResult].toString();
+                String grade = gradeItems[returnResult].toString();
                 vmDataBasic.setGrade(grade);
             }
         });
@@ -207,9 +194,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
-        sendData=receiveData;
-        intent.putExtra(ALL,sendData); //Parcel객체인 sendData intent에 추가
-        startActivityForResult(intent,OTHER_DATA_LOAD);
+        sendData = receiveData;
+        intent.putExtra(ALL, sendData); //Parcel객체인 sendData intent에 추가
+        startActivityForResult(intent, OTHER_DATA_LOAD);
     }
 
 
@@ -217,8 +204,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         imageViewProblem.setImageBitmap(originalBm); //이미지 set
-        if(originalBm==null){
-            Log.i(TAG,"null");
+        if (originalBm == null) {
+            Log.i(TAG, "null");
         }
     }
 
@@ -226,10 +213,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-        String imageFileName = timeStamp ;
+        String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/"+"userID"+"/");
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "userID" + "/");
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성
@@ -240,8 +227,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     /**
-     *  startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-     *  이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+     * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
+     * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -255,7 +243,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if(galleryFile != null) {
+            if (galleryFile != null) {
                 if (galleryFile.exists()) {
                     if (galleryFile.delete()) {
                         Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
@@ -265,22 +253,20 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
 
             return;
-        }
-
-        else if(requestCode==PICK_FROM_ALBUM){
-            Uri photo_problem=data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-            Cursor cursor=null;
+        } else if (requestCode == PICK_FROM_ALBUM) {
+            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+            Cursor cursor = null;
 
             //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
             try {
-                String[] proj = { MediaStore.Images.Media.DATA };
+                String[] proj = {MediaStore.Images.Media.DATA};
                 assert photo_problem != null;
                 cursor = getContentResolver().query(photo_problem, proj, null, null, null);
                 assert cursor != null;
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
                 galleryFile = new File(cursor.getString(column_index));
-            }finally {
+            } finally {
                 if (cursor != null) {
                     cursor.close();
                 }
@@ -291,46 +277,43 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             //데이터 등록
             setImage();
-        }
-        else if (requestCode == PICK_FROM_CAMERA) {
+        } else if (requestCode == PICK_FROM_CAMERA) {
             Uri photoUri;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", galleryFile);
 
-            }
-            else {
+            } else {
                 photoUri = Uri.fromFile(galleryFile);
             }
             vmDataBasic.setProblem(photoUri);
             setImage();
-        }
-        else if(requestCode==OTHER_DATA_LOAD){
-            if(resultCode==RESULT_OK){
-                String notice="";
+        } else if (requestCode == OTHER_DATA_LOAD) {
+            if (resultCode == RESULT_OK) {
+                String notice = "";
                 //VM_Data_ADD receiveData=data.getParcelableExtra(ALL);
-                receiveData=data.getParcelableExtra(ALL);
+                receiveData = data.getParcelableExtra(ALL);
 
-                if(!receiveData.getDetail().equals("")){
-                    notice="추가 설명 등록.";
-                    Log.i(TAG,receiveData.getDetail()+"떠야돼");
+                if (!receiveData.getDetail().equals("")) {
+                    notice = "추가 설명 등록.";
+                    Log.i(TAG, receiveData.getDetail() + "떠야돼");
                 }
-                int count=0;
-                for(int i=0;i<3;i++){
+                int count = 0;
+                for (int i = 0; i < 3; i++) {
 
-                    if(receiveData.getFilePathElement(i)!=null){
+                    if (receiveData.getFilePathElement(i) != null) {
                         count++;
-                        Log.i(TAG,"receiveDatacheck: "+i+",,"+receiveData.getFilePathElement(i).toString());
+                        Log.i(TAG, "receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
                     }
                 }
-                if(count!=0){
-                    notice+="사진 "+count+"개 추가.";
+                if (count != 0) {
+                    notice += "사진 " + count + "개 추가.";
                 }
 
                 //** 버튼에 정보 표시
-                if(notice!=""){
+                if (notice != "") {
                     buttonGoOther.setText(notice);
-                }else if (notice==""){
+                } else if (notice == "") {
                     buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
                 }
 
@@ -340,11 +323,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }
 
 
-
-
     }
 
-    private void showPickDialog(){
+    private void showPickDialog() {
         //** 다이얼로그 실행
         // 커스텀 다이얼로그를 생성
         final VM_Dialog_PickHowToGetPicture dialog = new VM_Dialog_PickHowToGetPicture(VM_RegisterProblemActivity.this);
@@ -354,14 +335,14 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         dialog.setDialogListener(new VM_DialogListener_PickHowToGetPicture() {
             @Override
             public void onButtonTakePhotoClicked() {
-                returnResult=CAMERA;
+                returnResult = CAMERA;
                 dialog.setReturnResult(CAMERA);
                 takePhoto();
             }
 
             @Override
             public void onButtonGetAlbumFileClicked() {
-                returnResult=GALLERY;
+                returnResult = GALLERY;
                 dialog.setReturnResult(GALLERY);
                 getAlbumFile();
             }
@@ -369,13 +350,14 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         dialog.callFunction();// 커스텀 다이얼로그를 호출
 
     }
+
     private void tedPermission() {
 
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 //** 권한 요청 성공
-                Toast.makeText(VM_RegisterProblemActivity.this,"Permission Granted",Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_RegisterProblemActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
                 showPickDialog();
 
@@ -384,7 +366,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
                 // ** 권한 요청 실패
-                Toast.makeText(VM_RegisterProblemActivity.this,deniedPermissions.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_RegisterProblemActivity.this, deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -402,34 +384,36 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         //** 데이터베이스에 저장
 
-//        vmDataBasic.setTitle(editTextTitle.getText().toString());
-//        VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
-//        vmDbHandler.newPost(receiveData,vmDataBasic);
 
         //** 문제 등록의 최소 요건 확인
-        ///checkAbility(); //launch시 open
+        if (checkAbility()){
+            Log.d(TAG,"문제 등록 요구사항 만족");
+            //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
+            vmDataBasic.setTitle(editTextTitle.getText().toString());
 
-        //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
-        vmDataBasic.setTitle(editTextTitle.getText().toString());
+            wrapContentProvider();
 
-        wrapContentProvider();
+            //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
+            VM_DBHandler vmDbHandler = new VM_DBHandler("POSTS");
+            vmDbHandler.newPost(receiveData, vmDataBasic);
+            //** 액티비티 종료
+            finish();
+        }else{
+            Log.d(TAG,"문제 등록 요구사항 만족 못함");
+        }
 
-        //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
-        VM_DBHandler vmDbHandler=new VM_DBHandler("POSTS");
-        vmDbHandler.newPost(receiveData,vmDataBasic);
 
-        finish();
     }
 
-    public void wrapContentProvider(){
+    public void wrapContentProvider() {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
-            for(int i=0;i<3;i++){
-                if(receiveData.getFilePathElement(i)!=null){
+            for (int i = 0; i < 3; i++) {
+                if (receiveData.getFilePathElement(i) != null) {
                     Uri photoUri = FileProvider.getUriForFile(this,
                             "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
-                    receiveData.setFilePathElement(photoUri,i);
+                    receiveData.setFilePathElement(photoUri, i);
                 }
             }
 
@@ -438,6 +422,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         }
     }
+
     public void cancel(View view) {
         finish();
     }
@@ -450,12 +435,50 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
      *
      * @return
      */
-    public boolean checkAbility(){
-        if(vmDataBasic.getTitle()!=null
-        && vmDataBasic.getProblem()!=null){
-            return true;
+    public boolean checkAbility() {
+
+        if (editTextTitle.getText()==null||
+                editTextTitle.getText().toString().replace(" ", "").equals("")) {
+            //** title란이 아예 쓰여진게 없거나 공백들로 이루어진 경우
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();     //닫기
+                }
+            });
+            alert.setMessage("문제 제목은 필수 입력사항입니다.");
+            alert.show();
+            return false;
         }
-        return false;
+        if (vmDataBasic.getProblem() == null) {
+            //** 문제 사진란이 공백
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();     //닫기
+                }
+            });
+            alert.setMessage("문제 사진 첨부는 필수 사항입니다.");
+            alert.show();
+            return false;
+        }
+        if(vmDataBasic.getGrade()==null){
+            //** 학년 선택을 하지 않은 경우
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();     //닫기
+                }
+            });
+            alert.setMessage("학년 선택은 필수 사항입니다.");
+            alert.show();
+            return false;
+        }
+        return true;
     }
+
 
 }

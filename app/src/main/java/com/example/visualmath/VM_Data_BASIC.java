@@ -8,6 +8,12 @@ public class VM_Data_BASIC {
     private String grade;
     private Uri problem;
 
+    public VM_Data_BASIC(){
+     this.title=null;
+     this.grade=null;
+     this.problem=null;
+
+    }
     public String getTitle() {
         return title;
     }
