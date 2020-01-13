@@ -6,8 +6,8 @@
     <solid android:color="#e9f7fd" />
     <!--    모서리 굴곡-->
     <corners
-        android:bottomLeftRadius="10dp"
-        android:bottomRightRadius="10dp"
-        android:topLeftRadius="10dp"
-        android:topRightRadius="10dp" />
+        android:bottomLeftRadius="6dp"
+        android:bottomRightRadius="6dp"
+        android:topLeftRadius="6dp"
+        android:topRightRadius="6dp" />
 </shape>
