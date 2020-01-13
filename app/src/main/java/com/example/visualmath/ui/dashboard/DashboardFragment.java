@@ -195,12 +195,12 @@ public class DashboardFragment extends Fragment {
 
 
                 //현재 포커싱된 달력뷰(년,월,일) 정보 저장
-                focusedYear=year;
-                focusedMonth=month+1;
-                focusedDay=dayOfMonth;
-                Log.d(TAG,"선택 -> 포커싱 변경: "+focusedYear+"-"+focusedMonth+"-"+focusedDay);
+//                focusedYear=year;
+//                focusedMonth=month+1;
+//                focusedDay=dayOfMonth;
+                Log.d(TAG,"선택 -> 포커싱 변경: "+year+"-"+(month+1)+"-"+dayOfMonth);
 
-                this_year = Integer.toString(year);
+//                this_year = Integer.toString(year);
 
                 datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
 
