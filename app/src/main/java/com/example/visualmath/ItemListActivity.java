@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,17 +64,28 @@ public class ItemListActivity extends AppCompatActivity {
     public static String TAG="ItemListActivity";
     public View recyclerView;
 
+    //lhj_0
+    private ProgressBar list_loading_bar;
+    //lhj_0
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
+
+        //lhj_1
+        list_loading_bar = findViewById(R.id.list_loading_bar);
+        //lhj_1
+
+        //lhj_2
+//        list_loading_bar.setVisibility(View.VISIBLE);
+        //lhj_2
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
-
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -88,7 +100,6 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
 
     }
 
@@ -204,6 +215,7 @@ public class ItemListActivity extends AppCompatActivity {
      * write
      */
     public void initData(){
+
         alarms=new ArrayList<AlarmItem>();
         firebaseDatabase=FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
@@ -223,6 +235,10 @@ public class ItemListActivity extends AppCompatActivity {
 
                 }
                 setupRecyclerView((RecyclerView) recyclerView);
+
+                //lhj_3
+                list_loading_bar.setVisibility(View.INVISIBLE);
+                //lhj_3
             }
 
             @Override
@@ -231,5 +247,6 @@ public class ItemListActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
         });
+
     }
 }
