@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,10 +35,19 @@ public class TeacherItemListActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private boolean mTwoPane;
     public static String TAG="TeacherItemList";
+
+    //lhj_0
+    private ProgressBar list_loading_bar;
+    //lhj_0
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_item_list);
+
+        //lhj_1
+        list_loading_bar = findViewById(R.id.teacher_list_loading_bar);
+        //lhj_1
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -50,9 +60,6 @@ public class TeacherItemListActivity extends AppCompatActivity {
         initData();
 
         init();
-
-
-
 //
 //        //** detailView 클릭 이벤트
 //        layout.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +217,10 @@ public class TeacherItemListActivity extends AppCompatActivity {
 
                 }
                 setupRecyclerView((RecyclerView) recyclerView);
+
+                //lhj_3
+                list_loading_bar.setVisibility(View.INVISIBLE);
+                //lhj_3
             }
 
             @Override
