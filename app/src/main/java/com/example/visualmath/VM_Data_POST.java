@@ -36,7 +36,7 @@ public class VM_Data_POST {
         live_state=_live_state;
         uploadDate=_uploadDate;
         matchSet_student=_s_id;
-        matchSet_teacher=null;
+        matchSet_teacher=null;//""로 바꿔야 할듯?
 
         // 필수 아닌 것
         liveTime=null;
