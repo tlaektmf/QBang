@@ -56,6 +56,9 @@ dependencies {
 
 //    스위치 버튼
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
+//    동그라미 이미지
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
