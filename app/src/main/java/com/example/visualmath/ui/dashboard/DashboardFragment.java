@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +53,7 @@ public class DashboardFragment extends Fragment {
     private String this_day;
 
     private TextView datecheck;
-    private CalendarView calendar;
+    private  CalendarView calendar;
     private RecyclerView recyclerView;
     private Button cal_mode_btn;
 
@@ -72,7 +73,9 @@ public class DashboardFragment extends Fragment {
 
     public HomeActivity parent;
     public static String TAG="DashboardFrag";
-
+    public int focusedYear;
+    public int focusedMonth;
+    public int focusedDay;
 
     public DashboardFragment() {
 
@@ -159,6 +162,10 @@ public class DashboardFragment extends Fragment {
         this_month = month;
         this_day = day;
 
+        //현재 포커싱된 달력뷰(년,월,일) 초기값
+        focusedYear=Integer.parseInt(this_year);
+        focusedMonth=Integer.parseInt(this_month);
+        focusedDay=Integer.parseInt(this_day);
 
         datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
 
@@ -167,6 +174,12 @@ public class DashboardFragment extends Fragment {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
 
+
+                //현재 포커싱된 달력뷰(년,월,일) 정보 저장
+                focusedYear=year;
+                focusedMonth=month+1;
+                focusedDay=dayOfMonth;
+                Log.d(TAG,"선택 -> 포커싱 변경: "+focusedYear+"-"+focusedMonth+"-"+focusedDay);
 
                 this_year = Integer.toString(year);
 
@@ -182,7 +195,7 @@ public class DashboardFragment extends Fragment {
                     selectedDate+=(month+1)+"-";
                 }
 
-                if((dayOfMonth+1)<10){
+                if(dayOfMonth<10){
                     selectedDate+="0"+(dayOfMonth);
                 }else{
                     selectedDate+=dayOfMonth;
@@ -249,11 +262,13 @@ public class DashboardFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
 
             final TextView mContentView;
-
+            final TextView mTimeView;
             ViewHolder(View view) {
                 super(view);
 
                 mContentView = (TextView) view.findViewById(R.id.problem_name);
+                mTimeView = (TextView) view.findViewById(R.id.endTime);
+
 
                 //** 아이템 클릭 이벤트
                 view.setOnClickListener(new View.OnClickListener() {
@@ -286,27 +301,17 @@ public class DashboardFragment extends Fragment {
      * write
      */
     public void readDataBase(){
-        posts=new ArrayList<VM_Data_Default>();
-        ids=new ArrayList<String>();
-        dates=new ArrayList<String>();
-        subs=new ArrayList<VM_Data_Default>();
 
-        String today=this_year+"-";
+//
 
-        if((Integer.parseInt(this_month)+1)<10){
-            today+="0"+(Integer.parseInt(this_month)+1)+"-";
-        }else{
-            today+=(Integer.parseInt(this_month)+1)+"-";
-        }
 
-        if((Integer.parseInt(this_day)+1)<10){
-            today+="0"+(Integer.parseInt(this_day)+1);
-        }else{
-            today+=Integer.parseInt(this_day)+1;
-        }
-
-        Log.d(TAG,"오늘 날짜: "+today);
-
+//>>>>
+//        posts=new ArrayList<VM_Data_Default>();
+//        ids=new ArrayList<String>();
+//        dates=new ArrayList<String>();
+//        String today=this_year+"-"+this_month+"-"+this_day;
+//        Log.d(TAG,"오늘 날짜: "+today);
+//>>>
 
         //** 데이터 읽기
         firebaseDatabase= FirebaseDatabase.getInstance();
@@ -314,9 +319,15 @@ public class DashboardFragment extends Fragment {
         reference=reference.child("user_name")
                 .child("posts").child("done");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                posts=new ArrayList<VM_Data_Default>();
+                ids=new ArrayList<String>();
+                dates=new ArrayList<String>();
+                subs=new ArrayList<VM_Data_Default>();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     String post_id=snapshot.getKey();
@@ -332,7 +343,43 @@ public class DashboardFragment extends Fragment {
                     Log.d(TAG, "ValueEventListener : " +post_date );
 
                 }
-                setupRecyclerView((RecyclerView) recyclerView);
+
+                //** 처음 DashBoard 세팅
+
+                //** 현재 포커싱된 날짜
+
+                subs=new ArrayList<VM_Data_Default>();
+
+                String today=this_year+"-"+this_month+"-"+this_day;
+                Log.d(TAG,"오늘 날짜: "+today);
+
+                String focusedDate=focusedYear+"-";
+
+                if((focusedMonth)<10){
+                    focusedDate+="0"+focusedMonth+"-";
+                }else{
+                    focusedDate+=focusedMonth+"-";
+                }
+                if(focusedDay<10){
+                    focusedDate+="0"+focusedDay;
+                }else{
+                    focusedDate+=focusedDay;
+                }
+                Log.d(TAG,"현재포지션 날짜:"+focusedDate);
+
+
+                if(posts!=null){
+                    for(int i=0;i<posts.size();i++){
+                        Log.d(TAG,"포스트 날짜: "+dates.get(i));
+                        if(dates.get(i).contains(focusedDate)){
+
+                            subs.add(posts.get(i));
+                        }
+                    }
+                }
+
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+
             }
 
             @Override
@@ -342,16 +389,19 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        //** 처음 DashBoard 세팀
-        if(posts!=null){
-            for(int i=0;i<posts.size();i++){
-                Log.d(TAG,"포스트 날짜: "+dates.get(i));
-                if(dates.get(i).contains(today)){
-                    subs.add(posts.get(i));
-                }
-            }
-        }
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+///>>>
+//        //** 처음 DashBoard 세팀
+//        if(posts!=null){
+//            for(int i=0;i<posts.size();i++){
+//                Log.d(TAG,"포스트 날짜: "+dates.get(i));
+//                if(dates.get(i).contains(today)){
+//                    subs.add(posts.get(i));
+//                }
+//            }
+//        }
+//
+//        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+///>>>
 
     }
 
