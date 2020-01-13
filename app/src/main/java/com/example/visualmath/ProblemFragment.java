@@ -228,11 +228,15 @@ public class ProblemFragment extends Fragment {
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
-                chatList.add(data);
-                Log.d(TAG, msgEditText.getText().toString() );
-                msgEditText.setText("");//채팅창 초기화
-                adapter.notifyDataSetChanged();
+
+                if(!msgEditText.getText().toString().equals("")){
+                    VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
+                    chatList.add(data);
+                    Log.d(TAG, msgEditText.getText().toString() );
+                    msgEditText.setText("");//채팅창 초기화
+                    adapter.notifyDataSetChanged();
+                }
+
             }
         });
 
