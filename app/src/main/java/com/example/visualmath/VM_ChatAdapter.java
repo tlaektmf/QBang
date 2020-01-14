@@ -21,7 +21,7 @@ import java.util.Vector;
 
 public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_CustomViewHolder> {
 
-    private static final String TAG = "VM_Adapter";
+    private static final String TAG = VM_ENUM.TAG;
     private List<VM_Data_CHAT> chatList;
     private Context context;
 
@@ -48,6 +48,9 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
     public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context) {
         this.chatList = _chatList;
+        if(chatList==null){
+            Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]: chatList가 null임");
+        }
         this.context = context;
     }
 
@@ -66,9 +69,11 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     public void onBindViewHolder(@NonNull VM_ChatAdapter.VM_CustomViewHolder holder, int position) {
         int chatSize = chatList.size();
 
-        Log.d("data", "chatsize" + chatSize + "");
-        Log.d("data", "pos: " + position  + chatList.get(position).getSender());
+        Log.d(TAG, "[VM_ChatAdapter] chatsize" + chatSize + "");
 
+        if(chatList==null){
+            Log.d(TAG, "[VM_ChatAdapter]: chatList가 null임");
+        }
         if (chatList.get(position).getSender().equals("student")) {
 
             holder.friendChatLayout.setVisibility(View.GONE);

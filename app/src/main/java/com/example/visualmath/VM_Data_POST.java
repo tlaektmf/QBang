@@ -6,64 +6,60 @@ import java.util.List;
 
 public class VM_Data_POST {
     private String p_id;//게시글 고유 id
-    private int state;
-    private int live_state;
+
     private String liveTime; //live 시간
     private String matchSet_teacher; // student-teacher match set
     private String matchSet_student; // student-teacher match set
     private String uploadDate; //업로드 날짜
-
+    private String solveWay; //풀이 방식
     private List<VM_Data_CHAT> chatList;
-//    private VM_Data_BASIC data_basic;
+
 
     private VM_Data_Default data_default;
     private VM_Data_EXTRA data_extra;
 
     //** data_add 부분이 Parcelable 객체로 되어 있어서 firebase에 데이터를 바로 넣을 수 없음
-    ///private VM_Data_ADD data_add;
-//    private String content;
-//    private Uri add_picture1;
-//    private Uri add_picture2;
-//    private Uri add_picture3;
 
-    //**
+    //private int state; //>>삭제 예정
+    //private int live_state;  ////>>삭제 예정
 
     public VM_Data_POST(VM_Data_Default _vm_data_default,
                         VM_Data_EXTRA _vm_data_extra,
-                        String _s_id,String _key,String _uploadDate,int _live_state){
-        p_id=_key;
-        state=VM_ENUM.BEFORE_MATH;
-        live_state=_live_state;
-        uploadDate=_uploadDate;
-        matchSet_student=_s_id;
-        matchSet_teacher=null;//""로 바꿔야 할듯?
+                        String _s_id,String _key,String _uploadDate,String _solveWay){
 
-        // 필수 아닌 것
-        liveTime=null;
-        chatList=new ArrayList<>();
-        VM_Data_CHAT chat=new VM_Data_CHAT("다슬","sdfsd",0,0);
-        chatList.add(chat);
+        this.p_id=_key;
+        this.uploadDate=_uploadDate;
+        this.solveWay=_solveWay;
+        this.matchSet_student=_s_id;
+        this.matchSet_teacher=null;
 
-        data_default=_vm_data_default;
+
+        //** 아직 입력이 안된 기본값들 초기 세팅
+        this.liveTime=null;
+        this.chatList=new ArrayList<>();
+        ///VM_Data_CHAT chat=new VM_Data_CHAT("다슬","sdfsd",0,0);
+        ///chatList.add(chat);
+
+        this.data_default=_vm_data_default;
 
         if(_vm_data_extra!=null){
-            data_extra=_vm_data_extra;
+            this.data_extra=_vm_data_extra;
 
             ///** DB저장할때, storage uri로 변경해서 저장 필요
             ///그냥 content uri 사용 시 보안문제로 error
             if(_vm_data_extra.getAdd_picture1()!=null){
-                data_extra.setAdd_picture1(matchSet_student+"/"+
-                        p_id+"/"+
+                this.data_extra.setAdd_picture1(this.matchSet_student+"/"+
+                        this.p_id+"/"+
                         "picture1");
             }
             if(_vm_data_extra.getAdd_picture2()!=null){
-                data_extra.setAdd_picture2(matchSet_student+"/"+
-                        p_id+"/"+
+                this.data_extra.setAdd_picture2(this.matchSet_student+"/"+
+                        this.p_id+"/"+
                         "picture2");
             }
            if(_vm_data_extra.getAdd_picture3()!=null){
-               data_extra.setAdd_picture3(matchSet_student+"/"+
-                       p_id+"/"+
+               this.data_extra.setAdd_picture3(this.matchSet_student+"/"+
+                       this.p_id+"/"+
                        "picture3");
            }
             ///**
@@ -72,8 +68,9 @@ public class VM_Data_POST {
 
         ///** DB저장할때, storage uri로 변경해서 저장 필요
         ///그냥 content uri 사용 시 보안문제로 error
-        data_default.setProblem(matchSet_student+"/"+
-                p_id+"/"+
+        ///null일수 없으므로 별도의 검사는 하지 않겠음
+        this.data_default.setProblem(this.matchSet_student+"/"+
+                this.p_id+"/"+
                 "problem"
         );
         ///**
@@ -87,7 +84,6 @@ public class VM_Data_POST {
     public void setP_id(String p_id) {
         this.p_id = p_id;
     }
-
 
 
     public VM_Data_EXTRA getData_extra() {
@@ -106,21 +102,6 @@ public class VM_Data_POST {
         this.data_default = data_default;
     }
 
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public int getLive_state() {
-        return live_state;
-    }
-
-    public void setLive_state(int live_state) {
-        this.live_state = live_state;
-    }
 
     public String getLiveTime() {
         return liveTime;
@@ -163,39 +144,29 @@ public class VM_Data_POST {
         this.matchSet_student = matchSet_student;
     }
 
+    public String getSolveWay() {
+        return solveWay;
+    }
 
+    public void setSolveWay(String solveWay) {
+        this.solveWay = solveWay;
+    }
 
-//    public String getContent() {
-//        return content;
+//
+//    public int getState() {
+//        return state;
 //    }
 //
-//    public void setContent(String content) {
-//        this.content = content;
+//    public void setState(int state) {
+//        this.state = state;
 //    }
 //
-//    public Uri getAdd_picture1() {
-//        return add_picture1;
+//    public int getLive_state() {
+//        return live_state;
 //    }
 //
-//    public void setAdd_picture1(Uri add_picture1) {
-//        this.add_picture1 = add_picture1;
+//    public void setLive_state(int live_state) {
+//        this.live_state = live_state;
 //    }
-//
-//    public Uri getAdd_picture2() {
-//        return add_picture2;
-//    }
-//
-//    public void setAdd_picture2(Uri add_picture2) {
-//        this.add_picture2 = add_picture2;
-//    }
-//
-//    public Uri getAdd_picture3() {
-//        return add_picture3;
-//    }
-//
-//    public void setAdd_picture3(Uri add_picture3) {
-//        this.add_picture3 = add_picture3;
-//    }
-
 
 }

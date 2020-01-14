@@ -46,10 +46,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.getIntentOld;
 
 public class VM_RegisterProblemActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterProblem";
+    private static final String TAG = VM_ENUM.TAG;
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     private static final int PICK_FROM_CAMERA = 2;
     private static final int OTHER_DATA_LOAD = 3;
@@ -68,16 +69,17 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private Button buttonGrade;
     private Button buttonGoOther;
     private ImageView imageViewProblem;
-    private VM_Data_ADD receiveData;
-    private VM_Data_ADD sendData;
+
+    //** 데이터
+    private VM_Data_ADD receiveData; //<내용추가뷰> -> <문제등록뷰> : "문제등록"버튼 클릭시, 현 액티비티에서 DB를 저장하기 위함
+    private VM_Data_ADD sendData;// <문제등록뷰> -> <내용추가뷰> : 바로 이전에 온 <내용추가뷰>에서의 기록을 보관하기 위함
+
+    //** DB에 저장될 데이터
     private VM_Data_BASIC vmDataBasic;
 
-
-    private FirebaseAuth firebaseAuth;
-    private StorageReference storageReference;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-    private FirebaseStorage firebaseStorage;
+    //** 풀이법 선택 변수 받기
+    Intent intent;
+    String solveWay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
+        Log.d(TAG,"VM_RegisterProblemActivity OnCreate 호출");
         init();
 
 
@@ -101,11 +104,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         buttonGoOther = findViewById(R.id.btn_goOther);
         editTextTitle = findViewById(R.id.et_title);
         returnResult = NOTHING;
-        firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
-        storageReference = FirebaseStorage.getInstance().getReference(); //파이어베이스 저장소
-        firebaseDatabase = FirebaseDatabase.getInstance();//파이어베이스 데이터 베이스
         vmDataBasic = new VM_Data_BASIC();
-
+        intent=getIntent();
+        solveWay=intent.getStringExtra(VM_ENUM.SOLVE_WAY);
+        Log.d(TAG,"[문제등록뷰로 넘어온 Intent 확인]"+solveWay);
     }
 
 
@@ -194,7 +196,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
-        sendData = receiveData;
+        sendData = receiveData;//<문제등록뷰>에서 <내용추가뷰>로 보내는 데이터는 바로 이전에 <내용추가뷰>로부터 받은 데이터
         intent.putExtra(ALL, sendData); //Parcel객체인 sendData intent에 추가
         startActivityForResult(intent, OTHER_DATA_LOAD);
     }
@@ -205,7 +207,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         imageViewProblem.setImageBitmap(originalBm); //이미지 set
         if (originalBm == null) {
-            Log.i(TAG, "null");
+            Log.d(TAG, "[VM_RegisterProblemActivity]: set할 이미지가 없음");
         }
     }
 
@@ -246,7 +248,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             if (galleryFile != null) {
                 if (galleryFile.exists()) {
                     if (galleryFile.delete()) {
-                        Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
+                        Log.d(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
                         galleryFile = null;
                     }
                 }
@@ -288,22 +290,27 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
             vmDataBasic.setProblem(photoUri);
             setImage();
-        } else if (requestCode == OTHER_DATA_LOAD) {
+        }
+        else if (requestCode == OTHER_DATA_LOAD) {
+            Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
+
             if (resultCode == RESULT_OK) {
                 String notice = "";
-                //VM_Data_ADD receiveData=data.getParcelableExtra(ALL);
+
+                //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
+                //receiveDatat 변수에 저장함
                 receiveData = data.getParcelableExtra(ALL);
 
                 if (!receiveData.getDetail().equals("")) {
                     notice = "추가 설명 등록.";
-                    Log.i(TAG, receiveData.getDetail() + "떠야돼");
+
                 }
                 int count = 0;
-                for (int i = 0; i < 3; i++) {
 
+                for (int i = 0; i < 3; i++) {
                     if (receiveData.getFilePathElement(i) != null) {
                         count++;
-                        Log.i(TAG, "receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
+                        Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
                     }
                 }
                 if (count != 0) {
@@ -387,37 +394,40 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         //** 문제 등록의 최소 요건 확인
         if (checkAbility()){
-            Log.d(TAG,"문제 등록 요구사항 만족");
+            Log.d(TAG,"[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족");
             //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
             vmDataBasic.setTitle(editTextTitle.getText().toString());
 
+            //** <내용추가>뷰에서 받아온 값들
             wrapContentProvider();
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
             VM_DBHandler vmDbHandler = new VM_DBHandler("POSTS");
-            vmDbHandler.newPost(receiveData, vmDataBasic);
+            vmDbHandler.newPost(receiveData, vmDataBasic,solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
             finish();
         }else{
-            Log.d(TAG,"문제 등록 요구사항 만족 못함");
+            Log.d(TAG,"[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
         }
 
 
     }
 
     public void wrapContentProvider() {
-
+        Log.d(TAG,"[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
-            for (int i = 0; i < 3; i++) {
-                if (receiveData.getFilePathElement(i) != null) {
-                    Uri photoUri = FileProvider.getUriForFile(this,
-                            "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
-                    receiveData.setFilePathElement(photoUri, i);
+            if(receiveData!=null){
+                for (int i = 0; i < 3; i++) {
+                    if (receiveData.getFilePathElement(i) != null) {
+                        Uri photoUri = FileProvider.getUriForFile(this,
+                                "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
+                        receiveData.setFilePathElement(photoUri, i);
+                    }
                 }
             }
 
-        } else {
+        } else { //** content provider 불필요함
 
 
         }

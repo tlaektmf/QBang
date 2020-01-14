@@ -111,73 +111,79 @@ public class problem_detail extends Fragment {
                 vmDataExtra=dataSnapshot.getValue(VM_Data_EXTRA.class);
                 Log.d(TAG, "ValueEventListener : " +dataSnapshot );
 
-                if(vmDataExtra.getContent()!=null){
-                    textViewContent.setText(vmDataExtra.getContent());
-                }else{//추가 설명이 없는 경우
+                if(vmDataExtra==null){//** <내용추가뷰>에서 채운 데이터가 없더라도 "질문내용" 부분에는 Default 메시지 필요
                     textViewContent.setText("추가 질문 내용이 없습니다.");
                 }
+                if(vmDataExtra!=null){
+                    if(vmDataExtra.getContent()!=null){
+                        textViewContent.setText(vmDataExtra.getContent());
+                    }else{//추가 설명이 없는 경우
+                        textViewContent.setText("추가 질문 내용이 없습니다.");
+                    }
 
-                //*** 사진 파일 읽기
-                //** storage 파일 가져오기
+                    //*** 사진 파일 읽기
+                    //** storage 파일 가져오기
 
-                //다운로드할 파일을 가르키는 참조 만들기
-                StorageReference pathReference;
+                    //다운로드할 파일을 가르키는 참조 만들기
+                    StorageReference pathReference;
 
-                if(vmDataExtra.getAdd_picture1()!=null){
+                    if(vmDataExtra.getAdd_picture1()!=null){
 
-                    pathReference = storageReference.child(vmDataExtra.getAdd_picture1());
-                    pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            mGlideRequestManager
-                                    .load(uri)
-                                    .into(imageViewOther1);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        pathReference = storageReference.child(vmDataExtra.getAdd_picture1());
+                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                mGlideRequestManager
+                                        .load(uri)
+                                        .into(imageViewOther1);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+
+                    //두번째 사진
+                    if(vmDataExtra.getAdd_picture2()!=null){
+                        pathReference = storageReference.child(vmDataExtra.getAdd_picture2());
+                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                mGlideRequestManager
+                                        .load(uri)
+                                        .into(imageViewOther2);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+
+                    //세번째 사진
+                    if(vmDataExtra.getAdd_picture3()!=null){
+                        pathReference = storageReference.child(vmDataExtra.getAdd_picture3());
+                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                mGlideRequestManager
+                                        .load(uri)
+                                        .into(imageViewOther3);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
 
-
-                //두번째 사진
-                if(vmDataExtra.getAdd_picture2()!=null){
-                    pathReference = storageReference.child(vmDataExtra.getAdd_picture2());
-                    pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            mGlideRequestManager
-                                    .load(uri)
-                                    .into(imageViewOther2);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-
-                //세번째 사진
-                if(vmDataExtra.getAdd_picture3()!=null){
-                    pathReference = storageReference.child(vmDataExtra.getAdd_picture3());
-                    pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            mGlideRequestManager
-                                    .load(uri)
-                                    .into(imageViewOther3);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
 
             }
 

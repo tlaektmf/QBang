@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class VM_Data_ADD implements Parcelable {
 
-    private String detail; //질문 사항
+    private String detail; // 추가 질문 사항
     private Uri[] filePathList;
 
 

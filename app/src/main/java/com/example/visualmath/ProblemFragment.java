@@ -55,7 +55,7 @@ import java.util.Vector;
 public class ProblemFragment extends Fragment {
 
     //**
-    private static final String TAG = "ProblemFragment";
+    private static final String TAG = VM_ENUM.TAG;
     private static final int CAMERA = 1;
     private static final int GALLERY = 2;
     private static final int LIVE = 3;
@@ -205,12 +205,17 @@ public class ProblemFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<VM_Data_CHAT>> tmp = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
 
+                Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
+                if(dataSnapshot.getValue(tmp)!=null){ //** chatList에 데이터가 있는 경우
+                    chatList=dataSnapshot.getValue(tmp);
+                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
+                    adapter = new VM_ChatAdapter(chatList, getActivity());
+                    recyclerView.setAdapter(adapter);
+                }else{
+                    //** chatList에 데이터가 없는 초기 상태의 경우
+                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null임<초기상태>");
+                }
 
-                chatList=dataSnapshot.getValue(tmp);
-                Log.d("data", "ValueEventListener : " +dataSnapshot );
-
-                adapter = new VM_ChatAdapter(chatList, getActivity());
-                recyclerView.setAdapter(adapter);
 
                 //** 리스트뷰에 반영
                 ///adapter.notifyDataSetChanged();
@@ -231,6 +236,7 @@ public class ProblemFragment extends Fragment {
 
                 if(!msgEditText.getText().toString().equals("")){
                     VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
+
                     chatList.add(data);
                     Log.d(TAG, msgEditText.getText().toString() );
                     msgEditText.setText("");//채팅창 초기화
