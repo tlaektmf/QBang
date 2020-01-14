@@ -102,7 +102,7 @@
             android:paddingBottom="10dp"
             android:background="@drawable/text_line"
 
-            android:text="추가로 등록할 답지 사진을 첨부해주세요"
+            android:text="추가로 등록할 사진을 첨부해주세요"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#404040"
             android:textSize="@dimen/view_text"
