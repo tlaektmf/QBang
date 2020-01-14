@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
 
-            android:text="사진 가져오기"
+            android:text="학년 선택하기"
             android:fontFamily="@font/nanumsquaure_eb"
             android:textColor="#016a96"
             app:scale_textsize="10"
