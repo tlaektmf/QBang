@@ -29,6 +29,13 @@ public  class VM_ENUM {
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
 
+    //** DB TABLE
+    public static final String DB_CHATS="CHATS";
+    public static final String DB_POSTS="POSTS";
+
+    //** DB CHILD
+    public  static final String DB_chatList="chatList";
+
 
 }
 

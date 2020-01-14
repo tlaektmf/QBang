@@ -200,6 +200,7 @@ public class ProblemFragment extends Fragment {
         textViewChatRoomTitle.setText(post_title);
 
         //** chat 데이터 생성
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -234,14 +235,28 @@ public class ProblemFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(!msgEditText.getText().toString().equals("")){
-                    VM_Data_CHAT data = new VM_Data_CHAT("student", msgEditText.getText().toString());
+                if(!msgEditText.getText().toString().replace(" ","").equals("")){
 
-                    chatList.add(data);
-                    Log.d(TAG, msgEditText.getText().toString() );
-                    msgEditText.setText("");//채팅창 초기화
-                    adapter.notifyDataSetChanged();
+                    Log.d(TAG, "[VM_ProblemFragment]: 보내는 텍스트가 공백 아닌 경우");
+
+
+
+                    if(chatList==null){
+                        //** 초기 상태의 경우(chatList에 데이터가 하나도 없는 경우
+                        Log.d(TAG, "[VM_ProblemFragment]: chatList에 데이터가 하나도 없는 경우");
+                        List<VM_Data_CHAT> data = new ArrayList<>();
+                        data.add(new VM_Data_CHAT("student", msgEditText.getText().toString()));
+                        loadDatabase(post_id,data);
+
+                    }else{
+                        //** chatList에 데이터가 하나라도 있는 경우
+                        chatList.add(new VM_Data_CHAT("student", msgEditText.getText().toString()));
+                        loadDatabase(post_id,chatList);
+                    }
+                    ///chatList.add(data);
+                   /// adapter.notifyDataSetChanged();
                 }
+                msgEditText.setText("");//채팅창 초기화
 
             }
         });
@@ -290,6 +305,9 @@ public class ProblemFragment extends Fragment {
         return rootView;
     }
 
-
+public void loadDatabase(String post_id,List<VM_Data_CHAT> chatItem){
+        VM_DBHandler dbHandler=new VM_DBHandler();
+        dbHandler.newChat(post_id,chatItem);
+}
 
 }
