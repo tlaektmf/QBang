@@ -133,6 +133,11 @@ public class VM_LoginActivity extends AppCompatActivity {
                             else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
                                 intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
                             }
+                            else if(editTextUserId.getText().toString().contains("@visualmath.com")){
+                                intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
+                            }else{//** 예외가 아닌 경우는 모두 학생으로 취급함
+                                intent= new Intent(getApplicationContext(), HomeActivity.class);
+                            }
                             //intent.putExtra("UID", userId);
                             startActivity(intent);
                             finish();

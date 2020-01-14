@@ -36,6 +36,10 @@ public  class VM_ENUM {
     //** DB CHILD
     public  static final String DB_chatList="chatList";
 
-
+    //** Preference Key
+    public  static final String PRE_LOGOUT="logout";
+    public  static final String PRE_ALARM="setAlarm";
+    public  static final String PRE_TEST="test";
+    public static final String PREF_USER_NAME = "username";
 }
 
