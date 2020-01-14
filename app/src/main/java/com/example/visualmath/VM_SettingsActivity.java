@@ -72,21 +72,9 @@ public class VM_SettingsActivity extends AppCompatActivity  {
                 editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
             }
             if(key.equals(VM_ENUM.PRE_LOGOUT)){
-                                AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
-                alt_bld.setMessage("로그아웃 하시겠습니까?").setCancelable(false)
-                        .setPositiveButton("네",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        FirebaseAuth.getInstance().signOut();
-                                        Intent intent=new Intent(parent,VM_LauncherActivity.class);
-                                        startActivity(intent);
-                                    }
-                                }).setNegativeButton("아니오",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                FirebaseAuth.getInstance().signOut();
+                Intent intent=new Intent(getActivity().getApplicationContext(),VM_LauncherActivity.class);
+                startActivity(intent);
 
             }
 
