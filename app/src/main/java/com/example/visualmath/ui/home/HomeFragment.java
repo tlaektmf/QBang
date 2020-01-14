@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
+import com.example.visualmath.VM_ProblemBoxActivity;
 import com.example.visualmath.VM_RegisterProblemActivity;
 
 public class HomeFragment extends Fragment {
@@ -28,6 +29,7 @@ public class HomeFragment extends Fragment {
         //ds.shim
         final ImageButton buttonQVideo=root.findViewById(R.id.ib_qVideo);
         final ImageButton buttonQText=root.findViewById(R.id.ib_qText);
+        final ImageButton buttonQBox=root.findViewById(R.id.ib_qBox);
 
 
         buttonQText.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +49,14 @@ public class HomeFragment extends Fragment {
                 Intent intent;
                 intent = new Intent(getActivity(), VM_RegisterProblemActivity.class);
                 intent.putExtra(VM_ENUM.SOLVE_WAY,VM_ENUM.VIDEO);
+                startActivity(intent);
+            }
+        });
+        buttonQBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getActivity(), VM_ProblemBoxActivity.class);
                 startActivity(intent);
             }
         });
