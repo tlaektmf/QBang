@@ -103,21 +103,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--    뒤에 붙는 부분-->
-    <!--    기존 framelayout-->
-
-    <ScrollView
-        android:id="@+id/problem_box_container_scview"
-        android:layout_width="match_parent"
+<!--    매치 미완료/완료에 따라 리사이클러뷰 데이터(?) 변경-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        tools:listitem="@layout/item_list_notime"
+        android:layout_marginTop="15dp"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_top_header">
-        <FrameLayout
-            android:id="@+id/problem_box_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@+id/detail_top_header"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
