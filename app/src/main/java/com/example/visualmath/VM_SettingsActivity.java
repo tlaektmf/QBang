@@ -63,13 +63,13 @@ public class VM_SettingsActivity extends AppCompatActivity  {
             String key = preference.getKey();
             Log.d(VM_ENUM.TAG,"[클릭된 Preference의 key] "+key);
 
-            if(key.equals(VM_ENUM.PRE_TEST)){
+            if(key.equals(VM_ENUM.PRE_TEST)){ //** Preference에 저장된 user 정보 삭제
 
                 SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                 SharedPreferences.Editor editor=preferences.edit();
                 Log.d(VM_ENUM.TAG,"[Preference] //저장된 user name :"+SaveSharedPreference.getUserName(getActivity().getApplicationContext()));
                 editor.clear();
-                editor.apply();//commit은 즉시 반영
+                editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
             }
             if(key.equals(VM_ENUM.PRE_LOGOUT)){
                                 AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
