@@ -1,9 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VM_ProblemBoxActivity">
+    tools:context=".VM_ProblemBoxActivity"
+    android:background="#f2f2f4">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detail_top_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_height_thick"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#fafafa"
+        android:elevation="5dp">
+
+        <!--        상단-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_top_cons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_bottom_cons">
+            <Button
+                android:onClick="cancel"
+                android:id="@+id/btn_goback"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/close"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문제 풀기"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/title_text"
+                android:gravity="center"
+                android:fontFamily="@font/nanumsquaure_eb"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--        상단 끝-->
+
+        <!--        하단-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_bottom_cons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_top_cons">
+            <Button
+                android:onClick="show_unmatched_list"
+                android:id="@+id/btn_unmatched"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:text="매치 미완료"
+                android:textColor="@drawable/changing_tab_textcolor"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:background="@drawable/changing_tab_menu_back"
+                style="?android:attr/borderlessButtonStyle"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/btn_matched"/>
+            <Button
+                android:onClick="show_matched_list"
+                android:id="@+id/btn_matched"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:text="매치 완료"
+                android:textColor="@drawable/changing_tab_textcolor"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:background="@drawable/changing_tab_menu_back"
+                style="?android:attr/borderlessButtonStyle"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/btn_unmatched"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--        하단 끝-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    뒤에 붙는 부분-->
+    <!--    기존 framelayout-->
+
+    <ScrollView
+        android:id="@+id/problem_box_container_scview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_top_header">
+        <FrameLayout
+            android:id="@+id/problem_box_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

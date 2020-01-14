@@ -14,7 +14,7 @@
         <ImageButton
             android:id="@+id/ib_pickProblem"
             android:background="@drawable/teacher_main_btn01"
-            android:layout_width="370dp"
+            android:layout_width="350dp"
             android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
@@ -24,7 +24,7 @@
         <ImageButton
             android:id="@+id/ib_solveProblem"
             android:background="@drawable/teacher_main_btn02"
-            android:layout_width="370dp"
+            android:layout_width="350dp"
             android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"

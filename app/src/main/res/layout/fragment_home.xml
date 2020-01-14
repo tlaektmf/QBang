@@ -12,7 +12,7 @@
         <ImageButton
             android:id="@+id/ib_qVideo"
             android:background="@drawable/home_btn01"
-            android:layout_width="370dp"
+            android:layout_width="350dp"
             android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
@@ -22,7 +22,7 @@
         <ImageButton
             android:id="@+id/ib_qText"
             android:background="@drawable/home_btn02"
-            android:layout_width="370dp"
+            android:layout_width="350dp"
             android:layout_height="160dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
@@ -31,9 +31,10 @@
 
         <ImageButton
             android:id="@+id/ib_qBox"
-            android:background="@android:drawable/btn_default"
-            android:layout_width="370dp"
+            android:background="@drawable/home_btn03"
+            android:layout_width="350dp"
             android:layout_height="160dp"
+
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ib_qText"/>
