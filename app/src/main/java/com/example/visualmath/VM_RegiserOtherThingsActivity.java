@@ -2,12 +2,14 @@ package com.example.visualmath;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -41,7 +43,7 @@ import static android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
 public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
-    private static final String TAG="RegisterOther";
+    private static final String TAG=VM_ENUM.TAG;
     private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     private static final int PICK_FROM_CAMERA = 2;
 
@@ -53,8 +55,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private int imageviewID;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
-    private VM_Data_ADD vm_data_add;
-    private VM_Data_ADD receiveData;
+    private VM_Data_ADD vm_data_add; //<내용추가뷰> -> <문제등록뷰>
+    private VM_Data_ADD receiveData;//** <문제등록뷰> -> <내용추가뷰> 기존의 <내용추가뷰>의 항목을 유지시키기 위해서
 
 
     @Override
@@ -117,16 +119,24 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     //** 추가 정보 등록 버튼 클릭
     public void loadAddInfo(View view) {
-        //** vm_data 객체 생성
-        String data_detail=editTextdetail.getText().toString();
-        vm_data_add.setDetail(data_detail);
 
-        Intent intent= new Intent(this,VM_RegisterProblemActivity.class);
-        intent.putExtra(ALL,vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
-        setResult(RESULT_OK, intent);
+        //** 문제 등록의 최소 요건 확인
+        if (checkAbility()){
+            Log.d(TAG,"[VM_RegisterOtherProblemActivity]: 문제 등록 요구사항 만족");
 
-        finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
+            //** vm_data 객체 생성
+            String data_detail=editTextdetail.getText().toString();
+            vm_data_add.setDetail(data_detail);
 
+            Intent intent= new Intent(this,VM_RegisterProblemActivity.class);
+            intent.putExtra(ALL,vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
+            setResult(RESULT_OK, intent);
+
+            finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
+
+        }else{
+            Log.d(TAG,"[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
+        }
 
     }
 
@@ -376,5 +386,34 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         finish();
     }
 
+    /***
+     * 문제 등록 최소 요구조건 확인
+     * - 문제 제목
+     * - 학년
+     * - 문제 사진
+     *
+     * @return
+     */
+    public boolean checkAbility() {
+
+        /*
+        1. receive 데이터와 차이가 없는 경우
+        =>변경사항 없음
+        2. receive 데이터와 차이가 하나라도 있는 경우
+        => 정말 변경 하시겠습니까
+        3. receive 데이터와 차이가 없으나, 모든 칸이 비어있는 경우
+        => 추가내용이 없습니다.
+         */
+
+        if(receiveData==null){
+            
+        }
+        if(receiveData.getDetail().equals(editTextdetail.getText().toString())){
+            Log.d(TAG,"[VM_OtherRegisterProblemActivity]: <추가등록뷰> 변동사항이 전혀 없는 경우");
+        }
+
+
+        return true;
+    }
 
 }
