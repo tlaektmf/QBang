@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="추가로 등록한 답지 사진"
+            android:text="추가로 등록한 사진"
             android:textSize="@dimen/input_text"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#404040"
