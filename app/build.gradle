@@ -59,6 +59,9 @@ dependencies {
 //    동그라미 이미지
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //구글 로그인
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

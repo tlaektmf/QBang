@@ -55,12 +55,13 @@ public class VM_LoginActivity extends AppCompatActivity {
 
         //**initializig firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null){
-            //이미 로그인 되었다면 이 액티비티를 종료함
-            finish();
-            //그리고 MainActivity 액티비티를 연다.
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class)); //추가해 줄 MainActivity
-        }
+
+//        if(firebaseAuth.getCurrentUser() != null){
+//            //이미 로그인 되었다면 이 액티비티를 종료함
+//            finish();
+//            //그리고 MainActivity 액티비티를 연다.
+//            startActivity(new Intent(getApplicationContext(), HomeActivity.class)); //추가해 줄 MainActivity
+//        }
 
 
 

@@ -18,7 +18,7 @@ public  class VM_ENUM {
     public static final String LIVE_ALARM_MESSAGE="라이브 5분전입니다.";//풀이된 문제가 도착 (학생)
 
     //** requestCode
-
+    public static final int RC_GOOGLE_LOGIN=1000;
     //** Log TAG
     public static final String TAG="다슬";
 
