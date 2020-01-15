@@ -36,6 +36,7 @@ public  class VM_ENUM {
     public static final String IT_PHOTO_INDEX="IT_PHOTO_INDEX";
     public static final String IT_TAKE_PHOTO="IT_TAKE_PHOTO";
     public static final String IT_GALLERY_PHOTO="IT_GALLERY_PHOTO";
+    public static final String IT_ARG_BLOCK="IT_ARG_BLOCK";
 
     //** 상수 String
     public static final String TEXT="TEXT";

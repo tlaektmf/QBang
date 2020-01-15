@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,7 +92,7 @@ public class ProblemFragment extends Fragment {
 
     //>>>>>
 
-
+    private boolean needToBlock;
     private ViewGroup rootView;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -165,6 +167,8 @@ public class ProblemFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        needToBlock=false;
+        needToBlock=getArguments().getBoolean(VM_ENUM.IT_ARG_BLOCK);
         post_id = getArguments().getString(ItemDetailFragment.ARG_ITEM_ID);
         post_title = getArguments().getString(VM_FullViewActivity.ARG_ITEM_TITLE);
 
@@ -302,6 +306,14 @@ public class ProblemFragment extends Fragment {
             }
         });
 
+        //** neeToBlock 이 true면 chat창 텍스트뷰를 막는다
+        if(needToBlock==true){
+            ConstraintLayout layout = (ConstraintLayout)rootView.findViewById(R.id.chat_bottom_lay);
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View child = layout.getChildAt(i);
+                child.setEnabled(false);
+            }
+        }
         return rootView;
     }
 

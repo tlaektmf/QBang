@@ -21,7 +21,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
     String post_id,post_title,post_grade,post_problem;
     Intent intent;
     Bundle arguments ;
-
+    public String needToBlock;
     public static final String ARG_ITEM_TITLE = "post_title";
     public static final String ARG_ITEM_GRADE = "post_grade";
     public static final String ARG_ITEM_PROBLEM = "post_problem";
@@ -53,6 +53,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
 
         Button btn01 = findViewById(R.id.btn_full_problem);
         btn01.setSelected(true);
+        needToBlock=null;
 
         arguments = new Bundle();
         intent=getIntent();
@@ -60,6 +61,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
         post_title=intent.getStringExtra(VM_FullViewActivity.ARG_ITEM_TITLE);
         post_grade=intent.getStringExtra(VM_FullViewActivity.ARG_ITEM_GRADE);
         post_problem=intent.getStringExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM);
+        needToBlock=intent.getStringExtra(VM_ENUM.IT_ARG_BLOCK);
 
         // 프래그먼트 초기 세팅
         arguments.putString(VM_FullViewActivity.ARG_ITEM_TITLE, post_title);
@@ -113,6 +115,9 @@ public class VM_FullViewActivity extends AppCompatActivity {
         transaction = fragmentManager.beginTransaction();
         arguments.putString(ItemDetailFragment.ARG_ITEM_ID, post_id);
         arguments.putString(VM_FullViewActivity.ARG_ITEM_TITLE, post_title);
+        if(needToBlock.equals(VM_ENUM.IT_ARG_BLOCK)){
+            arguments.putBoolean(VM_ENUM.IT_ARG_BLOCK,true);
+        }
         problemFragment.setArguments(arguments);
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }

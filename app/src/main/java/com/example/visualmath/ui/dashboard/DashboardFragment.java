@@ -352,6 +352,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
+                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);
                             mParentActivity.startActivity(intent);
                             Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
                         }
