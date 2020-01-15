@@ -151,7 +151,7 @@
                 android:id="@+id/iv_picture1"
                 android:onClick="changeAddFile"
                 android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:layout_height="105dp"
                 android:layout_width="105dp"
 
@@ -162,7 +162,7 @@
                 android:id="@+id/iv_picture2"
                 android:onClick="changeAddFile"
                 android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:layout_height="105dp"
                 android:layout_width="105dp"
 
@@ -174,7 +174,7 @@
                 android:id="@+id/iv_picture3"
                 android:onClick="changeAddFile"
                 android:src="@drawable/add_extra_img"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:layout_height="105dp"
                 android:layout_width="105dp"
 
