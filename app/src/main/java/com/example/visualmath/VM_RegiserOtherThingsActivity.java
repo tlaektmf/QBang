@@ -105,10 +105,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             Uri path = vm_data_add.getFilePathElement(i);
 
             if (path != null) {
-                Log.i(TAG, "init_set: " + i);
+                Log.i(VM_ENUM.TAG, "init_set: " + vm_data_add.getFilePathElement(i));
                 setImageByIndex(i);
             } else {
-                Log.i(TAG, "init_set: " + "파일 없음");
+                Log.i(VM_ENUM.TAG, "init_set: " + "파일 없음");
             }
         }
     }
@@ -118,23 +118,34 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         //** 권한 설정
         imageviewID = view.getId();
 
-        ImageView selected_img = findViewById(imageviewID);
-
-        //이미지 비교
-        Drawable tmp = selected_img.getDrawable();
-        Drawable extra_img = getDrawable(R.drawable.add_extra_img);
-
-        Bitmap tmpBitmap = ((BitmapDrawable)tmp).getBitmap();
-        Bitmap extra_imgBitmap = ((BitmapDrawable)extra_img).getBitmap();
-
-        if(tmpBitmap.equals(extra_imgBitmap)){
-            //아직 이미지 추가 안한 상태
-            tedPermission(imageviewID);
-        }else{
-            Toast.makeText(VM_RegiserOtherThingsActivity.this, "이미 추가함", Toast.LENGTH_SHORT).show();
-
-            //여기에다가?? 생성하면 될 것 같아요
+        int picViewIndex = 0;
+        switch (imageviewID) {
+            case R.id.iv_picture1:
+                picViewIndex = 0;
+                break;
+            case R.id.iv_picture2:
+                picViewIndex = 1;
+                break;
+            case R.id.iv_picture3:
+                picViewIndex = 2;
+                break;
         }
+        Log.d(TAG,"[pickViewIndex] "+picViewIndex);
+        if(vm_data_add!=null){
+            if(vm_data_add.getFilePathElement(picViewIndex)!=null){//** imageView에 이미지가 있는 경우
+                Intent intent=new Intent(this,VM_PhotoViewActivity.class);
+                intent.putExtra(VM_ENUM.PHOTO_URI, vm_data_add.getFilePathElement(picViewIndex));
+                intent.putExtra(VM_ENUM.IT_PHOTO_INDEX,picViewIndex);
+                Log.d(TAG,"[전달할 사진 uri] "+ vm_data_add.getFilePathElement(picViewIndex));
+                startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTO_VIEW);
+
+            }else{//** imageView에 이미지가 없는 경우
+                tedPermission(imageviewID);
+            }
+        }else{//** 제일 초기 클릭
+            tedPermission(imageviewID);
+        }
+
 
     }
 
@@ -298,10 +309,23 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             ///createData(photoUri);
             createData(Uri.parse(galleryFile.getAbsolutePath()));
             setImage(imageviewID);
+        }else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTO_VIEW){
+            Log.d(VM_ENUM.TAG,"[regiother->photoview]응답 보낸 결과");
+            Intent intent=getIntent();
+            int deleteIndex=-1;
+            intent.getIntExtra(VM_ENUM.DELETE_PHOTO,deleteIndex);
+
+            if(deleteIndex!=-1){
+                deletePhoto(deleteIndex);
+            }
+
         }
 
     }
 
+    private void deletePhoto(int index){
+        imageViewsOtherPictureList[index].setImageResource(0);
+    }
     private void createData(Uri _uri) {
         int index = 0;
         switch (imageviewID) {
@@ -415,6 +439,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     public void cancel(View view) {
         finish();
     }
+
 
 
 }
