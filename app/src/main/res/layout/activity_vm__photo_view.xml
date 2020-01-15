@@ -10,7 +10,32 @@
     tools:context=".VM_PhotoViewActivity"
     android:background="#000">
 
-    <ImageView
+<!--    상단 현재 화면 닫기-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pv_close_btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="15dp">
+        <Button
+            android:id="@+id/pv_close_btn"
+            android:onClick="cancel"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/pv_close_btn"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    상단 현재 화면 닫기 끝-->
+
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -19,7 +44,7 @@
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pv_close_btn_container"
         app:layout_constraintBottom_toTopOf="@+id/pv_btn_container"/>
 
 <!--    버튼 담는 곳-->
