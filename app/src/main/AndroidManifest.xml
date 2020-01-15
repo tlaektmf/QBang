@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".VM_PhotoViewActivity"
-            android:theme="@style/AppTheme.notitlebar"></activity>
+            android:theme="@style/AppTheme.blackStatusBar"></activity>
         <activity android:name=".VM_GoogleLoginActivity" />
         <activity
             android:name=".VM_ProblemBoxActivity"

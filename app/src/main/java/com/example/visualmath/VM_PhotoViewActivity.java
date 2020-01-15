@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -38,7 +39,9 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
     private Uri newPhotoUri;
-    private ImageView imageViewPhoto;
+//    private ImageView imageViewPhoto;
+    private PhotoView imageViewPhoto;
+
     int index;
 
 
@@ -47,7 +50,7 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__photo_view);
 
-        imageViewPhoto = (ImageView) findViewById(R.id.iv_photo);
+        imageViewPhoto = (PhotoView) findViewById(R.id.iv_photo);
         Uri uri = getIntent().getParcelableExtra(VM_ENUM.PHOTO_URI);
         index=getIntent().getIntExtra(VM_ENUM.IT_PHOTO_INDEX, -1);
         Log.d(VM_ENUM.TAG,"[VM_PhotoViewActivity]onCreate 호출, index  "+index);
@@ -277,4 +280,5 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
 
         }
     }
+    public void cancel(View view){finish();}
 }

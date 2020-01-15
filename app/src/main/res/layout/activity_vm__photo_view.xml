@@ -1,40 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context=".VM_PhotoViewActivity">
+    tools:context=".VM_PhotoViewActivity"
+    android:background="#000">
 
-    <ImageView
+<!--    상단 현재 화면 닫기-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pv_close_btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="15dp">
+        <Button
+            android:id="@+id/pv_close_btn"
+            android:onClick="cancel"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/pv_close_btn"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    상단 현재 화면 닫기 끝-->
+
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/ib_deletePhoto"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:onClick="deletePhotoButtonEvent"
-        android:text="사진삭제" />
+        android:scaleType="fitCenter"
 
-    <Button
-        android:id="@+id/ib_camera"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:onClick="takePhotoButtonEvent"
-        android:text="사진 촬영" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pv_close_btn_container"
+        app:layout_constraintBottom_toTopOf="@+id/pv_btn_container"/>
 
-    <Button
-        android:id="@+id/ib_gallery"
+<!--    버튼 담는 곳-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pv_btn_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:onClick="galleryButtonEvent"
-        android:text="갤러리" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
+        <!--    사진삭제 버튼-->
+        <Button
+            android:id="@+id/ib_deletePhoto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:onClick="deletePhotoButtonEvent"
+            android:background="@drawable/pv_delete_btn"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <!--    사진촬영 버튼-->
+        <Button
+            android:id="@+id/ib_camera"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:onClick="takePhotoButtonEvent"
+            android:background="@drawable/pv_camera_btn"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <!--    갤러리 버튼-->
+        <Button
+            android:id="@+id/ib_gallery"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:onClick="galleryButtonEvent"
+            android:background="@drawable/pv_gallery_btn"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    버튼 담는 곳 끝-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
