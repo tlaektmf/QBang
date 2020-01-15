@@ -22,6 +22,10 @@ allprojects {
         maven{
             url "https://maven.google.com"
         }
+        //사진 확대 축소 photoview 라이브러리 
+        maven{
+            url "https://jitpack.io"
+        }
 
         google()
         jcenter()
