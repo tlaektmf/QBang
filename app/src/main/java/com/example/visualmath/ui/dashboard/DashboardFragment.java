@@ -170,7 +170,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                 //검색 어댑터 생성
                 Log.d("filter","posts 사이즈 : "+posts.size());
-                filterAdapter = new FilterAdapter(getContext(),posts);
+//                filterAdapter = new FilterAdapter(getContext(),posts);
                 searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                 searched_list.setAdapter(filterAdapter);
             }
@@ -443,6 +443,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                 }
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+
+                filterAdapter = new FilterAdapter(getContext(),posts);
 
                 //lhj_3
                 cal_loading_back.setVisibility(View.INVISIBLE);
