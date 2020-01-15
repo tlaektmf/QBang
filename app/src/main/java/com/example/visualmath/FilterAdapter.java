@@ -102,13 +102,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
 
                     if (pos != RecyclerView.NO_POSITION) {
                         //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
-//                        Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-//                        intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
-//                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
-//                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
-//                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
-//                        mParentActivity.startActivity(intent);
-//                        Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, VM_FullViewActivity.class);
+                        intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, FilteredList.get(pos).second.first);
+                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,FilteredList.get(pos).first.getTitle());
+                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,FilteredList.get(pos).first.getGrade());
+                        intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,FilteredList.get(pos).first.getProblem());
+                        context.startActivity(intent);
+                        Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
                     }
                 }
             });
