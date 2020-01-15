@@ -79,7 +79,7 @@
 
 <!--   구글 로그인 버튼 위젯 추가     -->
         <com.google.android.gms.common.SignInButton
-            android:onClick="clickGoogleLoginButton"
+
             android:id="@+id/Google_Login"
             android:layout_width="match_parent"
             android:layout_height="55dp"

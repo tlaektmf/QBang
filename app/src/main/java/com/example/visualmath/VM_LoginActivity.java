@@ -95,6 +95,13 @@ public class VM_LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         Google_Login = findViewById(R.id.Google_Login);
 
+        Google_Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
+            }
+        });
         //** <<<<<<<<구글 로그인
 
 
@@ -164,11 +171,6 @@ public class VM_LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void clickGoogleLoginButton(View view) {
-        Log.d(VM_ENUM.TAG,"[구글로그인]");
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
-    }
 
     public void clickLoginButton(View view) {
         userId = editTextUserId.getText().toString();
@@ -185,7 +187,6 @@ public class VM_LoginActivity extends AppCompatActivity {
     }
 
 
-
     //구글 파이어베이스로 값넘기기
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         //파이어베이스로 받은 구글사용자가 확인된 이용자의 값을 토큰으로 받고
@@ -196,7 +197,7 @@ public class VM_LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {//** 아이디 생성 완료
-                            Intent intent = new Intent(getApplicationContext(), VM_LoginActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //** 일단 구글 로그인은 모두 학생으로 취급함
                             startActivity(intent);
                             finish();
 
@@ -215,7 +216,7 @@ public class VM_LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) { // 만약 로그인이 되어있으면 다음 액티비티 실행
-            Intent intent = new Intent(getApplicationContext(), VM_LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -248,6 +249,9 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                 //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
                 firebaseAuthWithGoogle(account);
+
+                //데이터 베이스 등록
+                VM_DBHandler dbHandler=new VM_DBHandler();
 
             } catch (ApiException e) {
             }
