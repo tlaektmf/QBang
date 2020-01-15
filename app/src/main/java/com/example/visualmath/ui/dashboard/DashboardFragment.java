@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,8 @@ public class DashboardFragment extends Fragment {
     private ConstraintLayout search_container;
     private InputMethodManager imm;
     private EditText search_editText;
+    //검색 목록
+    private RecyclerView searched_list;
 
     //lhj_0
 //    로딩창
@@ -126,23 +129,23 @@ public class DashboardFragment extends Fragment {
         //**검색창
 //        search_input_lay = root.findViewById(R.id.search_input_lay);
         search_container = root.findViewById(R.id.search_container);
-
         //**캘린더 모드 변경
         cal_mode_btn = root.findViewById(R.id.cal_mode_change);
-
         //검색 버튼
         search_btn = root.findViewById(R.id.cal_search_btn);
-
         //검색 취소 버튼
         search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
         search_editText = root.findViewById(R.id.search_editText);
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //검색 목록
+        searched_list = root.findViewById(R.id.searched_list);
 
         dateInit();
         readDataBase();
 
 
         setupRecyclerView(recyclerView);
+        setupRecyclerView(searched_list);
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,6 +427,8 @@ public class DashboardFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+                //검색 어댑터 달기
+                searched_list.setAdapter(new SimpleItemRecyclerViewAdapter(posts,mTwoPane,parent));
 
                 //lhj_3
                 cal_loading_back.setVisibility(View.INVISIBLE);
