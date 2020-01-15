@@ -267,7 +267,7 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
                 photoUri = Uri.fromFile(galleryFile);
             }
 
-            newPhotoUri = photoUri;
+            newPhotoUri=Uri.parse(galleryFile.getAbsolutePath());
             Intent intent = new Intent(this, VM_RegiserOtherThingsActivity.class);
             intent.putExtra(VM_ENUM.IT_TAKE_PHOTO, newPhotoUri);
             intent.putExtra(VM_ENUM.IT_PHOTO_INDEX, index);
