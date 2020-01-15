@@ -13,7 +13,10 @@
         android:layout="@layout/pre_alarm"
         android:key="setAlarm"/>
 
-    <Preference
+<!--    <Preference-->
+<!--        android:layout="@layout/pre_logout"-->
+<!--        android:key="logout"/>-->
+    <com.example.visualmath.LogoutPreference
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 

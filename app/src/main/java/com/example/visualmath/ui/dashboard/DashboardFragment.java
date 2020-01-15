@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visualmath.FilterAdapter;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.R;
@@ -51,7 +54,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements TextWatcher {
 
     private DashboardViewModel dashboardViewModel;
     private boolean mTwoPane;
@@ -74,6 +77,7 @@ public class DashboardFragment extends Fragment {
     private EditText search_editText;
     //검색 목록
     private RecyclerView searched_list;
+    private FilterAdapter filterAdapter;
 
     //lhj_0
 //    로딩창
@@ -136,16 +140,15 @@ public class DashboardFragment extends Fragment {
         //검색 취소 버튼
         search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
         search_editText = root.findViewById(R.id.search_editText);
+        search_editText.addTextChangedListener(this);
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //검색 목록
+        //검색 목록 리사이클러뷰
         searched_list = root.findViewById(R.id.searched_list);
 
         dateInit();
         readDataBase();
 
-
         setupRecyclerView(recyclerView);
-        setupRecyclerView(searched_list);
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +167,12 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+                //검색 어댑터 생성
+                Log.d("filter","posts 사이즈 : "+posts.size());
+                filterAdapter = new FilterAdapter(getContext(),posts);
+                searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+                searched_list.setAdapter(filterAdapter);
             }
         });
 
@@ -262,10 +271,23 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        filterAdapter.getFilter().filter(charSequence);
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 
     public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>
-            implements Filterable {
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         ///private final List<VM_Data_Default> mValues;
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
@@ -299,12 +321,6 @@ public class DashboardFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mValues.size();
-        }
-
-        //리사이클러뷰 내에서 검색
-        @Override
-        public Filter getFilter() {
-            return null;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -427,8 +443,6 @@ public class DashboardFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
-                //검색 어댑터 달기
-                searched_list.setAdapter(new SimpleItemRecyclerViewAdapter(posts,mTwoPane,parent));
 
                 //lhj_3
                 cal_loading_back.setVisibility(View.INVISIBLE);
