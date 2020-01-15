@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="계정"
             android:fontFamily="@font/nanumsquaure_b"
             android:textSize="16dp"
@@ -41,7 +41,7 @@
             android:textColor="#72d8ff"
 
             android:layout_marginRight="15dp"
-            android:gravity="right"/>
+            android:gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>
