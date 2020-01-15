@@ -26,6 +26,13 @@
     <style name="AppTheme.blueStatusBar">
         <item name="android:statusBarColor">#1097d0</item>
     </style>
+    <style name="AppTheme.blackStatusBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">#000</item>
+    </style>
+
 
 <!--    <style name="AppTheme.whiteStatusBar">-->
 <!--        <item name="android:statusBarColor">#f5f5f7</item>-->
