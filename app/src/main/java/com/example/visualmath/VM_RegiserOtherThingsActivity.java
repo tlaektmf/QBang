@@ -254,6 +254,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         if (originalBm != null) {
             imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
+            vm_data_add.setFilePathElement(_uri,index);
         }
 
     }
@@ -443,7 +444,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             int deleteIndex ;
             int photoIndex ;
-            Uri newPhotoURi;
+            Uri newGalleryPhotoURi;
+            Uri newTakePhotoURi;
 
 
             deleteIndex=data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX,-1);
@@ -455,13 +457,18 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             //**
             photoIndex=data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX,-1);
-            newPhotoURi=data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
-            if(newPhotoURi!=null&& photoIndex!=-1){
-                setImageByUri(photoIndex,newPhotoURi);
+            Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] photoIndex"+     photoIndex);
+            newGalleryPhotoURi=data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
+            if(newGalleryPhotoURi!=null&& photoIndex!=-1){
+                setImageByUri(photoIndex,newGalleryPhotoURi);
             }
-            newPhotoURi= data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
-            if(newPhotoURi!=null&& photoIndex!=-1){
-                setImageByUri(photoIndex,newPhotoURi);
+
+            //** IT_TAKE_PHOTO
+            newTakePhotoURi= data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
+            if(newTakePhotoURi!=null&& photoIndex!=-1){
+                Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] IT_TAKE_PHOTO");
+
+                setImageByUri(photoIndex,newTakePhotoURi);
             }
 
 
