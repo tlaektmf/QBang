@@ -62,7 +62,8 @@ public class DashboardFragment extends Fragment {
     //    검색창
     private Button search_btn;
     private Button search_cancel_btn;
-    private ConstraintLayout search_input_lay;
+//    private ConstraintLayout search_input_lay;
+    private ConstraintLayout search_container;
 
     //lhj_0
 //    로딩창
@@ -116,7 +117,8 @@ public class DashboardFragment extends Fragment {
         //lhj_1
 
         //**검색창
-        search_input_lay = root.findViewById(R.id.search_input_lay);
+//        search_input_lay = root.findViewById(R.id.search_input_lay);
+        search_container = root.findViewById(R.id.search_container);
 
         //**캘린더 모드 변경
         cal_mode_btn = root.findViewById(R.id.cal_mode_change);
@@ -151,14 +153,14 @@ public class DashboardFragment extends Fragment {
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
 
         search_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
         return root;
