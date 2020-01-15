@@ -76,8 +76,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private EditText search_editText;
     //검색 목록
     private RecyclerView searched_list;
-    //검색 목록 어댑터
-    private SimpleItemRecyclerViewAdapter search_adapter;
 
     //lhj_0
 //    로딩창
@@ -98,7 +96,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
     public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
-    public static List<Pair<VM_Data_Default,Pair<String,String>>> filtered;//전체 데이터에서 필터링된 검색 리스트
 
     public HomeActivity parent;
     public static String TAG="DashboardFrag";
@@ -170,14 +167,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             public void onClick(View v) {
                 search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                filtered=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
-                filtered=posts;
-
-
-                search_adapter = new SimpleItemRecyclerViewAdapter(filtered,mTwoPane,parent);
-
-                searched_list.setAdapter(search_adapter);
-                Log.d("mValues", "어댑터 달아주고 난 후 : "+filtered.size());
             }
         });
 
@@ -276,7 +265,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     }
 
-    //검색 필터링 관련 오버라이드 함수 3개
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -284,7 +272,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        search_adapter.getFilter().filter(charSequence);
+
     }
 
     @Override
@@ -293,8 +281,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     }
 
     public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>
-            implements Filterable {
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         ///private final List<VM_Data_Default> mValues;
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
@@ -305,7 +292,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             mValues = items;
             mTwoPane = twoPane;
             mParentActivity = parent;
-
         }
 
         @Override
@@ -328,53 +314,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
         @Override
         public int getItemCount() {
+            Log.d("mValue","mValues : "+mValues.size());
             return mValues.size();
-        }
-
-        //리사이클러뷰 내에서 검색
-        @Override
-        public Filter getFilter() {
-            return new Filter(){
-                @Override
-                protected FilterResults performFiltering(CharSequence charSequence) {
-                    String charString = charSequence.toString();
-
-                    if(charString.isEmpty()){
-                        //검색을 아직 안 한경우에는 전체 데이터인 posts가 들어가도록
-                        filtered = posts;
-                        Log.d("mValue","빈 경우 전체 데이터 입력 : "+filtered.size());
-                    }else{
-                        //검색을 한 경우
-
-                        //필터링 중인 목록
-                        List<Pair<VM_Data_Default,Pair<String,String>>> filteringList =
-                                new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
-
-                        for(Pair<VM_Data_Default,Pair<String,String>> item:posts){
-
-                            if(item.first.getTitle().contains(charString)){
-//                                Log.d("mValue","posts 중 해당되는 문제 : "+item.first.getTitle());
-                                //검색 문자열을 포함하는 경우
-                                filteringList.add(item);
-                            }
-                        }
-
-                        //필터링 완료된 목록 = 필터링 중인 목록
-                        filtered = filteringList;
-                        Log.d("mValue","검색 중 filtered 사이즈 : "+filtered.size());
-                    }
-                    FilterResults filterResults = new FilterResults();
-                    filterResults.values = filtered;
-
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                    filtered = (ArrayList<Pair<VM_Data_Default,Pair<String,String>>>)filterResults.values;
-                    notifyDataSetChanged();
-                }
-            };
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
