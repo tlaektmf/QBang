@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -115,7 +117,25 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     public void changeAddFile(View view) {
         //** 권한 설정
         imageviewID = view.getId();
-        tedPermission(imageviewID);
+
+        ImageView selected_img = findViewById(imageviewID);
+
+        //이미지 비교
+        Drawable tmp = selected_img.getDrawable();
+        Drawable extra_img = getDrawable(R.drawable.add_extra_img);
+
+        Bitmap tmpBitmap = ((BitmapDrawable)tmp).getBitmap();
+        Bitmap extra_imgBitmap = ((BitmapDrawable)extra_img).getBitmap();
+
+        if(tmpBitmap.equals(extra_imgBitmap)){
+            //아직 이미지 추가 안한 상태
+            tedPermission(imageviewID);
+        }else{
+            Toast.makeText(VM_RegiserOtherThingsActivity.this, "이미 추가함", Toast.LENGTH_SHORT).show();
+
+            //여기에다가?? 생성하면 될 것 같아요
+        }
+
     }
 
     //** 추가 정보 등록 버튼 클릭
@@ -373,7 +393,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 Toast.makeText(VM_RegiserOtherThingsActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
                 showPickDialog(_imageviewID);
-
             }
 
             @Override

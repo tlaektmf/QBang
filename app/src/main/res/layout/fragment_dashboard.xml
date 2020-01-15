@@ -154,6 +154,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_input_lay"
             android:background="#f2f2f4">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searched_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_list_calendar"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="15dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <!--        검색창 리스트 끝-->

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -249,7 +251,8 @@ public class DashboardFragment extends Fragment {
 
 
     public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>
+            implements Filterable {
 
         ///private final List<VM_Data_Default> mValues;
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
@@ -260,7 +263,6 @@ public class DashboardFragment extends Fragment {
             mValues = items;
             mTwoPane = twoPane;
             mParentActivity = parent;
-
         }
 
         @Override
@@ -286,6 +288,11 @@ public class DashboardFragment extends Fragment {
             return mValues.size();
         }
 
+        //리사이클러뷰 내에서 검색
+        @Override
+        public Filter getFilter() {
+            return null;
+        }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
