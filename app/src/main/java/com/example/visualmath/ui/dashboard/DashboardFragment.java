@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visualmath.FilterAdapter;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.R;
@@ -76,6 +77,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private EditText search_editText;
     //검색 목록
     private RecyclerView searched_list;
+    private FilterAdapter filterAdapter;
 
     //lhj_0
 //    로딩창
@@ -140,14 +142,13 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         search_editText = root.findViewById(R.id.search_editText);
         search_editText.addTextChangedListener(this);
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //검색 목록
+        //검색 목록 리사이클러뷰
         searched_list = root.findViewById(R.id.searched_list);
 
         dateInit();
         readDataBase();
 
         setupRecyclerView(recyclerView);
-        setupRecyclerView(searched_list);
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +168,11 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             public void onClick(View v) {
                 search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
+                //검색 어댑터 생성
+                Log.d("filter","posts 사이즈 : "+posts.size());
+                filterAdapter = new FilterAdapter(getContext(),posts);
+                searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+                searched_list.setAdapter(filterAdapter);
             }
         });
 
@@ -272,7 +278,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        filterAdapter.getFilter().filter(charSequence);
     }
 
     @Override
@@ -314,7 +320,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
         @Override
         public int getItemCount() {
-            Log.d("mValue","mValues : "+mValues.size());
             return mValues.size();
         }
 
