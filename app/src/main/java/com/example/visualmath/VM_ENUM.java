@@ -19,11 +19,17 @@ public  class VM_ENUM {
 
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
+    public static final int RC_REGIOTHER_TO_PHOTO_VIEW=999;
+
     //** Log TAG
     public static final String TAG="다슬";
 
     //** intent
     public static final String SOLVE_WAY="SOLVE_WAY";
+    public static final String PHOTO_URI="PHOTO_URI";
+    public static final String CHANGED_PHOTO_URI="CHANGED_PHOTO_URI";
+    public static final String DELETE_PHOTO="DELETE_PHOTO";
+    public static final String IT_PHOTO_INDEX="IT_PHOTO_INDEX";
 
     //** 상수 String
     public static final String TEXT="TEXT";

@@ -329,12 +329,11 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 }
 
             }
-
-
         }
 
 
     }
+
 
     private void showPickDialog() {
         //** 다이얼로그 실행
