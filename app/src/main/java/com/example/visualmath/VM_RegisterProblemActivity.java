@@ -228,113 +228,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-     * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //** 예외 사항 처리
-        if (resultCode != Activity.RESULT_OK) {
-
-            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-
-            if (galleryFile != null) {
-                if (galleryFile.exists()) {
-                    if (galleryFile.delete()) {
-                        Log.d(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
-                        galleryFile = null;
-                    }
-                }
-            }
-
-            return;
-        } else if (requestCode == PICK_FROM_ALBUM) {
-            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-            Cursor cursor = null;
-
-            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                assert photo_problem != null;
-                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                galleryFile = new File(cursor.getString(column_index));
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
-            vmDataBasic.setProblem(photo_problem);
-
-
-            //데이터 등록
-            setImage();
-        } else if (requestCode == PICK_FROM_CAMERA) {
-            Uri photoUri;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
-
-            } else {
-                photoUri = Uri.fromFile(galleryFile);
-            }
-            vmDataBasic.setProblem(photoUri);
-            setImage();
-        }
-        else if (requestCode == OTHER_DATA_LOAD) {
-            Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
-
-            if (resultCode == RESULT_OK) {
-                String notice = "";
-
-                //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
-                //receiveDatat 변수에 저장함
-                receiveData = data.getParcelableExtra(ALL);
-
-                if(receiveData.getDetail()==null){
-                    Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
-                }
-
-                if (!receiveData.getDetail().equals("")) {
-                    notice = "추가 설명 등록.";
-
-                }
-                int count = 0;
-
-                for (int i = 0; i < 3; i++) {
-                    if (receiveData.getFilePathElement(i) != null) {
-                        count++;
-                        Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
-                    }
-                }
-                if (count != 0) {
-                    notice += "사진 " + count + "개 추가.";
-                }
-
-                //** 버튼에 정보 표시
-                if (notice != "") {
-                    buttonGoOther.setText(notice);
-                } else if (notice == "") {
-                    buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
-                }
-
-            }
-        }
-
-
-    }
-
-
     private void showPickDialog() {
         //** 다이얼로그 실행
         // 커스텀 다이얼로그를 생성
@@ -491,6 +384,113 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
+     * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //** 예외 사항 처리
+        if (resultCode != Activity.RESULT_OK) {
+
+            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            if (galleryFile != null) {
+                if (galleryFile.exists()) {
+                    if (galleryFile.delete()) {
+                        Log.d(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
+                        galleryFile = null;
+                    }
+                }
+            }
+
+            return;
+        } else if (requestCode == PICK_FROM_ALBUM) {
+            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+            Cursor cursor = null;
+
+            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+            try {
+                String[] proj = {MediaStore.Images.Media.DATA};
+                assert photo_problem != null;
+                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                assert cursor != null;
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                galleryFile = new File(cursor.getString(column_index));
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+
+            vmDataBasic.setProblem(photo_problem);
+
+
+            //데이터 등록
+            setImage();
+        } else if (requestCode == PICK_FROM_CAMERA) {
+            Uri photoUri;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.example.visualmath.provider", galleryFile);
+
+            } else {
+                photoUri = Uri.fromFile(galleryFile);
+            }
+            vmDataBasic.setProblem(photoUri);
+            setImage();
+        }
+        else if (requestCode == OTHER_DATA_LOAD) {
+            Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
+
+            if (resultCode == RESULT_OK) {
+                String notice = "";
+
+                //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
+                //receiveDatat 변수에 저장함
+                receiveData = data.getParcelableExtra(ALL);
+
+                if(receiveData.getDetail()==null){
+                    Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
+                }
+
+                if (!receiveData.getDetail().equals("")) {
+                    notice = "추가 설명 등록.";
+
+                }
+                int count = 0;
+
+                for (int i = 0; i < 3; i++) {
+                    if (receiveData.getFilePathElement(i) != null) {
+                        count++;
+                        Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
+                    }
+                }
+                if (count != 0) {
+                    notice += "사진 " + count + "개 추가.";
+                }
+
+                //** 버튼에 정보 표시
+                if (notice != "") {
+                    buttonGoOther.setText(notice);
+                } else if (notice == "") {
+                    buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
+                }
+
+            }
+        }
+
+
     }
 
 

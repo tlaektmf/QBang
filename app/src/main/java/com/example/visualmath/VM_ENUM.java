@@ -19,7 +19,11 @@ public  class VM_ENUM {
 
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
-    public static final int RC_REGIOTHER_TO_PHOTO_VIEW=999;
+    public static final int RC_REGIOTHER_TO_PHOTOVIEW=999;
+
+    public static final int RC_PICK_FROM_ALBUM = 998;
+    public static final int RC_PICK_FROM_CAMERA = 997;
+
 
     //** Log TAG
     public static final String TAG="다슬";
@@ -28,8 +32,10 @@ public  class VM_ENUM {
     public static final String SOLVE_WAY="SOLVE_WAY";
     public static final String PHOTO_URI="PHOTO_URI";
     public static final String CHANGED_PHOTO_URI="CHANGED_PHOTO_URI";
-    public static final String DELETE_PHOTO="DELETE_PHOTO";
+    public static final String IT_DELETE_PHOTO_INDEX="IT_DELETE_PHOTO_INDEX";
     public static final String IT_PHOTO_INDEX="IT_PHOTO_INDEX";
+    public static final String IT_TAKE_PHOTO="IT_TAKE_PHOTO";
+    public static final String IT_GALLERY_PHOTO="IT_GALLERY_PHOTO";
 
     //** 상수 String
     public static final String TEXT="TEXT";

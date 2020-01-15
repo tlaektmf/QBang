@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:onClick="deletePhoto"
+        android:onClick="deletePhotoButtonEvent"
         android:text="사진삭제" />
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:onClick="takePhoto"
+        android:onClick="takePhotoButtonEvent"
         android:text="사진 촬영" />
 
     <Button
@@ -35,6 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:onClick="gallery"
+        android:onClick="galleryButtonEvent"
         android:text="갤러리" />
 </LinearLayout>

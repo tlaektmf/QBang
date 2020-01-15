@@ -133,11 +133,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         Log.d(TAG,"[pickViewIndex] "+picViewIndex);
         if(vm_data_add!=null){
             if(vm_data_add.getFilePathElement(picViewIndex)!=null){//** imageView에 이미지가 있는 경우
-                Intent intent=new Intent(this,VM_PhotoViewActivity.class);
+                Intent intent=new Intent(VM_RegiserOtherThingsActivity.this,VM_PhotoViewActivity.class);
                 intent.putExtra(VM_ENUM.PHOTO_URI, vm_data_add.getFilePathElement(picViewIndex));
                 intent.putExtra(VM_ENUM.IT_PHOTO_INDEX,picViewIndex);
                 Log.d(TAG,"[전달할 사진 uri] "+ vm_data_add.getFilePathElement(picViewIndex));
-                startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTO_VIEW);
+                startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
 
             }else{//** imageView에 이미지가 없는 경우
                 tedPermission(imageviewID);
@@ -247,84 +247,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-     * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
+    private void setImageByUri(int index,Uri _uri) {
 
-        //** 예외 사항 처리
-        if (resultCode != Activity.RESULT_OK) {
-
-            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-
-            if (galleryFile != null) {
-                if (galleryFile.exists()) {
-                    if (galleryFile.delete()) {
-                        Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
-                        galleryFile = null;
-                    }
-                }
-            }
-
-            return;
-        } else if (requestCode == PICK_FROM_ALBUM) {
-            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-            Cursor cursor = null;
-
-            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                assert photo_problem != null;
-                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                galleryFile = new File(cursor.getString(column_index));
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
-            createData(Uri.parse(galleryFile.getAbsolutePath()));
-            ///createData(photo_problem);
-            setImage(imageviewID);
-        } else if (requestCode == PICK_FROM_CAMERA) {
-            Uri photoUri;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
-
-            } else {
-                photoUri = Uri.fromFile(galleryFile);
-            }
-            ///createData(photoUri);
-            createData(Uri.parse(galleryFile.getAbsolutePath()));
-            setImage(imageviewID);
-        }else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTO_VIEW){
-            Log.d(VM_ENUM.TAG,"[regiother->photoview]응답 보낸 결과");
-            Intent intent=getIntent();
-            int deleteIndex=-1;
-            intent.getIntExtra(VM_ENUM.DELETE_PHOTO,deleteIndex);
-
-            if(deleteIndex!=-1){
-                deletePhoto(deleteIndex);
-            }
-
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+        if (originalBm != null) {
+            imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
         }
 
     }
 
     private void deletePhoto(int index){
-        imageViewsOtherPictureList[index].setImageResource(0);
+        imageViewsOtherPictureList[index].setImageResource(R.drawable.add_extra_img);
+        vm_data_add.setFilePathElement(null,index);
     }
     private void createData(Uri _uri) {
         int index = 0;
@@ -441,5 +377,96 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
+     * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(VM_ENUM.TAG,"[VM_RegisterOtherActivity/requestCode] "+requestCode);
+        //** 예외 사항 처리
+        if (resultCode != Activity.RESULT_OK) {
+
+            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            if (galleryFile != null) {
+                if (galleryFile.exists()) {
+                    if (galleryFile.delete()) {
+                        Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
+                        galleryFile = null;
+                    }
+                }
+            }
+
+            return;
+        } else if (requestCode == PICK_FROM_ALBUM) {
+            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+            Cursor cursor = null;
+
+            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+            try {
+                String[] proj = {MediaStore.Images.Media.DATA};
+                assert photo_problem != null;
+                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                assert cursor != null;
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                galleryFile = new File(cursor.getString(column_index));
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+
+            createData(Uri.parse(galleryFile.getAbsolutePath()));
+            ///createData(photo_problem);
+            setImage(imageviewID);
+        } else if (requestCode == PICK_FROM_CAMERA) {
+            Uri photoUri;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.example.visualmath.provider", galleryFile);
+
+            } else {
+                photoUri = Uri.fromFile(galleryFile);
+            }
+            ///createData(photoUri);
+            createData(Uri.parse(galleryFile.getAbsolutePath()));
+            setImage(imageviewID);
+        }else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW){
+
+            int deleteIndex ;
+            int photoIndex ;
+            Uri newPhotoURi;
+
+
+            deleteIndex=data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX,-1);
+            Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] deleteIndex"+     deleteIndex);
+            if(deleteIndex!=-1){
+                Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] deletePhoto");
+               deletePhoto(deleteIndex);
+            }
+
+            //**
+            photoIndex=data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX,-1);
+            newPhotoURi=data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
+            if(newPhotoURi!=null&& photoIndex!=-1){
+                setImageByUri(photoIndex,newPhotoURi);
+            }
+            newPhotoURi= data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
+            if(newPhotoURi!=null&& photoIndex!=-1){
+                setImageByUri(photoIndex,newPhotoURi);
+            }
+
+
+        }
+
+    }
 
 }
