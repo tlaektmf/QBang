@@ -32,7 +32,7 @@ public class LogoutPreference extends Preference {
             public void onClick(View view) {
 //                change_key("logout_clicked");
                 isClicked=true;
-                Toast.makeText(getContext(), "제에에발1", Toast.LENGTH_LONG).show();
+
 
                 change_key();
             }

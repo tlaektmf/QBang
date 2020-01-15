@@ -60,6 +60,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"/>
         <Button
+            android:onClick="clickLoginButton"
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -74,6 +75,22 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"/>
+
+
+<!--   구글 로그인 버튼 위젯 추가     -->
+        <com.google.android.gms.common.SignInButton
+            android:onClick="clickGoogleLoginButton"
+            android:id="@+id/Google_Login"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+           >
+
+        </com.google.android.gms.common.SignInButton>
+<!--   구글 로그인 버튼 위젯 추가     -->
+
     <CheckBox
         android:id="@+id/cb_AutoLogin"
         android:layout_width="wrap_content"
