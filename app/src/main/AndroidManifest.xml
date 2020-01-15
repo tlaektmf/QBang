@@ -61,7 +61,8 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".VM_AutoLoginCheckActivity"
             android:theme="@style/AppTheme.blueStatusBar" />

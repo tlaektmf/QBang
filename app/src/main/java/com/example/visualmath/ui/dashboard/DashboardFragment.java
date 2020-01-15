@@ -1,6 +1,7 @@
 package com.example.visualmath.ui.dashboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +9,10 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
@@ -66,6 +69,8 @@ public class DashboardFragment extends Fragment {
     private Button search_cancel_btn;
 //    private ConstraintLayout search_input_lay;
     private ConstraintLayout search_container;
+    private InputMethodManager imm;
+    private EditText search_editText;
 
     //lhj_0
 //    로딩창
@@ -130,14 +135,14 @@ public class DashboardFragment extends Fragment {
 
         //검색 취소 버튼
         search_cancel_btn = root.findViewById(R.id.serach_cancel_btn);
+        search_editText = root.findViewById(R.id.search_editText);
+        imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         dateInit();
         readDataBase();
 
 
         setupRecyclerView(recyclerView);
-
-
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,12 +168,17 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                hideKeyboard();
+                search_editText.setText("");
             }
         });
         return root;
     }
 
-
+//    키보드 숨기는 함수
+    private void hideKeyboard(){
+        imm.hideSoftInputFromWindow(search_editText.getWindowToken(),0);
+    }
     private void dateInit() {
         final long now = System.currentTimeMillis();//현재시간
         final Date date = new Date(now);//현재날짜
