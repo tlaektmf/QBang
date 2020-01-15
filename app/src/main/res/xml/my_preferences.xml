@@ -17,4 +17,9 @@
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 
+    <Preference
+        android:layout="@layout/pre_test"
+        android:key="test"/>
+
+
 </PreferenceScreen>

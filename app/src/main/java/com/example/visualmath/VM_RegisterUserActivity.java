@@ -29,6 +29,7 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
     private String email = "";
     private String password = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

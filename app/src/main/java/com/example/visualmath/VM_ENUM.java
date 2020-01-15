@@ -18,7 +18,7 @@ public  class VM_ENUM {
     public static final String LIVE_ALARM_MESSAGE="라이브 5분전입니다.";//풀이된 문제가 도착 (학생)
 
     //** requestCode
-
+    public static final int RC_GOOGLE_LOGIN=1000;
     //** Log TAG
     public static final String TAG="다슬";
 
@@ -29,6 +29,17 @@ public  class VM_ENUM {
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
 
+    //** DB TABLE
+    public static final String DB_CHATS="CHATS";
+    public static final String DB_POSTS="POSTS";
 
+    //** DB CHILD
+    public  static final String DB_chatList="chatList";
+
+    //** Preference Key
+    public  static final String PRE_LOGOUT="logout";
+    public  static final String PRE_ALARM="setAlarm";
+    public  static final String PRE_TEST="test";
+    public static final String PREF_USER_NAME = "username";
 }
 

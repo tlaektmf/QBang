@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
 
@@ -37,6 +38,12 @@ public class VM_DBHandler {
 
     private String user;
 
+    public VM_DBHandler(){
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
+        storageReference = FirebaseStorage.getInstance().getReference();
+    }
+
     public VM_DBHandler(String TABLE){//default constructor
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference(TABLE);
@@ -49,6 +56,19 @@ public class VM_DBHandler {
         }else{
             //table이 있으면 진행하지 않음
         }
+
+    }
+
+    void newChat(String post_id, List<VM_Data_CHAT> chat){
+        databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+        if(databaseReference==null){
+            //table이 없으면 생성
+            databaseReference.child(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+        }else{
+            //table이 있으면 진행하지 않음
+        }
+
+        databaseReference.setValue(chat); //** 파이어베이스 DB 등록
 
     }
 

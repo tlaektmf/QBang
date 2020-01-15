@@ -30,12 +30,19 @@ public class VM_AutoLoginCheckActivity extends AppCompatActivity {
         } else {
             // Call Next Activity : 저장된 정보가 있는 경우 VM_LoginActivity를 건너뜀
             String currentUser=SaveSharedPreference.getUserName(this);
-            if(currentUser.equals("teacher@gmail.com")){
+            if(currentUser.contains("@visualmath.com")){
                 intent = new Intent(VM_AutoLoginCheckActivity.this, TeacherHomeActivity.class);
-            }else if(currentUser.equals("dazzel0826@gmail.com")){
+            }
+            else if(currentUser.equals("teacher@gmail.com")){
+                intent = new Intent(VM_AutoLoginCheckActivity.this, TeacherHomeActivity.class);
+            }
+            else{
                 intent = new Intent(VM_AutoLoginCheckActivity.this, HomeActivity.class);
             }
-            intent.putExtra("UID", SaveSharedPreference.getUserName(this).toString());//user id정보를 함께 넘김
+//            else if(currentUser.equals("student@gmail.com")){
+//                intent = new Intent(VM_AutoLoginCheckActivity.this, HomeActivity.class);
+//            }
+//            intent.putExtra("UID", SaveSharedPreference.getUserName(this).toString());//user id정보를 함께 넘김
             startActivity(intent);
             this.finish();
         }

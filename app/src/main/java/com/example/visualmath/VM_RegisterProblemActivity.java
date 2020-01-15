@@ -301,6 +301,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 //receiveDatat 변수에 저장함
                 receiveData = data.getParcelableExtra(ALL);
 
+                if(receiveData.getDetail()==null){
+                    Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
+                }
+
                 if (!receiveData.getDetail().equals("")) {
                     notice = "추가 설명 등록.";
 

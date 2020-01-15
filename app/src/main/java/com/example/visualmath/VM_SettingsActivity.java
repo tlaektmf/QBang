@@ -1,14 +1,31 @@
 package com.example.visualmath;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
-public class VM_SettingsActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class VM_SettingsActivity extends AppCompatActivity  {
+
+
+    static VM_SettingsActivity parent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,18 +38,50 @@ public class VM_SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        parent=this;
+
+
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.my_preferences, rootKey);
+
+
+
         }
 
         // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성합니다.
         public static SettingsFragment newInstance() {
+
             return new SettingsFragment();
         }
 
+        @Override
+        public boolean onPreferenceTreeClick(Preference preference) {
+            String key = preference.getKey();
+            Log.d(VM_ENUM.TAG,"[클릭된 Preference의 key] "+key);
+
+            if(key.equals(VM_ENUM.PRE_TEST)){ //** Preference에 저장된 user 정보 삭제
+
+                SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor=preferences.edit();
+                Log.d(VM_ENUM.TAG,"[Preference] //저장된 user name :"+SaveSharedPreference.getUserName(getActivity().getApplicationContext()));
+                editor.clear();
+                editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
+            }
+            if(key.equals(VM_ENUM.PRE_LOGOUT)){
+                FirebaseAuth.getInstance().signOut();
+                Intent intent=new Intent(getActivity().getApplicationContext(),VM_LauncherActivity.class);
+                startActivity(intent);
+
+            }
+
+            return false;
+
+        }
     }
+
+
 }
