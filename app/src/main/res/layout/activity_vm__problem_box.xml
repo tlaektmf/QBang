@@ -105,6 +105,7 @@
     <!--    뒤에 붙는 부분-->
 <!--    매치 미완료/완료에 따라 리사이클러뷰 데이터(?) 변경-->
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/problem_recyclerview"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         tools:listitem="@layout/item_list_notime"
