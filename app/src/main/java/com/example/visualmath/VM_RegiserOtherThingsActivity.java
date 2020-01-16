@@ -2,6 +2,7 @@ package com.example.visualmath;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -9,6 +10,7 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,9 +19,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcel;
+import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -33,9 +37,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Provider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -379,6 +387,72 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         finish();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void saveFile(){
+        ContentValues values=new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME,galleryFile.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
+
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미입니다.
+            values.put(MediaStore.Images.Media.IS_PENDING,1);
+        }
+        ContentResolver contentResolver=getContentResolver();
+        ///Uri item=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        Uri item = contentResolver.insert(collection, values);
+
+        try {
+            assert item != null;
+            ParcelFileDescriptor pdf=contentResolver.openFileDescriptor(item,"w",null);
+            if(pdf==null){
+
+            }else{
+                InputStream inputStream = getImageInputStram();
+                byte[] strToByte = getBytes(inputStream);
+                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                fos.write(strToByte);
+                fos.close();
+                inputStream.close();
+                pdf.close();
+                contentResolver.update(item, values, null, null);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        values.clear();
+        // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
+        values.put(MediaStore.Images.Media.IS_PENDING, 0);
+        contentResolver.update(item, values, null, null);
+    }
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+    private InputStream getImageInputStram() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        ByteArrayInputStream bs=null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
+        if (originalBm != null) {
+
+            originalBm.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+            byte[] bitmapData = bytes.toByteArray();
+            bs = new ByteArrayInputStream(bitmapData);
+        }
+
+        return bs;
+    }
 
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -398,14 +472,17 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if (galleryFile != null) {
-                if (galleryFile.exists()) {
-                    if (galleryFile.delete()) {
-                        Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
-                        galleryFile = null;
+            if(requestCode==PICK_FROM_CAMERA){
+                if (galleryFile != null) {
+                    if (galleryFile.exists()) {
+                        if (galleryFile.delete()) {
+                            Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
+                            galleryFile = null;
+                        }
                     }
                 }
             }
+
 
             return;
         } else if (requestCode == PICK_FROM_ALBUM) {
@@ -442,6 +519,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             ///createData(photoUri);
             createData(Uri.parse(galleryFile.getAbsolutePath()));
             setImage(imageviewID);
+
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                saveFile();
+            }
         }else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW){
 
             int deleteIndex ;

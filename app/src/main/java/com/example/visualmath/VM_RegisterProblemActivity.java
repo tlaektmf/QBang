@@ -248,10 +248,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM); //Environment.getExternalStorageDirectory().getAbsolutePath()
-        ///File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
-        Log.d(VM_ENUM.TAG,"[getExternalStorageDirectory] "+Environment.getExternalStorageDirectory().toString());
-        Log.d(VM_ENUM.TAG,"[getAbsolutePath] "+Environment.getExternalStorageDirectory().getAbsolutePath());
+        File storageDir;
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+             storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+            Log.d(VM_ENUM.TAG,"[Q 상위 버전] "+storageDir);
+        }else{
+             storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
+            Log.d(VM_ENUM.TAG,"[Q 하위 버전] "+storageDir);
+        }
+
 
         if (!storageDir.exists()) storageDir.mkdirs();
 
