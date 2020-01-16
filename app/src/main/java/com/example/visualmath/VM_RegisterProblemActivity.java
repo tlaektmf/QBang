@@ -2,6 +2,7 @@ package com.example.visualmath;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +22,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -38,9 +42,13 @@ import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -241,7 +249,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         // 이미지가 저장될 폴더 이름 ( userID )
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM); //Environment.getExternalStorageDirectory().getAbsolutePath()
-        //File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
+        ///File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
         Log.d(VM_ENUM.TAG,"[getExternalStorageDirectory] "+Environment.getExternalStorageDirectory().toString());
         Log.d(VM_ENUM.TAG,"[getAbsolutePath] "+Environment.getExternalStorageDirectory().getAbsolutePath());
 
@@ -256,6 +264,73 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         return image;
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void saveFile(){
+        ContentValues values=new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME,takeFile.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
+
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미입니다.
+            values.put(MediaStore.Images.Media.IS_PENDING,1);
+        }
+        ContentResolver contentResolver=getContentResolver();
+        ///Uri item=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        Uri item = contentResolver.insert(collection, values);
+
+        try {
+            assert item != null;
+            ParcelFileDescriptor pdf=contentResolver.openFileDescriptor(item,"w",null);
+            if(pdf==null){
+
+            }else{
+                InputStream inputStream = getImageInputStram();
+                byte[] strToByte = getBytes(inputStream);
+                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                fos.write(strToByte);
+                fos.close();
+                inputStream.close();
+                pdf.close();
+                contentResolver.update(item, values, null, null);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        values.clear();
+        // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
+        values.put(MediaStore.Images.Media.IS_PENDING, 0);
+        contentResolver.update(item, values, null, null);
+    }
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+    private InputStream getImageInputStram() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        ByteArrayInputStream bs=null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(takeFile.getAbsolutePath(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
+        if (originalBm != null) {
+
+            originalBm.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+            byte[] bitmapData = bytes.toByteArray();
+            bs = new ByteArrayInputStream(bitmapData);
+        }
+
+        return bs;
     }
 
     private void showPickDialog() {
@@ -503,6 +578,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             vmDataBasic.setProblem(photoUri);//provider 가 씌워진 파일을 DB에 저장함
             setImageByUri(Uri.parse(takeFile.getAbsolutePath()));//이미지 set의 경우는 provider가 벗겨진 파일을 set
+
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                saveFile();
+            }
 
         }
         else if (requestCode == OTHER_DATA_LOAD) {
