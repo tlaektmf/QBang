@@ -41,10 +41,15 @@ public  class VM_ENUM {
     //** 상수 String
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
+    public static final String TEACHER="TEACHER";
+    public static final String STUDENT="STUDENT";
+    public static final String GMAIL="gmail";
+
 
     //** DB TABLE
     public static final String DB_CHATS="CHATS";
     public static final String DB_POSTS="POSTS";
+    public static final String DB_USERS="USERS";
 
     //** DB CHILD
     public  static final String DB_chatList="chatList";

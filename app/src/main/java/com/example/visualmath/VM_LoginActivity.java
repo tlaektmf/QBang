@@ -188,7 +188,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
 
     //구글 파이어베이스로 값넘기기
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct, final String user_type) {
         //파이어베이스로 받은 구글사용자가 확인된 이용자의 값을 토큰으로 받고
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
@@ -197,9 +197,28 @@ public class VM_LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {//** 아이디 생성 완료
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //** 일단 구글 로그인은 모두 학생으로 취급함
-                            startActivity(intent);
-                            finish();
+
+                            //데이터 베이스 등록
+                            VM_DBHandler dbHandler=new VM_DBHandler();
+                            Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
+
+                            Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
+
+                            String mailDomin=VM_ENUM.GMAIL;
+                            String user=acct.getEmail().split("@")[0]+"_"+mailDomin;//이메일 형식은 파이어베이스 정책상 불가
+                           dbHandler.newUser(user,VM_ENUM.STUDENT);
+
+                            if(user_type.equals(VM_ENUM.TEACHER)){
+                                Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+                                startActivity(intent);
+                                finish();
+                            }else if(user_type.equals(VM_ENUM.STUDENT)){
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+                                startActivity(intent);
+                                finish();
+                            }
+
+
 
                             Toast.makeText(VM_LoginActivity.this, "아이디 생성완료", Toast.LENGTH_SHORT).show();
                         } else {
@@ -248,10 +267,9 @@ public class VM_LoginActivity extends AppCompatActivity {
                 Log.d(VM_ENUM.TAG, "getIdToken()=" + account.getIdToken());
 
                 //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
-                firebaseAuthWithGoogle(account);
+                firebaseAuthWithGoogle(account,VM_ENUM.STUDENT);//** 구글 로그인으로 한 유저는 일단 무조건 학생으로 구분함
 
-                //데이터 베이스 등록
-                VM_DBHandler dbHandler=new VM_DBHandler();
+
 
             } catch (ApiException e) {
             }

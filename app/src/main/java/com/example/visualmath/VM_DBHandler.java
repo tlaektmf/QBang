@@ -72,10 +72,42 @@ public class VM_DBHandler {
 
     }
 
+    void newUser(String user_email,String user_type){
+        databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_USERS);
+        if(databaseReference==null){
+            //table이 없으면 생성
+            databaseReference.child(VM_ENUM.DB_USERS);
+        }else{
+            //table이 있으면 진행하지 않음
+        }
+
+        databaseReference= databaseReference.child(user_email);
+        if(databaseReference==null){
+            databaseReference.child(user_email);
+        }
+
+        //** 학생과 선생님을 구분해서 유저 객체 생성
+        long time=System.currentTimeMillis();//시스템 시간
+        Date date = new Date(time);
+        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd");//사용할 포맷 정의
+        String joinDate=dateFormat.format(date);
+
+        Log.i(TAG,"[유저 최초 가입 날짜:] "+joinDate);
+
+        if(user_type.equals(VM_ENUM.TEACHER)){
+
+        }else if(user_type.equals(VM_ENUM.STUDENT)){
+            VM_Data_STUDENT student=new VM_Data_STUDENT(user_email,joinDate);
+            databaseReference.setValue(student); //** 파이어베이스 DB 등록
+        }
+
+
+    }
     boolean newPost(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic,String _solveWay){
 
         String currentUserEmail=firebaseAuth.getCurrentUser().getEmail();
-        user=currentUserEmail.split("@")[0]+"_"+currentUserEmail.split("@")[1];//이메일 형식은 파이어베이스 정책상 불가
+        String mailDomin=currentUserEmail.split("@")[1].split(".")[0];
+        user=currentUserEmail.split("@")[0]+"_"+mailDomin;//이메일 형식은 파이어베이스 정책상 불가
 
 
         long time=System.currentTimeMillis();//시스템 시간
@@ -128,6 +160,7 @@ public class VM_DBHandler {
             StartupLoadFile(_vmDataAdd,_vmDataBasic); //** 파이어베이스 저장소에 파일 등록
         }
 
+        //** STUDENTS에서 user_email을 찾고 posts의 unsloved / unmatched에 등록
         return true;
     }
 
