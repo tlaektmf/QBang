@@ -240,11 +240,19 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + userID + "/");
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM); //Environment.getExternalStorageDirectory().getAbsolutePath()
+        //File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
+        Log.d(VM_ENUM.TAG,"[getExternalStorageDirectory] "+Environment.getExternalStorageDirectory().toString());
+        Log.d(VM_ENUM.TAG,"[getAbsolutePath] "+Environment.getExternalStorageDirectory().getAbsolutePath());
+
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg"
+                , storageDir);
+
 
         return image;
 
@@ -422,22 +430,27 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d(VM_ENUM.TAG,"[VM_RegisterProblem] "+requestCode+" ," +resultCode);
         //** 예외 사항 처리
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK)
+        {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-
-            if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
-                if (takeFile.exists()) {
-                    if (takeFile.delete()) {
-                        Log.d(TAG, takeFile.getAbsolutePath() + " 삭제 성공");
-                        takeFile = null;
+            if(requestCode==PICK_FROM_CAMERA){
+                if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
+                    if (takeFile.exists()) {
+                        if (takeFile.delete()) {
+                            Log.d(TAG, takeFile.getAbsolutePath() + " 삭제 성공");
+                            takeFile = null;
+                        }
                     }
                 }
+
             }
 
             return;
+
         } else if (requestCode == PICK_FROM_ALBUM) {
             Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
 
@@ -490,6 +503,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             vmDataBasic.setProblem(photoUri);//provider 가 씌워진 파일을 DB에 저장함
             setImageByUri(Uri.parse(takeFile.getAbsolutePath()));//이미지 set의 경우는 provider가 벗겨진 파일을 set
+
         }
         else if (requestCode == OTHER_DATA_LOAD) {
             Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
