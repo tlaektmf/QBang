@@ -100,64 +100,7 @@ public class ProblemFragment extends Fragment {
 
     private VM_ChatAdapter adapter;
 
-    private File galleryFile; //갤러리로부터 받아온 이미지를 저장
 
-    private File createImageFile() throws IOException {
-
-        // 이미지 파일 이름 ( {시간})
-        String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
-        String imageFileName = timeStamp;
-
-        // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "userID" + "/");
-        if (!storageDir.exists()) storageDir.mkdirs();
-
-        // 빈 파일 생성
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        return image;
-
-    }
-
-    public void getAlbumFile() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
-        /*
-        startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-        이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
-         */
-    }
-
-    public void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
-
-        try {
-            galleryFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성
-        } catch (IOException e) {
-            //Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-            //finish();
-            e.printStackTrace();
-        }
-
-        if (galleryFile != null) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-
-                Uri photoUri = FileProvider.getUriForFile(getContext(),
-                        "com.example.visualmath.provider", galleryFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(intent, PICK_FROM_CAMERA);
-
-            } else {
-                Uri photoUri = Uri.fromFile(galleryFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //galleryFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
-                startActivityForResult(intent, PICK_FROM_CAMERA);
-
-            }
-
-        }
-
-    }
 
     public ProblemFragment() {
         // Required empty public constructor

@@ -21,12 +21,13 @@ public class VM_FullViewActivity extends AppCompatActivity {
     String post_id,post_title,post_grade,post_problem;
     Intent intent;
     Bundle arguments ;
+
     public String needToBlock;
     public static final String ARG_ITEM_TITLE = "post_title";
     public static final String ARG_ITEM_GRADE = "post_grade";
     public static final String ARG_ITEM_PROBLEM = "post_problem";
 
-    public static final String TAG="VM_FULL_A";
+    public static final String TAG=VM_ENUM.TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

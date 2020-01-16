@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -232,13 +233,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
-
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "userID" + "/");
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + userID + "/");
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성

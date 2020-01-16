@@ -213,13 +213,13 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
-
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "userID" + "/");
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + userID + "/");
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성
@@ -299,7 +299,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             wrapContentProvider();
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
-            VM_DBHandler vmDbHandler = new VM_DBHandler("POSTS");
+            VM_DBHandler vmDbHandler = new VM_DBHandler();
             vmDbHandler.newPost(receiveData, vmDataBasic,solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
             finish();

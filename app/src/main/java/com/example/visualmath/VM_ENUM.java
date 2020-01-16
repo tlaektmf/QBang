@@ -43,12 +43,8 @@ public  class VM_ENUM {
     public static final String VIDEO="VIDEO";
     public static final String TEACHER="TEACHER";
     public static final String STUDENT="STUDENT";
-    public static final String GMAIL="gmail";
-    public static final String S_ID="s_id";
-    public static final String USER_TYPE="type";
-    public static final String INFO="info";
-    public static final String DATE="date";
-    public static final String SOLVE_PROBLEM="solve_problem";
+
+
 
 
 
@@ -59,10 +55,26 @@ public  class VM_ENUM {
     public static final String DB_USERS="USERS";
     public static final String DB_STUDENTS="STUDENTS";
     public static final String DB_TEACHERS="TEACHERS";
+    public static final String DB_UNMATCHED="UNMATCHED";
+
 
 
     //** DB CHILD
     public  static final String DB_chatList="chatList";
+    public static final String DB_S_ID="s_id";
+    public static final String DB_USER_TYPE="type";
+    public static final String DB_INFO="info";
+    public static final String DB_DATE="date";
+    public static final String DB_SOLVE_PROBLEM="solve_problem";
+    public static final String DB_STU_UNMATCHED="unmatched";
+    public static final String DB_STU_DONE="done";
+    public static final String DB_STU_UNSOLVED="unsolved";
+    public static final String DB_GRADE="grade";
+    public static final String DB_P_ID="p_id";
+    public static final String DB_TITLE="title";
+    public static final String DB_PROBLEM="problem";
+    public static final String DB_UPLOAD_DATE="uploadDate";
+
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";

@@ -155,9 +155,9 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        String uerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity/createImageFile] 현재 로그인한 유저" + uerID);
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + uerID + "/");
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity/createImageFile] 현재 로그인한 유저" + userID);
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + userID + "/");
 
         //** 디렉토리 설정
         if (!storageDir.exists()) storageDir.mkdirs();
