@@ -64,6 +64,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private static final int NOTHING = -1;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
+    private File takeFile;
+
     private final CharSequence[] gradeItems = {"초       등", "중       등", "고       등"};
 
     private EditText editTextTitle;
@@ -123,6 +125,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
+        // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
         /*
         startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
         이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
@@ -133,24 +136,33 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
         try {
-            galleryFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성
+            takeFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성(아직 content provider이 입혀져 있지 않음)
+            Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 전 getAbsolutePath"+takeFile.getAbsolutePath());
+            Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 전 fromFile"+ Uri.fromFile(takeFile));
+
         } catch (IOException e) {
             Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             finish();
             e.printStackTrace();
         }
 
-        if (galleryFile != null) {
+
+        if (takeFile != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                        "com.example.visualmath.provider", takeFile);
+
+                Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 후"+photoUri);
+
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);//provider을 씌워서 보냄
+                // : photoUri를 intent로 넘겨주고, 이를 다시 onActivity result에서 받기 위함이 아니라,가서 쓰라는 의미
+
                 startActivityForResult(intent, PICK_FROM_CAMERA);
 
             } else {
-                Uri photoUri = Uri.fromFile(galleryFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //galleryFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
+                Uri photoUri = Uri.fromFile(takeFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //takeFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
                 startActivityForResult(intent, PICK_FROM_CAMERA);
 
             }
@@ -203,16 +215,25 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
 
-    private void setImage() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
-        imageViewProblem.setImageBitmap(originalBm); //이미지 set
-        if (originalBm == null) {
-            Log.d(TAG, "[VM_RegisterProblemActivity]: set할 이미지가 없음");
-        }
-    }
+//    private void setImage() {
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+//        imageViewProblem.setImageBitmap(originalBm); //이미지 set
+//        if (originalBm == null) {
+//            Log.d(TAG, "[VM_RegisterProblemActivity]: set할 이미지가 없음");
+//        }
+//    }
 
-    private File createImageFile() throws IOException {
+    private void setImageByUri(Uri _uri) {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
+        if (originalBm != null) {
+            imageViewProblem.setImageBitmap(originalBm); //이미지 set
+        }
+
+    }
+    private File createImageFile() throws IOException {//** 파일 경로를 이미 생성(시간으로 중복문제 해결)
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
@@ -295,7 +316,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
             vmDataBasic.setTitle(editTextTitle.getText().toString());
 
-            //** <내용추가>뷰에서 받아온 값들
+            //** <내용추가>뷰에서 받아온 값들 (content provider가 벗겨져 있기 때문에, 이를 씌워서 DB에 올린다
+            //** Firebase 정책
             wrapContentProvider();
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
@@ -405,11 +427,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if (galleryFile != null) {
-                if (galleryFile.exists()) {
-                    if (galleryFile.delete()) {
-                        Log.d(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
-                        galleryFile = null;
+
+            if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
+                if (takeFile.exists()) {
+                    if (takeFile.delete()) {
+                        Log.d(TAG, takeFile.getAbsolutePath() + " 삭제 성공");
+                        takeFile = null;
                     }
                 }
             }
@@ -417,6 +440,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             return;
         } else if (requestCode == PICK_FROM_ALBUM) {
             Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+
+            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem "+photo_problem);
+
             Cursor cursor = null;
 
             //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
@@ -434,22 +460,36 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 }
             }
 
-            vmDataBasic.setProblem(photo_problem);
+            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem "+photo_problem);
+            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
+                    +Uri.parse(galleryFile.getAbsolutePath()));
+
+            vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
 
 
             //데이터 등록
-            setImage();
+            setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+
         } else if (requestCode == PICK_FROM_CAMERA) {
             Uri photoUri;
+
+            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]: getAbsolutePath "
+                    +Uri.parse(takeFile.getAbsolutePath()));
+            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:  Uri.fromFile(takeFile) "
+                    + Uri.fromFile(takeFile));
+
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
+                        "com.example.visualmath.provider", takeFile);
+
+                Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:content provider photoUri "+photoUri);
 
             } else {
-                photoUri = Uri.fromFile(galleryFile);
+                photoUri = Uri.fromFile(takeFile);
             }
-            vmDataBasic.setProblem(photoUri);
-            setImage();
+
+            vmDataBasic.setProblem(photoUri);//provider 가 씌워진 파일을 DB에 저장함
+            setImageByUri(Uri.parse(takeFile.getAbsolutePath()));//이미지 set의 경우는 provider가 벗겨진 파일을 set
         }
         else if (requestCode == OTHER_DATA_LOAD) {
             Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");

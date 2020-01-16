@@ -219,6 +219,7 @@ public class ItemListActivity extends AppCompatActivity {
         alarms=new ArrayList<AlarmItem>();
         firebaseDatabase=FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
+
         reference=reference.child("user_name")
                 .child("posts").child("unsolved");
 
