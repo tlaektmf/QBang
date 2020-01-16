@@ -112,12 +112,8 @@ public class VM_LoginActivity extends AppCompatActivity {
         fakeGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.google_Login_btn:
-                        Log.d("클릭","확인");
-                        Google_Login.performClick();
-                        break;
-                }
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
             }
         });
 

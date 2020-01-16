@@ -236,11 +236,11 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_line_container"
             app:layout_constraintBottom_toBottomOf="parent">
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/Google_Login"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="center"/>
+<!--            <com.google.android.gms.common.SignInButton-->
+<!--                android:id="@+id/Google_Login"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_gravity="center"/>-->
 
 <!--            기존 구글 버튼을 덮는 부분-->
             <androidx.constraintlayout.widget.ConstraintLayout
