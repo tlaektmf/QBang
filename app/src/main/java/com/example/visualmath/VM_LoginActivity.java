@@ -204,8 +204,8 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                             Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
 
-                            String mailDomin=VM_ENUM.GMAIL;
-                            String user=acct.getEmail().split("@")[0]+"_"+mailDomin;//이메일 형식은 파이어베이스 정책상 불가
+                            String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
+                            String user=acct.getEmail().split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
                            dbHandler.newUser(user,VM_ENUM.STUDENT);
 
                             if(user_type.equals(VM_ENUM.TEACHER)){

@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 
@@ -104,7 +105,7 @@ public class ProblemFragment extends Fragment {
     private File createImageFile() throws IOException {
 
         // 이미지 파일 이름 ( {시간})
-        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )

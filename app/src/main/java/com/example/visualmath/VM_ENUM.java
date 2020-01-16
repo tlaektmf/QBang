@@ -44,12 +44,22 @@ public  class VM_ENUM {
     public static final String TEACHER="TEACHER";
     public static final String STUDENT="STUDENT";
     public static final String GMAIL="gmail";
+    public static final String S_ID="s_id";
+    public static final String USER_TYPE="type";
+    public static final String INFO="info";
+    public static final String DATE="date";
+    public static final String SOLVE_PROBLEM="solve_problem";
+
+
 
 
     //** DB TABLE
     public static final String DB_CHATS="CHATS";
     public static final String DB_POSTS="POSTS";
     public static final String DB_USERS="USERS";
+    public static final String DB_STUDENTS="STUDENTS";
+    public static final String DB_TEACHERS="TEACHERS";
+
 
     //** DB CHILD
     public  static final String DB_chatList="chatList";

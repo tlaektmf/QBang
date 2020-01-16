@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,9 +38,9 @@ public class TeacherDashboardListFragment extends Fragment {
 
     long now = System.currentTimeMillis();
     Date date = new Date(now);
-    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM",Locale.KOREA);
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd",Locale.KOREA);
 
     //2. 무조건 1월부터 시작하는 방법
     Integer year = Integer.parseInt(yearFormat.format(date));

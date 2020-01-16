@@ -115,9 +115,13 @@ public class VM_FullViewActivity extends AppCompatActivity {
         transaction = fragmentManager.beginTransaction();
         arguments.putString(ItemDetailFragment.ARG_ITEM_ID, post_id);
         arguments.putString(VM_FullViewActivity.ARG_ITEM_TITLE, post_title);
-        if(needToBlock.equals(VM_ENUM.IT_ARG_BLOCK)){
-            arguments.putBoolean(VM_ENUM.IT_ARG_BLOCK,true);
+
+        if(needToBlock!=null){
+            if(needToBlock.equals(VM_ENUM.IT_ARG_BLOCK)){
+                arguments.putBoolean(VM_ENUM.IT_ARG_BLOCK,true);
+            }
         }
+
         problemFragment.setArguments(arguments);
         transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
     }

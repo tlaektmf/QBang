@@ -2,7 +2,7 @@ package com.example.visualmath;
 
 public class VM_Data_STUDENT {
     private String s_id; //학생 id
-    private String date; //가입 날짜 : SimpleDateFormat("yyyy-MM-dd");//사용할 포맷
+    private String date; //가입 날짜 : SimpleDateFormat("yyyy-MM-dd",Locale.KOREA);//사용할 포맷
     private int solve_problem;// 여태 푼 문제 수
    // private VM_Data_POST vm_data_post;
 

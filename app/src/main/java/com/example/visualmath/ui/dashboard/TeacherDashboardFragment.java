@@ -153,9 +153,9 @@ public class TeacherDashboardFragment extends Fragment {
         final long now = System.currentTimeMillis();//현재시간
         final Date date = new Date(now);//현재날짜
 
-        final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.getDefault());//현재 지역의 년도
-        final SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.getDefault());
-        final SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.getDefault());//현재 몇일
+        final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);//현재 지역의 년도
+        final SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.KOREA);
+        final SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.KOREA);//현재 몇일
 
         final String year = yearFormat.format(date);
         final String month = monthFormat.format(date);

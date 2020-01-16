@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Handler;
 
@@ -52,6 +53,7 @@ public class VM_DBHandler {
 
         if(databaseReference==null){
             //table이 없으면 생성
+            Log.i(TAG,"[POSTS TABLE 생성] ");
             databaseReference.child(TABLE);
         }else{
             //table이 있으면 진행하지 않음
@@ -59,37 +61,31 @@ public class VM_DBHandler {
 
     }
 
-    void newChat(String post_id, List<VM_Data_CHAT> chat){
-        databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-        if(databaseReference==null){
-            //table이 없으면 생성
-            databaseReference.child(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-        }else{
-            //table이 있으면 진행하지 않음
-        }
+    public void newChat(String post_id, List<VM_Data_CHAT> chat){
 
+        databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
         databaseReference.setValue(chat); //** 파이어베이스 DB 등록
 
     }
 
-    void newUser(String user_email,String user_type){
+
+    /**
+     * USERS 객체 생성
+     * @param user_email
+     * @param user_type
+     */
+    public void newUser(String user_email,String user_type){
         databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_USERS);
         if(databaseReference==null){
             //table이 없으면 생성
             databaseReference.child(VM_ENUM.DB_USERS);
-        }else{
-            //table이 있으면 진행하지 않음
-        }
-
-        databaseReference= databaseReference.child(user_email);
-        if(databaseReference==null){
-            databaseReference.child(user_email);
+            Log.i(TAG,"[USERS TABLE 생성] ");
         }
 
         //** 학생과 선생님을 구분해서 유저 객체 생성
         long time=System.currentTimeMillis();//시스템 시간
         Date date = new Date(time);
-        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd");//사용할 포맷 정의
+        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
         String joinDate=dateFormat.format(date);
 
         Log.i(TAG,"[유저 최초 가입 날짜:] "+joinDate);
@@ -98,21 +94,37 @@ public class VM_DBHandler {
 
         }else if(user_type.equals(VM_ENUM.STUDENT)){
             VM_Data_STUDENT student=new VM_Data_STUDENT(user_email,joinDate);
-            databaseReference.setValue(student); //** 파이어베이스 DB 등록
+
+            databaseReference.child(user_email).child(VM_ENUM.S_ID).setValue(user_email); //** 파이어베이스 DB 등록
+            databaseReference.child(user_email).child(VM_ENUM.USER_TYPE).setValue(user_type); //** 파이어베이스 DB 등록
+            Log.i(TAG,"[USERS instance 생성] ");
+
+            databaseReference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS);
+            databaseReference.child(user_email).child(VM_ENUM.INFO).setValue(student); //** 파이어베이스 DB 등록
+            Log.i(TAG,"[STUDENTS instance 생성] ");
         }
 
 
+
     }
+
+    /**
+     * POST 객체 생성
+     * @param _vmDataAdd
+     * @param _vmDataBasic
+     * @param _solveWay
+     * @return
+     */
     boolean newPost(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic,String _solveWay){
 
         String currentUserEmail=firebaseAuth.getCurrentUser().getEmail();
-        String mailDomin=currentUserEmail.split("@")[1].split(".")[0];
-        user=currentUserEmail.split("@")[0]+"_"+mailDomin;//이메일 형식은 파이어베이스 정책상 불가
+        String mailDomain=currentUserEmail.split("@")[1].split("\\.")[0];
+        user=currentUserEmail.split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
 
         long time=System.currentTimeMillis();//시스템 시간
         Date date = new Date(time);
-        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd HH:mm");//사용할 포맷 정의
+        SimpleDateFormat dateFormat=new  SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.KOREA);//사용할 포맷 정의
         String uploadDate=dateFormat.format(date);
 
         Log.i(TAG,"[포스트 업로드 날짜:] "+uploadDate);
@@ -191,6 +203,11 @@ public class VM_DBHandler {
 
     }
 
+    /**
+     * storage에 파일을 업로드함
+     * @param uri
+     * @param fileName
+     */
     public void storageFileLoad(Uri uri, String fileName){
 
         StorageReference riversRef = storageReference.child

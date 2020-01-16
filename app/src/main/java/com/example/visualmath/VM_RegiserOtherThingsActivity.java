@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION;
@@ -233,7 +234,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
 
         // 이미지 파일 이름 ( {시간})
-        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
