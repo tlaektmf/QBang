@@ -12,7 +12,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -140,6 +143,74 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
          */
     }
 
+    ///public ArrayList<Uri> getGalleryImages()
+
+    /**
+     * 방금 선택한 앨범의 사진인 galleryFile 의 미디어 주소를 찾음
+     * @return
+     */
+    public void getGalleryImages( ) {
+        int i = 0;
+        Cursor cursor=null;
+        ArrayList<Uri> arrayList=new ArrayList<>();
+        if (cursor == null) {
+            ContentResolver resolver = getContentResolver();
+            String where="_display_name = '" + galleryFile.getName() + "'";
+            cursor = resolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    null,
+                    where,
+                    null,
+                    null);
+            if (cursor != null) {
+                while (i < cursor.getCount()) {
+                    cursor.moveToPosition(i);
+                    int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                    Long id = cursor.getLong(fieldIndex);
+                    Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                    arrayList.add(imageUri);
+                    i++;
+                }
+                cursor.close();
+            }
+
+        }
+        Log.d(VM_ENUM.TAG,"[RegisterProblem] :쿼리 데이터-> "+arrayList.size()+","+arrayList.get(0).toString());
+
+        String imgRealPath;
+        String subPath;
+        if(arrayList.size()!=1||arrayList.get(0)==null){
+
+        }else{
+            imgRealPath=getRealPathFromURI(arrayList.get(0));
+            subPath=imgRealPath.split("/")[5];
+            Log.d(VM_ENUM.TAG,"[RegisterProblem] :쿼리 데이터(imgRealPath,subPath)->"+imgRealPath+","+subPath);
+            setImageByUri(Uri.parse("/storage/emulated/0/Android/data/com.example.visualmath/files/Pictures/"+subPath));
+        }
+
+        ///return arrayList;
+    }
+
+    /**
+     * 내장드라이브에서 미디어 스토어 주소를 찾고, 이를 통해 실제 경로를 가져온다 (disply name을 가져오기 위한 method)
+     * @param contentUri
+     * @return
+     */
+    public String getRealPathFromURI( Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
@@ -241,6 +312,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }
 
     }
+
     private File createImageFile() throws IOException {//** 파일 경로를 이미 생성(시간으로 중복문제 해결)
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // 이미지 파일 이름 ( {시간})
@@ -250,7 +322,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         // 이미지가 저장될 폴더 이름 ( userID )
         File storageDir;
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-             storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+             storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             Log.d(VM_ENUM.TAG,"[Q 상위 버전] "+storageDir);
         }else{
              storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
@@ -274,17 +346,19 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void saveFile(){
         ContentValues values=new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME,takeFile.getAbsolutePath());
+        values.put(MediaStore.Images.Media.DISPLAY_NAME,takeFile.getName());
+        Log.d(VM_ENUM.TAG,takeFile.getName());
         values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
 
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미입니다.
+            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미.
             values.put(MediaStore.Images.Media.IS_PENDING,1);
         }
         ContentResolver contentResolver=getContentResolver();
-        ///Uri item=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
-        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+
+        //Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Uri item = contentResolver.insert(collection, values);
 
         try {
@@ -300,6 +374,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 fos.close();
                 inputStream.close();
                 pdf.close();
+                values.clear();
+                // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
+                values.put(MediaStore.Images.Media.IS_PENDING, 0);
                 contentResolver.update(item, values, null, null);
             }
         } catch (FileNotFoundException e) {
@@ -307,10 +384,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }catch (IOException e){
             e.printStackTrace();
         }
-        values.clear();
-        // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
-        values.put(MediaStore.Images.Media.IS_PENDING, 0);
-        contentResolver.update(item, values, null, null);
+
     }
     public byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
@@ -358,6 +432,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 returnResult = GALLERY;
                 dialog.setReturnResult(GALLERY);
                 getAlbumFile();
+
+
             }
         });
         dialog.callFunction();// 커스텀 다이얼로그를 호출
@@ -561,7 +637,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
             //데이터 등록
-            setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                getGalleryImages();
+            }else{
+                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+            }
+
 
         } else if (requestCode == PICK_FROM_CAMERA) {
             Uri photoUri;
@@ -597,8 +678,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
                 //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
                 //receiveDatat 변수에 저장함
+                assert data != null;
                 receiveData = data.getParcelableExtra(ALL);
 
+                assert receiveData != null;
                 if(receiveData.getDetail()==null){
                     Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
                 }
@@ -620,9 +703,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 }
 
                 //** 버튼에 정보 표시
-                if (notice != "") {
+                if (!notice.equals("")) {
                     buttonGoOther.setText(notice);
-                } else if (notice == "") {
+                } else if (notice.equals("")) {
                     buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
                 }
 
