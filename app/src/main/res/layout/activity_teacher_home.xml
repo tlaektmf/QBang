@@ -83,7 +83,6 @@
             app:itemIconTint="@drawable/bottom_nav_selec"
             app:itemTextColor="@drawable/bottom_nav_selec"
             app:menu="@menu/teacher_bottom_nav_menu"
-            android:layout_marginTop="10dp"
             android:elevation="2dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
