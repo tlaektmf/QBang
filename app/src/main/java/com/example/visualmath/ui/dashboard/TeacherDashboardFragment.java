@@ -15,17 +15,22 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.visualmath.FilterAdapter;
 import com.example.visualmath.HomeActivity;
 import com.example.visualmath.ItemDetailFragment;
 import com.example.visualmath.ItemListActivity;
@@ -49,7 +54,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TeacherDashboardFragment extends Fragment {
+public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     private DashboardViewModel dashboardViewModel;
     private boolean mTwoPane;
 
@@ -67,7 +72,11 @@ public class TeacherDashboardFragment extends Fragment {
     //    검색창
     private Button search_btn;
     private Button search_cancel_btn;
-    private ConstraintLayout search_input_lay;
+    private ConstraintLayout teacher_search_container;
+    private InputMethodManager imm;
+    private EditText search_editText;
+    private RecyclerView searched_list;
+    private FilterAdapter filterAdapter;
 
     //로딩창
     private ProgressBar cal_loading_bar;
@@ -107,18 +116,22 @@ public class TeacherDashboardFragment extends Fragment {
         datecheck = root.findViewById(R.id.teacher_datecheck);
         calendar = root.findViewById(R.id.teacher_calendar);
 
+        //로딩창
+        cal_loading_bar = root.findViewById(R.id.cal_loading_bar);
+        cal_loading_back = root.findViewById(R.id.cal_loading_back);
+
         //검색창
-        search_input_lay = root.findViewById(R.id.teacher_search_input_lay);
+        teacher_search_container = root.findViewById(R.id.teacher_search_container);
         //캘린더 모드 변경
         cal_mode_btn = root.findViewById(R.id.teacher_cal_mode_change);
         //검색 버튼
         search_btn = root.findViewById(R.id.teacher_cal_search_btn);
         //검색 취소 버튼
         search_cancel_btn = root.findViewById(R.id.teacher_search_cancel_btn);
-
-        //로딩창
-        cal_loading_bar = root.findViewById(R.id.cal_loading_bar);
-        cal_loading_back = root.findViewById(R.id.cal_loading_back);
+        search_editText = root.findViewById(R.id.teacher_search_editText);
+        search_editText.addTextChangedListener(this);
+        imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        searched_list=root.findViewById(R.id.teacher_searched_list);
 
         dateInit();
         readDataBase();
@@ -142,21 +155,26 @@ public class TeacherDashboardFragment extends Fragment {
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            teacher_search_container.setVisibility(teacher_search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+            searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+            searched_list.setAdapter(filterAdapter);
             }
         });
-
 
         search_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_input_lay.setVisibility(search_input_lay.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                teacher_search_container.setVisibility(teacher_search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                hideKeyboard();
+                search_editText.setText("");
             }
         });
-
         return root;
     }
-
+    private void hideKeyboard(){
+        imm.hideSoftInputFromWindow(search_editText.getWindowToken(),0);
+    }
     private void dateInit() {
         final long now = System.currentTimeMillis();//현재시간
         final Date date = new Date(now);//현재날짜
@@ -232,6 +250,21 @@ public class TeacherDashboardFragment extends Fragment {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ///recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        filterAdapter.getFilter().filter(charSequence);
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 
     public static class SimpleItemRecyclerViewAdapter
@@ -387,6 +420,8 @@ public class TeacherDashboardFragment extends Fragment {
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane, parent));
 
+                filterAdapter = new FilterAdapter(getContext(),posts);
+                
                 //로딩창 숨기기
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
