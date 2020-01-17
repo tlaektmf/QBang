@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,111 +9,163 @@
     android:orientation="vertical"
     android:background="#f2f2f4"
     tools:context=".ItemProblemDetailFragment">
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/post_back"
+        android:background="#fff"
+        android:elevation="5dp"
 
-        android:padding="20dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp">
         <TextView
+            android:id="@+id/tv_alarm"
             android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
 
-            android:text="문제가 도착하였습니다"
-            android:textSize="20dp"
+            android:textSize="@dimen/input_text"
             android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#404040"/>
+            android:textColor="#404040"
+            android:gravity="left"
 
-        <ImageView
-            android:layout_width="330dp"
-            android:layout_height="3dp"
-            android:src="@drawable/chat_title_line"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="8dp"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/detail_line_first"
+
+            android:layout_marginTop="@dimen/input_margin"
+            android:layout_marginLeft="@dimen/input_margin"
+            android:layout_marginRight="@dimen/input_margin"/>
+        <View
+            android:id="@+id/detail_line_first"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#72d8ff"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+
+            app:layout_constraintTop_toBottomOf="@id/tv_alarm"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_problem_detail"/>
         <TextView
             android:id="@+id/tv_problem_detail"
             android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginBottom="8dp"
 
-            android:text="2015년 3월 교육청 5번"
             android:textSize="15dp"
             android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#016a96"/>
+            android:textColor="#016a96"
+            android:gravity="left"
+
+            android:layout_marginLeft="@dimen/input_margin"
+            android:layout_marginRight="@dimen/input_margin"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_line_first"
+            app:layout_constraintBottom_toTopOf="@id/tv_problem_title"/>
         <TextView
             android:id="@+id/tv_problem_title"
             android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginBottom="8dp"
 
-            android:text="고    등"
             android:textSize="24dp"
             android:fontFamily="@font/nanumsquaure_eb"
-            android:textColor="#404040"/>
+            android:textColor="#404040"
+
+            android:layout_marginLeft="@dimen/input_margin"
+            android:layout_marginRight="@dimen/input_margin"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_problem_detail"
+            app:layout_constraintBottom_toTopOf="@id/iv_problem_image"/>
 
         <ImageView
             android:id="@+id/iv_problem_image"
-            android:layout_width="330dp"
-            android:layout_height="330dp"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:scaleType="centerCrop"
 
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="12dp"/>
-        <ImageView
-            android:layout_width="330dp"
-            android:layout_height="2.2dp"
-            android:src="@drawable/chat_title_line"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="20dp"/>
-        <LinearLayout
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_problem_title"
+            app:layout_constraintBottom_toTopOf="@+id/detail_line_second"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"/>
+        <View
+            android:id="@+id/detail_line_second"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#72d8ff"
+            android:layout_marginBottom="20dp"
+
+            app:layout_constraintTop_toBottomOf="@id/iv_problem_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/detail_btn_container"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_btn_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center">
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"
+            android:layout_marginBottom="20dp">
             <Button
                 android:id="@+id/bt_viewDetail"
-                android:layout_width="160dp"
-                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
                 android:background="@drawable/detail_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="문제 상세보기"
-                android:layout_marginBottom="5dp"
+                android:paddingBottom="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="20dp"/>
+                android:textSize="18dp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/bt_match"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"/>
             <Button
                 android:id="@+id/bt_match"
-                android:layout_width="160dp"
-                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
                 android:background="@drawable/detail_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="문제 선택하기"
-                android:layout_marginBottom="5dp"
+                android:paddingBottom="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="20dp"
-                android:layout_marginLeft="16dp"/>
-        </LinearLayout>
+                android:textSize="18dp"
 
-    </LinearLayout>
-</LinearLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/bt_viewDetail"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="5dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
