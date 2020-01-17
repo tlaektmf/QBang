@@ -71,7 +71,7 @@ public class TeacherDashboardListFragment extends Fragment {
 
                 FragmentManager fm = ((TeacherHomeActivity)getActivity()).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
-                tran.replace(R.id.teacher_nav_host_fragment,new DashboardFragment()).commit();
+                tran.replace(R.id.teacher_nav_host_fragment,new TeacherDashboardFragment()).commit();
 
             }
         });
