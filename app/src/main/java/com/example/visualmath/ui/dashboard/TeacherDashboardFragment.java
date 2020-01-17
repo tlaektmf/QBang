@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,10 @@ public class TeacherDashboardFragment extends Fragment {
     private Button search_cancel_btn;
     private ConstraintLayout search_input_lay;
 
+    //로딩창
+    private ProgressBar cal_loading_bar;
+    private View cal_loading_back;
+
     //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
@@ -102,7 +107,6 @@ public class TeacherDashboardFragment extends Fragment {
         datecheck = root.findViewById(R.id.teacher_datecheck);
         calendar = root.findViewById(R.id.teacher_calendar);
 
-
         //검색창
         search_input_lay = root.findViewById(R.id.teacher_search_input_lay);
         //캘린더 모드 변경
@@ -111,6 +115,10 @@ public class TeacherDashboardFragment extends Fragment {
         search_btn = root.findViewById(R.id.teacher_cal_search_btn);
         //검색 취소 버튼
         search_cancel_btn = root.findViewById(R.id.teacher_search_cancel_btn);
+
+        //로딩창
+        cal_loading_bar = root.findViewById(R.id.cal_loading_bar);
+        cal_loading_back = root.findViewById(R.id.cal_loading_back);
 
         dateInit();
         readDataBase();
@@ -178,9 +186,9 @@ public class TeacherDashboardFragment extends Fragment {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
                 //현재 포커싱된 달력뷰(년,월,일) 정보 저장
-                focusedYear = year;
-                focusedMonth = month + 1;
-                focusedDay = dayOfMonth;
+//                focusedYear = year;
+//                focusedMonth = month + 1;
+//                focusedDay = dayOfMonth;
                 Log.d(TAG, "선택 -> 포커싱 변경: " + focusedYear + "-" + focusedMonth + "-" + focusedDay);
 
                 datecheck.setText(year + "년 " + (month + 1) + "월 " + dayOfMonth + "일 문제 목록");
@@ -379,6 +387,9 @@ public class TeacherDashboardFragment extends Fragment {
 
                 recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane, parent));
 
+                //로딩창 숨기기
+                cal_loading_back.setVisibility(View.INVISIBLE);
+                cal_loading_bar.setVisibility(View.INVISIBLE);
             }
 
             @Override
