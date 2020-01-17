@@ -97,15 +97,15 @@ public class VM_LoginActivity extends AppCompatActivity {
         //checkedLogin();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        Google_Login = findViewById(R.id.Google_Login);
-
-        Google_Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signInIntent = googleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
-            }
-        });
+//        Google_Login = findViewById(R.id.Google_Login);
+//
+//        Google_Login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent signInIntent = googleSignInClient.getSignInIntent();
+//                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
+//            }
+//        });
         //** <<<<<<<<구글 로그인
 
         fakeGoogle = findViewById(R.id.google_Login_btn);
