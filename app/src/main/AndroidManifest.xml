@@ -3,15 +3,6 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.visualmath">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
-    
-    <dist:module dist:instant="true" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VM_PhotoViewActivity"
-            android:theme="@style/AppTheme.blackStatusBar"></activity>
+        <activity
+            android:name=".VM_PhotoViewActivity"
+            android:theme="@style/AppTheme.blackStatusBar" />
         <activity android:name=".VM_GoogleLoginActivity" />
         <activity
             android:name=".VM_ProblemBoxActivity"
@@ -66,7 +58,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".VM_AutoLoginCheckActivity"
             android:theme="@style/AppTheme.blueStatusBar" />
@@ -93,5 +85,16 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <dist:module dist:instant="true" />
 
 </manifest>
