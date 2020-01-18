@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +50,7 @@ import com.gun0912.tedpermission.TedPermission;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -149,7 +152,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
      * 방금 선택한 앨범의 사진인 galleryFile 의 미디어 주소를 찾음
      * @return
      */
-    public void getGalleryImages( ) {
+    public void getGalleryImages( ) throws FileNotFoundException {
         int i = 0;
         Cursor cursor=null;
         ArrayList<Uri> arrayList=new ArrayList<>();
@@ -185,10 +188,44 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             imgRealPath=getRealPathFromURI(arrayList.get(0));
             subPath=imgRealPath.split("/")[5];
             Log.d(VM_ENUM.TAG,"[RegisterProblem] :쿼리 데이터(imgRealPath,subPath)->"+imgRealPath+","+subPath);
-            setImageByUri(Uri.parse("/storage/emulated/0/Android/data/com.example.visualmath/files/Pictures/"+subPath));
+            ///setImageByUri(Uri.parse("/storage/emulated/0/Android/data/com.example.visualmath/files/Pictures/"+subPath));
+
+//            getContentResolver().takePersistableUriPermission(
+////                    arrayList.get(0),
+////                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+////            );
+////            setImageByUri(Uri.parse(imgRealPath));
+////            getContentResolver().openFileDescriptor(arrayList.get(0),"r");
+            performFileSearch();
         }
 
+
+
         ///return arrayList;
+    }
+
+    private static final int READ_REQUEST_CODE = 42;
+
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
+    public void performFileSearch() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+        intent.setType("image/*");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
     /**
@@ -573,7 +610,83 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         return true;
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.Q)
+//    public void setAccess(Uri uri) throws IOException {
+//
+//        final double[] latLong;
+//
+//        // Get location data from the ExifInterface class.
+//        uri = MediaStore.setRequireOriginal(uri);
+//        InputStream stream = getContentResolver().openInputStream(uri);
+//        if (stream != null) {
+//            ExifInterface exifInterface = new ExifInterface(stream);
+//            double[] returnedLatLong = exifInterface.getLatLong();
+//
+//            // If lat/long is null, fall back to the coordinates (0, 0).
+//            latLong = returnedLatLong != null ? returnedLatLong : new double[2];
+//
+//            // Don't reuse the stream associated with the instance of "ExifInterface".
+//            stream.close();
+//        } else {
+//            // Failed to load the stream, so return the coordinates (0, 0).
+//            latLong = new double[2];
+//        }
+//
+//    }
 
+    public void dumpImageMetaData(Uri uri) {
+
+        // The query, since it only applies to a single document, will only return
+        // one row. There's no need to filter, sort, or select fields, since we want
+        // all fields for one document.
+        Cursor cursor =getContentResolver()
+                .query(uri, null, null, null, null, null);
+
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                String displayName = cursor.getString(
+                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                Log.i(TAG, "Display Name: " + displayName);
+
+                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                // If the size is unknown, the value stored is null.  But since an
+                // int can't be null in Java, the behavior is implementation-specific,
+                // which is just a fancy term for "unpredictable".  So as
+                // a rule, check if it's null before assigning to an int.  This will
+                // happen often:  The storage API allows for remote files, whose
+                // size might not be locally known.
+                String size = null;
+                if (!cursor.isNull(sizeIndex)) {
+                    // Technically the column stores an int, but cursor.getString()
+                    // will do the conversion automatically.
+                    size = cursor.getString(sizeIndex);
+                } else {
+                    size = "Unknown";
+                }
+                Log.i(TAG, "Size: " + size);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+
+        if (image != null) {
+            imageViewProblem.setImageBitmap(image); //이미지 set
+        }
+
+        return image;
+    }
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
      * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
@@ -638,7 +751,13 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             //데이터 등록
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
-                getGalleryImages();
+
+                try {
+                    getGalleryImages();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
             }else{
                 setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
             }
@@ -670,6 +789,28 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
 
         }
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+        // response to some other intent, and the code below shouldn't run at all.
+
+        else if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.i(TAG, "Uri: " + uri.toString());
+                ///dumpImageMetaData(uri);
+                try {
+                    getBitmapFromUri(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         else if (requestCode == OTHER_DATA_LOAD) {
             Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
