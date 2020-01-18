@@ -191,7 +191,7 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         ///values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, seconDir);
         values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
-
+        Log.d(VM_ENUM.TAG,"[PhotoView] "+takeFile.getName());
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
 
 
@@ -323,27 +323,35 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
 
             return;
         } else if (requestCode == VM_ENUM.RC_PICK_FROM_ALBUM) {
-            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-            Cursor cursor = null;
 
-            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                assert photo_problem != null;
-                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                galleryFile = new File(cursor.getString(column_index));
-                newPhotoUri = Uri.parse(galleryFile.getAbsolutePath());
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Uri uri = null;
+                if (data != null) {
+                    uri = data.getData();
+                    Log.i(VM_ENUM.TAG, "Uri: " + uri.toString());
+
+                    newPhotoUri = uri;
                 }
             }
+            else{
+                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+                Cursor cursor = null;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                saveFile();
+                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+                try {
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    assert photo_problem != null;
+                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                    assert cursor != null;
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    galleryFile = new File(cursor.getString(column_index));
+                    newPhotoUri = Uri.parse(galleryFile.getAbsolutePath());
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
             }
 
             Intent intent = new Intent(this, VM_RegiserOtherThingsActivity.class);
@@ -353,33 +361,22 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
             finish();
 
         } else if (requestCode == VM_ENUM.RC_PICK_FROM_CAMERA) {
+         Uri photoUri;
 
-//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                Uri uri = null;
-//                if (data != null) {
-//                    uri = data.getData();
-//                    Log.i(VM_ENUM.TAG, "Uri: " + uri.toString());
-//                    ///dumpImageMetaData(uri);
-//                    try {
-//                        getBitmapFromUri(uri);
-//                        vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }else{
-//                Uri photoUri;
-//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-//                    Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity] 상위버전");
-//                    photoUri = FileProvider.getUriForFile(this,
-//                            "com.example.visualmath.provider", takeFile);
-//
-//                } else {
-//                    Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity] 하위버전");
-//                    photoUri = Uri.fromFile(takeFile);
-//                }
-//
-//            }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity] 상위버전");
+                    photoUri = FileProvider.getUriForFile(this,
+                            "com.example.visualmath.provider", takeFile);
+
+                } else {
+                    Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity] 하위버전");
+                    photoUri = Uri.fromFile(takeFile);
+                }
+
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                saveFile();
+            }
+
             newPhotoUri=Uri.parse(takeFile.getAbsolutePath());
             Intent intent = new Intent(this, VM_RegiserOtherThingsActivity.class);
             intent.putExtra(VM_ENUM.IT_TAKE_PHOTO, newPhotoUri);

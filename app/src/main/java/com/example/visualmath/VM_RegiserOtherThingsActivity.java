@@ -148,13 +148,12 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
 
             }else{//** imageView에 이미지가 없는 경우
-                tedPermission(imageviewID);
+                tedPermission();
             }
         }else{//** 제일 초기 클릭
-            tedPermission(imageviewID);
+            tedPermission();
         }
 
-        ///tedPermission(imageviewID);
     }
 
     //** 추가 정보 등록 버튼 클릭
@@ -194,7 +193,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    public void getAlbumFile(final int _imageviewID) {
+    public void getAlbumFile() {
 
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
@@ -206,7 +205,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
          */
     }
 
-    public void takePhoto(final int _imageviewID) {
+    public void takePhoto() {
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
@@ -409,7 +408,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    private void showPickDialog(final int _imageviewID) {
+    private void showPickDialog() {
         //** 다이얼로그 실행
 
         // 커스텀 다이얼로그를 생성
@@ -421,13 +420,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             @Override
             public void onButtonTakePhotoClicked() {
 
-                takePhoto(_imageviewID);
+                takePhoto();
             }
 
             @Override
             public void onButtonGetAlbumFileClicked() {
 
-                getAlbumFile(_imageviewID);
+                getAlbumFile();
             }
         });
         dialog.callFunction();// 커스텀 다이얼로그를 호출
@@ -435,7 +434,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    private void tedPermission(final int _imageviewID) {
+    private void tedPermission() {
 
         PermissionListener permissionListener = new PermissionListener() {
             @Override
@@ -443,7 +442,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 //** 권한 요청 성공
                 Toast.makeText(VM_RegiserOtherThingsActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
-                showPickDialog(_imageviewID);
+                showPickDialog();
             }
 
             @Override
@@ -467,9 +466,34 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         finish();
     }
 
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
 
+        int idx = 0;
+        switch (imageviewID) {
+            case R.id.iv_picture1:
+                idx = 0;
+                break;
+            case R.id.iv_picture2:
+                idx = 1;
+                break;
+            case R.id.iv_picture3:
+                idx = 2;
+                break;
+        }
 
-    private Bitmap getBitmapFromUri(Uri uri,int imageviewID) throws IOException {
+        if (image != null) {
+            imageViewsOtherPictureList[idx].setImageBitmap(image); //이미지 set
+        }
+
+        return image;
+    }
+
+    private Bitmap getBitmapFromUriandIndex(Uri uri,int imageviewID) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -522,36 +546,38 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                     uri = data.getData();
                     Log.i(TAG, "Uri: " + uri.toString());
                     ///dumpImageMetaData(uri);
+                    createData(uri);
                     try {
-                        createData(uri);
-                        getBitmapFromUri(uri,imageviewID);
+                        getBitmapFromUri(uri);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
+            else{
+                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+                Cursor cursor = null;
 
-            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-            Cursor cursor = null;
-
-            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                assert photo_problem != null;
-                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                galleryFile = new File(cursor.getString(column_index));
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
+                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+                try {
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    assert photo_problem != null;
+                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                    assert cursor != null;
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    galleryFile = new File(cursor.getString(column_index));
+                    createData(Uri.parse(galleryFile.getAbsolutePath()));
+                    setImageIDandURI(imageviewID,Uri.parse(galleryFile.getAbsolutePath()));
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
                 }
+
             }
 
-            createData(Uri.parse(galleryFile.getAbsolutePath()));
-            ///createData(photo_problem);
-            setImageIDandURI(imageviewID,Uri.parse(galleryFile.getAbsolutePath()));
+
         } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -583,7 +609,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 Log.i(TAG, "Uri: " + uri.toString());
                 ///dumpImageMetaData(uri);
                 try {
-                    getBitmapFromUri(uri,imageviewID);
+                    getBitmapFromUriandIndex(uri,imageviewID);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -611,14 +637,14 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             if(newGalleryPhotoURi!=null&& photoIndex!=-1){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
                     try {
-                        getBitmapFromUri(newGalleryPhotoURi,photoIndex);
+                        getBitmapFromUriandIndex(newGalleryPhotoURi,photoIndex);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }else{
                     setImageByUri(photoIndex,newGalleryPhotoURi);
                 }
-
+                createData(newGalleryPhotoURi);
             }
 
             //** IT_TAKE_PHOTO
@@ -626,11 +652,9 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             if(newTakePhotoURi!=null&& photoIndex!=-1){
                 Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] IT_TAKE_PHOTO");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    try {
-                        getBitmapFromUri(newGalleryPhotoURi,photoIndex);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity]newTakePhotoURi"+newTakePhotoURi);
+
+                    setImageByUri(photoIndex,newTakePhotoURi);
                 }else{
                     setImageByUri(photoIndex,newTakePhotoURi);
                 }
