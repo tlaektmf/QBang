@@ -12,7 +12,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/all_preference_delete"
-    android:text="누르지마세요"
+    android:text="자동로그인 정보 삭제"
     />
 
 </LinearLayout>

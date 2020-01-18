@@ -55,22 +55,6 @@ public class VM_SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.my_preferences, rootKey);
 
-
-//            프레퍼런스 클릭
-//            Preference logout_preference = findPreference("logout");
-//            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            View row = inflater.inflate(logout_preference.getLayoutResource(), null);
-//            final TextView logout_text = row.findViewById(R.id.logout_text);
-//            Log.d("로그아웃","가져오시죠 : " +logout_text.getText());
-//
-//            logout_text.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d("로그아웃","가져오시죠2 : " +logout_text.getText());
-//                    Toast.makeText(getContext(),"프레퍼런스 텍스트만 클릭",Toast.LENGTH_LONG).show();
-//                }
-//            });
-
         }
 
         // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성합니다.
@@ -79,29 +63,29 @@ public class VM_SettingsActivity extends AppCompatActivity {
             return new SettingsFragment();
         }
 
-        @Override
-        public boolean onPreferenceTreeClick(Preference preference) {
-            String key = preference.getKey();
-            Log.d(VM_ENUM.TAG, "[클릭된 Preference의 key] " + key);
-
-            if (key.equals(VM_ENUM.PRE_TEST)) { //** Preference에 저장된 user 정보 삭제
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                SharedPreferences.Editor editor = preferences.edit();
-                Log.d(VM_ENUM.TAG, "[Preference] //저장된 user name :" + SaveSharedPreference.getUserName(getActivity().getApplicationContext()));
-                editor.clear();
-                editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
-            }
-            if (key.equals(VM_ENUM.PRE_LOGOUT)) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent=new Intent(getActivity().getApplicationContext(),VM_LauncherActivity.class);
-                startActivity(intent);
-
-            }
-
-            return false;
-
-        }
+//        @Override
+//        public boolean onPreferenceTreeClick(Preference preference) {
+//            String key = preference.getKey();
+//            Log.d(VM_ENUM.TAG, "[클릭된 Preference의 key] " + key);
+//
+//            if (key.equals(VM_ENUM.PRE_TEST)) { //** Preference에 저장된 user 정보 삭제
+//
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+//                SharedPreferences.Editor editor = preferences.edit();
+//                Log.d(VM_ENUM.TAG, "[Preference] //저장된 user name :" + SaveSharedPreference.getUserName(getActivity().getApplicationContext()));
+//                editor.clear();
+//                editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
+//            }
+//            if (key.equals(VM_ENUM.PRE_LOGOUT)) {
+//                FirebaseAuth.getInstance().signOut();
+//                Intent intent=new Intent(getActivity().getApplicationContext(),VM_LauncherActivity.class);
+//                startActivity(intent);
+//
+//            }
+//
+//            return false;
+//
+//        }
 
     }
 

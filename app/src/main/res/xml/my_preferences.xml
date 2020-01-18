@@ -13,17 +13,20 @@
         android:layout="@layout/pre_alarm"
         android:key="setAlarm"/>
 
-    <Preference
-        android:layout="@layout/pre_logout"
-        android:key="logout"/>
-
-<!--    <com.example.visualmath.LogoutPreference-->
+<!--    <Preference-->
 <!--        android:layout="@layout/pre_logout"-->
 <!--        android:key="logout"/>-->
 
-    <Preference
+    <com.example.visualmath.LogoutPreference
+        android:layout="@layout/pre_logout"
+        android:key="logout"/>
+
+    <com.example.visualmath.DatabaseRemovePreference
         android:layout="@layout/pre_test"
-        android:key="test"/>
+        android:key="dataRemove"/>
+<!--    <Preference-->
+<!--        android:layout="@layout/pre_test"-->
+<!--        android:key="test"/>-->
 
 
 </PreferenceScreen>
