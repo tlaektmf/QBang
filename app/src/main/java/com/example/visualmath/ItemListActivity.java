@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visualmath.dummy.DummyContent;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -220,7 +221,11 @@ public class ItemListActivity extends AppCompatActivity {
         firebaseDatabase=FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference("STUDENTS");
 
-        reference=reference.child("user_name")
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+        Log.d(VM_ENUM.TAG,"[ItemListAct] "+user+" 의 데이터 접근");
+        reference=reference.child(user)
                 .child("posts").child("unsolved");
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
