@@ -57,11 +57,7 @@ import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
 public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private static final String TAG = VM_ENUM.TAG;
-    private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
-    private static final int PICK_FROM_CAMERA = 2;
 
-
-    private static final String ALL = "all";
     private EditText editTextdetail;
     private ImageView[] imageViewsOtherPictureList;
 
@@ -94,7 +90,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         //** 데이터 넘어온 게 있는 지 확인
         Intent intent = getIntent();
         if (intent != null) {// 넘어온 데이터가 있는 경우
-            receiveData = intent.getParcelableExtra(ALL);
+            receiveData = intent.getParcelableExtra(VM_ENUM.ALL);
 
             if (receiveData != null) {//혹시 모르니 한번 더 확인
                 vm_data_add = receiveData;
@@ -185,7 +181,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             }
 
             Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
-            intent.putExtra(ALL, vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
+            intent.putExtra(VM_ENUM.ALL, vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
             setResult(RESULT_OK, intent);
 
             finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
@@ -200,7 +196,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
+        startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
 
         /*
         startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -226,12 +222,12 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 Uri photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", galleryFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(intent, PICK_FROM_CAMERA);
+                startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
             } else {
                 Uri photoUri = Uri.fromFile(galleryFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //galleryFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
-                startActivityForResult(intent, PICK_FROM_CAMERA);
+                startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
             }
 
@@ -485,7 +481,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
 
             return;
-        } else if (requestCode == PICK_FROM_ALBUM) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
             Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
             Cursor cursor = null;
 
@@ -507,7 +503,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             createData(Uri.parse(galleryFile.getAbsolutePath()));
             ///createData(photo_problem);
             setImage(imageviewID);
-        } else if (requestCode == PICK_FROM_CAMERA) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
