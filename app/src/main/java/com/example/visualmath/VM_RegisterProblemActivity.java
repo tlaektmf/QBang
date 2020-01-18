@@ -330,10 +330,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void saveFile() {
+        ///String seconDir = "visual_math";
+        ///Log.d(VM_ENUM.TAG,"[VM_RegisterProblem], seconDir "+seconDir);
         ContentValues values = new ContentValues();
-
+        ///values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, seconDir);
         values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
-        Log.d(VM_ENUM.TAG, takeFile.getName());
+
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
 
 
@@ -419,8 +421,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonGetAlbumFileClicked() {
                 returnResult = GALLERY;
                 dialog.setReturnResult(GALLERY);
-                ///getAlbumFile();//내부 저장소 접근
-                performFileSearch();//내,외부 저장소 모두 접근 가능
+                getAlbumFile();//내부 저장소 접근
+                ///performFileSearch();//내,외부 저장소 모두 접근 가능
 
             }
         });
@@ -619,11 +621,13 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     ///dumpImageMetaData(uri);
                     try {
                         getBitmapFromUri(uri);
+                        vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             } else {
+                assert data != null;
                 Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
 
                 Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem " + photo_problem);
