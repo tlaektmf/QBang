@@ -137,22 +137,22 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 break;
         }
         Log.d(TAG,"[pickViewIndex] "+picViewIndex);
-        if(vm_data_add!=null){
-            if(vm_data_add.getFilePathElement(picViewIndex)!=null){//** imageView에 이미지가 있는 경우
-                Intent intent=new Intent(VM_RegiserOtherThingsActivity.this,VM_PhotoViewActivity.class);
-                intent.putExtra(VM_ENUM.PHOTO_URI, vm_data_add.getFilePathElement(picViewIndex));
-                intent.putExtra(VM_ENUM.IT_PHOTO_INDEX,picViewIndex);
-                Log.d(TAG,"[전달할 사진 uri] "+ vm_data_add.getFilePathElement(picViewIndex));
-                startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
+//        if(vm_data_add!=null){
+//            if(vm_data_add.getFilePathElement(picViewIndex)!=null){//** imageView에 이미지가 있는 경우
+//                Intent intent=new Intent(VM_RegiserOtherThingsActivity.this,VM_PhotoViewActivity.class);
+//                intent.putExtra(VM_ENUM.PHOTO_URI, vm_data_add.getFilePathElement(picViewIndex));
+//                intent.putExtra(VM_ENUM.IT_PHOTO_INDEX,picViewIndex);
+//                Log.d(TAG,"[전달할 사진 uri] "+ vm_data_add.getFilePathElement(picViewIndex));
+//                startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
+//
+//            }else{//** imageView에 이미지가 없는 경우
+//                tedPermission(imageviewID);
+//            }
+//        }else{//** 제일 초기 클릭
+//            tedPermission(imageviewID);
+//        }
 
-            }else{//** imageView에 이미지가 없는 경우
-                tedPermission(imageviewID);
-            }
-        }else{//** 제일 초기 클릭
-            tedPermission(imageviewID);
-        }
-
-
+        tedPermission(imageviewID);
     }
 
     //** 추가 정보 등록 버튼 클릭
@@ -468,7 +468,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if(true){//requestCode==PICK_FROM_CAMERA
+            if(requestCode==VM_ENUM.PICK_FROM_CAMERA){
                 if (galleryFile != null) {
                     if (galleryFile.exists()) {
                         if (galleryFile.delete()) {
