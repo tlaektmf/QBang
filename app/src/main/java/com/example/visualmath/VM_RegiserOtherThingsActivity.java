@@ -239,7 +239,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
@@ -609,15 +609,32 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] photoIndex"+     photoIndex);
             newGalleryPhotoURi=data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
             if(newGalleryPhotoURi!=null&& photoIndex!=-1){
-                setImageByUri(photoIndex,newGalleryPhotoURi);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    try {
+                        getBitmapFromUri(newGalleryPhotoURi,photoIndex);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    setImageByUri(photoIndex,newGalleryPhotoURi);
+                }
+
             }
 
             //** IT_TAKE_PHOTO
             newTakePhotoURi= data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
             if(newTakePhotoURi!=null&& photoIndex!=-1){
                 Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] IT_TAKE_PHOTO");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    try {
+                        getBitmapFromUri(newGalleryPhotoURi,photoIndex);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    setImageByUri(photoIndex,newTakePhotoURi);
+                }
 
-                setImageByUri(photoIndex,newTakePhotoURi);
             }
 
 
