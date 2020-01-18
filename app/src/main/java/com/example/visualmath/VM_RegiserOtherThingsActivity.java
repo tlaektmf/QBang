@@ -40,6 +40,7 @@ import com.gun0912.tedpermission.TedPermission;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private ImageView[] imageViewsOtherPictureList;
 
     private int imageviewID;
-
+    private File takeFile;
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
     private VM_Data_ADD vm_data_add; //<내용추가뷰> -> <문제등록뷰>
     private VM_Data_ADD receiveData;//** <문제등록뷰> -> <내용추가뷰> 기존의 <내용추가뷰>의 항목을 유지시키기 위해서 // 이 뷰에서 변경 될 일 없음
@@ -209,23 +210,23 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
         try {
-            galleryFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성
+            takeFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성
         } catch (IOException e) {
             Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             finish();
             e.printStackTrace();
         }
 
-        if (galleryFile != null) {
+        if (takeFile != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
+                        "com.example.visualmath.provider", takeFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
             } else {
-                Uri photoUri = Uri.fromFile(galleryFile);
+                Uri photoUri = Uri.fromFile(takeFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //galleryFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
                 startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
@@ -243,7 +244,15 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         String imageFileName = timeStamp;
 
         // 이미지가 저장될 폴더 이름 ( userID )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/" + userID + "/");
+        File storageDir;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            Log.d(VM_ENUM.TAG, "[Q 상위 버전] " + storageDir);
+        } else {
+            storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
+            Log.d(VM_ENUM.TAG, "[Q 하위 버전] " + storageDir);
+        }
+
         if (!storageDir.exists()) storageDir.mkdirs();
 
         // 빈 파일 생성
@@ -253,6 +262,78 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void saveFile() {
+        ///String seconDir = "visual_math";
+        ///Log.d(VM_ENUM.TAG,"[VM_RegisterProblem], seconDir "+seconDir);
+        ContentValues values = new ContentValues();
+        ///values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, seconDir);
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
+
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미.
+            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+        }
+        ContentResolver contentResolver = getContentResolver();
+
+        //Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri item = contentResolver.insert(collection, values);
+
+        try {
+            assert item != null;
+            ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w", null);
+            if (pdf == null) {
+
+            } else {
+                InputStream inputStream = getImageInputStram();
+                byte[] strToByte = getBytes(inputStream);
+                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                fos.write(strToByte);
+                fos.close();
+                inputStream.close();
+                pdf.close();
+                values.clear();
+                // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
+                values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                contentResolver.update(item, values, null, null);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    private InputStream getImageInputStram() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        ByteArrayInputStream bs = null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(takeFile.getAbsolutePath(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
+        if (originalBm != null) {
+
+            originalBm.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+            byte[] bitmapData = bytes.toByteArray();
+            bs = new ByteArrayInputStream(bitmapData);
+        }
+
+        return bs;
+    }
 
     private void setImageByUri(int index,Uri _uri) {
 
@@ -288,9 +369,9 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    private void setImage(final int _imageviewID) {
+    private void setImageIDandURI(final int _imageviewID,Uri _uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+        Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
 
         int index = 0;
         switch (_imageviewID) {
@@ -304,8 +385,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 index = 2;
                 break;
         }
+        if(originalBm!=null){
+            imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
+        }
 
-        imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
     }
 
 
@@ -383,71 +466,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         finish();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void saveFile(){
-        ContentValues values=new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME,galleryFile.getAbsolutePath());
-        values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
 
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-            // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미입니다.
-            values.put(MediaStore.Images.Media.IS_PENDING,1);
-        }
-        ContentResolver contentResolver=getContentResolver();
-        ///Uri item=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
-        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-        Uri item = contentResolver.insert(collection, values);
+    private Bitmap getBitmapFromUri(Uri uri,int imageviewID) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
 
-        try {
-            assert item != null;
-            ParcelFileDescriptor pdf=contentResolver.openFileDescriptor(item,"w",null);
-            if(pdf==null){
-
-            }else{
-                InputStream inputStream = getImageInputStram();
-                byte[] strToByte = getBytes(inputStream);
-                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
-                fos.write(strToByte);
-                fos.close();
-                inputStream.close();
-                pdf.close();
-                contentResolver.update(item, values, null, null);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        values.clear();
-        // 파일을 모두 write하고 다른곳에서 사용할 수 있도록 0으로 업데이트를 해줍니다.
-        values.put(MediaStore.Images.Media.IS_PENDING, 0);
-        contentResolver.update(item, values, null, null);
-    }
-    public byte[] getBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-        return byteBuffer.toByteArray();
-    }
-    private InputStream getImageInputStram() {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        ByteArrayInputStream bs=null;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
-        if (originalBm != null) {
-
-            originalBm.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-            byte[] bitmapData = bytes.toByteArray();
-            bs = new ByteArrayInputStream(bitmapData);
+        if (image != null) {
+            imageViewsOtherPictureList[imageviewID].setImageBitmap(image); //이미지 set
         }
 
-        return bs;
+        return image;
     }
 
     /**
@@ -469,11 +501,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
             if(requestCode==VM_ENUM.PICK_FROM_CAMERA){
-                if (galleryFile != null) {
-                    if (galleryFile.exists()) {
-                        if (galleryFile.delete()) {
-                            Log.e(TAG, galleryFile.getAbsolutePath() + " 삭제 성공");
-                            galleryFile = null;
+                if (takeFile != null) {
+                    if (takeFile.exists()) {
+                        if (takeFile.delete()) {
+                            Log.e(TAG, takeFile.getAbsolutePath() + " 삭제 성공");
+                            takeFile = null;
                         }
                     }
                 }
@@ -482,6 +514,22 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             return;
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Uri uri = null;
+                if (data != null) {
+                    uri = data.getData();
+                    Log.i(TAG, "Uri: " + uri.toString());
+                    ///dumpImageMetaData(uri);
+                    try {
+                        createData(uri);
+                        getBitmapFromUri(uri,imageviewID);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
             Cursor cursor = null;
 
@@ -502,24 +550,45 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             createData(Uri.parse(galleryFile.getAbsolutePath()));
             ///createData(photo_problem);
-            setImage(imageviewID);
+            setImageIDandURI(imageviewID,Uri.parse(galleryFile.getAbsolutePath()));
         } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", galleryFile);
+                        "com.example.visualmath.provider", takeFile);
 
             } else {
-                photoUri = Uri.fromFile(galleryFile);
+                photoUri = Uri.fromFile(takeFile);
             }
             ///createData(photoUri);
-            createData(Uri.parse(galleryFile.getAbsolutePath()));
-            setImage(imageviewID);
+            createData(Uri.parse(takeFile.getAbsolutePath()));
+            setImageIDandURI(imageviewID,Uri.parse(takeFile.getAbsolutePath()));
 
             if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
                 saveFile();
             }
-        }else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW){
+        }else if (requestCode == VM_ENUM.RC_READ_REQUEST_CODE) {//** 사용 안함
+            // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+            // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+            // response to some other intent, and the code below shouldn't run at all.
+
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.i(TAG, "Uri: " + uri.toString());
+                ///dumpImageMetaData(uri);
+                try {
+                    getBitmapFromUri(uri,imageviewID);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW){
 
             int deleteIndex ;
             int photoIndex ;
