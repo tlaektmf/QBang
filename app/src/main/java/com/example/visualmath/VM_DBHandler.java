@@ -194,11 +194,13 @@ public class VM_DBHandler {
             //** TABLE : STUDENTS - child(unmatched)에 등록
             firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                     .child(user)
+                    .child(VM_ENUM.DB_STU_POSTS)
                     .child(VM_ENUM.DB_STU_UNMATCHED)
                     .child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id()); //** 파이어베이스 DB 등록
             firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                     .child(user)
+                    .child(VM_ENUM.DB_STU_POSTS)
                     .child(VM_ENUM.DB_STU_UNMATCHED)
                     .child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle()); //** 파이어베이스 DB 등록
@@ -207,11 +209,13 @@ public class VM_DBHandler {
             //** TABLE : STUDENTS - child(unsolved)에 등록
             firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                     .child(user)
+                    .child(VM_ENUM.DB_STU_POSTS)
                     .child(VM_ENUM.DB_STU_UNSOLVED)
                     .child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id()); //** 파이어베이스 DB 등록
             firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                     .child(user)
+                    .child(VM_ENUM.DB_STU_POSTS)
                     .child(VM_ENUM.DB_STU_UNSOLVED)
                     .child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle()); //** 파이어베이스 DB 등록
