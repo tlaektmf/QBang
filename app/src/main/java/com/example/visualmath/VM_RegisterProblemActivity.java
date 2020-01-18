@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.content.Intent.ACTION_PICK;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.getIntentOld;
 
@@ -136,14 +137,16 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void getAlbumFile() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
-        // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
-        /*
-        startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-        이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
-         */
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+//        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
+//        // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
+//        /*
+//        startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
+//        이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+//         */
+
+        performFileSearch();
     }
 
     ///public ArrayList<Uri> getGalleryImages()
@@ -610,70 +613,48 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         return true;
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.Q)
-//    public void setAccess(Uri uri) throws IOException {
+
+
+//    public void dumpImageMetaData(Uri uri) {
 //
-//        final double[] latLong;
+//        // The query, since it only applies to a single document, will only return
+//        // one row. There's no need to filter, sort, or select fields, since we want
+//        // all fields for one document.
+//        Cursor cursor =getContentResolver()
+//                .query(uri, null, null, null, null, null);
 //
-//        // Get location data from the ExifInterface class.
-//        uri = MediaStore.setRequireOriginal(uri);
-//        InputStream stream = getContentResolver().openInputStream(uri);
-//        if (stream != null) {
-//            ExifInterface exifInterface = new ExifInterface(stream);
-//            double[] returnedLatLong = exifInterface.getLatLong();
+//        try {
+//            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+//            // "if there's anything to look at, look at it" conditionals.
+//            if (cursor != null && cursor.moveToFirst()) {
 //
-//            // If lat/long is null, fall back to the coordinates (0, 0).
-//            latLong = returnedLatLong != null ? returnedLatLong : new double[2];
+//                // Note it's called "Display Name".  This is
+//                // provider-specific, and might not necessarily be the file name.
+//                String displayName = cursor.getString(
+//                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+//                Log.i(TAG, "Display Name: " + displayName);
 //
-//            // Don't reuse the stream associated with the instance of "ExifInterface".
-//            stream.close();
-//        } else {
-//            // Failed to load the stream, so return the coordinates (0, 0).
-//            latLong = new double[2];
+//                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+//                // If the size is unknown, the value stored is null.  But since an
+//                // int can't be null in Java, the behavior is implementation-specific,
+//                // which is just a fancy term for "unpredictable".  So as
+//                // a rule, check if it's null before assigning to an int.  This will
+//                // happen often:  The storage API allows for remote files, whose
+//                // size might not be locally known.
+//                String size = null;
+//                if (!cursor.isNull(sizeIndex)) {
+//                    // Technically the column stores an int, but cursor.getString()
+//                    // will do the conversion automatically.
+//                    size = cursor.getString(sizeIndex);
+//                } else {
+//                    size = "Unknown";
+//                }
+//                Log.i(TAG, "Size: " + size);
+//            }
+//        } finally {
+//            cursor.close();
 //        }
-//
 //    }
-
-    public void dumpImageMetaData(Uri uri) {
-
-        // The query, since it only applies to a single document, will only return
-        // one row. There's no need to filter, sort, or select fields, since we want
-        // all fields for one document.
-        Cursor cursor =getContentResolver()
-                .query(uri, null, null, null, null, null);
-
-        try {
-            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
-            // "if there's anything to look at, look at it" conditionals.
-            if (cursor != null && cursor.moveToFirst()) {
-
-                // Note it's called "Display Name".  This is
-                // provider-specific, and might not necessarily be the file name.
-                String displayName = cursor.getString(
-                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                Log.i(TAG, "Display Name: " + displayName);
-
-                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-                // If the size is unknown, the value stored is null.  But since an
-                // int can't be null in Java, the behavior is implementation-specific,
-                // which is just a fancy term for "unpredictable".  So as
-                // a rule, check if it's null before assigning to an int.  This will
-                // happen often:  The storage API allows for remote files, whose
-                // size might not be locally known.
-                String size = null;
-                if (!cursor.isNull(sizeIndex)) {
-                    // Technically the column stores an int, but cursor.getString()
-                    // will do the conversion automatically.
-                    size = cursor.getString(sizeIndex);
-                } else {
-                    size = "Unknown";
-                }
-                Log.i(TAG, "Size: " + size);
-            }
-        } finally {
-            cursor.close();
-        }
-    }
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
@@ -750,7 +731,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
             //데이터 등록
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
 
                 try {
                     getGalleryImages();
