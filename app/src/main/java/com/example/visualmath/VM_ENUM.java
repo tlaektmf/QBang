@@ -23,7 +23,7 @@ public  class VM_ENUM {
 
     public static final int RC_PICK_FROM_ALBUM = 998;
     public static final int RC_PICK_FROM_CAMERA = 997;
-
+    public static final int RC_READ_REQUEST_CODE = 995;
 
     //** Log TAG
     public static final String TAG="다슬";

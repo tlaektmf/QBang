@@ -110,7 +110,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        Log.d(TAG,"VM_RegisterProblemActivity OnCreate 호출");
+        Log.d(TAG, "VM_RegisterProblemActivity OnCreate 호출");
         init();
 
 
@@ -123,9 +123,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         editTextTitle = findViewById(R.id.et_title);
         returnResult = NOTHING;
         vmDataBasic = new VM_Data_BASIC();
-        intent=getIntent();
-        solveWay=intent.getStringExtra(VM_ENUM.SOLVE_WAY);
-        Log.d(TAG,"[문제등록뷰로 넘어온 Intent 확인]"+solveWay);
+        intent = getIntent();
+        solveWay = intent.getStringExtra(VM_ENUM.SOLVE_WAY);
+        Log.d(TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
     }
 
 
@@ -135,6 +135,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         tedPermission();
 
     }
+
 
     public void getAlbumFile() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -150,63 +151,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * 방금 선택한 앨범의 사진인 galleryFile 의 미디어 주소를 찾음
-     * @return
-     */
-    public void getGalleryImages( ) throws FileNotFoundException {
-        int i = 0;
-        Cursor cursor=null;
-        ArrayList<Uri> arrayList=new ArrayList<>();
-        if (cursor == null) {
-            ContentResolver resolver = getContentResolver();
-            String where="_display_name = '" + galleryFile.getName() + "'";
-            cursor = resolver.query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    null,
-                    where,
-                    null,
-                    null);
-            if (cursor != null) {
-                while (i < cursor.getCount()) {
-                    cursor.moveToPosition(i);
-                    int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-                    Long id = cursor.getLong(fieldIndex);
-                    Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                    arrayList.add(imageUri);
-                    i++;
-                }
-                cursor.close();
-            }
 
-        }
-        Log.d(VM_ENUM.TAG,"[RegisterProblem] :쿼리 데이터-> "+arrayList.size()+","+arrayList.get(0).toString());
-
-        String imgRealPath;
-        String subPath;
-        if(arrayList.size()!=1||arrayList.get(0)==null){
-
-        }else{
-            imgRealPath=getRealPathFromURI(arrayList.get(0));
-            subPath=imgRealPath.split("/")[5];
-            Log.d(VM_ENUM.TAG,"[RegisterProblem] :쿼리 데이터(imgRealPath,subPath)->"+imgRealPath+","+subPath);
-            ///setImageByUri(Uri.parse("/storage/emulated/0/Android/data/com.example.visualmath/files/Pictures/"+subPath));
-
-//            getContentResolver().takePersistableUriPermission(
-////                    arrayList.get(0),
-////                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-////            );
-////            setImageByUri(Uri.parse(imgRealPath));
-////            getContentResolver().openFileDescriptor(arrayList.get(0),"r");
-            performFileSearch();
-        }
-
-
-
-        ///return arrayList;
-    }
-
-    private static final int READ_REQUEST_CODE = 42;
 
     /**
      * Fires an intent to spin up the "file chooser" UI and select an image.
@@ -227,19 +172,20 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         // it would be "*/*".
         intent.setType("image/*");
 
-        startActivityForResult(intent, READ_REQUEST_CODE);
+        startActivityForResult(intent, VM_ENUM.RC_READ_REQUEST_CODE);
     }
 
     /**
      * 내장드라이브에서 미디어 스토어 주소를 찾고, 이를 통해 실제 경로를 가져온다 (disply name을 가져오기 위한 method)
+     *
      * @param contentUri
      * @return
      */
-    public String getRealPathFromURI( Uri contentUri) {
+    public String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = getContentResolver().query(contentUri,  proj, null, null, null);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -255,8 +201,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         try {
             takeFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성(아직 content provider이 입혀져 있지 않음)
-            Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 전 getAbsolutePath"+takeFile.getAbsolutePath());
-            Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 전 fromFile"+ Uri.fromFile(takeFile));
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblem]+content provider 전 getAbsolutePath" + takeFile.getAbsolutePath());
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblem]+content provider 전 fromFile" + Uri.fromFile(takeFile));
 
         } catch (IOException e) {
             Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
@@ -271,7 +217,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 Uri photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
 
-                Log.d(VM_ENUM.TAG,"[VM_RegisterProblem]+content provider 후"+photoUri);
+                Log.d(VM_ENUM.TAG, "[VM_RegisterProblem]+content provider 후" + photoUri);
 
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);//provider을 씌워서 보냄
                 // : photoUri를 intent로 넘겨주고, 이를 다시 onActivity result에서 받기 위함이 아니라,가서 쓰라는 의미
@@ -360,12 +306,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         // 이미지가 저장될 폴더 이름 ( userID )
         File storageDir;
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-             storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            Log.d(VM_ENUM.TAG,"[Q 상위 버전] "+storageDir);
-        }else{
-             storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
-            Log.d(VM_ENUM.TAG,"[Q 하위 버전] "+storageDir);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            Log.d(VM_ENUM.TAG, "[Q 상위 버전] " + storageDir);
+        } else {
+            storageDir = new File(Environment.getExternalStorageDirectory() + "/" + "visual_math" + "/");
+            Log.d(VM_ENUM.TAG, "[Q 하위 버전] " + storageDir);
         }
 
 
@@ -383,19 +329,19 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void saveFile(){
-        ContentValues values=new ContentValues();
+    private void saveFile() {
+        ContentValues values = new ContentValues();
 
-        values.put(MediaStore.Images.Media.DISPLAY_NAME,takeFile.getName());
-        Log.d(VM_ENUM.TAG,takeFile.getName());
-        values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
+        Log.d(VM_ENUM.TAG, takeFile.getName());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
 
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미.
-            values.put(MediaStore.Images.Media.IS_PENDING,1);
+            values.put(MediaStore.Images.Media.IS_PENDING, 1);
         }
-        ContentResolver contentResolver=getContentResolver();
+        ContentResolver contentResolver = getContentResolver();
 
         //Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -403,10 +349,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         try {
             assert item != null;
-            ParcelFileDescriptor pdf=contentResolver.openFileDescriptor(item,"w",null);
-            if(pdf==null){
+            ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w", null);
+            if (pdf == null) {
 
-            }else{
+            } else {
                 InputStream inputStream = getImageInputStram();
                 byte[] strToByte = getBytes(inputStream);
                 FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
@@ -421,11 +367,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
     public byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
@@ -437,9 +384,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
+
     private InputStream getImageInputStram() {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        ByteArrayInputStream bs=null;
+        ByteArrayInputStream bs = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(takeFile.getAbsolutePath(), options);// galleryFile or takeFile의 경로를 불러와 bitmap 파일로 변경
         if (originalBm != null) {
@@ -471,8 +419,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonGetAlbumFileClicked() {
                 returnResult = GALLERY;
                 dialog.setReturnResult(GALLERY);
-                getAlbumFile();//내부 저장소 접근
-                ///performFileSearch();//내,외부 저장소 모두 접근 가능
+                ///getAlbumFile();//내부 저장소 접근
+                performFileSearch();//내,외부 저장소 모두 접근 가능
 
             }
         });
@@ -515,8 +463,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
         //** 문제 등록의 최소 요건 확인
-        if (checkAbility()){
-            Log.d(TAG,"[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족");
+        if (checkAbility()) {
+            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족");
             //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
             vmDataBasic.setTitle(editTextTitle.getText().toString());
 
@@ -526,21 +474,21 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
             VM_DBHandler vmDbHandler = new VM_DBHandler();
-            vmDbHandler.newPost(receiveData, vmDataBasic,solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
+            vmDbHandler.newPost(receiveData, vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
             finish();
-        }else{
-            Log.d(TAG,"[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
+        } else {
+            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
         }
 
 
     }
 
     public void wrapContentProvider() {
-        Log.d(TAG,"[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
+        Log.d(TAG, "[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
-            if(receiveData!=null){
+            if (receiveData != null) {
                 for (int i = 0; i < 3; i++) {
                     if (receiveData.getFilePathElement(i) != null) {
                         Uri photoUri = FileProvider.getUriForFile(this,
@@ -570,7 +518,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
      */
     public boolean checkAbility() {
 
-        if (editTextTitle.getText()==null||
+        if (editTextTitle.getText() == null ||
                 editTextTitle.getText().toString().replace(" ", "").equals("")) {
             //** title란이 아예 쓰여진게 없거나 공백들로 이루어진 경우
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -597,7 +545,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             alert.show();
             return false;
         }
-        if(vmDataBasic.getGrade()==null){
+        if (vmDataBasic.getGrade() == null) {
             //** 학년 선택을 하지 않은 경우
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -615,46 +563,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
 
-//    public void dumpImageMetaData(Uri uri) {
-//
-//        // The query, since it only applies to a single document, will only return
-//        // one row. There's no need to filter, sort, or select fields, since we want
-//        // all fields for one document.
-//        Cursor cursor =getContentResolver()
-//                .query(uri, null, null, null, null, null);
-//
-//        try {
-//            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
-//            // "if there's anything to look at, look at it" conditionals.
-//            if (cursor != null && cursor.moveToFirst()) {
-//
-//                // Note it's called "Display Name".  This is
-//                // provider-specific, and might not necessarily be the file name.
-//                String displayName = cursor.getString(
-//                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-//                Log.i(TAG, "Display Name: " + displayName);
-//
-//                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-//                // If the size is unknown, the value stored is null.  But since an
-//                // int can't be null in Java, the behavior is implementation-specific,
-//                // which is just a fancy term for "unpredictable".  So as
-//                // a rule, check if it's null before assigning to an int.  This will
-//                // happen often:  The storage API allows for remote files, whose
-//                // size might not be locally known.
-//                String size = null;
-//                if (!cursor.isNull(sizeIndex)) {
-//                    // Technically the column stores an int, but cursor.getString()
-//                    // will do the conversion automatically.
-//                    size = cursor.getString(sizeIndex);
-//                } else {
-//                    size = "Unknown";
-//                }
-//                Log.i(TAG, "Size: " + size);
-//            }
-//        } finally {
-//            cursor.close();
-//        }
-//    }
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
@@ -668,6 +576,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         return image;
     }
+
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
      * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
@@ -680,14 +589,13 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(VM_ENUM.TAG,"[VM_RegisterProblem] "+requestCode+" ," +resultCode);
+        Log.d(VM_ENUM.TAG, "[VM_RegisterProblem] " + requestCode + " ," + resultCode);
         //** 예외 사항 처리
-        if (resultCode != Activity.RESULT_OK)
-        {
+        if (resultCode != Activity.RESULT_OK) {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if(requestCode==PICK_FROM_CAMERA){
+            if (requestCode == PICK_FROM_CAMERA) {
                 if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
                     if (takeFile.exists()) {
                         if (takeFile.delete()) {
@@ -703,72 +611,76 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         } else if (requestCode == PICK_FROM_ALBUM) {
 
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                ///dumpImageMetaData(uri);
-                try {
-                    getBitmapFromUri(uri);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Uri uri = null;
+                if (data != null) {
+                    uri = data.getData();
+                    Log.i(TAG, "Uri: " + uri.toString());
+                    ///dumpImageMetaData(uri);
+                    try {
+                        getBitmapFromUri(uri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+            } else {
+                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem " + photo_problem);
+
+                Cursor cursor = null;
+
+                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+                try {
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    assert photo_problem != null;
+                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                    assert cursor != null;
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    galleryFile = new File(cursor.getString(column_index));
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem " + photo_problem);
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
+                        + Uri.parse(galleryFile.getAbsolutePath()));
+
+                vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
+                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+
+                //데이터 등록
+//                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//
+//                    try {
+//                        getGalleryImages();
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                } else {
+//                    setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+//                }
+
             }
-//            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-//
-//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem "+photo_problem);
-//
-//            Cursor cursor = null;
-//
-//            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-//            try {
-//                String[] proj = {MediaStore.Images.Media.DATA};
-//                assert photo_problem != null;
-//                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-//                assert cursor != null;
-//                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//                cursor.moveToFirst();
-//                galleryFile = new File(cursor.getString(column_index));
-//            } finally {
-//                if (cursor != null) {
-//                    cursor.close();
-//                }
-//            }
-//
-//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem "+photo_problem);
-//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
-//                    +Uri.parse(galleryFile.getAbsolutePath()));
-//
-//            vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
-//
-//
-//            //데이터 등록
-//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-//
-//                try {
-//                    getGalleryImages();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }else{
-//                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
-//            }
 
 
         } else if (requestCode == PICK_FROM_CAMERA) {
             Uri photoUri;
 
-            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]: getAbsolutePath "
-                    +Uri.parse(takeFile.getAbsolutePath()));
-            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:  Uri.fromFile(takeFile) "
+            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]: getAbsolutePath "
+                    + Uri.parse(takeFile.getAbsolutePath()));
+            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:  Uri.fromFile(takeFile) "
                     + Uri.fromFile(takeFile));
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
 
-                Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:content provider photoUri "+photoUri);
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:content provider photoUri " + photoUri);
 
             } else {
                 photoUri = Uri.fromFile(takeFile);
@@ -777,16 +689,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             vmDataBasic.setProblem(photoUri);//provider 가 씌워진 파일을 DB에 저장함
             setImageByUri(Uri.parse(takeFile.getAbsolutePath()));//이미지 set의 경우는 provider가 벗겨진 파일을 set
 
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
             }
 
-        }
-        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-        // response to some other intent, and the code below shouldn't run at all.
+        } else if (requestCode == VM_ENUM.RC_READ_REQUEST_CODE) {
+            // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+            // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+            // response to some other intent, and the code below shouldn't run at all.
 
-        else if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // The document selected by the user won't be returned in the intent.
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
@@ -802,10 +713,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
-
-        else if (requestCode == OTHER_DATA_LOAD) {
-            Log.d(TAG,"[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
+        } else if (requestCode == OTHER_DATA_LOAD) {
+            Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
             if (resultCode == RESULT_OK) {
                 String notice = "";
@@ -816,7 +725,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 receiveData = data.getParcelableExtra(ALL);
 
                 assert receiveData != null;
-                if(receiveData.getDetail()==null){
+                if (receiveData.getDetail() == null) {
                     Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
                 }
 
