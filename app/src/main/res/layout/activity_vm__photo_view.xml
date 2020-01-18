@@ -21,16 +21,17 @@
         android:paddingTop="15dp"
         android:paddingLeft="15dp"
         android:paddingBottom="15dp">
+
         <Button
             android:id="@+id/pv_close_btn"
-            android:onClick="cancel"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="7dp"
             android:background="@drawable/pv_close_btn"
+            android:onClick="cancel"
 
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--    상단 현재 화면 닫기 끝-->

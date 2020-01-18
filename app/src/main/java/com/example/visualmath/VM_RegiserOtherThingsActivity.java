@@ -472,7 +472,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if(requestCode==PICK_FROM_CAMERA){
+            if(true){//requestCode==PICK_FROM_CAMERA
                 if (galleryFile != null) {
                     if (galleryFile.exists()) {
                         if (galleryFile.delete()) {

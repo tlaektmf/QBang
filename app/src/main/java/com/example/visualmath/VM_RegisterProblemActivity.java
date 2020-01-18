@@ -137,19 +137,18 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     public void getAlbumFile() {
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-//        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
-//        // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
-//        /*
-//        startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
-//        이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
-//         */
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
+        // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
+        /*
+        startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
+        이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
+         */
 
-        performFileSearch();
+
     }
 
-    ///public ArrayList<Uri> getGalleryImages()
 
     /**
      * 방금 선택한 앨범의 사진인 galleryFile 의 미디어 주소를 찾음
@@ -386,6 +385,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void saveFile(){
         ContentValues values=new ContentValues();
+
         values.put(MediaStore.Images.Media.DISPLAY_NAME,takeFile.getName());
         Log.d(VM_ENUM.TAG,takeFile.getName());
         values.put(MediaStore.Images.Media.MIME_TYPE,"image/*");
@@ -471,8 +471,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonGetAlbumFileClicked() {
                 returnResult = GALLERY;
                 dialog.setReturnResult(GALLERY);
-                getAlbumFile();
-
+                getAlbumFile();//내부 저장소 접근
+                ///performFileSearch();//내,외부 저장소 모두 접근 가능
 
             }
         });
@@ -702,46 +702,58 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             return;
 
         } else if (requestCode == PICK_FROM_ALBUM) {
-            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
 
-            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem "+photo_problem);
-
-            Cursor cursor = null;
-
-            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                assert photo_problem != null;
-                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                galleryFile = new File(cursor.getString(column_index));
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
-            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem "+photo_problem);
-            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
-                    +Uri.parse(galleryFile.getAbsolutePath()));
-
-            vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
-
-
-            //데이터 등록
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.i(TAG, "Uri: " + uri.toString());
+                ///dumpImageMetaData(uri);
                 try {
-                    getGalleryImages();
-                } catch (FileNotFoundException e) {
+                    getBitmapFromUri(uri);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            }else{
-                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
             }
+//            Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+//
+//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem "+photo_problem);
+//
+//            Cursor cursor = null;
+//
+//            //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+//            try {
+//                String[] proj = {MediaStore.Images.Media.DATA};
+//                assert photo_problem != null;
+//                cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+//                assert cursor != null;
+//                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                cursor.moveToFirst();
+//                galleryFile = new File(cursor.getString(column_index));
+//            } finally {
+//                if (cursor != null) {
+//                    cursor.close();
+//                }
+//            }
+//
+//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem "+photo_problem);
+//            Log.d(TAG,"[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
+//                    +Uri.parse(galleryFile.getAbsolutePath()));
+//
+//            vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
+//
+//
+//            //데이터 등록
+//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+//
+//                try {
+//                    getGalleryImages();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }else{
+//                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+//            }
 
 
         } else if (requestCode == PICK_FROM_CAMERA) {
