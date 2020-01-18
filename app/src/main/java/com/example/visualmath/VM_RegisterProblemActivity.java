@@ -60,23 +60,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.content.Intent.ACTION_PICK;
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.getIntentOld;
-
 public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     private static final String TAG = VM_ENUM.TAG;
-    private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
-    private static final int PICK_FROM_CAMERA = 2;
-    private static final int OTHER_DATA_LOAD = 3;
-    private static final String DETAIL = "detail";
-    private static final String ALL = "all";
-
     private int returnResult;
-    private static final int GALLERY = 1;
-    private static final int CAMERA = 2;
-    private static final int NOTHING = -1;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
     private File takeFile;
@@ -121,7 +108,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         imageViewProblem = findViewById(R.id.iv_file_problem);
         buttonGoOther = findViewById(R.id.btn_goOther);
         editTextTitle = findViewById(R.id.et_title);
-        returnResult = NOTHING;
+        returnResult = VM_ENUM.NOTHING;
         vmDataBasic = new VM_Data_BASIC();
         intent = getIntent();
         solveWay = intent.getStringExtra(VM_ENUM.SOLVE_WAY);
@@ -140,7 +127,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void getAlbumFile() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM); //앨범 화면으로 이동
+        startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
         // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
         /*
         startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -222,12 +209,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);//provider을 씌워서 보냄
                 // : photoUri를 intent로 넘겨주고, 이를 다시 onActivity result에서 받기 위함이 아니라,가서 쓰라는 의미
 
-                startActivityForResult(intent, PICK_FROM_CAMERA);
+                startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
             } else {
                 Uri photoUri = Uri.fromFile(takeFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //takeFile 의 Uri경로를 intent에 추가 -> 카메라에서 찍은 사진이 저장될 주소를 의미
-                startActivityForResult(intent, PICK_FROM_CAMERA);
+                startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
             }
 
@@ -274,8 +261,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
         sendData = receiveData;//<문제등록뷰>에서 <내용추가뷰>로 보내는 데이터는 바로 이전에 <내용추가뷰>로부터 받은 데이터
-        intent.putExtra(ALL, sendData); //Parcel객체인 sendData intent에 추가
-        startActivityForResult(intent, OTHER_DATA_LOAD);
+        intent.putExtra(VM_ENUM.ALL, sendData); //Parcel객체인 sendData intent에 추가
+        startActivityForResult(intent, VM_ENUM.OTHER_DATA_LOAD);
     }
 
 
@@ -412,15 +399,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         dialog.setDialogListener(new VM_DialogListener_PickHowToGetPicture() {
             @Override
             public void onButtonTakePhotoClicked() {
-                returnResult = CAMERA;
-                dialog.setReturnResult(CAMERA);
+                returnResult = VM_ENUM.CAMERA;
+                dialog.setReturnResult(VM_ENUM.CAMERA);
                 takePhoto();
             }
 
             @Override
             public void onButtonGetAlbumFileClicked() {
-                returnResult = GALLERY;
-                dialog.setReturnResult(GALLERY);
+                returnResult = VM_ENUM.GALLERY;
+                dialog.setReturnResult(VM_ENUM.GALLERY);
                 getAlbumFile();//내부 저장소 접근
                 ///performFileSearch();//내,외부 저장소 모두 접근 가능
 
@@ -597,7 +584,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if (requestCode == PICK_FROM_CAMERA) {
+            if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
                 if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
                     if (takeFile.exists()) {
                         if (takeFile.delete()) {
@@ -611,7 +598,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             return;
 
-        } else if (requestCode == PICK_FROM_ALBUM) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Uri uri = null;
@@ -672,7 +659,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
 
 
-        } else if (requestCode == PICK_FROM_CAMERA) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
 
             Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]: getAbsolutePath "
@@ -717,7 +704,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        } else if (requestCode == OTHER_DATA_LOAD) {
+        } else if (requestCode == VM_ENUM.OTHER_DATA_LOAD) {
             Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
             if (resultCode == RESULT_OK) {
@@ -726,7 +713,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
                 //receiveDatat 변수에 저장함
                 assert data != null;
-                receiveData = data.getParcelableExtra(ALL);
+                receiveData = data.getParcelableExtra(VM_ENUM.ALL);
 
                 assert receiveData != null;
                 if (receiveData.getDetail() == null) {

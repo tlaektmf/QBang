@@ -25,6 +25,10 @@ public  class VM_ENUM {
     public static final int RC_PICK_FROM_CAMERA = 997;
     public static final int RC_READ_REQUEST_CODE = 995;
 
+    public static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
+    public static final int PICK_FROM_CAMERA = 2;
+    public static final int OTHER_DATA_LOAD = 3;
+
     //** Log TAG
     public static final String TAG="다슬";
 
@@ -43,8 +47,10 @@ public  class VM_ENUM {
     public static final String VIDEO="VIDEO";
     public static final String TEACHER="TEACHER";
     public static final String STUDENT="STUDENT";
-
-
+    public static final int GALLERY = 1;
+    public static final int CAMERA = 2;
+    public static final int NOTHING = -1;
+    public static final String ALL = "all";
 
 
 
