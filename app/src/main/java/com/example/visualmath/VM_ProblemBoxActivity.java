@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visualmath.dummy.AlarmItem;
+import com.example.visualmath.dummy.PostCustomData;
 import com.example.visualmath.ui.dashboard.DashboardFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -48,8 +49,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
-    private static List<Pair<String,Pair<String,String>>> unmatched; //포스트 데이터 unmatched 리스트 /id/title/date
-    private static List<Pair<String,Pair<String,String>>> matched; //포스트 데이터 matched 리스트 /id/title/date
+    private static List<PostCustomData> unmatched; //포스트 데이터 unmatched 리스트 /id/title/date
+    private static List<PostCustomData> matched; //포스트 데이터 matched 리스트 /id/title/date
 
 
     @Override
@@ -135,9 +136,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
     //어댑터
     public class ProblemListAdapter extends RecyclerView.Adapter<ProblemListAdapter.ViewHolder>{
-        private List<Pair<String,Pair<String,String>>> mData = null;
+        private List<PostCustomData> mData = null;
 
-        ProblemListAdapter(List<Pair<String,Pair<String,String>>> list){
+        ProblemListAdapter(List<PostCustomData> list){
             mData = list;
         }
 
@@ -156,9 +157,17 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ProblemListAdapter.ViewHolder holder, int position) {
 
-            holder.pName.setText(mData.get(position).second.first);
-            holder.pDate.setText(mData.get(position).second.second);
+            holder.pName.setText(mData.get(position).getP_title());
+            holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
+
+//            if(mData.get(position).getMatchSet_student()!=null){
+//                holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
+//            }
+//            if(mData.get(position).getSolveWay()!=null){
+//                holder.pSolveWay.setText(mData.get(position).getSolveWay());
+//            }
+
 
 //            if(item.getProblemLive()){
 //                //라이브인 경우 이미지 표시
@@ -178,12 +187,17 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             TextView pName;
             TextView pDate;
             ImageView pLive;
+            TextView pMatchStudent;
+            TextView pSolveWay;
+
 
             ViewHolder(View itemView){
                 super(itemView);
                 pName = itemView.findViewById(R.id.problem_name);
                 pDate = itemView.findViewById(R.id.problem_date);
                 pLive = itemView.findViewById(R.id.problem_live);
+                //pMatchStudent = itemView.findViewById(R.id.problem_solveWay);
+                //pSolveWay = itemView.findViewById(R.id.problem_matchStudent);
 
                 //** 아이템 클릭 이벤트
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +223,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
      */
     public void setUnmatchedData(){
 
-        unmatched=new ArrayList<Pair<String,Pair<String,String>>>();
+        unmatched=new ArrayList<PostCustomData>();
 
         firebaseDatabase=FirebaseDatabase.getInstance();
 
@@ -235,9 +249,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                     String post_id=snapshot.getKey();
                     String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
                     String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
-                    unmatched.add(Pair.create(post_id, Pair.create(post_title,post_date)));
 
-                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +post_id );
+                    unmatched.add(new PostCustomData(post_id,post_title,post_date));
+                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
 
                 }
 
@@ -262,7 +276,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
      */
     public void setMatchedData(){
 
-        matched=new ArrayList<Pair<String,Pair<String,String>>>();
+        matched=new ArrayList<PostCustomData>();
 
         firebaseDatabase=FirebaseDatabase.getInstance();
 
@@ -285,12 +299,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    String post_id=snapshot.getKey();
-                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
-                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
-                    matched.add(Pair.create(post_id, Pair.create(post_title,post_date)));
-
-                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +post_id );
+                    matched.add(snapshot.getValue(PostCustomData.class));
+                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
 
                 }
 
@@ -313,13 +323,13 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         String post_id=null;
 
         if(isUnMatchedClick==false){//"현재상태: 매치완료 목록"
-            post_id=matched.get(position).first;
+            post_id=matched.get(position).getP_id();
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
                     .child(post_id)
                     .child(VM_ENUM.DB_DATA_DEFAULT);
 
         }else{//"현재 상태: 매치 미완료 목록"
-            post_id=unmatched.get(position).first;
+            post_id=unmatched.get(position).getP_id();
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
                     .child(post_id)
                     .child(VM_ENUM.DB_DATA_DEFAULT);

@@ -9,27 +9,42 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.visualmath.dummy.PostCustomData;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
-    private FragmentManager fragmentManager;
-    private FragmentTransaction transaction;
-//    SolveFragment solveFragment;
-//    TeacherProblemFragment teacherProblemFragment;
-//    problem_detail problemDetailFragment;
 
+    private List<PostCustomData> postCustomData;
     //문제 목록을 보여줄 리사이클러뷰
     private RecyclerView recycler_view;
     ProblemListAdapter mAdapater;
-    ArrayList<problem_item> mList = new ArrayList<problem_item>();
+
+    //** DB
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    ///private static List<Pair<String,Pair<String,String>>> matched; //포스트 데이터 matched 리스트 /id/title/date
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,70 +61,28 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
     }
 
     public void init(){
-        fragmentManager=getSupportFragmentManager();
-//        solveFragment=new SolveFragment();
-//        teacherProblemFragment=new TeacherProblemFragment();
-//        problemDetailFragment = new problem_detail();
 
-
-//        변경_0
         recycler_view = findViewById(R.id.teacher_solve_rv);
-        mAdapater = new ProblemListAdapter(mList);
-        recycler_view.setAdapter(mAdapater);
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
-//        테스트용 아이템 추가
-        addItem("테스트 문제 1번","2020-01-01",true);
-        addItem("테스트 문제 2번","2020-01-02",true);
-        addItem("테스트 문제 3번","2020-01-03",false);
-//        변경_0
 
-//        transaction=fragmentManager.beginTransaction();
-//        transaction.replace(R.id.teacher_solve_container,solveFragment).commitAllowingStateLoss();
-    }
+        //** 데이터 초기화
+        postCustomData=null;
 
-    public void addItem(String name, String date, Boolean live){
-        problem_item item = new problem_item();
+        Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setMatchedData 호출");
+        setMatchedData();
 
-        item.setProblemName(name);
-        item.setProblemDate(date);
-        item.setProblemLive(live);
-
-        mList.add(item);
     }
 
     public void cancel(View view) {
         finish();
     }
 
-    public class problem_item {
-        private String problem_name;//문제 제목
-        private String problem_date;//문제 날짜
-        private Boolean problem_live;//문제 라이브인지 아닌지
 
-        public void setProblemName(String problem_name){
-            this.problem_name=problem_name;
-        }
-        public void setProblemDate(String problem_date){
-            this.problem_date=problem_date;
-        }
-        public void setProblemLive(Boolean problem_live){
-            this.problem_live=problem_live;
-        }
-        public String getProblemName(){
-            return this.problem_name;
-        }
-        public String getProblemDate(){
-            return this.problem_date;
-        }
-        public Boolean getProblemLive(){
-            return this.problem_live;
-        }
-    }
 
     public class ProblemListAdapter extends RecyclerView.Adapter<VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder>{
-        private ArrayList<VM_TeacherSolveProblemActivity.problem_item> mData = null;
+        private List<PostCustomData> mData = null;
 
-        ProblemListAdapter(ArrayList<VM_TeacherSolveProblemActivity.problem_item> list){
+        ProblemListAdapter(List<PostCustomData> list){
             mData = list;
         }
 
@@ -127,17 +100,19 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder holder, int position) {
-            VM_TeacherSolveProblemActivity.problem_item item = mData.get(position);
 
-            holder.pName.setText(item.getProblemName());
-            holder.pDate.setText(item.getProblemDate());
+            holder.pName.setText(mData.get(position).getP_title());
+            //holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
+           // holder.pSolveWay.setText(mData.get(position).getSolveWay());
+            holder.pDate.setText(mData.get(position).getUpLoadDate());
+            holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 
-            if(item.getProblemLive()){
-                //라이브인 경우 이미지 표시
-                holder.pLive.setVisibility(View.VISIBLE);
-            }else{
-                holder.pLive.setVisibility(View.INVISIBLE);
-            }
+//            if(item.getProblemLive()){
+//                //라이브인 경우 이미지 표시
+//                holder.pLive.setVisibility(View.VISIBLE);
+//            }else{
+//                holder.pLive.setVisibility(View.INVISIBLE);
+//            }
 
         }
 
@@ -150,54 +125,122 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
             TextView pName;
             TextView pDate;
             ImageView pLive;
+            TextView pMatchStudent;
+            TextView pSolveWay;
 
             ViewHolder(View itemView){
                 super(itemView);
                 pName = itemView.findViewById(R.id.problem_name);
                 pDate = itemView.findViewById(R.id.problem_date);
                 pLive = itemView.findViewById(R.id.problem_live);
+                //pMatchStudent = itemView.findViewById(R.id.problem_solveWay);
+                //pSolveWay = itemView.findViewById(R.id.problem_matchStudent);
+
+                //** 아이템 클릭 이벤트
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = getAdapterPosition();
+
+
+                        if (pos != RecyclerView.NO_POSITION) {
+                            //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+                            searchData(pos);
+                        }
+                    }
+                });
+
             }
         }
     }
 
-//    public void showUsersLoad(View view) {
-//        Button btn01 = findViewById(R.id.btn_full_problem);
-//        Button btn02 = findViewById(R.id.btn_full_solve);
-//        Button btn03 = findViewById(R.id.btn_both);
-//
-//        btn01.setSelected(true);
-//        btn02.setSelected(false);
-//        btn03.setSelected(false);
-//
-//        transaction = fragmentManager.beginTransaction();
-//        transaction.replace(R.id.teacher_solve_container, solveFragment).commitAllowingStateLoss();
-//    }
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void setMatchedData(){
 
-//    public void showSolve(View view) {
-////        transaction = fragmentManager.beginTransaction();
-////        transaction.replace(R.id.teacher_solve_container, teacherProblemFragment).commitAllowingStateLoss();
-//        Button btn01 = findViewById(R.id.btn_full_problem);
-//        Button btn02 = findViewById(R.id.btn_full_solve);
-//        Button btn03 = findViewById(R.id.btn_both);
-//
-//        btn01.setSelected(false);
-//        btn02.setSelected(true);
-//        btn03.setSelected(false);
-//
-//        transaction = fragmentManager.beginTransaction();
-//        transaction.replace(R.id.teacher_solve_container, problemDetailFragment).commitAllowingStateLoss();
-//    }
+        postCustomData=new ArrayList<PostCustomData>();
 
-//    public void showBoth(View view) {
-//        Button btn01 = findViewById(R.id.btn_full_problem);
-//        Button btn02 = findViewById(R.id.btn_full_solve);
-//        Button btn03 = findViewById(R.id.btn_both);
-//
-//        btn01.setSelected(false);
-//        btn02.setSelected(false);
-//        btn03.setSelected(true);
-//
-//        transaction = fragmentManager.beginTransaction();
-//        transaction.replace(R.id.teacher_solve_container, teacherProblemFragment).commitAllowingStateLoss();
-//    }
+        firebaseDatabase=FirebaseDatabase.getInstance();
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        Log.d(VM_ENUM.TAG,"[VM_TeacherProblemBox] "+user+" 의 데이터 접근");
+
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+                .child(user)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(VM_ENUM.DB_TEA_UNSOLVED);
+
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    postCustomData.add(snapshot.getValue(PostCustomData.class));
+                    Log.d(VM_ENUM.TAG, "[TeacherProblemBox] ValueEventListener : " +snapshot );
+
+                }
+
+                //        리사이클러뷰에 객체 지정
+                mAdapater = new VM_TeacherSolveProblemActivity.ProblemListAdapter(postCustomData);
+                recycler_view.setAdapter(mAdapater);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+
+    }
+
+    public void searchData(int position){
+        String post_id=null;
+
+            post_id=postCustomData.get(position).getP_id();
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+                    .child(post_id)
+                    .child(VM_ENUM.DB_DATA_DEFAULT);
+
+
+        final String finalPost_id = post_id;
+        Log.d(VM_ENUM.TAG,"[TeacherProblemBox] POSTS 데이터"+finalPost_id+" 접근");
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
+
+                assert vmDataDefault != null;
+                Log.d(VM_ENUM.TAG, "[TeacherProblemBox] unmatched ValueEventListener : " +vmDataDefault.getTitle() );
+
+                Intent intent = new Intent(VM_TeacherSolveProblemActivity.this, VM_FullViewActivity.class);
+                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, finalPost_id);
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,vmDataDefault.getTitle());
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
+
+
+                startActivity(intent);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+
+    }
 }

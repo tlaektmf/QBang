@@ -234,7 +234,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonPrimary() {
                 returnResult = 0;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade = gradeItems[returnResult].toString();
+                String grade = VM_ENUM.GRADE_ELEMENT;
                 vmDataBasic.setGrade(grade);
             }
 
@@ -242,7 +242,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonMiddle() {
                 returnResult = 1;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade = gradeItems[returnResult].toString();
+                String grade = VM_ENUM.GRADE_MID;
                 vmDataBasic.setGrade(grade);
             }
 
@@ -250,7 +250,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onButtonHigh() {
                 returnResult = 2;
                 buttonGrade.setText(gradeItems[returnResult]);
-                String grade = gradeItems[returnResult].toString();
+                String grade = VM_ENUM.GRADE_HIGH;
                 vmDataBasic.setGrade(grade);
             }
         });

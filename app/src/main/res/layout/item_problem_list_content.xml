@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="215dp"
@@ -24,7 +24,6 @@
             android:layout_weight="4"
 
             android:fontFamily="@font/nanumsquaure_eb"
-            android:text="교육청 1"
             android:textColor="#404040"
             android:textSize="17dp"
             android:layout_marginLeft="5dp"
@@ -40,7 +39,6 @@
             android:layout_weight="4"
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:text="교육청 1"
             android:textColor="#404040"
             android:textSize="16dp"
             android:layout_marginLeft="5dp"
@@ -50,15 +48,28 @@
             android:textAppearance="?attr/textAppearanceListItem"/>
 
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/ib_lighton"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@color/transparent"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            android:src="@drawable/complete_btn"-->
-<!--            android:layout_marginTop="1dp"/>-->
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/problem_content_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="시간"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#404040"
+            android:textSize="16dp"
+            android:layout_marginLeft="5dp"
+
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

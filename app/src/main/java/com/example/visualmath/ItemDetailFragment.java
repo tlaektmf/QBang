@@ -47,6 +47,7 @@ import java.util.ArrayList;
  * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link ItemListActivity}
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
+ *
  * on handsets.
  */
 public class ItemDetailFragment extends Fragment {
@@ -152,9 +153,9 @@ public class ItemDetailFragment extends Fragment {
 
 
         firebaseDatabase= FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference("POSTS");
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
         reference=reference.child(post_id)
-                .child("data_default");
+                .child(VM_ENUM.DB_DATA_DEFAULT);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

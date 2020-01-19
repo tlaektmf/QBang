@@ -219,7 +219,7 @@ public class ItemListActivity extends AppCompatActivity {
 
         alarms=new ArrayList<AlarmItem>();
         firebaseDatabase=FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference("STUDENTS");
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS);
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];

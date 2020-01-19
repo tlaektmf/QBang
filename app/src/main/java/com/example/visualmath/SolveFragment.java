@@ -64,8 +64,8 @@ public class SolveFragment extends Fragment {
     }
 
     public void init(ViewGroup _rootView){
-         textViewTitle=_rootView.findViewById(R.id.tv_title);
-         textViewGrade=_rootView.findViewById(R.id.tv_grade);
+         textViewTitle=_rootView.findViewById(R.id.tv_grade);
+         textViewGrade=_rootView.findViewById(R.id.tv_title);
          imageViewProblem=_rootView.findViewById(R.id.iv_file_problem);
         mGlideRequestManager = Glide.with(this);
         ///firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
