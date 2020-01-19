@@ -31,6 +31,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class VM_LoginActivity extends AppCompatActivity {
 
@@ -49,12 +54,11 @@ public class VM_LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
 
     //** <<<<<<<<구글 로그인
-    SignInButton Google_Login;
     private GoogleSignInClient googleSignInClient;
 
     //** 구글 로그인>>>>>>>>
-//    가짜 구글 버튼 이미지
-    private ConstraintLayout fakeGoogle;
+//   구글 버튼 이미지
+    private ConstraintLayout layoutGoogle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,21 +101,14 @@ public class VM_LoginActivity extends AppCompatActivity {
         //checkedLogin();
 
         firebaseAuth = FirebaseAuth.getInstance();
-//        Google_Login = findViewById(R.id.Google_Login);
-//
-//        Google_Login.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent signInIntent = googleSignInClient.getSignInIntent();
-//                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
-//            }
-//        });
+
         //** <<<<<<<<구글 로그인
 
-        fakeGoogle = findViewById(R.id.google_Login_btn);
-        fakeGoogle.setOnClickListener(new View.OnClickListener() {
+        layoutGoogle = findViewById(R.id.google_Login_btn);
+        layoutGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Log.d(VM_ENUM.TAG,"소셜 로그인(구글 로그인)의 경우, 자동 로그인이 불가합니다.");
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
             }
@@ -133,6 +130,8 @@ public class VM_LoginActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 
     //**올바른 아이디와 비밀번호가 입력됐는지 확인함
     private void userLogin(String email,String password){
@@ -185,6 +184,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
 
     public void clickLoginButton(View view) {
+
         userId = editTextUserId.getText().toString();
         userPw = editTextUserPw.getText().toString();
         isAutoLoginChecked = checkBoxAutoLogin.isChecked();
@@ -230,8 +230,6 @@ public class VM_LoginActivity extends AppCompatActivity {
                                 finish();
                             }
 
-
-
                             Toast.makeText(VM_LoginActivity.this, "아이디 생성완료", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -252,6 +250,7 @@ public class VM_LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
     /**
      * Intent Result 반환
      *
@@ -270,7 +269,7 @@ public class VM_LoginActivity extends AppCompatActivity {
             try {
 
                 // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
+                final GoogleSignInAccount account = task.getResult(ApiException.class);
 
                 Log.d(VM_ENUM.TAG, "이름 =" + account.getDisplayName());
                 Log.d(VM_ENUM.TAG, "이메일=" + account.getEmail());
@@ -278,16 +277,61 @@ public class VM_LoginActivity extends AppCompatActivity {
                 Log.d(VM_ENUM.TAG, "getAccount()=" + account.getAccount());
                 Log.d(VM_ENUM.TAG, "getIdToken()=" + account.getIdToken());
 
-                //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
-                firebaseAuthWithGoogle(account,VM_ENUM.STUDENT);//** 구글 로그인으로 한 유저는 일단 무조건 학생으로 구분함
+                //** 자동로그인 체크
+                isAutoLoginChecked=checkBoxAutoLogin.isChecked();
+                if(isAutoLoginChecked){
+                    SaveSharedPreference.setUserName(VM_LoginActivity.this, account.getEmail());
+                    Log.i(VM_ENUM.TAG,"[자동로그인 클릭]");
+                }
+                else{
+                    Log.i(VM_ENUM.TAG,"[자동로그인 클릭 안함]");
+                    SaveSharedPreference.clearUserName(VM_LoginActivity.this);
+                }
 
+                //** DB 있는 지 확인
+                String user;
+                String mailDomain = account.getEmail().split("@")[1].split("\\.")[0];
+                user = account.getEmail().split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+                Log.d(VM_ENUM.TAG,user);
 
+                FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                DatabaseReference reference= firebaseDatabase.getReference(VM_ENUM.DB_USERS);
+                reference.orderByKey().equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d(VM_ENUM.TAG,dataSnapshot.getValue().toString());
+                        if(dataSnapshot.getValue()==null){
+                            Log.d(VM_ENUM.TAG,"계정이 없습니다. DB 등록");
+                            //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
+                            firebaseAuthWithGoogle(account,VM_ENUM.STUDENT);//** 구글 로그인으로 한 유저는 일단 무조건 학생으로 구분함
+
+                        }else{
+
+                            String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
+                            Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
+                            ///Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+dataSnapshot.getChildren().iterator().next());
+
+                            if(user_type.equals(VM_ENUM.TEACHER)){
+                                Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+                                startActivity(intent);
+                                finish();
+                            }else if(user_type.equals(VM_ENUM.STUDENT)){
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             } catch (ApiException e) {
             }
-        }
-        else {
-
         }
     }
 
