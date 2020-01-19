@@ -4,7 +4,8 @@ public  class VM_ENUM {
 
     //** post
     public static final int FINISH=0;  //>>삭제 예정
-    public static final String PROJECT_EMAIL ="visualmath.com" ;
+    public static final String PROJECT_EMAIL ="visualmath" ;
+
     static final int BEFORE_MATCH=1; //>>삭제 예정
     static final int AFTER_MACTH=2; //>>삭제 예정
 
@@ -78,6 +79,7 @@ public  class VM_ENUM {
     public static final String DB_STU_UNSOLVED="unsolved";
     public static final String DB_GRADE="grade";
     public static final String DB_P_ID="p_id";
+    public static final String DB_T_ID ="t_id" ;
     public static final String DB_TITLE="title";
     public static final String DB_PROBLEM="problem";
     public static final String DB_UPLOAD_DATE="uploadDate";

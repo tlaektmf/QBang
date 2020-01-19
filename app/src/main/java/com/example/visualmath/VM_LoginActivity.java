@@ -2,10 +2,12 @@ package com.example.visualmath;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -185,29 +187,24 @@ public class VM_LoginActivity extends AppCompatActivity {
                                     SaveSharedPreference.clearUserName(VM_LoginActivity.this);
                                 }
 
+                                //** 데이터 베이스 유무 확인 및 인텐트 이동
                                 checkUserDatabase(user,mailDomain);
 
-                                // 계정확인이 완료되면, user 정보를 가지고 HomeActivity 이동
-                                Intent intent=null;
-                                if(editTextUserId.getText().toString().equals("student@gmail.com")){
-                                    intent= new Intent(getApplicationContext(), HomeActivity.class);
-                                }
-                                else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
-                                    intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
-                                }
-                                else if(editTextUserId.getText().toString().contains("@visualmath.com")){
-                                    intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
-                                }else{//** 예외가 아닌 경우는 모두 학생으로 취급함
-                                    intent= new Intent(getApplicationContext(), HomeActivity.class);
-                                }
 
-                                startActivity(intent);
-                                finish();
+                            }else{
+                                AlertDialog.Builder alert = new AlertDialog.Builder(VM_LoginActivity.this);
+                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();     //닫기
+                                    }
+                                });
+                                alert.setMessage("이메일 인증을 완료 해 주세요");
+                                alert.show();
+                            }
 
                             }
-                            }
-                      else {
-                            //로그인 실패
+                      else {//로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -425,7 +422,6 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                     String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
                     Log.d(VM_ENUM.TAG,"checkUserDatabase 이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
-                    ///Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+dataSnapshot.getChildren().iterator().next());
 
                     if(user_type.equals(VM_ENUM.TEACHER)){
                         Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**

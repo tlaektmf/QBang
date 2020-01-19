@@ -93,6 +93,15 @@ public class VM_DBHandler {
         Log.i(TAG, "[유저 최초 가입 날짜:] " + joinDate);
 
         if (user_type.equals(VM_ENUM.TEACHER)) {
+            VM_Data_TEACHER teacher = new VM_Data_TEACHER(user_email, joinDate);
+
+            databaseReference.child(user_email).child(VM_ENUM.DB_T_ID).setValue(user_email); //** 파이어베이스 DB 등록
+            databaseReference.child(user_email).child(VM_ENUM.DB_USER_TYPE).setValue(user_type); //** 파이어베이스 DB 등록
+            Log.i(TAG, "[USERS instance 생성] ");
+
+            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS);
+            databaseReference.child(user_email).child(VM_ENUM.DB_INFO).setValue(teacher); //** 파이어베이스 DB 등록
+            Log.i(TAG, "[TEACHERS instance 생성] ");
 
         } else if (user_type.equals(VM_ENUM.STUDENT)) {
             VM_Data_STUDENT student = new VM_Data_STUDENT(user_email, joinDate);
