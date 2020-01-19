@@ -35,6 +35,7 @@ import com.gun0912.tedpermission.TedPermission;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,13 +68,34 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
         if (uri != null) {
 
             Log.d(VM_ENUM.TAG, "[VM_PhotoViewActivity] " + uri);
-            setImage(uri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                try {
+                    getBitmapFromUri(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                setImage(uri);
+            }
+
         }
         if (index != -1) {
 
         }
     }
 
+    private void getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+
+        if (image != null) {
+            imageViewPhoto.setImageBitmap(image); //이미지 set
+        }
+
+    }
     private void setImage(Uri _uri) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();

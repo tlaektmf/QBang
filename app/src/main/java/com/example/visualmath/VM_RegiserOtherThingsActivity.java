@@ -74,11 +74,15 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__regiser_other_things);
 
-        init();
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void init() {
+    public void init() throws IOException {
 
         editTextdetail = findViewById(R.id.tv_detail);
         imageviewID = -1;
@@ -103,7 +107,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     }
 
 
-    public void init_set() {
+    public void init_set() throws IOException {
         //1. edittext 채우기
         editTextdetail.setText(vm_data_add.getDetail());
 
@@ -113,7 +117,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             if (path != null) {
                 Log.i(VM_ENUM.TAG, "init_set: " + vm_data_add.getFilePathElement(i));
-                setImageByIndex(i);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    getBitmapFromUriandIndex( receiveData.getFilePathElement(i),i);
+                }else{
+                    setImageByIndex(i);
+
+                }
+
             } else {
                 Log.i(VM_ENUM.TAG, "init_set: " + "파일 없음");
             }
@@ -137,20 +147,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 picViewIndex = 2;
                 break;
         }
-        Log.d(TAG,"[pickViewIndex] "+picViewIndex);
+        Log.d(TAG, "[pickViewIndex] " + picViewIndex);
 
-        if(vm_data_add!=null){
-            if(vm_data_add.getFilePathElement(picViewIndex)!=null){//** imageView에 이미지가 있는 경우
-                Intent intent=new Intent(VM_RegiserOtherThingsActivity.this,VM_PhotoViewActivity.class);
+        if (vm_data_add != null) {
+            if (vm_data_add.getFilePathElement(picViewIndex) != null) {//** imageView에 이미지가 있는 경우
+                Intent intent = new Intent(VM_RegiserOtherThingsActivity.this, VM_PhotoViewActivity.class);
                 intent.putExtra(VM_ENUM.PHOTO_URI, vm_data_add.getFilePathElement(picViewIndex));
-                intent.putExtra(VM_ENUM.IT_PHOTO_INDEX,picViewIndex);
-                Log.d(TAG,"[전달할 사진 uri] "+ vm_data_add.getFilePathElement(picViewIndex));
+                intent.putExtra(VM_ENUM.IT_PHOTO_INDEX, picViewIndex);
+                Log.d(TAG, "[전달할 사진 uri] " + vm_data_add.getFilePathElement(picViewIndex));
                 startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
 
-            }else{//** imageView에 이미지가 없는 경우
+            } else {//** imageView에 이미지가 없는 경우
                 tedPermission();
             }
-        }else{//** 제일 초기 클릭
+        } else {//** 제일 초기 클릭
             tedPermission();
         }
 
@@ -159,10 +169,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     //** 추가 정보 등록 버튼 클릭
     public void loadAddInfo(View view) {
 
-        if(receiveData==null){
+        if (receiveData == null) {
             Log.d(TAG, "[VM_RegisterOtherProblemActivity]: receiveData==null");
         }
-        if(editTextdetail.getText().toString().replace(" ", "").equals("")){
+        if (editTextdetail.getText().toString().replace(" ", "").equals("")) {
             Log.d(TAG, "[VM_RegisterOtherProblemActivity]: editTextdetail==공백");
         }
         Log.d(TAG, "[VM_RegisterOtherProblemActivity]: loadAddInfo");
@@ -172,20 +182,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 //        if (checkAbility()) {
 //            Log.d(TAG, "[VM_RegisterOtherProblemActivity]: 문제 등록 요구사항 만족");
 
-            //** vm_data 객체 생성
-           if(!editTextdetail.getText().toString().replace(" ", "").equals("")){
-                String data_detail = editTextdetail.getText().toString();
-                vm_data_add.setDetail(data_detail);
-        Log.d(TAG, "[VM_RegisterOtherProblemActivity]: data_detail"+1+data_detail+2);
-            }else{
-               vm_data_add.setDetail("");
-            }
+        //** vm_data 객체 생성
+        if (!editTextdetail.getText().toString().replace(" ", "").equals("")) {
+            String data_detail = editTextdetail.getText().toString();
+            vm_data_add.setDetail(data_detail);
+            Log.d(TAG, "[VM_RegisterOtherProblemActivity]: data_detail" + 1 + data_detail + 2);
+        } else {
+            vm_data_add.setDetail("");
+        }
 
-            Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
-            intent.putExtra(VM_ENUM.ALL, vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
-            setResult(RESULT_OK, intent);
+        Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
+        intent.putExtra(VM_ENUM.ALL, vm_data_add); //Parcel객체인 vm_data_add를 intent에 추가
+        setResult(RESULT_OK, intent);
 
-            finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
+        finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
 
 //        } else {
 //            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
@@ -211,6 +221,9 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         try {
             takeFile = createImageFile(); //파일 경로가 담긴 빈 이미지 생성
+            Log.d(VM_ENUM.TAG, "[RegiOther]+content provider 전 getAbsolutePath" + takeFile.getAbsolutePath());
+            Log.d(VM_ENUM.TAG, "[RegiOther]+content provider 전 fromFile" + Uri.fromFile(takeFile));
+
         } catch (IOException e) {
             Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             finish();
@@ -222,6 +235,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
+                Log.d(VM_ENUM.TAG, "[RegiOther]+content provider 후" + photoUri);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
 
@@ -308,6 +322,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         }
 
     }
+
     public byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
@@ -335,21 +350,22 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         return bs;
     }
 
-    private void setImageByUri(int index,Uri _uri) {
+    private void setImageByUri(int index, Uri _uri) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         if (originalBm != null) {
             imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
-            vm_data_add.setFilePathElement(_uri,index);
+            vm_data_add.setFilePathElement(_uri, index);
         }
 
     }
 
-    private void deletePhoto(int index){
+    private void deletePhoto(int index) {
         imageViewsOtherPictureList[index].setImageResource(R.drawable.add_extra_img);
-        vm_data_add.setFilePathElement(null,index);
+        vm_data_add.setFilePathElement(null, index);
     }
+
     private void createData(Uri _uri) {
         int index = 0;
         switch (imageviewID) {
@@ -369,7 +385,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    private void setImageIDandURI(final int _imageviewID,Uri _uri) {
+    private void setImageIDandURI(final int _imageviewID, Uri _uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
 
@@ -385,7 +401,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 index = 2;
                 break;
         }
-        if(originalBm!=null){
+        if (originalBm != null) {
             imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
         }
 
@@ -488,12 +504,14 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         if (image != null) {
             imageViewsOtherPictureList[idx].setImageBitmap(image); //이미지 set
+            Log.d(VM_ENUM.TAG, "[RegiOther],Gallery uri" + uri);
+
         }
 
         return image;
     }
 
-    private Bitmap getBitmapFromUriandIndex(Uri uri,int imageviewID) throws IOException {
+    private Bitmap getBitmapFromUriandIndex(Uri uri, int imageviewID) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -519,13 +537,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(VM_ENUM.TAG,"[VM_RegisterOtherActivity/requestCode] "+requestCode);
+        Log.d(VM_ENUM.TAG, "[VM_RegisterOtherActivity/requestCode] " + requestCode);
         //** 예외 사항 처리
         if (resultCode != Activity.RESULT_OK) {
 
             Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-            if(requestCode==VM_ENUM.PICK_FROM_CAMERA){
+            if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
                 if (takeFile != null) {
                     if (takeFile.exists()) {
                         if (takeFile.delete()) {
@@ -544,17 +562,16 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
-                    Log.i(TAG, "Uri: " + uri.toString());
-                    ///dumpImageMetaData(uri);
-                    createData(uri);
+                    Log.i(TAG, "[RegiOther] Uri: " + uri.toString());
+
                     try {
                         getBitmapFromUri(uri);
+                        createData(uri);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            }
-            else{
+            } else {
                 Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
                 Cursor cursor = null;
 
@@ -568,7 +585,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                     cursor.moveToFirst();
                     galleryFile = new File(cursor.getString(column_index));
                     createData(Uri.parse(galleryFile.getAbsolutePath()));
-                    setImageIDandURI(imageviewID,Uri.parse(galleryFile.getAbsolutePath()));
+                    setImageIDandURI(imageviewID, Uri.parse(galleryFile.getAbsolutePath()));
                 } finally {
                     if (cursor != null) {
                         cursor.close();
@@ -580,6 +597,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
+            Log.d(TAG, "[RegiOther/PICK_FROM_CAMERA]: getAbsolutePath "
+                    + Uri.parse(takeFile.getAbsolutePath()));
+            Log.d(TAG, "[RegiOther/PICK_FROM_CAMERA]:  Uri.fromFile(takeFile) "
+                    + Uri.fromFile(takeFile));
+
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
@@ -587,76 +609,55 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             } else {
                 photoUri = Uri.fromFile(takeFile);
             }
-            ///createData(photoUri);
-            createData(Uri.parse(takeFile.getAbsolutePath()));
-            setImageIDandURI(imageviewID,Uri.parse(takeFile.getAbsolutePath()));
+            createData(photoUri);//provider 가 씌워진 파일을 DB에 저장함
+            ///createData(Uri.parse(takeFile.getAbsolutePath()));
+            setImageIDandURI(imageviewID, Uri.parse(takeFile.getAbsolutePath()));
 
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
             }
-        }else if (requestCode == VM_ENUM.RC_READ_REQUEST_CODE) {//** 사용 안함
-            // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-            // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-            // response to some other intent, and the code below shouldn't run at all.
+        } else if (requestCode == VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW) {
 
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                ///dumpImageMetaData(uri);
-                try {
-                    getBitmapFromUriandIndex(uri,imageviewID);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else if(requestCode==VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW){
-
-            int deleteIndex ;
-            int photoIndex ;
+            int deleteIndex;
+            int photoIndex;
             Uri newGalleryPhotoURi;
             Uri newTakePhotoURi;
 
 
-            deleteIndex=data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX,-1);
-            Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] deleteIndex"+     deleteIndex);
-            if(deleteIndex!=-1){
-                Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] deletePhoto");
-               deletePhoto(deleteIndex);
+            deleteIndex = data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX, -1);
+            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deleteIndex" + deleteIndex);
+            if (deleteIndex != -1) {
+                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deletePhoto");
+                deletePhoto(deleteIndex);
             }
 
             //**
-            photoIndex=data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX,-1);
-            Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] photoIndex"+     photoIndex);
-            newGalleryPhotoURi=data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
-            if(newGalleryPhotoURi!=null&& photoIndex!=-1){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            photoIndex = data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX, -1);
+            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] photoIndex" + photoIndex);
+            newGalleryPhotoURi = data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
+            if (newGalleryPhotoURi != null && photoIndex != -1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     try {
-                        getBitmapFromUriandIndex(newGalleryPhotoURi,photoIndex);
+                        getBitmapFromUriandIndex(newGalleryPhotoURi, photoIndex);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    setImageByUri(photoIndex,newGalleryPhotoURi);
+                } else {
+                    setImageByUri(photoIndex, newGalleryPhotoURi);
                 }
                 createData(newGalleryPhotoURi);
             }
 
             //** IT_TAKE_PHOTO
-            newTakePhotoURi= data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
-            if(newTakePhotoURi!=null&& photoIndex!=-1){
-                Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity] IT_TAKE_PHOTO");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    Log.d(VM_ENUM.TAG,"[VM_RegiOtherActivity]newTakePhotoURi"+newTakePhotoURi);
+            newTakePhotoURi = data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
+            if (newTakePhotoURi != null && photoIndex != -1) {
+                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] IT_TAKE_PHOTO");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity]newTakePhotoURi" + newTakePhotoURi);
 
-                    setImageByUri(photoIndex,newTakePhotoURi);
-                }else{
-                    setImageByUri(photoIndex,newTakePhotoURi);
+                    setImageByUri(photoIndex, newTakePhotoURi);
+                } else {
+                    setImageByUri(photoIndex, newTakePhotoURi);
                 }
 
             }

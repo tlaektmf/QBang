@@ -684,26 +684,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 saveFile();
             }
 
-        } else if (requestCode == VM_ENUM.RC_READ_REQUEST_CODE) {
-            // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-            // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-            // response to some other intent, and the code below shouldn't run at all.
-
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                ///dumpImageMetaData(uri);
-                try {
-                    getBitmapFromUri(uri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         } else if (requestCode == VM_ENUM.OTHER_DATA_LOAD) {
             Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
