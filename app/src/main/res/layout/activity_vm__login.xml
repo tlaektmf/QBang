@@ -24,7 +24,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/signup_btn"
-
+            android:onClick="clickRegisterUser"
             app:layout_constraintRight_toLeftOf="@id/singup_text"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,7 @@
             android:textColor="#fff"
             android:fontFamily="@font/nanumsquaure_r"
             android:textSize="15dp"
-
+            android:onClick="clickRegisterUser"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
