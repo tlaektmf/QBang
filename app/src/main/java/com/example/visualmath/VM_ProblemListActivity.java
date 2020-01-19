@@ -50,6 +50,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     private static List<PostCustomData> unmatched_element; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private static List<PostCustomData> unmatched_mid; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private static List<PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
+    private String nowGrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +71,14 @@ public class VM_ProblemListActivity extends AppCompatActivity {
          btnMid = findViewById(R.id.ib_mid);
          btnHigh = findViewById(R.id.ib_high);
 
+
         unmatched_element=null;
         unmatched_mid=null;
         unmatched_high=null;
 
         Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
         setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        nowGrade=VM_ENUM.GRADE_ELEMENT;
 
     }
 
@@ -162,6 +165,20 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 mDetailView = (TextView) view.findViewById(R.id.problem_content_detail);
                 mDateView = (TextView) view.findViewById(R.id.problem_content_time);
 
+                //** 아이템 클릭 이벤트
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final int pos = getAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION) {
+                            //** 프래그먼트의 아이템 클릭 시, ProblemDetail 전환
+                            ///searchData(pos);
+                        }
+                    }
+                });
+
+
             }
         }
     }
@@ -188,7 +205,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     public void showElementary(View view) {
         //** 초등
 
-
+        nowGrade=VM_ENUM.GRADE_ELEMENT;
         btnElement.setSelected(true);
         btnMid.setSelected(false);
         btnHigh.setSelected(false);
@@ -212,7 +229,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         btnElement.setSelected(false);
         btnMid.setSelected(true);
         btnHigh.setSelected(false);
-
+        nowGrade=VM_ENUM.GRADE_MID;
 
         //** 데이터베이스 트랜젝션
         if(unmatched_mid!=null){
@@ -229,7 +246,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     }
 
     public void showHigh(View view) {
-
+        nowGrade=VM_ENUM.GRADE_HIGH;
         btnElement.setSelected(false);
         btnMid.setSelected(false);
         btnHigh.setSelected(true);
@@ -300,4 +317,48 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     }
 
+    public void searchData(int position){
+        String post_id=null;
+
+        if(nowGrade.equals(VM_ENUM.GRADE_ELEMENT)){//"현재상태: 초등"
+            post_id=unmatched_element.get(position).getP_id();
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+                    .child(post_id)
+                    .child(VM_ENUM.DB_DATA_DEFAULT);
+
+        }else if(nowGrade.equals(VM_ENUM.GRADE_MID)){//"현재 상태: 중등"
+            post_id=unmatched_mid.get(position).getP_id();
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+                    .child(post_id)
+                    .child(VM_ENUM.DB_DATA_DEFAULT);
+        }else if(nowGrade.equals(VM_ENUM.GRADE_HIGH)){//"현재 상태: 고등"
+            post_id=unmatched_high.get(position).getP_id();
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+                    .child(post_id)
+                    .child(VM_ENUM.DB_DATA_DEFAULT);
+        }
+
+        final String finalPost_id = post_id;
+        Log.d(VM_ENUM.TAG,"[선생님 문제 선택] POSTS 데이터"+finalPost_id+" 접근");
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
+
+                assert vmDataDefault != null;
+                Log.d(TAG, "[선생님 문제 선택] "+vmDataDefault.getGrade()+", ValueEventListener : " +vmDataDefault.getTitle() );
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+
+    }
 }
