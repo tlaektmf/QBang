@@ -1,11 +1,17 @@
 package com.example.visualmath;
 
+import android.animation.Animator;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +61,10 @@ public class problem_detail extends Fragment {
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
 
-
+    private int imageViewID;
+    private ImageView[] imageViewsOtherPictureList;
+    private FrameLayout detail_front;
+    private Button close_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,9 +100,56 @@ public class problem_detail extends Fragment {
         imageViewOther2=_rootView.findViewById(R.id.extra_img_two);
         imageViewOther3=_rootView.findViewById(R.id.extra_img_three);
 
+        detail_front=_rootView.findViewById(R.id.detail_front);
+        close_btn=_rootView.findViewById(R.id.pv_close_btn);
+        close_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                detail_front.setVisibility(View.GONE);
+            }
+        });
+
+        imageViewID=-1;
+        imageViewsOtherPictureList = new ImageView[3];
+        imageViewsOtherPictureList[0] = _rootView.findViewById(R.id.extra_img_one);
+        imageViewsOtherPictureList[0].setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                zoomImageFromThumb(view);
+            }
+        });
+        imageViewsOtherPictureList[1] = _rootView.findViewById(R.id.extra_img_two);
+        imageViewsOtherPictureList[1].setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //테스트용
+                zoomImageFromThumb(view);
+            }
+        });
+        imageViewsOtherPictureList[2] = _rootView.findViewById(R.id.extra_img_three);
+        imageViewsOtherPictureList[2].setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //테스트용
+                zoomImageFromThumb(view);
+            }
+        });
+
         setWidget();
 
     }
+    public void zoomImageFromThumb(final View thumView){
+//        Toast.makeText(thumView.getContext(),"아아아악",Toast.LENGTH_LONG).show();
+        ImageView smallView = (ImageView) thumView;
+        ImageView bigView = rootView.findViewById(R.id.iv_photo);
+
+        BitmapDrawable  bitmapDrawable = (BitmapDrawable) smallView.getDrawable();
+        Bitmap tmpBitmap = bitmapDrawable.getBitmap();
+        bigView.setImageBitmap(tmpBitmap);
+
+        detail_front.setVisibility(View.VISIBLE);
+    }
+
 
     /****
      * 데이터베이스 트랜젝션
@@ -217,11 +275,11 @@ public class problem_detail extends Fragment {
         if(vmDataExtra!=null){ //*** 데이터를 DB에서 읽어온 경우
             Toast.makeText(getContext(),"로딩완료.",Toast.LENGTH_SHORT).show();
 
-        }else{
+        }else {
             //데이터 읽어오는 중 => 로딩 필요
-            Toast.makeText(getContext(),"로딩중입니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "로딩중입니다.", Toast.LENGTH_SHORT).show();
         }
 
-
     }
+
 }
