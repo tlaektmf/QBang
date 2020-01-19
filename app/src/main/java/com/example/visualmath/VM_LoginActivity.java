@@ -3,6 +3,7 @@ package com.example.visualmath;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -51,6 +53,8 @@ public class VM_LoginActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
 
     //** 구글 로그인>>>>>>>>
+//    가짜 구글 버튼 이미지
+    private ConstraintLayout fakeGoogle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,17 +97,25 @@ public class VM_LoginActivity extends AppCompatActivity {
         //checkedLogin();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        Google_Login = findViewById(R.id.Google_Login);
+//        Google_Login = findViewById(R.id.Google_Login);
+//
+//        Google_Login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent signInIntent = googleSignInClient.getSignInIntent();
+//                startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
+//            }
+//        });
+        //** <<<<<<<<구글 로그인
 
-        Google_Login.setOnClickListener(new View.OnClickListener() {
+        fakeGoogle = findViewById(R.id.google_Login_btn);
+        fakeGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, VM_ENUM.RC_GOOGLE_LOGIN);
             }
         });
-        //** <<<<<<<<구글 로그인
-
 
     }
 

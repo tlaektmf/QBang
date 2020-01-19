@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--로그인 화면 아이디 입력 배경-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="15dp"
+    android:shape="rectangle" >
+<!--    배경색 : 투명(지정 안함)-->
+<!--    <solid android:color="#e9f7fd" />-->
+
+<!--    모서리 굴곡-->
+    <corners
+        android:bottomLeftRadius="50dp"
+        android:bottomRightRadius="50dp"
+        android:topLeftRadius="50dp"
+        android:topRightRadius="50dp" />
+<!--    경계선-->
+    <stroke
+        android:width="2dp"
+        android:color="#fff" />
+</shape>

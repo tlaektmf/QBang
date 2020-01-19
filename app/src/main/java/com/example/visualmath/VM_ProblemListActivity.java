@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     View recyclerView;
     ViewGroup layout;
     public static String TAG="VM_ProblemList";
+    private ProgressBar list_loading_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
+        list_loading_bar = findViewById(R.id.list_loading_bar);
     }
 
 
@@ -132,18 +134,24 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     //**
     public void activateList(View view) {
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.choose_drawer_menu);
+        View clickview = findViewById(R.id.teacher_clickview);
         if(layout.getVisibility()==View.VISIBLE){
             //현재 뷰가 보이면
             layout.setVisibility(View.GONE);
+            clickview.setVisibility(View.INVISIBLE);
         }else{
             //뷰가 보이지 않으면
             layout.setVisibility(View.VISIBLE);
+            clickview.setVisibility(View.VISIBLE);
+            clickview.setClickable(true);
         }
     }
 
 
     private void setData(@NonNull RecyclerView recyclerView,List<TestContent.TestItem> items) {
         recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, items));
+        
+        list_loading_bar.setVisibility(View.INVISIBLE);
     }
 
     public void showElementary(View view) {

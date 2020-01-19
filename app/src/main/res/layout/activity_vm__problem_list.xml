@@ -10,33 +10,30 @@
     tools:context=".VM_ProblemListActivity"
     android:background="#f2f2f4">
 
-    <FrameLayout
+<!--    전체 감싸기-->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<!--        메인-->
-        <FrameLayout
-            android:id="@+id/teacherframeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include layout="@layout/item_problem_list" />
-
-        </FrameLayout>
 <!--        상단바-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/thick_top_header"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:orientation="vertical"
-            android:background="@drawable/top_menu_back02">
-            <LinearLayout
+            android:layout_height="@dimen/top_height_thick"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#fafafa"
+            android:elevation="5dp">
+
+<!--            상단바 01-->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12.8dp">
+                android:layout_height="0dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/top_header_bottom">
 
                 <Button
                     android:id="@+id/ib_menu"
@@ -45,7 +42,11 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/ic_menu_black_24dp"
-                    android:onClick="activateList" />
+                    android:onClick="activateList"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,59 +54,109 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="20dp"
                     android:textAlignment="center"
-                    android:paddingRight="25dp"
                     android:fontFamily="@font/nanumsquaure_eb"
-                    android:layout_gravity="center"/>
+                    android:gravity="center"
 
-            </LinearLayout>
-            <LinearLayout
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            상단바 01 끝-->
+<!--            상단바 02-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/top_header_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout">
                 <Button
                     android:id="@+id/ib_element"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="33dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="초     등"
+                    android:layout_height="wrap_content"
+                    android:text="초    등"
+                    android:textColor="@drawable/changing_tab_textcolor"
                     android:textSize="17dp"
                     android:textAlignment="center"
                     android:fontFamily="@font/nanumsquaure_b"
                     android:background="@drawable/changing_tab_menu_back"
                     android:onClick="showElementary"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="?android:attr/borderlessButtonStyle"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ib_mid"/>
                 <Button
                     android:id="@+id/ib_mid"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="33dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="중     등"
+                    android:layout_height="wrap_content"
+                    android:text="중    등"
+                    android:textColor="@drawable/changing_tab_textcolor"
                     android:textSize="17dp"
                     android:textAlignment="center"
                     android:fontFamily="@font/nanumsquaure_b"
                     android:background="@drawable/changing_tab_menu_back"
-                    android:onClick="showMid" />
+                    android:onClick="showMid"
+                    style="?android:attr/borderlessButtonStyle"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ib_high"
+                    app:layout_constraintLeft_toRightOf="@+id/ib_element"/>
                 <Button
                     android:id="@+id/ib_high"
-                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="33dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="고     등"
+                    android:layout_height="wrap_content"
+                    android:text="고    등"
+                    android:textColor="@drawable/changing_tab_textcolor"
                     android:textSize="17dp"
                     android:textAlignment="center"
                     android:fontFamily="@font/nanumsquaure_b"
                     android:background="@drawable/changing_tab_menu_back"
-                    android:onClick="showHigh" />
+                    android:onClick="showHigh"
+                    style="?android:attr/borderlessButtonStyle"
 
-            </LinearLayout>
-        </LinearLayout>
-    </FrameLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/ib_mid"/>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            상단바 02 끝-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        상단바 끝-->
+
+<!--        프레임 레이아웃-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thick_top_header">
+            <FrameLayout
+                android:id="@+id/teacherframeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <include layout="@layout/item_problem_list" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        프레임 레이아웃 끝-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--        프로그레스 바-->
+    <ProgressBar
+        android:id="@+id/list_loading_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="visible"
+        android:layout_gravity="center"/>
+<!--    전체 감싸기 끝-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

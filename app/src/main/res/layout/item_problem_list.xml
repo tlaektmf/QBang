@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,6 +23,13 @@
             android:background="@drawable/back_img" />
     </RelativeLayout>
 
+    <View
+        android:id="@+id/teacher_clickview"
+        android:clickable="true"
+        android:background="#4D000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <RelativeLayout
         android:id="@+id/choose_drawer_menu"
         android:layout_width="wrap_content"
@@ -35,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            android:paddingTop="100dp"
+            android:paddingTop="10dp"
             tools:context="com.example.visualmath.VM_ProblemListActivity"
             tools:listitem="@layout/item_problem_list_content"
 

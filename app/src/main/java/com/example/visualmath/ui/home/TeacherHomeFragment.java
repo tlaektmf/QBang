@@ -39,8 +39,6 @@ public class TeacherHomeFragment extends Fragment {
         final ImageButton buttonPickProblem=root.findViewById(R.id.ib_pickProblem);
         final ImageButton buttonSolveProblem=root.findViewById(R.id.ib_solveProblem);
 
-
-
         buttonPickProblem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
