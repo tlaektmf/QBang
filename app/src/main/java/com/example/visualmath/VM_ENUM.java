@@ -6,6 +6,7 @@ public  class VM_ENUM {
     public static final int FINISH=0;  //>>삭제 예정
     public static final String PROJECT_EMAIL ="visualmath" ;
 
+
     static final int BEFORE_MATCH=1; //>>삭제 예정
     static final int AFTER_MACTH=2; //>>삭제 예정
 
@@ -85,6 +86,8 @@ public  class VM_ENUM {
     public static final String DB_UPLOAD_DATE="uploadDate";
     public static final String DB_STU_POSTS="posts";
     public static final String DB_DATA_DEFAULT="data_default";
+    public static final String DB_TEA_POSTS ="posts" ;
+    public static final String DB_TEA_UNSOLVED = "unsolved";
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
