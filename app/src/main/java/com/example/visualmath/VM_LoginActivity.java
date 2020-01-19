@@ -136,7 +136,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
 
     //**올바른 아이디와 비밀번호가 입력됐는지 확인함
-    private void userLogin(String email,String password){
+    private void userLogin(final String email, String password){
         //logging in the user
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -144,6 +144,13 @@ public class VM_LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()) {
+
+                            //** 이메일 검증 절차 확인
+                            if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                                Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 완료]");
+                            }else{
+                                Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 이전]");
+                            }
                             /*
                              * 자동로그인이 체크 되어있는 경우, 파일에 저장
                              * 자동로그인이 체크 되어있지 않은  경우, 파일에 저장x

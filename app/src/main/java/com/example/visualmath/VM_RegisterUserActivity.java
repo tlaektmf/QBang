@@ -3,6 +3,7 @@ package com.example.visualmath;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -115,6 +116,8 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {                         //해당 이메일에 확인메일을 보냄
                     Log.d(VM_ENUM.TAG, "[메일 요청 완료]");
+                    Intent intent=new Intent(VM_RegisterUserActivity.this,VM_LoginActivity.class);
+                    finish();
 
                 } else {                                             //메일 보내기 실패
                     Log.d(VM_ENUM.TAG, "[메일 발송 실패]");
@@ -124,6 +127,10 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
 
     }
     public void onBackPressed() {
-        //super.onBackPressed();
+        ///super.onBackPressed();
+    }
+
+    public void cancel(View view) {
+        finish();
     }
 }
