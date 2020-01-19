@@ -44,7 +44,6 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     //문제 목록을 보여줄 리사이클러뷰
     private RecyclerView recycler_view;
     private  ProblemListAdapter mAdapater;
-    ///ArrayList<problem_item> mList = new ArrayList<problem_item>();
 
     //** DB
     private FirebaseDatabase firebaseDatabase;
@@ -81,27 +80,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setUnmatched 호출");
         setUnmatchedData();
 
-        //        리사이클러뷰에 객체 지정
-//        mAdapater = new ProblemListAdapter(mList);
-//        recycler_view.setAdapter(mAdapater);
-
-//        테스트용 아이템 추가
-//        addItem("테스트 문제 1번","2020-01-01",true);
-//        addItem("테스트 문제 2번","2020-01-02",true);
-//        addItem("테스트 문제 3번","2020-01-03",false);
 
     }
 
-    //리사이클러뷰 테스트용 아이템 추가 함수
-//    public void addItem(String name, String date, Boolean live){
-//        problem_item item = new problem_item();
-//
-//        item.setProblemName(name);
-//        item.setProblemDate(date);
-//        item.setProblemLive(live);
-//
-//        mList.add(item);
-//    }
 
     //매치 미완료 목록 보여주기 탭(왼쪽)
     public void show_unmatched_list(View view){
@@ -133,34 +114,6 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         finish();
     }
 
-    //리사이클러뷰 부분
-
-//    //데이터 클래스
-//    public class problem_item {
-//        private String problem_name;//문제 제목
-//        private String problem_date;//문제 날짜
-//        private Boolean problem_live;//문제 라이브인지 아닌지
-//
-//        public void setProblemName(String problem_name){
-//            this.problem_name=problem_name;
-//        }
-//        public void setProblemDate(String problem_date){
-//            this.problem_date=problem_date;
-//        }
-//        public void setProblemLive(Boolean problem_live){
-//            this.problem_live=problem_live;
-//        }
-//        public String getProblemName(){
-//            return this.problem_name;
-//        }
-//        public String getProblemDate(){
-//            return this.problem_date;
-//        }
-//        public Boolean getProblemLive(){
-//            return this.problem_live;
-//        }
-//    }
-//    //데이터 클래스 끝
 
     //어댑터
     public class ProblemListAdapter extends RecyclerView.Adapter<ProblemListAdapter.ViewHolder>{
