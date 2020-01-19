@@ -124,7 +124,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/login_id_back"
 
-                android:hint="비밀번호"
+                android:hint="사용할 비밀번호를 입력해주세요"
                 android:textColorHint="#fff"
                 android:fontFamily="@font/nanumsquaure_r"
                 android:inputType="textPassword"
@@ -145,7 +145,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/login_btn_back"
 
-                android:text="회원가입"
+                android:text="이메일 인증하기"
                 android:textAlignment="center"
                 android:textColor="#1097d0"
                 android:fontFamily="@font/nanumsquaure_b"
