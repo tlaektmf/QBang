@@ -95,6 +95,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         if(unmatched!=null){
             //데이터 셋팅은 되어있는 상태
             Log.d(VM_ENUM.TAG,"[ProblemBox],데이터 셋팅은 되어있는 상태 ");
+            //        리사이클러뷰에 객체 지정
+            mAdapater = new ProblemListAdapter(unmatched);
+            recycler_view.setAdapter(mAdapater);
+
         }else{
             //초기 셋팅 필요
             Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setUnmatched 호출");
@@ -107,6 +111,20 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         Toast.makeText(this, "매치 완료 목록",Toast.LENGTH_LONG).show();
         btn_unmatched.setSelected(false);
         btn_matched.setSelected(true);
+
+        //** 데이터베이스 트랜젝션
+        if(matched!=null){
+            //데이터 셋팅은 되어있는 상태
+            //        리사이클러뷰에 객체 지정
+            mAdapater = new ProblemListAdapter(matched);
+            recycler_view.setAdapter(mAdapater);
+            Log.d(VM_ENUM.TAG,"[ProblemBox],데이터 셋팅은 되어있는 상태 ");
+        }else{
+            //초기 셋팅 필요
+            Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setMatchedData 호출");
+            setMatchedData();
+        }
+
     }
 
     //뒤로가기 버튼
@@ -226,6 +244,59 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 //        리사이클러뷰에 객체 지정
         mAdapater = new ProblemListAdapter(unmatched);
        recycler_view.setAdapter(mAdapater);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+
+    }
+
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void setMatchedData(){
+
+        matched=new ArrayList<Pair<String,Pair<String,String>>>();
+
+        firebaseDatabase=FirebaseDatabase.getInstance();
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        Log.d(VM_ENUM.TAG,"[VM_ProblemBox] "+user+" 의 데이터 접근");
+
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+                .child(user)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_UNSOLVED);
+
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    String post_id=snapshot.getKey();
+                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
+                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
+                    matched.add(Pair.create(post_id, Pair.create(post_title,post_date)));
+
+                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +post_id );
+
+                }
+
+                //        리사이클러뷰에 객체 지정
+                mAdapater = new ProblemListAdapter(matched);
+                recycler_view.setAdapter(mAdapater);
 
             }
 
