@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -11,8 +12,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
 
@@ -36,6 +39,10 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vm__register_user);
 
         init();
+
+
+
+
     }
 
     public void init(){
@@ -88,6 +95,7 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 회원가입 성공
+                            sendVerifyEmail();
                             Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
                         } else {
                             // 회원가입 실패
@@ -97,4 +105,25 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                 });
     }
 
+    public void sendVerifyEmail(){
+        FirebaseUser currentUser  = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth.getInstance().useAppLanguage();                //해당기기의 언어 설정
+
+        assert currentUser != null;
+        currentUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {                         //해당 이메일에 확인메일을 보냄
+                    Log.d(VM_ENUM.TAG, "[메일 요청 완료]");
+
+                } else {                                             //메일 보내기 실패
+                    Log.d(VM_ENUM.TAG, "[메일 발송 실패]");
+                }
+            }
+        });
+
+    }
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

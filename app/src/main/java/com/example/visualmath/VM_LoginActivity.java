@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -43,6 +44,7 @@ public class VM_LoginActivity extends AppCompatActivity {
     EditText editTextUserPw;
     Button buttonLogin;
     CheckBox checkBoxAutoLogin;
+    TextView textViewRegister;
 
     String userId = "defaultId";
     String userPw = "defaultPw";
@@ -76,7 +78,7 @@ public class VM_LoginActivity extends AppCompatActivity {
         editTextUserPw = findViewById(R.id.et_userPw);
         buttonLogin = findViewById(R.id.btn_login);
         checkBoxAutoLogin = findViewById(R.id.cb_AutoLogin);
-
+        textViewRegister=findViewById(R.id.singup_text);
         //**initializig firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -338,5 +340,10 @@ public class VM_LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    public void clickRegisterUser(View view) {
+        Intent intent=new Intent(VM_LoginActivity.this,VM_RegisterUserActivity.class);
+        startActivity(intent);
     }
 }
