@@ -26,10 +26,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.dummy.PostCustomData;
 import com.example.visualmath.dummy.TestContent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +39,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.Objects;
 
 
 /**
@@ -51,6 +55,8 @@ public class ItemProblemDetailFragment extends Fragment {
      */
     private String post_id;
     private String solveWay;
+    private String matchSet_student;
+    private String upLoadDate;
     View rootView;
     public static final String ARG_ITEM_ID="post_id";
     public static final String ARG_ITEM_DETAIL = "item_problem_detail";
@@ -59,6 +65,7 @@ public class ItemProblemDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private VM_Data_Default vmDataDefault;
+    private PostCustomData postCustomData;
 
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
@@ -131,6 +138,8 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
+
+                        dataUpdate();
                     }
                     public void onButtonNo(){
 
@@ -160,6 +169,47 @@ public class ItemProblemDetailFragment extends Fragment {
 
     }
 
+    public void dataUpdate(){
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
+        postCustomData=new (post_id,vmDataDefault.getTitle(),solveWay,matchSet_student,user);
+//        //** 1. UNMATCHED 에서 삭제
+//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+//                .child(post_id).removeValue();
+//        Log.d(TAG,"[UNMATCHED에서 삭제완료]");
+
+        //** 2. teacher unsolved 에 저장
+
+
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                .child(user)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(post_id);
+        Log.d(TAG,"[teacher unsolved 에 저장]");
+
+        //** 3. student unsolved에 저장
+
+        Log.d(TAG,"[student unsolved에 저장]");
+
+
+//        //** 4. student unmatched에서 삭제
+//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.STUDENT)
+//                .child(post_id).removeValue();
+
+        Log.d(TAG,"[student unmatched에서 삭제]");
+        //** 5. POSTS 의 matchset에 설정
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                .child(post_id).child(VM_ENUM.DB_MATCH_STUDENT).setValue(matchSet_student);
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
+        Log.d(TAG,"[POSTS 의 matchset 등록 완료]");
+    }
+
     /****
      * 데이터베이스 트랜젝션
      * write
@@ -171,15 +221,18 @@ public class ItemProblemDetailFragment extends Fragment {
 
         firebaseDatabase= FirebaseDatabase.getInstance();
         reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
-        reference=reference.child(post_id)
-                .child(VM_ENUM.DB_DATA_DEFAULT);
+        reference=reference.child(post_id);
+                //.child(VM_ENUM.DB_DATA_DEFAULT);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
+                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
+                matchSet_student=dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue(String.class);
+                upLoadDate=dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue(String.class);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] ValueEventListener : " +dataSnapshot );
-
+                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] matchSet_student : " +matchSet_student );
+                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] upLoadDate : " +upLoadDate );
 
                 //** 사진 파일 읽기
                 StorageReference storageReference;
