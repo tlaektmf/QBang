@@ -177,37 +177,48 @@ public class ItemProblemDetailFragment extends Fragment {
         String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
-        postCustomData=new (post_id,vmDataDefault.getTitle(),solveWay,matchSet_student,user);
-//        //** 1. UNMATCHED 에서 삭제
-//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
-//                .child(post_id).removeValue();
-//        Log.d(TAG,"[UNMATCHED에서 삭제완료]");
+        postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),solveWay,upLoadDate,matchSet_student,user);
+
 
         //** 2. teacher unsolved 에 저장
-
-
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
                 .child(user)
                 .child(VM_ENUM.DB_TEA_POSTS)
-                .child(post_id);
+                .child(VM_ENUM.DB_TEA_UNSOLVED)
+                .child(post_id)
+                .setValue(postCustomData);
         Log.d(TAG,"[teacher unsolved 에 저장]");
 
         //** 3. student unsolved에 저장
-
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                .child(matchSet_student)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_UNSOLVED)
+                .child(post_id)
+                .setValue(postCustomData);
         Log.d(TAG,"[student unsolved에 저장]");
 
 
-//        //** 4. student unmatched에서 삭제
-//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.STUDENT)
-//                .child(post_id).removeValue();
+        //** 4. student unmatched에서 삭제
+        FirebaseDatabase.getInstance().getReference()
+                .child(VM_ENUM.DB_STUDENTS)
+                .child(matchSet_student)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_UNMATCHED)
+                .child(post_id).removeValue();
 
         Log.d(TAG,"[student unmatched에서 삭제]");
+
         //** 5. POSTS 의 matchset에 설정
-        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
-                .child(post_id).child(VM_ENUM.DB_MATCH_STUDENT).setValue(matchSet_student);
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
                 .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
         Log.d(TAG,"[POSTS 의 matchset 등록 완료]");
+
+        //** 1. UNMATCHED 에서 삭제
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+                .child(post_id).removeValue();
+        Log.d(TAG,"[UNMATCHED에서 삭제완료]");
+
     }
 
     /****
