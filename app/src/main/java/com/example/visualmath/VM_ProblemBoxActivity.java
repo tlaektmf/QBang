@@ -161,6 +161,14 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 
+//            if(mData.get(position).getMatchSet_student()!=null){
+//                holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
+//            }
+//            if(mData.get(position).getSolveWay()!=null){
+//                holder.pSolveWay.setText(mData.get(position).getSolveWay());
+//            }
+
+
 //            if(item.getProblemLive()){
 //                //라이브인 경우 이미지 표시
 //                holder.pLive.setVisibility(View.VISIBLE);
@@ -179,13 +187,17 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             TextView pName;
             TextView pDate;
             ImageView pLive;
-            TextView
+            TextView pMatchStudent;
+            TextView pSolveWay;
+
 
             ViewHolder(View itemView){
                 super(itemView);
                 pName = itemView.findViewById(R.id.problem_name);
                 pDate = itemView.findViewById(R.id.problem_date);
                 pLive = itemView.findViewById(R.id.problem_live);
+                //pMatchStudent = itemView.findViewById(R.id.problem_solveWay);
+                //pSolveWay = itemView.findViewById(R.id.problem_matchStudent);
 
                 //** 아이템 클릭 이벤트
                 itemView.setOnClickListener(new View.OnClickListener() {
