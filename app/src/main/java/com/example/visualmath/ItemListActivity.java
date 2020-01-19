@@ -62,7 +62,7 @@ public class ItemListActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
     public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
-    public static String TAG="ItemListActivity";
+    public static String TAG=VM_ENUM.TAG;
     public View recyclerView;
 
     //lhj_0

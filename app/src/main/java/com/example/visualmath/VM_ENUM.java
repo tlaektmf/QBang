@@ -81,6 +81,7 @@ public  class VM_ENUM {
     public static final String DB_PROBLEM="problem";
     public static final String DB_UPLOAD_DATE="uploadDate";
     public static final String DB_STU_POSTS="posts";
+    public static final String DB_DATA_DEFAULT="data_default";
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
