@@ -92,7 +92,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     /**
      * class SimpleItemRecyclerViewAdapter
      */
-    public static class SimpleItemRecyclerViewAdapter
+    public  class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<VM_ProblemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final VM_ProblemListActivity mParentActivity;
@@ -104,17 +104,19 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TestContent.TestItem item = (TestContent.TestItem) view.getTag();
+                PostCustomData item = (PostCustomData)view.getTag();
 
-                Bundle arguments = new Bundle();
-                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_ID, item.getId());
-                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_CONTENT, item.getContent());
-                arguments.putString(ItemProblemDetailFragment.ARG_ITEM_DETAIL, item.getDetails());
-                ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
-                fragment.setArguments(arguments);
-                mParentActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.item_problem_detail_container, fragment)
-                        .commit();
+
+                    //** 프래그먼트의 아이템 클릭 시, ProblemDetail 전환
+                    ///searchData(pos);
+                    Bundle arguments = new Bundle();
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getP_id());
+                    ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
+                    fragment.setArguments(arguments);
+                    mParentActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_problem_detail_container, fragment)
+                            .commit();
+
             }
         };
 
@@ -165,18 +167,17 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 mDetailView = (TextView) view.findViewById(R.id.problem_content_detail);
                 mDateView = (TextView) view.findViewById(R.id.problem_content_time);
 
-                //** 아이템 클릭 이벤트
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final int pos = getAdapterPosition();
-
-                        if (pos != RecyclerView.NO_POSITION) {
-                            //** 프래그먼트의 아이템 클릭 시, ProblemDetail 전환
-                            ///searchData(pos);
-                        }
-                    }
-                });
+//                //** 아이템 클릭 이벤트
+//                itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        final int pos = getAdapterPosition();
+//
+//
+//
+//
+//                    }
+//                });
 
 
             }
