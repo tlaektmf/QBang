@@ -336,9 +336,8 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                         }else{
 
-                            String user_type=dataSnapshot.child(VM_ENUM.DB_USER_TYPE).getValue().toString();
-                            Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+dataSnapshot.child(VM_ENUM.DB_USER_TYPE).getValue());
-                            ///Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+dataSnapshot.getChildren().iterator().next());
+                            String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
+                            Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
 
                             if(user_type.equals(VM_ENUM.TEACHER)){
                                 Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
