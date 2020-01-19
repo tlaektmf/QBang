@@ -12,6 +12,13 @@ public class PostCustomData {
     public PostCustomData(){
 
     }
+
+    public PostCustomData(String p_id,String p_title,String upLoadDate){
+        this.p_id=p_id;
+        this.p_title=p_title;
+        this.upLoadDate=upLoadDate;
+    }
+
     public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate){
         this.p_id=p_id;
         this.p_title=p_title;
