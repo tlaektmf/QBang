@@ -181,7 +181,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
                     String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
                     matched.add(Pair.create(post_id, Pair.create(post_title,post_date)));
 
-                    Log.d(VM_ENUM.TAG, "[ProblemBox] ValueEventListener : " +post_id );
+                    Log.d(VM_ENUM.TAG, "[TeacherProblemBox] ValueEventListener : " +post_id );
 
                 }
 
@@ -210,7 +210,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 
 
         final String finalPost_id = post_id;
-        Log.d(VM_ENUM.TAG,"[VM_ProblemBox] POSTS 데이터"+finalPost_id+" 접근");
+        Log.d(VM_ENUM.TAG,"[TeacherProblemBox] POSTS 데이터"+finalPost_id+" 접근");
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
             @Override
@@ -218,7 +218,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
                 VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
 
                 assert vmDataDefault != null;
-                Log.d(VM_ENUM.TAG, "[ProblemBox] unmatched ValueEventListener : " +vmDataDefault.getTitle() );
+                Log.d(VM_ENUM.TAG, "[TeacherProblemBox] unmatched ValueEventListener : " +vmDataDefault.getTitle() );
 
                 Intent intent = new Intent(VM_TeacherSolveProblemActivity.this, VM_FullViewActivity.class);
                 intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, finalPost_id);

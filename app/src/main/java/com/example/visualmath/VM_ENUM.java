@@ -5,6 +5,10 @@ public  class VM_ENUM {
     //** post
     public static final int FINISH=0;  //>>삭제 예정
     public static final String PROJECT_EMAIL ="visualmath" ;
+    public static final String DB_SOLVE_WAY ="solveWay" ;
+    public static final String GRADE_HIGH ="고등" ;
+    public static final String GRADE_MID = "중등";
+    public static final String GRADE_ELEMENT = "초등";
 
 
     static final int BEFORE_MATCH=1; //>>삭제 예정

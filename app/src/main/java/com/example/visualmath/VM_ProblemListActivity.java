@@ -2,11 +2,13 @@ package com.example.visualmath;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +17,39 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.visualmath.dummy.AlarmItem;
 import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.dummy.PostCustomData;
 import com.example.visualmath.dummy.TestContent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class VM_ProblemListActivity extends AppCompatActivity {
     View recyclerView;
     ViewGroup layout;
-    public static String TAG="VM_ProblemList";
+    public static String TAG=VM_ENUM.TAG;
     private ProgressBar list_loading_bar;
+
+    Button btnElement ;
+    Button btnMid ;
+    Button btnHigh;
+
+    //** DB
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    private static List<PostCustomData> unmatched_element; //포스트 데이터 unmatched 리스트 /id/title/video or text
+    private static List<PostCustomData> unmatched_mid; //포스트 데이터 unmatched 리스트 /id/title/video or text
+    private static List<PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,30 +58,33 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         init();
 
-        //** detailView 클릭 이벤트
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(getApplicationContext(), VM_ProblemDetailActivity.class);
-                startActivity(intent);
-//                finish();
-            }
-        });
     }
 
     public void init(){
         recyclerView = findViewById(R.id.item_problem_list);
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
         list_loading_bar = findViewById(R.id.list_loading_bar);
+         btnElement = findViewById(R.id.ib_element);
+         btnMid = findViewById(R.id.ib_mid);
+         btnHigh = findViewById(R.id.ib_high);
+
+        unmatched_element=null;
+        unmatched_mid=null;
+        unmatched_high=null;
+
+        Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+        setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+
     }
 
+    private void setData(@NonNull RecyclerView recyclerView,List<PostCustomData> items) {
+        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, items));
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, new TestContent().getITEMS()));
+        list_loading_bar.setVisibility(View.INVISIBLE);
     }
+
 
     /**
      * class SimpleItemRecyclerViewAdapter
@@ -66,7 +93,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<VM_ProblemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final VM_ProblemListActivity mParentActivity;
-        private final List<TestContent.TestItem> mValues;
+        private final List<PostCustomData> mValues;
 
         /**
          * 문제 상세뷰로 이동
@@ -89,7 +116,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(VM_ProblemListActivity parent,
-                                      List<TestContent.TestItem> items) {
+                                      List<PostCustomData> items) {
             mValues = items;
             mParentActivity = parent;
 
@@ -105,8 +132,15 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final VM_ProblemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
 
-            holder.mDetailView.setText(mValues.get(position).getDetails());
-            holder.mtitleView.setText(mValues.get(position).getContent());
+            if(mValues.get(position).getSolveWay().equals(VM_ENUM.VIDEO)){
+                holder.mtitleView.setText("[영상 질문]");//video or text
+            }else if(mValues.get(position).getSolveWay().equals(VM_ENUM.TEXT)){
+                holder.mtitleView.setText("[텍스트 질문]");//video or text
+            }
+
+            holder.mDetailView.setText(mValues.get(position).getP_title());//title
+            holder.mDateView.setText(mValues.get(position).getUpLoadDate());//title
+
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
 
@@ -120,12 +154,13 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mtitleView;
             final TextView mDetailView;
-
+            final TextView mDateView;
 
             ViewHolder(View view) {
                 super(view);
                 mtitleView = (TextView) view.findViewById(R.id.problem_content_title);
                 mDetailView = (TextView) view.findViewById(R.id.problem_content_detail);
+                mDateView = (TextView) view.findViewById(R.id.problem_content_time);
 
             }
         }
@@ -148,60 +183,121 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     }
 
 
-    private void setData(@NonNull RecyclerView recyclerView,List<TestContent.TestItem> items) {
-        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, items));
-        
-        list_loading_bar.setVisibility(View.INVISIBLE);
-    }
+
 
     public void showElementary(View view) {
         //** 초등
-        Button btn01 = findViewById(R.id.ib_element);
-        Button btn02 = findViewById(R.id.ib_mid);
-        Button btn03 = findViewById(R.id.ib_high);
 
-        btn01.setSelected(true);
-        btn02.setSelected(false);
-        btn03.setSelected(false);
 
-        Log.i(TAG,"클릭");
-        TestContent testContent=new TestContent();
-        for(int i=0;i<3;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","초     등"+i,"detail"+i));
+        btnElement.setSelected(true);
+        btnMid.setSelected(false);
+        btnHigh.setSelected(false);
+
+//** 데이터베이스 트랜젝션
+        if(unmatched_element!=null){
+            //데이터 셋팅은 되어있는 상태
+            //        리사이클러뷰에 객체 지정
+           setData((RecyclerView) recyclerView,unmatched_element);
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],데이터 셋팅은 되어있는 상태 ");
+        }else{
+            //초기 셋팅 필요
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],초기 셋팅 필요 | setUnmatchedData 호출");
+            setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
         }
-        setData((RecyclerView) recyclerView,testContent.getITEMS());
+
     }
 
     public void showMid(View view) {
-        Button btn01 = findViewById(R.id.ib_element);
-        Button btn02 = findViewById(R.id.ib_mid);
-        Button btn03 = findViewById(R.id.ib_high);
 
-        btn01.setSelected(false);
-        btn02.setSelected(true);
-        btn03.setSelected(false);
+        btnElement.setSelected(false);
+        btnMid.setSelected(true);
+        btnHigh.setSelected(false);
 
-        TestContent testContent=new TestContent();
-        for(int i=0;i<15;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","중     등"+i,"detail"+i));
+
+        //** 데이터베이스 트랜젝션
+        if(unmatched_mid!=null){
+            //데이터 셋팅은 되어있는 상태
+            //        리사이클러뷰에 객체 지정
+            setData((RecyclerView) recyclerView,unmatched_mid);
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],데이터 셋팅은 되어있는 상태 ");
+        }else{
+            //초기 셋팅 필요
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],초기 셋팅 필요 | setUnmatchedData 호출");
+            setUnmatchedData(VM_ENUM.GRADE_MID);
         }
-        setData((RecyclerView) recyclerView,testContent.getITEMS());
 
     }
 
     public void showHigh(View view) {
-        Button btn01 = findViewById(R.id.ib_element);
-        Button btn02 = findViewById(R.id.ib_mid);
-        Button btn03 = findViewById(R.id.ib_high);
 
-        btn01.setSelected(false);
-        btn02.setSelected(false);
-        btn03.setSelected(true);
+        btnElement.setSelected(false);
+        btnMid.setSelected(false);
+        btnHigh.setSelected(true);
 
-        TestContent testContent=new TestContent();
-        for(int i=0;i<15;i++){
-            testContent.getITEMS().add(new TestContent.TestItem(i+"","고     등"+i,"detail"+i));
+//** 데이터베이스 트랜젝션
+        if(unmatched_high!=null){
+            //데이터 셋팅은 되어있는 상태
+            //        리사이클러뷰에 객체 지정
+            setData((RecyclerView) recyclerView,unmatched_high);
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],데이터 셋팅은 되어있는 상태 ");
+        }else{
+            //초기 셋팅 필요
+            Log.d(VM_ENUM.TAG,"[선생님 문제 선택],초기 셋팅 필요 | setUnmatchedData 호출");
+            setUnmatchedData(VM_ENUM.GRADE_HIGH);
         }
-        setData((RecyclerView) recyclerView,testContent.getITEMS());
     }
+
+    /****
+     * 데이터베이스 트랜젝션
+     * write
+     */
+    public void setUnmatchedData(final String grade){
+
+
+        firebaseDatabase=FirebaseDatabase.getInstance();
+
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
+
+        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                List<PostCustomData> unmatched=new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+
+                    String post_id=snapshot.getKey();
+                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
+                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
+                    String post_solveWay=snapshot.child(VM_ENUM.DB_SOLVE_WAY).getValue().toString();
+
+//                    PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate)
+                    unmatched.add(new PostCustomData(post_id,post_title,post_solveWay,post_date) );
+                    Log.d(TAG, "[선생님 문제 선택뷰] ValueEventListener : " +snapshot.getValue() );
+
+                }
+
+                if(grade.equals(VM_ENUM.GRADE_ELEMENT)){
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 생성 "  );
+                    unmatched_element=unmatched;
+                }else if(grade.equals(VM_ENUM.GRADE_MID)){
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 생성 "  );
+                    unmatched_mid=unmatched;
+                }else if(grade.equals(VM_ENUM.GRADE_HIGH)){
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 생성 "  );
+                    unmatched_high=unmatched;
+                }
+
+               setData((RecyclerView) recyclerView,unmatched);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Failed to read value", databaseError.toException());
+            }
+        });
+
+    }
+
 }
