@@ -38,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class VM_LoginActivity extends AppCompatActivity {
 
     EditText editTextUserId;
@@ -138,52 +140,73 @@ public class VM_LoginActivity extends AppCompatActivity {
     //**올바른 아이디와 비밀번호가 입력됐는지 확인함
     private void userLogin(final String email, String password){
         //logging in the user
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if(task.isSuccessful()) {
+                        if(task.isSuccessful()) {//** 로그인 성공 시
 
-                            //** 이메일 검증 절차 확인
-                            if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
-                                Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 완료]");
+                            String currentUserEmail = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
+                            assert currentUserEmail != null;
+                            String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+                            String user=currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+                            boolean isAllowed=false;
+
+                            if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+                                //**선생님인 경우
+                                isAllowed=true;
                             }else{
-                                Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 이전]");
+                                //** 이메일 검증 절차 확인
+                                if(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified()){
+                                    Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 완료]");
+                                    isAllowed=true;
+                                }else{
+                                    Log.d(VM_ENUM.TAG,"[사용자 이메일 인증 이전]");
+                                    isAllowed=false;
+                                }
                             }
-                            /*
-                             * 자동로그인이 체크 되어있는 경우, 파일에 저장
-                             * 자동로그인이 체크 되어있지 않은  경우, 파일에 저장x
-                             * */
-                            if(isAutoLoginChecked){
-                                SaveSharedPreference.setUserName(VM_LoginActivity.this, userId);
-                                Log.i("VM_LoginActivity",isAutoLoginChecked.toString());
-                            }
-                            else{
+
+                            if(isAllowed){
+                                /*
+                                 * 자동로그인이 체크 되어있는 경우, 파일에 저장
+                                 * 자동로그인이 체크 되어있지 않은  경우, 파일에 저장x
+                                 * */
+                                if(isAutoLoginChecked){
+                                    SaveSharedPreference.setUserName(VM_LoginActivity.this, userId);
+                                    Log.i("VM_LoginActivity",isAutoLoginChecked.toString());
+                                }
+                                else{
                                 /*
                                 자동 로그인을 선택하지 않았을 때 실행 되는 코드
                                  */
-                                SaveSharedPreference.clearUserName(VM_LoginActivity.this);
-                            }
+                                    SaveSharedPreference.clearUserName(VM_LoginActivity.this);
+                                }
 
-                            // 계정확인이 완료되면, user 정보를 가지고 HomeActivity 이동
-                            Intent intent=null;
-                            if(editTextUserId.getText().toString().equals("student@gmail.com")){
-                                intent= new Intent(getApplicationContext(), HomeActivity.class);
-                            }
-                            else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
-                                intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
-                            }
-                            else if(editTextUserId.getText().toString().contains("@visualmath.com")){
-                                intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
-                            }else{//** 예외가 아닌 경우는 모두 학생으로 취급함
-                                intent= new Intent(getApplicationContext(), HomeActivity.class);
-                            }
-                            //intent.putExtra("UID", userId);
-                            startActivity(intent);
-                            finish();
+                                checkUserDatabase(user,mailDomain);
 
-                        } else {
+                                // 계정확인이 완료되면, user 정보를 가지고 HomeActivity 이동
+                                Intent intent=null;
+                                if(editTextUserId.getText().toString().equals("student@gmail.com")){
+                                    intent= new Intent(getApplicationContext(), HomeActivity.class);
+                                }
+                                else if(editTextUserId.getText().toString().equals("teacher@gmail.com")){
+                                    intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
+                                }
+                                else if(editTextUserId.getText().toString().contains("@visualmath.com")){
+                                    intent = new Intent(getApplicationContext(), TeacherHomeActivity.class);
+                                }else{//** 예외가 아닌 경우는 모두 학생으로 취급함
+                                    intent= new Intent(getApplicationContext(), HomeActivity.class);
+                                }
+
+                                startActivity(intent);
+                                finish();
+
+                            }
+                            }
+                      else {
                             //로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
                         }
@@ -352,5 +375,75 @@ public class VM_LoginActivity extends AppCompatActivity {
     public void clickRegisterUser(View view) {
         Intent intent=new Intent(VM_LoginActivity.this,VM_RegisterUserActivity.class);
         startActivity(intent);
+    }
+
+    public void createUserDatabase(String user,String user_type){
+        //데이터 베이스 등록
+        VM_DBHandler dbHandler=new VM_DBHandler();
+        Log.d(VM_ENUM.TAG, "[ createUserDatabase | user email, user type]"+user+","+user_type);
+
+        dbHandler.newUser(user,user_type);
+
+        if(user_type.equals(VM_ENUM.TEACHER)){
+            Log.d(VM_ENUM.TAG, "[createUserDatabase | 선생님 모드 인텐트 이동]");
+            Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+            startActivity(intent);
+            finish();
+        }else if(user_type.equals(VM_ENUM.STUDENT)){
+            Log.d(VM_ENUM.TAG, "[createUserDatabase | 학생 모드 인텐트 이동]");
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+            startActivity(intent);
+            finish();
+        }
+
+
+    }
+    public void checkUserDatabase(final String user, final String mailDomain){
+
+        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+        DatabaseReference reference= firebaseDatabase.getReference(VM_ENUM.DB_USERS);
+
+        reference.orderByKey().equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.getValue()==null){
+                    Log.d(VM_ENUM.TAG,"checkUserDatabase 계정이 없습니다. DB 등록");
+                    //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
+
+                    if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){//** 선생님인 경우
+                        createUserDatabase(user,VM_ENUM.TEACHER);
+                        Log.d(VM_ENUM.TAG,"checkUserDatabase 선생님인 경우 DB 등록 함수 호출");
+                    }else{
+                        //** 학생인 경우
+                        Log.d(VM_ENUM.TAG,"checkUserDatabase 학생인 경우 DB 등록 함수 호출");
+                        createUserDatabase(user,VM_ENUM.STUDENT);
+                    }
+
+
+                }else{
+
+                    String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
+                    Log.d(VM_ENUM.TAG,"checkUserDatabase 이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
+                    ///Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+dataSnapshot.getChildren().iterator().next());
+
+                    if(user_type.equals(VM_ENUM.TEACHER)){
+                        Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }else if(user_type.equals(VM_ENUM.STUDENT)){
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

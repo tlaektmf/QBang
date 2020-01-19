@@ -4,6 +4,7 @@ public  class VM_ENUM {
 
     //** post
     public static final int FINISH=0;  //>>삭제 예정
+    public static final String PROJECT_EMAIL ="visualmath.com" ;
     static final int BEFORE_MATCH=1; //>>삭제 예정
     static final int AFTER_MACTH=2; //>>삭제 예정
 
