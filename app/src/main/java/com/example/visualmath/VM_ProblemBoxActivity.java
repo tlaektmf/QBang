@@ -317,7 +317,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
                     .child(post_id)
                     .child(VM_ENUM.DB_DATA_DEFAULT);
-            
+
         }else{//"현재 상태: 매치 미완료 목록"
             post_id=unmatched.get(position).first;
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
