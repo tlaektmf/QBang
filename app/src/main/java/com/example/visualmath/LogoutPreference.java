@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,7 @@ import androidx.preference.PreferenceViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LogoutPreference extends Preference {
-    private TextView logout_textview;
+    private Button logout_textview;
 
 
     public LogoutPreference(Context context, AttributeSet attrs){
@@ -26,7 +27,7 @@ public class LogoutPreference extends Preference {
     @Override
     public void onBindViewHolder(final PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        logout_textview = (TextView) holder.findViewById(R.id.logout_text);
+        logout_textview = (Button) holder.findViewById(R.id.logout_text);
         logout_textview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

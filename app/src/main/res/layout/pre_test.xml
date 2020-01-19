@@ -4,15 +4,45 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:layout_gravity="center_horizontal"
+    android:gravity="center"
     android:padding="10dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#e6e6e6"
+        android:layout_marginBottom="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="자동로그인 정보"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textSize="16dp"
+            android:textColor="#040404"
 
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/all_preference_delete"
-    android:text="자동로그인 정보 삭제"
-    />
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center"/>
+        <Button
+            android:id="@+id/all_preference_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="삭제하기"
+            android:fontFamily="@font/nanumsquaure_eb"
+            android:textSize="15dp"
+            android:textColor="#72d8ff"
+            android:layout_marginRight="16dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@color/transparent"
+            android:gravity="center"/>
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -4,8 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:layout_gravity="center_horizontal"
+    android:gravity="center"
     android:padding="10dp">
 
     <View
@@ -30,17 +31,17 @@
 
             android:layout_marginLeft="15dp"/>
 
-        <TextView
+        <Button
             android:id="@+id/logout_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
             android:text="로그아웃"
-            android:fontFamily="@font/nanumsquaure_r"
+            android:fontFamily="@font/nanumsquaure_eb"
             android:textSize="15dp"
             android:textColor="#72d8ff"
-
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="16dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@color/transparent"
             android:gravity="center"/>
     </LinearLayout>
 
