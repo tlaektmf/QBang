@@ -81,11 +81,13 @@
             android:id="@+id/tv_detail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/detail_back"
+            android:background="@drawable/answer_back"
+            android:padding="20dp"
+            android:gravity="start"
 
             android:fontFamily="@font/nanumsquaure_r"
             android:textColor="#016a96"
-            android:textSize="@dimen/small_input_text"
+            android:textSize="15dp"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
