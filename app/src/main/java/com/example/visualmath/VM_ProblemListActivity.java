@@ -106,11 +106,12 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 PostCustomData item = (PostCustomData)view.getTag();
 
-
+                Log.d(VM_ENUM.TAG,"[아이템 선택]"+item.getP_id()+","+item.getSolveWay());
                     //** 프래그먼트의 아이템 클릭 시, ProblemDetail 전환
                     ///searchData(pos);
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getP_id());
+                    arguments.putString(VM_ENUM.DB_SOLVE_WAY,item.getSolveWay());
                     ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()

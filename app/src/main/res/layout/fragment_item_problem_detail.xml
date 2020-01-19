@@ -54,9 +54,9 @@
             app:layout_constraintTop_toBottomOf="@id/tv_alarm"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_problem_detail"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_problem_grade"/>
         <TextView
-            android:id="@+id/tv_problem_detail"
+            android:id="@+id/tv_problem_grade"
             android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
             android:layout_marginBottom="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_problem_detail"
+            app:layout_constraintTop_toBottomOf="@id/tv_problem_grade"
             app:layout_constraintBottom_toTopOf="@id/iv_problem_image"/>
 
         <ImageView

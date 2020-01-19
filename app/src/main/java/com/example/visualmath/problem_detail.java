@@ -82,8 +82,8 @@ public class problem_detail extends Fragment {
     }
 
     public void init(ViewGroup _rootView){
-        textViewTitle=_rootView.findViewById(R.id.detail_frag_tv_title);
-        textViewGrade=_rootView.findViewById(R.id.detail_frag_tv_grade);
+        textViewTitle=_rootView.findViewById(R.id.detail_frag_tv_grade);//** 위치 그냥바꿈..
+        textViewGrade=_rootView.findViewById(R.id.detail_frag_tv_title);
         textViewContent=_rootView.findViewById(R.id.tv_question);
         imageViewOther1=_rootView.findViewById(R.id.extra_img_one);
         imageViewOther2=_rootView.findViewById(R.id.extra_img_two);
