@@ -58,6 +58,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__problem_box);
 
+        Log.d(VM_ENUM.TAG,"[ProblemBoxAct]init 함수 호출");
         init();
     }
 
@@ -88,8 +89,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
     //매치 미완료 목록 보여주기 탭(왼쪽)
     public void show_unmatched_list(View view){
-        needToBlock=VM_ENUM.IT_ARG_BLOCK;
-        fromStudentUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+
 
         isUnMatchedClick=true;
 
@@ -113,8 +113,6 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     }
     //매치 완료 목록 보여주기 탭(오른쪽)
     public void show_matched_list(View view){
-        needToBlock=null;
-        fromStudentUnmatched=null;
 
         isUnMatchedClick=false;
         Toast.makeText(this, "매치 완료 목록",Toast.LENGTH_LONG).show();
@@ -330,7 +328,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     public void searchData(int position){
         String post_id=null;
 
-        if(isUnMatchedClick==false){//"현재상태: 매치완료 목록"
+        if(!isUnMatchedClick){//"현재상태: 매치완료 목록"
             post_id=matched.get(position).getP_id();
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
                     .child(post_id)
@@ -342,7 +340,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                     .child(post_id)
                     .child(VM_ENUM.DB_DATA_DEFAULT);
 
-        }
+            needToBlock=VM_ENUM.IT_ARG_BLOCK;
+            fromStudentUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+           }
 
         final String finalPost_id = post_id;
         Log.d(VM_ENUM.TAG,"[VM_ProblemBox] POSTS 데이터"+finalPost_id+" 접근");
@@ -361,9 +361,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
 
-                if(needToBlock.equals(VM_ENUM.IT_ARG_BLOCK)){ //** 매치 미완료의 경우 사용자의 채팅창 막음
+                if(needToBlock!=null){ //** 매치 미완료의 경우 사용자의 채팅창 막음
                     intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);
                     intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);
+                    Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
                 }
 
                 startActivity(intent);
