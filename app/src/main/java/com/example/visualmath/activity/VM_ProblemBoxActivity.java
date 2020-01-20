@@ -35,6 +35,8 @@ import java.util.Objects;
 
 public class VM_ProblemBoxActivity extends AppCompatActivity {
     public static String TAG= VM_ENUM.TAG;
+    public String needToBlock;
+    public String fromStudentUnmatched;
 
     private Button btn_unmatched;
     private Button btn_matched;
@@ -65,7 +67,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         btn_unmatched = findViewById(R.id.btn_unmatched);
         btn_matched = findViewById(R.id.btn_matched);
         recycler_view = findViewById(R.id.problem_recyclerview);
-
+        needToBlock=null;
+        fromStudentUnmatched=null;
 //        화면 초기 상태에서는 미완료 목록이 클릭된 상태
         btn_unmatched.setSelected(true);
 
@@ -85,7 +88,11 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
     //매치 미완료 목록 보여주기 탭(왼쪽)
     public void show_unmatched_list(View view){
+        needToBlock=VM_ENUM.IT_ARG_BLOCK;
+        fromStudentUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+
         isUnMatchedClick=true;
+
         Toast.makeText(this, "매치 미완료 목록",Toast.LENGTH_LONG).show();
         btn_unmatched.setSelected(true);
         btn_matched.setSelected(false);
@@ -106,6 +113,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     }
     //매치 완료 목록 보여주기 탭(오른쪽)
     public void show_matched_list(View view){
+        needToBlock=null;
+        fromStudentUnmatched=null;
+
         isUnMatchedClick=false;
         Toast.makeText(this, "매치 완료 목록",Toast.LENGTH_LONG).show();
         btn_unmatched.setSelected(false);
@@ -351,6 +361,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
 
+                if(needToBlock.equals(VM_ENUM.IT_ARG_BLOCK)){ //** 매치 미완료의 경우 사용자의 채팅창 막음
+                    intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);
+                    intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);
+                }
 
                 startActivity(intent);
 

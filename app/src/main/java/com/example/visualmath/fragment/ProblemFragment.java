@@ -84,7 +84,15 @@ public class ProblemFragment extends Fragment {
 
     //>>>>>
 
+//DashBoardFragment
+// VM_ProblemBoxActivity
+// 에서 ProblemFragment로 오는 경우, 채팅창 라인 비활성화
     private boolean needToBlock;
+
+    //**학생의 unmatched 에서 오는 경우, matchset_teacher를 dB에서 찾지 않기 위한 예외처리
+    private boolean fromStudentUnmatched;
+
+
     private ViewGroup rootView;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -103,7 +111,11 @@ public class ProblemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         needToBlock=false;
+        fromStudentUnmatched=false;
+
+        assert getArguments() != null;
         needToBlock=getArguments().getBoolean(VM_ENUM.IT_ARG_BLOCK);
+        fromStudentUnmatched=getArguments().getBoolean(VM_ENUM.IT_FROM_UNMATCHED);
         post_id = getArguments().getString(ItemDetailFragment.ARG_ITEM_ID);
         post_title = getArguments().getString(VM_FullViewActivity.ARG_ITEM_TITLE);
 
@@ -157,8 +169,15 @@ public class ProblemFragment extends Fragment {
 
                 Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
                 List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
-                matchset_teacher=dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue().toString();
-                Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher);
+
+                if(!fromStudentUnmatched){
+                    matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
+                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher);
+                }else{
+                    Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
+                }
+
+
                 vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
                 Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
 

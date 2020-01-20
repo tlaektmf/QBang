@@ -362,7 +362,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
-                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);
+                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
                             mParentActivity.startActivity(intent);
                             Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
                         }
