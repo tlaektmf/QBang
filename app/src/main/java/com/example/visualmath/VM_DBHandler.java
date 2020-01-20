@@ -1,31 +1,31 @@
 package com.example.visualmath;
 
-import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.visualmath.data.VM_Data_ADD;
+import com.example.visualmath.data.VM_Data_BASIC;
+import com.example.visualmath.data.VM_Data_CHAT;
+import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.data.VM_Data_EXTRA;
+import com.example.visualmath.data.VM_Data_POST;
+import com.example.visualmath.data.VM_Data_STUDENT;
+import com.example.visualmath.data.VM_Data_TEACHER;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.core.utilities.encoding.CustomClassMapper;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.logging.Handler;
 
 public class VM_DBHandler {
     private static final String TAG = VM_ENUM.TAG;

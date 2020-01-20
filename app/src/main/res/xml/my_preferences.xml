@@ -17,11 +17,11 @@
 <!--        android:layout="@layout/pre_logout"-->
 <!--        android:key="logout"/>-->
 
-    <com.example.visualmath.LogoutPreference
+    <com.example.visualmath.preference.LogoutPreference
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 
-    <com.example.visualmath.DatabaseRemovePreference
+    <com.example.visualmath.preference.DatabaseRemovePreference
         android:layout="@layout/pre_test"
         android:key="dataRemove"/>
 <!--    <Preference-->

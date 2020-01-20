@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabFragment"
+    tools:context=".fragment.TabFragment"
     tools:ignore="missingPrefix">
 
     <!-- TODO: Update blank fragment layout -->
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layoutManager="LinearLayoutManager"
-                tools:context="com.example.visualmath.ItemListActivity"
+                tools:context="com.example.visualmath.activity.ItemListActivity"
                 tools:listitem="@layout/item_list_content"
 
                 app:scale_left="0"

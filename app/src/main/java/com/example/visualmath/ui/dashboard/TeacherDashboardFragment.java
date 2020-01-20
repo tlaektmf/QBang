@@ -2,7 +2,6 @@ package com.example.visualmath.ui.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,15 +29,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.visualmath.FilterAdapter;
-import com.example.visualmath.HomeActivity;
-import com.example.visualmath.ItemDetailFragment;
-import com.example.visualmath.ItemListActivity;
+import com.example.visualmath.adapter.FilterAdapter;
+import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
-import com.example.visualmath.TeacherHomeActivity;
-import com.example.visualmath.VM_Data_Default;
-import com.example.visualmath.VM_FullViewActivity;
-import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.activity.TeacherHomeActivity;
+import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.activity.VM_FullViewActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

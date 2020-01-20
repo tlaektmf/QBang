@@ -13,9 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.visualmath.R;
-import com.example.visualmath.VM_ProblemListActivity;
-import com.example.visualmath.VM_RegisterProblemActivity;
-import com.example.visualmath.VM_TeacherSolveProblemActivity;
+import com.example.visualmath.activity.VM_ProblemListActivity;
+import com.example.visualmath.activity.VM_TeacherSolveProblemActivity;
 
 /**
  * A simple {@link Fragment} subclass.

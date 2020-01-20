@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".VM_ProblemListActivity">
+    tools:context=".activity.VM_ProblemListActivity">
 
     <RelativeLayout
         android:id="@+id/teacher_choose_container"
@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
             android:paddingTop="10dp"
-            tools:context="com.example.visualmath.VM_ProblemListActivity"
+            tools:context="com.example.visualmath.activity.VM_ProblemListActivity"
             tools:listitem="@layout/item_problem_list_content"
 
             android:layout_marginRight="20dp"

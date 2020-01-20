@@ -40,7 +40,7 @@
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
             android:paddingTop="10dp"
-            tools:context="com.example.visualmath.ItemListActivity"
+            tools:context="com.example.visualmath.activity.ItemListActivity"
             tools:listitem="@layout/item_list_content"
             android:background="#ffffff"
 

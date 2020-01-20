@@ -1,6 +1,5 @@
 package com.example.visualmath.ui.dashboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ProgressBar;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +28,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.visualmath.FilterAdapter;
-import com.example.visualmath.HomeActivity;
-import com.example.visualmath.ItemDetailFragment;
+import com.example.visualmath.adapter.FilterAdapter;
+import com.example.visualmath.activity.HomeActivity;
+import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
-import com.example.visualmath.VM_Data_Default;
+import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.VM_ENUM;
-import com.example.visualmath.VM_FullViewActivity;
-import com.example.visualmath.dummy.AlarmItem;
-import com.example.visualmath.dummy.DummyContent;
+import com.example.visualmath.activity.VM_FullViewActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +43,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
