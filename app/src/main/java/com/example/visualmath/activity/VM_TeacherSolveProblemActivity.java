@@ -101,7 +101,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder holder, int position) {
 
-            holder.pName.setText(mData.get(position).getP_title());
+            holder.pName.setText(mData.get(position).getTitle());
             //holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
            // holder.pSolveWay.setText(mData.get(position).getSolveWay());
             holder.pDate.setText(mData.get(position).getUpLoadDate());

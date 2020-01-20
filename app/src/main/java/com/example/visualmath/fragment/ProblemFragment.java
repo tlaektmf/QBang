@@ -26,9 +26,12 @@ import com.example.visualmath.adapter.VM_ChatAdapter;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
+import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
+import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,8 +41,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 
 /**
@@ -49,17 +56,11 @@ public class ProblemFragment extends Fragment {
 
     //**
     private static final String TAG = VM_ENUM.TAG;
-    private static final int CAMERA = 1;
-    private static final int GALLERY = 2;
-    private static final int LIVE = 3;
-    private static final int VIDEO = 4;
-    private static final int COMPLETE = 5;
-    private static final int NOTHING = -1;
 
-    private static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
-    private static final int PICK_FROM_CAMERA = 2;
-    private static final int OTHER_DATA_LOAD = 3;
-
+    private  String user_id;
+    private String user_type;
+    private String matchset_teacher;
+    private VM_Data_Default vmDataDefault;
 
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
@@ -109,10 +110,7 @@ public class ProblemFragment extends Fragment {
         firebaseDatabase= FirebaseDatabase.getInstance();
         storageReference= FirebaseStorage.getInstance().getReference();
 
-        reference=firebaseDatabase.getReference("POSTS");
-        reference=reference.child(post_id)
-                .child("chatList");
-
+        reference=firebaseDatabase.getReference("POSTS").child(post_id);
 
         mGlideRequestManager = Glide.with(this);
         chatList =new ArrayList<>();
@@ -137,16 +135,33 @@ public class ProblemFragment extends Fragment {
         //** 채팅창 제목 설정
         textViewChatRoomTitle.setText(post_title);
 
+        //** 유저 정보 설정
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+            //선생님
+            user_type=VM_ENUM.TEACHER;
+        }else{
+            user_type=VM_ENUM.STUDENT;
+        }
+
         //** chat 데이터 생성
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<VM_Data_CHAT>> tmp = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
 
                 Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
-                if(dataSnapshot.getValue(tmp)!=null){ //** chatList에 데이터가 있는 경우
-                    chatList=dataSnapshot.getValue(tmp);
+                List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
+                matchset_teacher=dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue().toString();
+                Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher);
+
+                if(chats!=null){ //** chatList에 데이터가 있는 경우
+                    chatList=chats;
                     Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
                     adapter = new VM_ChatAdapter(chatList, getActivity());
                     recyclerView.setAdapter(adapter);
@@ -156,8 +171,6 @@ public class ProblemFragment extends Fragment {
                 }
 
 
-                //** 리스트뷰에 반영
-                ///adapter.notifyDataSetChanged();
 
             }
 
@@ -232,8 +245,53 @@ public class ProblemFragment extends Fragment {
 
                     @Override
                     public void onButtonComplete() {
-                        Toast.makeText(getActivity(), "완료버튼", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "문제풀이가 완료 되었습니다. \\n <질문 노트>에서 확인 가능합니다.", Toast.LENGTH_LONG).show();
+                        Log.d(VM_ENUM.TAG,"[완료된 포스트 ID ] "+post_id);
+                        long time = System.currentTimeMillis();//시스템 시간
+                        Date date = new Date(time);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
+                        String doneTime = dateFormat.format(date);//문제 완료 시간
 
+                        //   public PostCustomData(String p_id,String p_title,String grade,String problem,String time)
+                        PostCustomData postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),vmDataDefault.getGrade(),vmDataDefault.getProblem(),doneTime);
+
+                        //** teacher unsolved에서 done으로 이동
+                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                                .child(matchset_teacher)
+                                .child(VM_ENUM.DB_STU_POSTS)
+                                .child(VM_ENUM.DB_STU_DONE)
+                                .child(post_id)
+                                .setValue(postCustomData);
+                        Log.d(TAG,"[teacher done에 저장]");
+
+//                        //** student unsolved에서 done으로 이동
+//                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+//                                .child(user_id)
+//                                .child(VM_ENUM.DB_STU_POSTS)
+//                                .child(VM_ENUM.DB_STU_DONE)
+//                                .child(post_id)
+//                                .setValue(postCustomData);
+//                        Log.d(TAG,"[student done에 저장]");
+//
+//
+////                        //** teacher unsolved에서 삭제
+//                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+//                                .child(matchset_teacher)
+//                                .child(VM_ENUM.DB_TEA_POSTS)
+//                                .child(VM_ENUM.DB_TEA_UNSOLVED)
+//                                .child(post_id)
+//                                .removeValue();
+//                        Log.d(TAG,"[ "+ matchset_teacher+ "teacher unsolved 에서 삭제]");
+//
+//                        //** student unsolved에서 삭제
+//                        FirebaseDatabase.getInstance().getReference()
+//                                .child(VM_ENUM.DB_STUDENTS)
+//                                .child(user_id)
+//                                .child(VM_ENUM.DB_STU_POSTS)
+//                                .child(VM_ENUM.DB_STU_UNSOLVED)
+//                                .child(post_id).removeValue();
+//
+//                        Log.d(TAG,"[student unsolved에서 삭제]");
                     }
                 });
                 dig.callFunction();
