@@ -159,6 +159,8 @@ public class ProblemFragment extends Fragment {
                 List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
                 matchset_teacher=dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue().toString();
                 Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher);
+                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
+                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
 
                 if(chats!=null){ //** chatList에 데이터가 있는 경우
                     chatList=chats;
@@ -264,34 +266,34 @@ public class ProblemFragment extends Fragment {
                                 .setValue(postCustomData);
                         Log.d(TAG,"[teacher done에 저장]");
 
-//                        //** student unsolved에서 done으로 이동
-//                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
-//                                .child(user_id)
-//                                .child(VM_ENUM.DB_STU_POSTS)
-//                                .child(VM_ENUM.DB_STU_DONE)
-//                                .child(post_id)
-//                                .setValue(postCustomData);
-//                        Log.d(TAG,"[student done에 저장]");
-//
-//
-////                        //** teacher unsolved에서 삭제
-//                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
-//                                .child(matchset_teacher)
-//                                .child(VM_ENUM.DB_TEA_POSTS)
-//                                .child(VM_ENUM.DB_TEA_UNSOLVED)
-//                                .child(post_id)
-//                                .removeValue();
-//                        Log.d(TAG,"[ "+ matchset_teacher+ "teacher unsolved 에서 삭제]");
-//
-//                        //** student unsolved에서 삭제
-//                        FirebaseDatabase.getInstance().getReference()
-//                                .child(VM_ENUM.DB_STUDENTS)
-//                                .child(user_id)
-//                                .child(VM_ENUM.DB_STU_POSTS)
-//                                .child(VM_ENUM.DB_STU_UNSOLVED)
-//                                .child(post_id).removeValue();
-//
-//                        Log.d(TAG,"[student unsolved에서 삭제]");
+                        //** student unsolved에서 done으로 이동
+                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                                .child(user_id)
+                                .child(VM_ENUM.DB_STU_POSTS)
+                                .child(VM_ENUM.DB_STU_DONE)
+                                .child(post_id)
+                                .setValue(postCustomData);
+                        Log.d(TAG,"[student done에 저장]");
+
+
+                        //** teacher unsolved에서 삭제
+                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                                .child(matchset_teacher)
+                                .child(VM_ENUM.DB_TEA_POSTS)
+                                .child(VM_ENUM.DB_TEA_UNSOLVED)
+                                .child(post_id)
+                                .removeValue();
+                        Log.d(TAG,"[ "+ matchset_teacher+ "teacher unsolved 에서 삭제]");
+
+                        //** student unsolved에서 삭제
+                        FirebaseDatabase.getInstance().getReference()
+                                .child(VM_ENUM.DB_STUDENTS)
+                                .child(user_id)
+                                .child(VM_ENUM.DB_STU_POSTS)
+                                .child(VM_ENUM.DB_STU_UNSOLVED)
+                                .child(post_id).removeValue();
+
+                        Log.d(TAG,"[student unsolved에서 삭제]");
                     }
                 });
                 dig.callFunction();

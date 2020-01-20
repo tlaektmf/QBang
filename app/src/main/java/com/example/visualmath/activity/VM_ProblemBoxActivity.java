@@ -155,7 +155,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ProblemListAdapter.ViewHolder holder, int position) {
 
-            holder.pName.setText(mData.get(position).getP_title());
+            holder.pName.setText(mData.get(position).getTitle());
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 

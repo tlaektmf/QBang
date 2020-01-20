@@ -140,7 +140,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 holder.mtitleView.setText("[텍스트 질문]");//video or text
             }
 
-            holder.mDetailView.setText(mValues.get(position).getP_title());//title
+            holder.mDetailView.setText(mValues.get(position).getTitle());//title
             holder.mDateView.setText(mValues.get(position).getUpLoadDate());//title
 
             holder.itemView.setTag(mValues.get(position));
