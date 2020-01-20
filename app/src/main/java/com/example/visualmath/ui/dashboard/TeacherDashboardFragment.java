@@ -302,7 +302,7 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
             holder.itemView.setTag(mValues.get(position));
 
             //** Date 에서 시간만 표기 (시:분)
-            String token = mValues.get(position).second.second.split(" ")[1];
+            String token = mValues.get(position).second.second;
             holder.mTimeView.setText(token);//시간
 
         }

@@ -247,7 +247,7 @@ public class ProblemFragment extends Fragment {
 
                     @Override
                     public void onButtonComplete() {
-                        Toast.makeText(getActivity(), "문제풀이가 완료 되었습니다. \\n <질문 노트>에서 확인 가능합니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "문제풀이가 완료 되었습니다. \n <질문 노트>에서 확인 가능합니다.", Toast.LENGTH_LONG).show();
                         Log.d(VM_ENUM.TAG,"[완료된 포스트 ID ] "+post_id);
                         long time = System.currentTimeMillis();//시스템 시간
                         Date date = new Date(time);

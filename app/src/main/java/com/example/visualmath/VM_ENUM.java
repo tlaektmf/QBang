@@ -11,6 +11,7 @@ public  class VM_ENUM {
     public static final String GRADE_ELEMENT = "초등";
 
 
+
     static final int BEFORE_MATCH=1; //>>삭제 예정
     static final int AFTER_MACTH=2; //>>삭제 예정
 
@@ -77,8 +78,6 @@ public  class VM_ENUM {
     public static final String DB_S_ID="s_id";
     public static final String DB_USER_TYPE="type";
     public static final String DB_INFO="info";
-    public static final String DB_DATE="date";
-    public static final String DB_SOLVE_PROBLEM="solve_problem";
     public static final String DB_STU_UNMATCHED="unmatched";
     public static final String DB_STU_DONE="done";
     public static final String DB_STU_UNSOLVED="unsolved";
@@ -95,7 +94,7 @@ public  class VM_ENUM {
     public static final String DB_MATCH_STUDENT = "matchSet_student";
     public static final String DB_MATCH_TEACHER = "matchSet_teacher";
     public static final String DB_SOLVE_WAY ="solveWay" ;
-
+    public static final String DB_TEA_DONE = "done";
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
     public  static final String PRE_ALARM="setAlarm";

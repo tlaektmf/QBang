@@ -30,15 +30,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.visualmath.adapter.FilterAdapter;
 import com.example.visualmath.activity.HomeActivity;
+import com.example.visualmath.data.PostCustomData;
+import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class DashboardFragment extends Fragment implements TextWatcher {
 
@@ -82,12 +87,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
 
-    //** 포커싱된 곳 DB
-    ///public static List<VM_Data_Default> subs;
-    //** 전체 DB
-    ///public static List<VM_Data_Default> posts; //포스트 데이터 리스트
-    ///public static List<String> ids;//포스트 아이디를 따로 관리
-    ///public static List<String> dates;//포스트 완료 날짜를 따로 관리
+    private String user_id;
+    private String user_type;
 
     public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
     public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
@@ -107,6 +108,21 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         super.onCreate(savedInstanceState);
 
         parent=(HomeActivity)getActivity();
+
+        //** 유저 정보 설정
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+            //선생님
+            user_type=VM_ENUM.TEACHER;
+        }else{
+            user_type=VM_ENUM.STUDENT;
+        }
+
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -199,6 +215,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         this_year = year;
         this_month = month;
         this_day = day;
+
 
         //현재 포커싱된 달력뷰(년,월,일) 초기값
         focusedYear=Integer.parseInt(this_year);
@@ -306,7 +323,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             holder.itemView.setTag(mValues.get(position));
 
             //** Date 에서 시간만 표기 (시:분)
-            String token=mValues.get(position).second.second.split(" ")[1];
+            String token=mValues.get(position).second.second;
             holder.mTimeView.setText(token);//시간
 
         }
@@ -365,37 +382,41 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
         //** 데이터 읽기
         firebaseDatabase= FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference("STUDENTS");
-        reference=reference.child("user_name")
-                .child("posts").child("done");
+        if (user_type.equals(VM_ENUM.STUDENT)) {
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+            .child(user_id)
+            .child(VM_ENUM.DB_STU_POSTS).child(VM_ENUM.DB_STU_DONE);
+        }else if(user_type.equals(VM_ENUM.TEACHER)){
+            reference=firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+            .child(user_id).child(VM_ENUM.DB_TEA_POSTS).child(VM_ENUM.DB_TEA_DONE);
+        }
+
+        Log.d(TAG, "[DashboardFragment] 데이터 접근 : " +user_id+","+user_type);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                ///posts=new ArrayList<VM_Data_Default>();
-                ///ids=new ArrayList<String>();
-                ///dates=new ArrayList<String>();
-                ///subs=new ArrayList<VM_Data_Default>();
 
                 posts=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
                 String post_id,post_date,post_title,post_grade,post_problem;
-                String token;
+                PostCustomData postCustomData;
 
+                //PostCustomData(String p_id,String p_title,String grade,String problem,String time)
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    post_id=snapshot.getKey();
-                    post_date=snapshot.child("time").getValue().toString();
-                    post_title=snapshot.child("title").getValue().toString();
-                    post_grade=snapshot.child("grade").getValue().toString();
-                    post_problem=snapshot.child("problem").getValue().toString();
+                    postCustomData=snapshot.getValue(PostCustomData.class);
+                    assert postCustomData != null;
+                    post_id=postCustomData.getP_id();
+                    post_date=postCustomData.getTime();
+                    post_title=postCustomData.getTitle();
+                    post_grade=postCustomData.getGrade();
+                    post_problem=postCustomData.getProblem();
+
                     posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
                             Pair.create(post_id,post_date)));
 
-//                    posts.add(new VM_Data_Default(post_title,post_grade,post_problem));
-//                    ids.add(post_id);
-//                    dates.add(post_date);
-                    Log.d(TAG, "ValueEventListener : " +snapshot);
+                    Log.d(TAG, "[DashboardFragment] post_date : " +post_date);
 
                 }
 
@@ -421,7 +442,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                 }else{
                     focusedDate+=focusedDay;
                 }
-                Log.d(TAG,"[ValueListener]현재포지션 날짜:"+focusedDate);
+                Log.d(TAG,"[ DashBoard ]현재포지션 날짜:"+focusedDate);
 
 
                 if(posts!=null){
@@ -449,7 +470,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent,"데이터베이스 오류",Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
         });

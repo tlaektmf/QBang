@@ -48,7 +48,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
         holder.itemView.setTag(FilteredList.get(position));
 
         //** Date 에서 시간만 표기 (시:분)
-        String token=FilteredList.get(position).second.second.split(" ")[1];
+        String token=FilteredList.get(position).second.second;
         holder.mTimeView.setText(token);//시간
     }
     @Override
