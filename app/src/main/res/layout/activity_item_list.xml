@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ItemListActivity"
+    tools:context=".activity.ItemListActivity"
     android:background="#f2f2f4">
 
 <!--    전체 감싸기-->

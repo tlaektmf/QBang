@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VM_AutoLoginCheckActivity"
+    tools:context=".activity.VM_AutoLoginCheckActivity"
     android:background="#1097d0"
     android:layout_gravity="center"
     android:gravity="center"

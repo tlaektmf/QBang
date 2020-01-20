@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.visualmath.R;
-import com.example.visualmath.VM_SettingsActivity;
+import com.example.visualmath.activity.VM_SettingsActivity;
 
 /**
  * A simple {@link Fragment} subclass.

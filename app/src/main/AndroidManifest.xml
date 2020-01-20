@@ -24,62 +24,63 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".VM_PhotoViewActivity"
+            android:name=".activity.VM_PhotoViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
-        <activity android:name=".VM_GoogleLoginActivity" />
+        <activity android:name=".activity.VM_GoogleLoginActivity" />
         <activity
-            android:name=".VM_ProblemBoxActivity"
+            android:name=".activity.VM_ProblemBoxActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name=".VM_RegisterUserActivity"
+            android:name=".activity.VM_RegisterUserActivity"
             android:theme="@style/AppTheme.blueStatusBar_notitle" />
+
         <activity
-            android:name=".VM_RegiserOtherThingsActivity"
+            android:name=".activity.VM_RegiserOtherThingsActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name=".VM_FullViewActivity"
+            android:name=".activity.VM_FullViewActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".VM_RegisterProblemActivity" />
-        <activity android:name=".VM_ProblemDetailActivity" />
+        <activity android:name=".activity.VM_ProblemDetailActivity" />
         <activity
-            android:name=".VM_TeacherSolveProblemActivity"
+            android:name=".activity.VM_TeacherSolveProblemActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".VM_ProblemListActivity"
+            android:name=".activity.VM_ProblemListActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name=".TeacherItemListActivity"
+            android:name=".activity.TeacherItemListActivity"
             android:theme="@style/AppTheme.notitlebar" />
-        <activity android:name=".TeacherHomeActivity" />
+        <activity android:name=".activity.TeacherHomeActivity" />
         <activity
-            android:name=".VM_SettingsActivity"
+            android:name=".activity.VM_SettingsActivity"
             android:label="@string/title_activity_vm__settings" />
-        <activity android:name=".VM_WebViewActivity" />
+        <activity android:name=".activity.VM_WebViewActivity" />
         <activity
-            android:name=".ItemListActivity"
+            android:name=".activity.ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ItemDetailActivity"
+            android:name=".activity.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity"
+            android:parentActivityName=".activity.ItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.visualmath.ItemListActivity" />
+                android:value="com.example.visualmath.activity.ItemListActivity" />
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".VM_AutoLoginCheckActivity"
+            android:name=".activity.VM_AutoLoginCheckActivity"
             android:theme="@style/AppTheme.blueStatusBar" />
         <activity
-            android:name=".VM_LoginActivity"
+            android:name=".activity.VM_LoginActivity"
             android:theme="@style/AppTheme.blueStatusBar" />
         <activity
-            android:name=".VM_LauncherActivity"
+            android:name=".activity.VM_LauncherActivity"
             android:theme="@style/AppTheme.blueStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,7 +88,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" /> <!-- 사진 촬영을 위한 provide -->
+        <activity android:name=".activity.MainActivity" /> <!-- 사진 촬영을 위한 provide -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.visualmath.provider"

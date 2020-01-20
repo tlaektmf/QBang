@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
-import com.example.visualmath.VM_ProblemBoxActivity;
+import com.example.visualmath.activity.VM_ProblemBoxActivity;
 import com.example.visualmath.VM_RegisterProblemActivity;
 
 public class HomeFragment extends Fragment {

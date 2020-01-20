@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherItemListActivity"
+    tools:context=".activity.TeacherItemListActivity"
     android:background="#f2f2f4">
 
 <!--    전체 감싸기-->

@@ -9,7 +9,7 @@
     android:id="@+id/item_detail"
     android:orientation="vertical"
     android:background="#f2f2f4"
-    tools:context=".TeacherItemDetailFragment">
+    tools:context=".fragment.TeacherItemDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

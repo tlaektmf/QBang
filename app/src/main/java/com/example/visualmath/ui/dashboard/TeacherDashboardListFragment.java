@@ -14,9 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.visualmath.HomeActivity;
 import com.example.visualmath.R;
-import com.example.visualmath.TeacherHomeActivity;
+import com.example.visualmath.activity.TeacherHomeActivity;
 import com.example.visualmath.calendarListAdapater;
 import com.example.visualmath.date_data;
 
