@@ -416,7 +416,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                     posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
                             Pair.create(post_id,post_date)));
 
-                    Log.d(TAG, "[DashboardFragment] post_date : " +post_date);
+                    Log.d(TAG, "[Student DashBoard]ValueEventListener : " + snapshot);
 
                 }
 

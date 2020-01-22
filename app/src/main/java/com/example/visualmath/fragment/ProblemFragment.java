@@ -1,6 +1,7 @@
 package com.example.visualmath.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -277,10 +280,10 @@ public class ProblemFragment extends Fragment {
                         PostCustomData postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),vmDataDefault.getGrade(),vmDataDefault.getProblem(),doneTime);
 
                         //** teacher unsolved에서 done으로 이동
-                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
                                 .child(matchset_teacher)
-                                .child(VM_ENUM.DB_STU_POSTS)
-                                .child(VM_ENUM.DB_STU_DONE)
+                                .child(VM_ENUM.DB_TEA_POSTS)
+                                .child(VM_ENUM.DB_TEA_DONE)
                                 .child(post_id)
                                 .setValue(postCustomData);
                         Log.d(TAG,"[teacher done에 저장]");
@@ -313,6 +316,9 @@ public class ProblemFragment extends Fragment {
                                 .child(post_id).removeValue();
 
                         Log.d(TAG,"[student unsolved에서 삭제]");
+
+                        //** 완료 한 문제수 증가
+                       onSolveProblemIncrease(matchset_teacher,user_id);
                     }
                 });
                 dig.callFunction();
@@ -320,7 +326,7 @@ public class ProblemFragment extends Fragment {
         });
 
         //** neeToBlock 이 true면 chat창 텍스트뷰를 막는다
-        if(needToBlock==true){
+        if(needToBlock){
             ConstraintLayout layout = (ConstraintLayout)rootView.findViewById(R.id.chat_bottom_lay);
             for (int i = 0; i < layout.getChildCount(); i++) {
                 View child = layout.getChildAt(i);
@@ -334,5 +340,77 @@ public void loadDatabase(String post_id,List<VM_Data_CHAT> chatItem){
         VM_DBHandler dbHandler=new VM_DBHandler();
         dbHandler.newChat(post_id,chatItem);
 }
+
+    private void onSolveProblemIncrease(String matchset_teacher, String user_id) {
+
+
+
+        DatabaseReference reference=FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS).
+                child(user_id).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_SOLVE_PROBLEM);
+
+//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d(VM_ENUM.TAG,dataSnapshot.get);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+        reference.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                if ( mutableData.getValue()== null) {
+                    return Transaction.success(mutableData);
+                }
+
+                int origin_count = mutableData.getValue(Integer.class);
+                // Set value and report transaction success
+                mutableData.setValue(origin_count+1);
+                Log.d(TAG,"[student 완료 문제수 증가]");
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+
+        reference=FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS).
+                child(matchset_teacher).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_SOLVE_PROBLEM);
+
+        reference.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                if ( mutableData.getValue()== null) {
+                    Log.d(TAG,"[mutableData null]");
+                    return Transaction.success(mutableData);
+                }
+
+                int origin_count = mutableData.getValue(Integer.class);
+                // Set value and report transaction success
+                mutableData.setValue(origin_count+1);
+                Log.d(TAG,"[teacher 완료 문제수 증가]");
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+
+    }
 
 }

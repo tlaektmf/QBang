@@ -95,6 +95,9 @@ public  class VM_ENUM {
     public static final String DB_MATCH_TEACHER = "matchSet_teacher";
     public static final String DB_SOLVE_WAY ="solveWay" ;
     public static final String DB_TEA_DONE = "done";
+    public static final String DB_SOLVE_PROBLEM ="solve_problem" ;
+
+
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
     public  static final String PRE_ALARM="setAlarm";
