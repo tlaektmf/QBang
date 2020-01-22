@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -503,41 +504,59 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         if (editTextTitle.getText() == null ||
                 editTextTitle.getText().toString().replace(" ", "").equals("")) {
             //** title란이 아예 쓰여진게 없거나 공백들로 이루어진 경우
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();     //닫기
-                }
-            });
-            alert.setMessage("문제 제목은 필수 입력사항입니다.");
-            alert.show();
+//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();     //닫기
+//                }
+//            });
+//            alert.setMessage("문제 제목은 필수 입력사항입니다.");
+//            alert.show();
+
+
+            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_title,null));
+            toast.show();
             return false;
         }
         if (vmDataBasic.getProblem() == null) {
             //** 문제 사진란이 공백
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();     //닫기
-                }
-            });
-            alert.setMessage("문제 사진 첨부는 필수 사항입니다.");
-            alert.show();
+//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();     //닫기
+//                }
+//            });
+//            alert.setMessage("문제 사진 첨부는 필수 사항입니다.");
+//            alert.show();
+//            return false;
+
+            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_picture,null));
+            toast.show();
             return false;
         }
         if (vmDataBasic.getGrade() == null) {
             //** 학년 선택을 하지 않은 경우
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();     //닫기
-                }
-            });
-            alert.setMessage("학년 선택은 필수 사항입니다.");
-            alert.show();
+//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();     //닫기
+//                }
+//            });
+//            alert.setMessage("학년 선택은 필수 사항입니다.");
+//            alert.show();
+//            return false;
+
+            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_grade,null));
+            toast.show();
             return false;
         }
         return true;

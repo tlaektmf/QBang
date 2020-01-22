@@ -32,7 +32,8 @@
             android:theme="@style/AppTheme.notitlebar" />
         <activity
             android:name=".activity.VM_RegisterUserActivity"
-            android:theme="@style/AppTheme.notitlebar" />
+            android:theme="@style/AppTheme.blueStatusBar_notitle" />
+
         <activity
             android:name=".activity.VM_RegiserOtherThingsActivity"
             android:theme="@style/AppTheme.notitlebar" />
