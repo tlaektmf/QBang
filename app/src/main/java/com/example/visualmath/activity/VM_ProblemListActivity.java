@@ -273,7 +273,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         reference=firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
 
-        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -315,48 +315,48 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     }
 
-    public void searchData(int position){
-        String post_id=null;
-
-        if(nowGrade.equals(VM_ENUM.GRADE_ELEMENT)){//"현재상태: 초등"
-            post_id=unmatched_element.get(position).getP_id();
-            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
-                    .child(post_id)
-                    .child(VM_ENUM.DB_DATA_DEFAULT);
-
-        }else if(nowGrade.equals(VM_ENUM.GRADE_MID)){//"현재 상태: 중등"
-            post_id=unmatched_mid.get(position).getP_id();
-            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
-                    .child(post_id)
-                    .child(VM_ENUM.DB_DATA_DEFAULT);
-        }else if(nowGrade.equals(VM_ENUM.GRADE_HIGH)){//"현재 상태: 고등"
-            post_id=unmatched_high.get(position).getP_id();
-            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
-                    .child(post_id)
-                    .child(VM_ENUM.DB_DATA_DEFAULT);
-        }
-
-        final String finalPost_id = post_id;
-        Log.d(VM_ENUM.TAG,"[선생님 문제 선택] POSTS 데이터"+finalPost_id+" 접근");
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
-
-                assert vmDataDefault != null;
-                Log.d(TAG, "[선생님 문제 선택] "+vmDataDefault.getGrade()+", ValueEventListener : " +vmDataDefault.getTitle() );
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "Failed to read value", databaseError.toException());
-            }
-        });
-
-    }
+//    public void searchData(int position){
+//        String post_id=null;
+//
+//        if(nowGrade.equals(VM_ENUM.GRADE_ELEMENT)){//"현재상태: 초등"
+//            post_id=unmatched_element.get(position).getP_id();
+//            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+//                    .child(post_id)
+//                    .child(VM_ENUM.DB_DATA_DEFAULT);
+//
+//        }else if(nowGrade.equals(VM_ENUM.GRADE_MID)){//"현재 상태: 중등"
+//            post_id=unmatched_mid.get(position).getP_id();
+//            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+//                    .child(post_id)
+//                    .child(VM_ENUM.DB_DATA_DEFAULT);
+//        }else if(nowGrade.equals(VM_ENUM.GRADE_HIGH)){//"현재 상태: 고등"
+//            post_id=unmatched_high.get(position).getP_id();
+//            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
+//                    .child(post_id)
+//                    .child(VM_ENUM.DB_DATA_DEFAULT);
+//        }
+//
+//        final String finalPost_id = post_id;
+//        Log.d(VM_ENUM.TAG,"[선생님 문제 선택] POSTS 데이터"+finalPost_id+" 접근");
+//
+//        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
+//
+//                assert vmDataDefault != null;
+//                Log.d(TAG, "[선생님 문제 선택] "+vmDataDefault.getGrade()+", ValueEventListener : " +vmDataDefault.getTitle() );
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+//                Log.w(TAG, "Failed to read value", databaseError.toException());
+//            }
+//        });
+//
+//    }
 }
