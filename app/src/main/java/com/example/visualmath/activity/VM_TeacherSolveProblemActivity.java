@@ -92,7 +92,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
             Context context = parent.getContext();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = inflater.inflate(R.layout.item_list_notime,parent,false);
+            View view = inflater.inflate(R.layout.matched_item_list_teacher,parent,false);
             VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder viewHolder = new VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder(view);
 
             return viewHolder;
@@ -101,9 +101,11 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull VM_TeacherSolveProblemActivity.ProblemListAdapter.ViewHolder holder, int position) {
 
+            Log.d(VM_ENUM.TAG,"[teacherSolveProblem] "+mData.get(position).getMatchSet_student());
             holder.pName.setText(mData.get(position).getTitle());
-            //holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
-           // holder.pSolveWay.setText(mData.get(position).getSolveWay());
+            holder.pMatchStudent.setText(mData.get(position).getMatchSet_student());
+
+           holder.pSolveWay.setText(mData.get(position).getSolveWay());
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 
@@ -133,8 +135,8 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
                 pName = itemView.findViewById(R.id.problem_name);
                 pDate = itemView.findViewById(R.id.problem_date);
                 pLive = itemView.findViewById(R.id.problem_live);
-                //pMatchStudent = itemView.findViewById(R.id.problem_solveWay);
-                //pSolveWay = itemView.findViewById(R.id.problem_matchStudent);
+                pMatchStudent = itemView.findViewById(R.id.problem_matchSet);
+                pSolveWay = itemView.findViewById(R.id.problem_solveWay);
 
                 //** 아이템 클릭 이벤트
                 itemView.setOnClickListener(new View.OnClickListener() {

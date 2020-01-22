@@ -91,7 +91,6 @@ public class ItemProblemDetailFragment extends Fragment {
 
             mGlideRequestManager = Glide.with(this);
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
 
             initData();
 
@@ -122,7 +121,7 @@ public class ItemProblemDetailFragment extends Fragment {
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,vmDataDefault.getTitle());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
-
+                intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//Teacher 문제 선택에서 넘어왔으므로, 채팅창 모두 막아야됨
                 startActivity(intent);
             }
         });
@@ -142,6 +141,7 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
 
+                        //isDataAvailable();
                         dataUpdate();
                     }
                     public void onButtonNo(){
@@ -172,6 +172,10 @@ public class ItemProblemDetailFragment extends Fragment {
 
     }
 
+//    public boolean isDataAvailable(){
+//
+//
+//    }
     public void dataUpdate(){
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
