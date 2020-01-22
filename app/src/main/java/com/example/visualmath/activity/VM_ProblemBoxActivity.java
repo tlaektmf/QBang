@@ -81,8 +81,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         matched=null;
 
         Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setUnmatched 호출");
-        setUnmatchedData();
 
+        if(setUnmatchedData()){
+            setMatchedData();
+        }
 
     }
 
@@ -227,7 +229,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
      * 데이터베이스 트랜젝션
      * write
      */
-    public void setUnmatchedData(){
+    public boolean setUnmatchedData(){
 
         unmatched=new ArrayList<PostCustomData>();
 
@@ -261,7 +263,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
                 }
 
-                //        리사이클러뷰에 객체 지정
+//                //        리사이클러뷰에 객체 지정
         mAdapater = new ProblemListAdapter(unmatched);
        recycler_view.setAdapter(mAdapater);
 
@@ -274,13 +276,14 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             }
         });
 
+        return true;
     }
 
     /****
      * 데이터베이스 트랜젝션
      * write
      */
-    public void setMatchedData(){
+    public boolean setMatchedData(){
 
         matched=new ArrayList<PostCustomData>();
 
@@ -311,9 +314,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 }
 
                 //        리사이클러뷰에 객체 지정
-                mAdapater = new ProblemListAdapter(matched);
-                recycler_view.setAdapter(mAdapater);
+//                mAdapater = new ProblemListAdapter(matched);
+//                recycler_view.setAdapter(mAdapater);
 
+                //list_loading_bar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -322,7 +326,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
         });
-
+return true;
     }
 
     public void searchData(int position){

@@ -2,6 +2,7 @@ package com.example.visualmath.fragment;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -27,6 +29,8 @@ import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
+import com.example.visualmath.activity.VM_LoginActivity;
+import com.example.visualmath.activity.VM_ProblemListActivity;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogListener_matchComplete;
@@ -72,7 +76,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
-
+    public Activity parent;
     public ItemProblemDetailFragment() {
         // Required empty public constructor
     }
@@ -88,7 +92,7 @@ public class ItemProblemDetailFragment extends Fragment {
             post_id=getArguments().getString(ARG_ITEM_ID);
             solveWay=getArguments().getString(VM_ENUM.DB_SOLVE_WAY);
             Log.d(TAG,post_id+","+solveWay);
-
+            parent=(VM_ProblemListActivity)getActivity();
             mGlideRequestManager = Glide.with(this);
             Activity activity = this.getActivity();
 
@@ -136,13 +140,25 @@ public class ItemProblemDetailFragment extends Fragment {
                 dialog.setDialogListener(new VM_DialogListener_matchComplete(){
                     public void onButtonYes(){
 
-                        Toast toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(parent,"",Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
 
-                        //isDataAvailable();
-                        dataUpdate();
+//                        if(isDataAvailable()){
+//                            dataUpdate();
+//                        }else{
+//                            AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+//                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();     //닫기
+//                                }
+//                            });
+//                            alert.setMessage("이미 선택된 문제입니다.");
+//                            alert.show();
+//                        }
+
                     }
                     public void onButtonNo(){
 
@@ -175,7 +191,9 @@ public class ItemProblemDetailFragment extends Fragment {
 //    public boolean isDataAvailable(){
 //
 //
+//
 //    }
+
     public void dataUpdate(){
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
