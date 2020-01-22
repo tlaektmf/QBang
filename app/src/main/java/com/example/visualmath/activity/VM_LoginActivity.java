@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_RegisterProblemActivity;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.example.visualmath.preference.SaveSharedPreference;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
@@ -170,7 +172,6 @@ public class VM_LoginActivity extends AppCompatActivity {
                                     isAllowed=false;
                                 }
                             }
-
                             if(isAllowed){
                                 /*
                                  * 자동로그인이 체크 되어있는 경우, 파일에 저장
@@ -192,15 +193,18 @@ public class VM_LoginActivity extends AppCompatActivity {
 
 
                             }else{
-                                AlertDialog.Builder alert = new AlertDialog.Builder(VM_LoginActivity.this);
-                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();     //닫기
-                                    }
-                                });
-                                alert.setMessage("이메일 인증을 완료 해 주세요");
-                                alert.show();
+//                                AlertDialog.Builder alert = new AlertDialog.Builder(VM_LoginActivity.this);
+//                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();     //닫기
+//                                    }
+//                                });
+//                                alert.setMessage("이메일 인증을 완료해 주세요");
+//                                alert.show();
+                                final VM_Dialog_registerProblem checkDialog =
+                                        new VM_Dialog_registerProblem(VM_LoginActivity.this);
+                                checkDialog.callFunction(4);
                             }
 
                             }
