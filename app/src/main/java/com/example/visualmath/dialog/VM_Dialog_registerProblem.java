@@ -32,6 +32,10 @@ public class VM_Dialog_registerProblem {
         }else if(tmpNum==2){
             dig.setContentView(R.layout.layout_dialog_register_check_grade);
         }
+        else if(tmpNum==4){
+            //이메일 인증 확인
+            dig.setContentView(R.layout.layout_dialog_check_email);
+        }
         else{
             Log.d("registerProblem 오류","다이얼로그 if문 조건 범위 오류");
         }
