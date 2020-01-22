@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -20,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -37,6 +39,7 @@ import com.example.visualmath.dialog.VM_DialogLIstener_PickGrade;
 import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_PickGrade;
 import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -500,65 +503,37 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
      * @return
      */
     public boolean checkAbility() {
+        int tmpNum=-1;
+        final VM_Dialog_registerProblem checkDialog =
+                new VM_Dialog_registerProblem(VM_RegisterProblemActivity.this);
 
         if (editTextTitle.getText() == null ||
                 editTextTitle.getText().toString().replace(" ", "").equals("")) {
             //** title란이 아예 쓰여진게 없거나 공백들로 이루어진 경우
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();     //닫기
-//                }
-//            });
-//            alert.setMessage("문제 제목은 필수 입력사항입니다.");
-//            alert.show();
 
+            tmpNum=0;
+            checkDialog.callFunction(tmpNum);
+            Log.d("register check 확인","첫번째 다이얼로그");
 
-            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_title,null));
-            toast.show();
             return false;
         }
         if (vmDataBasic.getProblem() == null) {
             //** 문제 사진란이 공백
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();     //닫기
-//                }
-//            });
-//            alert.setMessage("문제 사진 첨부는 필수 사항입니다.");
-//            alert.show();
-//            return false;
 
-            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_picture,null));
-            toast.show();
+            tmpNum=1;
+            checkDialog.callFunction(tmpNum);
+            Log.d("register check 확인","두번째 다이얼로그");
             return false;
         }
         if (vmDataBasic.getGrade() == null) {
             //** 학년 선택을 하지 않은 경우
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();     //닫기
-//                }
-//            });
-//            alert.setMessage("학년 선택은 필수 사항입니다.");
-//            alert.show();
-//            return false;
 
-            Toast toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_register_check_grade,null));
-            toast.show();
+            tmpNum=2;
+            checkDialog.callFunction(tmpNum);
+            Log.d("register check 확인","세번째 다이얼로그");
             return false;
         }
+
         return true;
     }
 
