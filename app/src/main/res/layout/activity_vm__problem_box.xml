@@ -108,7 +108,7 @@
         android:id="@+id/problem_recyclerview"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        tools:listitem="@layout/item_list_notime"
+        tools:listitem="@layout/matched_item_list_teacher"
         android:layout_marginTop="15dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
