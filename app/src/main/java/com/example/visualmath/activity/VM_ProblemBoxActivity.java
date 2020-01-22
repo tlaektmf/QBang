@@ -154,7 +154,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             Context context = parent.getContext();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = inflater.inflate(R.layout.item_list_notime,parent,false);
+            View view = inflater.inflate(R.layout.matched_item_list_teacher,parent,false);
             ProblemListAdapter.ViewHolder viewHolder = new ProblemListAdapter.ViewHolder(view);
 
             return viewHolder;
@@ -167,12 +167,12 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 
-//            if(mData.get(position).getMatchSet_student()!=null){
-//                holder.pMatchStudent.setText(mData.get(position).getMatchSet_teacher());
-//            }
-//            if(mData.get(position).getSolveWay()!=null){
-//                holder.pSolveWay.setText(mData.get(position).getSolveWay());
-//            }
+            if(mData.get(position).getMatchSet_student()!=null){
+                holder.pMatchTeacher.setText(mData.get(position).getMatchSet_teacher());
+            }
+            if(mData.get(position).getSolveWay()!=null){
+                holder.pSolveWay.setText(mData.get(position).getSolveWay());
+            }
 
 
 //            if(item.getProblemLive()){
@@ -193,7 +193,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             TextView pName;
             TextView pDate;
             ImageView pLive;
-            TextView pMatchStudent;
+            TextView pMatchTeacher;
             TextView pSolveWay;
 
 
@@ -202,8 +202,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 pName = itemView.findViewById(R.id.problem_name);
                 pDate = itemView.findViewById(R.id.problem_date);
                 pLive = itemView.findViewById(R.id.problem_live);
-                //pMatchStudent = itemView.findViewById(R.id.problem_solveWay);
-                //pSolveWay = itemView.findViewById(R.id.problem_matchStudent);
+                pMatchTeacher = itemView.findViewById(R.id.problem_matchSet);
+                pSolveWay = itemView.findViewById(R.id.problem_solveWay);
 
                 //** 아이템 클릭 이벤트
                 itemView.setOnClickListener(new View.OnClickListener() {
