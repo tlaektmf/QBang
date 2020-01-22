@@ -2,17 +2,20 @@ package com.example.visualmath.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.dialog.VM_DialogListener_finish_app;
 import com.example.visualmath.dialog.VM_Dialog_finish_app;
 import com.example.visualmath.ui.dashboard.DashboardFragment;
 import com.example.visualmath.ui.home.HomeFragment;
 import com.example.visualmath.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -20,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -42,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        init();
+         init();
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();

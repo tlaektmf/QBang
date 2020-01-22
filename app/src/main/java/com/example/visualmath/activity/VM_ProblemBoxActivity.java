@@ -333,7 +333,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
                     .child(post_id)
                     .child(VM_ENUM.DB_DATA_DEFAULT);
-
+            needToBlock=null;
+            fromStudentUnmatched=null;
         }else{//"현재 상태: 매치 미완료 목록"
             post_id=unmatched.get(position).getP_id();
             reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
@@ -353,7 +354,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
 
                 assert vmDataDefault != null;
-                Log.d(TAG, "[ProblemBox] unmatched ValueEventListener : " +vmDataDefault.getTitle() );
+                Log.d(TAG, "[ProblemBox] ValueEventListener : " +vmDataDefault.getTitle() );
 
                 Intent intent = new Intent(VM_ProblemBoxActivity.this, VM_FullViewActivity.class);
                 intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, finalPost_id);

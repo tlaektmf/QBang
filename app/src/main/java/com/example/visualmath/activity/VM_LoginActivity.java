@@ -228,6 +228,60 @@ public class VM_LoginActivity extends AppCompatActivity {
     }
 
 
+    public void checkgoogleDB(final GoogleSignInAccount acct){
+
+
+        //** DB 있는 지 확인
+        final String user;
+        final String mailDomain = acct.getEmail().split("@")[1].split("\\.")[0];
+        user = acct.getEmail().split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+        Log.d(VM_ENUM.TAG,user);
+
+        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+        DatabaseReference reference= firebaseDatabase.getReference(VM_ENUM.DB_USERS);
+        reference.orderByKey().equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(VM_ENUM.TAG,dataSnapshot.getValue().toString());
+                if(dataSnapshot.getValue()==null){
+                    Log.d(VM_ENUM.TAG,"계정이 없습니다. DB 등록");
+                    //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
+
+                    //데이터 베이스 등록
+                    VM_DBHandler dbHandler=new VM_DBHandler();
+                    Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
+
+                    Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
+
+                    //String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
+                    //String user=acct.getEmail().split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+                    dbHandler.newUser(user,VM_ENUM.STUDENT);
+
+                }else{
+
+                    String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
+                    Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
+
+                    if(user_type.equals(VM_ENUM.TEACHER)){
+                        Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }else if(user_type.equals(VM_ENUM.STUDENT)){
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
     //구글 파이어베이스로 값넘기기
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct, final String user_type) {
         //파이어베이스로 받은 구글사용자가 확인된 이용자의 값을 토큰으로 받고
@@ -239,25 +293,29 @@ public class VM_LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {//** 아이디 생성 완료
 
-                            //데이터 베이스 등록
-                            VM_DBHandler dbHandler=new VM_DBHandler();
-                            Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
-
-                            Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
-
-                            String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
-                            String user=acct.getEmail().split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
-                           dbHandler.newUser(user,VM_ENUM.STUDENT);
-
-                            if(user_type.equals(VM_ENUM.TEACHER)){
-                                Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
-                                startActivity(intent);
-                                finish();
-                            }else if(user_type.equals(VM_ENUM.STUDENT)){
-                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
-                                startActivity(intent);
-                                finish();
+                            //** 자동로그인 체크
+                            isAutoLoginChecked=checkBoxAutoLogin.isChecked();
+                            if(isAutoLoginChecked){
+                                SaveSharedPreference.setUserName(VM_LoginActivity.this, acct.getEmail());
+                                Log.i(VM_ENUM.TAG,"[자동로그인 클릭]");
                             }
+                            else{
+                                Log.i(VM_ENUM.TAG,"[자동로그인 클릭 안함]");
+                                SaveSharedPreference.clearUserName(VM_LoginActivity.this);
+                            }
+
+                            checkgoogleDB(acct);
+
+//                            //** 액티비티 전환
+//                            if(user_type.equals(VM_ENUM.TEACHER)){
+//                                Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+//                                startActivity(intent);
+//                                finish();
+//                            }else if(user_type.equals(VM_ENUM.STUDENT)){
+//                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+//                                startActivity(intent);
+//                                finish();
+//                            }
 
                             Toast.makeText(VM_LoginActivity.this, "아이디 생성완료", Toast.LENGTH_SHORT).show();
                         } else {
@@ -306,57 +364,7 @@ public class VM_LoginActivity extends AppCompatActivity {
                 Log.d(VM_ENUM.TAG, "getAccount()=" + account.getAccount());
                 Log.d(VM_ENUM.TAG, "getIdToken()=" + account.getIdToken());
 
-                //** 자동로그인 체크
-                isAutoLoginChecked=checkBoxAutoLogin.isChecked();
-                if(isAutoLoginChecked){
-                    SaveSharedPreference.setUserName(VM_LoginActivity.this, account.getEmail());
-                    Log.i(VM_ENUM.TAG,"[자동로그인 클릭]");
-                }
-                else{
-                    Log.i(VM_ENUM.TAG,"[자동로그인 클릭 안함]");
-                    SaveSharedPreference.clearUserName(VM_LoginActivity.this);
-                }
-
-                //** DB 있는 지 확인
-                String user;
-                String mailDomain = account.getEmail().split("@")[1].split("\\.")[0];
-                user = account.getEmail().split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
-                Log.d(VM_ENUM.TAG,user);
-
-                FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-                DatabaseReference reference= firebaseDatabase.getReference(VM_ENUM.DB_USERS);
-                reference.orderByKey().equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(VM_ENUM.TAG,dataSnapshot.getValue().toString());
-                        if(dataSnapshot.getValue()==null){
-                            Log.d(VM_ENUM.TAG,"계정이 없습니다. DB 등록");
-                            //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
-                            firebaseAuthWithGoogle(account,VM_ENUM.STUDENT);//** 구글 로그인으로 한 유저는 일단 무조건 학생으로 구분함
-
-                        }else{
-
-                            String user_type=dataSnapshot.getChildren().iterator().next().child(VM_ENUM.DB_USER_TYPE).getValue().toString();
-                            Log.d(VM_ENUM.TAG,"이미 계정이 존재합니다. DB 등록 하지 않음, "+user_type);
-
-                            if(user_type.equals(VM_ENUM.TEACHER)){
-                                Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
-                                startActivity(intent);
-                                finish();
-                            }else if(user_type.equals(VM_ENUM.STUDENT)){
-                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
-                                startActivity(intent);
-                                finish();
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                firebaseAuthWithGoogle(account,VM_ENUM.STUDENT);//** 구글 로그인으로 한 유저는 일단 무조건 학생으로 구분함
 
             } catch (ApiException e) {
             }
