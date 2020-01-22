@@ -280,10 +280,10 @@ public class ProblemFragment extends Fragment {
                         PostCustomData postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),vmDataDefault.getGrade(),vmDataDefault.getProblem(),doneTime);
 
                         //** teacher unsolved에서 done으로 이동
-                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
                                 .child(matchset_teacher)
-                                .child(VM_ENUM.DB_STU_POSTS)
-                                .child(VM_ENUM.DB_STU_DONE)
+                                .child(VM_ENUM.DB_TEA_POSTS)
+                                .child(VM_ENUM.DB_TEA_DONE)
                                 .child(post_id)
                                 .setValue(postCustomData);
                         Log.d(TAG,"[teacher done에 저장]");
