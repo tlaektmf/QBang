@@ -21,6 +21,10 @@
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 
+    <com.example.visualmath.preference.CountSolveProblemPreference
+        android:layout="@layout/pre_count"
+        android:key="countsolveProblem"/>
+
     <com.example.visualmath.preference.DatabaseRemovePreference
         android:layout="@layout/pre_test"
         android:key="dataRemove"/>

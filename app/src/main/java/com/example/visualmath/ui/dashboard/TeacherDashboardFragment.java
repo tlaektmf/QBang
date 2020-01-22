@@ -29,12 +29,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.adapter.FilterAdapter;
+import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
 import com.example.visualmath.activity.TeacherHomeActivity;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.activity.VM_FullViewActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,6 +95,8 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     public int focusedMonth;
     public int focusedDay;
 
+    private String user_id;
+    private String user_type;
 
     public TeacherDashboardFragment() {
         // Required empty public constructor
@@ -100,6 +106,20 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parent = (TeacherHomeActivity) getActivity();
+
+        //** 유저 정보 설정
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+            //선생님
+            user_type=VM_ENUM.TEACHER;
+        }else{
+            user_type=VM_ENUM.STUDENT;
+        }
+
     }
 
 
@@ -354,9 +374,9 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
 
         //** 데이터 읽기
         firebaseDatabase = FirebaseDatabase.getInstance();
-        reference = firebaseDatabase.getReference("STUDENTS");
-        reference = reference.child("user_name")
-                .child("posts").child("done");
+        reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+                .child(user_id)
+                .child(VM_ENUM.DB_TEA_POSTS).child(VM_ENUM.DB_TEA_DONE);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -364,18 +384,22 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
 
                 posts = new ArrayList<Pair<VM_Data_Default, Pair<String, String>>>();
                 String post_id, post_date, post_title, post_grade, post_problem;
-                String token;
+                PostCustomData postCustomData;
 
+                //PostCustomData(String p_id,String p_title,String grade,String problem,String time)
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    post_id = snapshot.getKey();
-                    post_date = snapshot.child("time").getValue().toString();
-                    post_title = snapshot.child("title").getValue().toString();
-                    post_grade = snapshot.child("grade").getValue().toString();
-                    post_problem = snapshot.child("problem").getValue().toString();
-                    posts.add(Pair.create(new VM_Data_Default(post_title, post_grade, post_problem),
-                            Pair.create(post_id, post_date)));
-                    Log.d(TAG, "ValueEventListener : " + snapshot);
+                    postCustomData=snapshot.getValue(PostCustomData.class);
+                    assert postCustomData != null;
+                    post_id=postCustomData.getP_id();
+                    post_date=postCustomData.getTime();
+                    post_title=postCustomData.getTitle();
+                    post_grade=postCustomData.getGrade();
+                    post_problem=postCustomData.getProblem();
+
+                    posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
+                            Pair.create(post_id,post_date)));
+                    Log.d(TAG, "[TeacherDashBoard]ValueEventListener : " + snapshot);
 
                 }
 
