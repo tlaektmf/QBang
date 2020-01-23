@@ -33,6 +33,7 @@ import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -164,47 +165,54 @@ public class ProblemFragment extends Fragment {
             user_type=VM_ENUM.STUDENT;
         }
 
-        //** chat 데이터 생성
+        adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
+        recyclerView.setAdapter(adapter);
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+        initProblemFragment();
 
-                Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
-                List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
+//** chat 데이터 생성
+///*** open with addvalueListenr <<<<<<<<<<<
 
-                if(!fromStudentUnmatched){
-                    matchset_student= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue()).toString();
-                    matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
-                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher+", matchset_student: "+matchset_student);
-                }else{
-                    Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
-                }
-
-
-                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
-                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
-
-                if(chats!=null){ //** chatList에 데이터가 있는 경우
-                    chatList=chats;
-                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
-                    adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
-                    recyclerView.setAdapter(adapter);
-                }else{
-                    //** chatList에 데이터가 없는 초기 상태의 경우
-                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null임<초기상태>");
-                }
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//         reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+//
+//                Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
+//                List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
+//
+//                if(!fromStudentUnmatched){
+//                    matchset_student= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue()).toString();
+//                    matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
+//                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher+", matchset_student: "+matchset_student);
+//                }else{
+//                    Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
+//                }
+//
+//
+//                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
+//                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
+//
+//                if(chats!=null){ //** chatList에 데이터가 있는 경우
+//                    chatList=chats;
+//                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
+//                    adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
+//                    recyclerView.setAdapter(adapter);
+//                }else{
+//                    //** chatList에 데이터가 없는 초기 상태의 경우
+//                    Log.d(TAG, "[VM_ProblemFragment]: chatList가 null임<초기상태>");
+//                }
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+///*** open with addvalueListenr //>>>>>>>>>>
 
 
 
@@ -216,20 +224,24 @@ public class ProblemFragment extends Fragment {
 
                     Log.d(TAG, "[VM_ProblemFragment]: 보내는 텍스트가 공백 아닌 경우");
 
+                    VM_Data_CHAT item=new VM_Data_CHAT(user_type, msgEditText.getText().toString());
+                    loadDatabase(post_id,item);
 
+///*** open with addvalueListenr >>>>>>
+//                    if(chatList==null){
+//                        //** 초기 상태의 경우(chatList에 데이터가 하나도 없는 경우
+//                        Log.d(TAG, "[VM_ProblemFragment]: chatList에 데이터가 하나도 없는 경우");
+//                        List<VM_Data_CHAT> data = new ArrayList<>();
+//                        data.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
+//                        loadDatabase(post_id,data);
+//
+//                    }else{
+//                        //** chatList에 데이터가 하나라도 있는 경우
+//                        ///*** open with addvalueListenr //chatList.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
+//                        loadDatabase(post_id,chatList);
+//                    }
+///*** open with addvalueListenr <<<<<<<<<<<<<
 
-                    if(chatList==null){
-                        //** 초기 상태의 경우(chatList에 데이터가 하나도 없는 경우
-                        Log.d(TAG, "[VM_ProblemFragment]: chatList에 데이터가 하나도 없는 경우");
-                        List<VM_Data_CHAT> data = new ArrayList<>();
-                        data.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
-                        loadDatabase(post_id,data);
-
-                    }else{
-                        //** chatList에 데이터가 하나라도 있는 경우
-                        chatList.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
-                        loadDatabase(post_id,chatList);
-                    }
                     ///chatList.add(data);
                    /// adapter.notifyDataSetChanged();
                 }
@@ -245,7 +257,7 @@ public class ProblemFragment extends Fragment {
 
                 final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
 
-                dig.setDialogListener(new VM_DialogLIstener_chatMenu() {
+                dig.setDialogListener(new VM_DialogLIstener_chatMenu() { //chats 에 추가 되는 내용이기 때문에, 동시 접근에 대해서 허용가능, 별도의 이벤트 처리를 하지 않음
                     @Override
                     public void onButtonCamera() {
                         Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
@@ -339,11 +351,76 @@ public class ProblemFragment extends Fragment {
         return rootView;
     }
 
-public void loadDatabase(String post_id,List<VM_Data_CHAT> chatItem){
+///*** open with addvalueListenr     <<<<<<<
+//public void loadDatabase(String post_id,List<VM_Data_CHAT> chatItem){
+//        VM_DBHandler dbHandler=new VM_DBHandler();
+//        dbHandler.newChat(post_id,chatItem);
+//}
+///*** open with addvalueListenr <<<<<<<
+
+public void loadDatabase(String post_id,VM_Data_CHAT chatItem){
         VM_DBHandler dbHandler=new VM_DBHandler();
         dbHandler.newChat(post_id,chatItem);
 }
+private void initProblemFragment(){//** 한번만 호출
+             reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
 
+                if(!fromStudentUnmatched){
+                    matchset_student= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue()).toString();
+                    matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
+                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher+", matchset_student: "+matchset_student);
+                }else{
+                    Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
+                }
+
+
+                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
+                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
+
+
+
+                //** chat 데이터 생성
+                reference.child(VM_ENUM.DB_chatList).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Log.d(TAG, "[VM_ProblemFragment] ValueEventListener 새로운 데이터 추가 : " +dataSnapshot );
+                        chatList.add(dataSnapshot.getValue(VM_Data_CHAT.class));
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+}
     private void onSolveProblemIncrease(String matchset_teacher, String user_id) {
 
 
