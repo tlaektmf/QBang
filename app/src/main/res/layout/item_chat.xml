@@ -35,7 +35,7 @@
                 android:layout_height="40dp"
                 android:visibility="visible"
                 android:id="@+id/friendImgView"
-                android:src="@drawable/teacher"
+
                 android:contentDescription="@string/app_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/friendImgView"
-                android:text="선생님이름"
+
                 android:fontFamily="@font/nanumsquaure_r"
                 android:textColor="#404040"
                 android:textSize="14dp"

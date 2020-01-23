@@ -18,20 +18,26 @@ import com.example.visualmath.data.VM_Data_CHAT;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_CustomViewHolder> {
 
     private static final String TAG = VM_ENUM.TAG;
     private List<VM_Data_CHAT> chatList;
     private Context context;
+    private String userType;
+    private String matchSet_student;
+    private String matchSet_teacher;
 
     public class VM_CustomViewHolder extends RecyclerView.ViewHolder {
 
         //위젯
-        protected ImageView friendImgView;
-        protected TextView friendMsgTxtView;
-        protected TextView myMsgTxtView;
-        protected View friendChatLayout;
-        protected View myChatLayout;
+        private ImageView friendImgView;
+        private TextView friendMsgTxtView;
+        private TextView myMsgTxtView;
+        private View friendChatLayout;
+        private View myChatLayout;
+        private TextView friendName;
 
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -42,15 +48,19 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.myMsgTxtView = itemView.findViewById(R.id.myMsgTxtView);
             this.myChatLayout = itemView.findViewById(R.id.myChatLayout);
             this.friendChatLayout = itemView.findViewById(R.id.friendChatLayout);
+            this.friendName=itemView.findViewById(R.id.friend_name_tv);
         }
     }
 
-    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context) {
+    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher) {
         this.chatList = _chatList;
         if(chatList==null){
             Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]: chatList가 null임");
         }
         this.context = context;
+        this.userType=userType;
+        this.matchSet_student=matchSet_student;
+        this.matchSet_teacher=matchSet_teacher;
     }
 
     @NonNull
@@ -73,22 +83,42 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         if(chatList==null){
             Log.d(TAG, "[VM_ChatAdapter]: chatList가 null임");
         }
-        if (chatList.get(position).getSender().equals("student")) {
 
-            holder.friendChatLayout.setVisibility(View.GONE);
-            holder.myChatLayout.setVisibility(View.VISIBLE);
-            holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
+        if(userType.equals(VM_ENUM.TEACHER)){ //유저가 선생인 경우
+            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) {
 
-        } else if (chatList.get(position).getSender().equals("teacher")) {
+                holder.friendChatLayout.setVisibility(View.GONE);
+                holder.myChatLayout.setVisibility(View.VISIBLE);
+                holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
 
-            holder.friendChatLayout.setVisibility(View.VISIBLE);
-            holder.myChatLayout.setVisibility(View.GONE);
-            holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {
 
-            if (Build.VERSION.SDK_INT >= 21) {
-                holder.friendImgView.setClipToOutline(true);
+                holder.friendChatLayout.setVisibility(View.VISIBLE);
+                holder.myChatLayout.setVisibility(View.GONE);
+                holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+                holder.friendName.setText(this.matchSet_student);
+                //holder.friendImgView.setImageResource(R.drawable.student);
+                //holder.friendImgView.setClipToOutline(true);
+            }
+        }else if(userType.equals(VM_ENUM.STUDENT)){//유저가 학생인 경우
+            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) {
+
+                holder.friendChatLayout.setVisibility(View.VISIBLE);
+                holder.myChatLayout.setVisibility(View.GONE);
+                holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+                holder.friendName.setText(this.matchSet_teacher);
+                holder.friendImgView.setImageResource(R.drawable.teacher);
+
+            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {
+
+                holder.friendChatLayout.setVisibility(View.GONE);
+                holder.myChatLayout.setVisibility(View.VISIBLE);
+                holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
+
+
             }
         }
+
 
 
     }

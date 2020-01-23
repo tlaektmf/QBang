@@ -63,6 +63,7 @@ public class ProblemFragment extends Fragment {
     private  String user_id;
     private String user_type;
     private String matchset_teacher;
+    private String matchset_student;
     private VM_Data_Default vmDataDefault;
 
     //** Glide Library Exception 처리
@@ -174,8 +175,9 @@ public class ProblemFragment extends Fragment {
                 List<VM_Data_CHAT> chats=dataSnapshot.child(VM_ENUM.DB_chatList).getValue(t);
 
                 if(!fromStudentUnmatched){
+                    matchset_student= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue()).toString();
                     matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
-                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher);
+                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher+", matchset_student: "+matchset_student);
                 }else{
                     Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
                 }
@@ -187,7 +189,7 @@ public class ProblemFragment extends Fragment {
                 if(chats!=null){ //** chatList에 데이터가 있는 경우
                     chatList=chats;
                     Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
-                    adapter = new VM_ChatAdapter(chatList, getActivity());
+                    adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
                     recyclerView.setAdapter(adapter);
                 }else{
                     //** chatList에 데이터가 없는 초기 상태의 경우
@@ -220,12 +222,12 @@ public class ProblemFragment extends Fragment {
                         //** 초기 상태의 경우(chatList에 데이터가 하나도 없는 경우
                         Log.d(TAG, "[VM_ProblemFragment]: chatList에 데이터가 하나도 없는 경우");
                         List<VM_Data_CHAT> data = new ArrayList<>();
-                        data.add(new VM_Data_CHAT("student", msgEditText.getText().toString()));
+                        data.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
                         loadDatabase(post_id,data);
 
                     }else{
                         //** chatList에 데이터가 하나라도 있는 경우
-                        chatList.add(new VM_Data_CHAT("student", msgEditText.getText().toString()));
+                        chatList.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
                         loadDatabase(post_id,chatList);
                     }
                     ///chatList.add(data);
@@ -269,6 +271,7 @@ public class ProblemFragment extends Fragment {
 
                     @Override
                     public void onButtonComplete() {
+                        // 여기는 학생만 누를 수 있으므로  user_id 는 matchset_student 와 동일함 => 따라서 코드에, matchset_student대신 user_id를 그대로 사용함
                         Toast.makeText(getActivity(), "문제풀이가 완료 되었습니다. \n <질문 노트>에서 확인 가능합니다.", Toast.LENGTH_LONG).show();
                         Log.d(VM_ENUM.TAG,"[완료된 포스트 ID ] "+post_id);
                         long time = System.currentTimeMillis();//시스템 시간
@@ -286,7 +289,7 @@ public class ProblemFragment extends Fragment {
                                 .child(VM_ENUM.DB_TEA_DONE)
                                 .child(post_id)
                                 .setValue(postCustomData);
-                        Log.d(TAG,"[teacher done에 저장]");
+                        Log.d(TAG,matchset_teacher+"[teacher done에 저장]");
 
                         //** student unsolved에서 done으로 이동
                         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
@@ -295,7 +298,7 @@ public class ProblemFragment extends Fragment {
                                 .child(VM_ENUM.DB_STU_DONE)
                                 .child(post_id)
                                 .setValue(postCustomData);
-                        Log.d(TAG,"[student done에 저장]");
+                        Log.d(TAG,user_id+"[student done에 저장]");
 
 
                         //** teacher unsolved에서 삭제
@@ -315,7 +318,7 @@ public class ProblemFragment extends Fragment {
                                 .child(VM_ENUM.DB_STU_UNSOLVED)
                                 .child(post_id).removeValue();
 
-                        Log.d(TAG,"[student unsolved에서 삭제]");
+                        Log.d(TAG,user_id+ "[student unsolved에서 삭제]");
 
                         //** 완료 한 문제수 증가
                        onSolveProblemIncrease(matchset_teacher,user_id);

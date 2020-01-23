@@ -74,6 +74,7 @@ public  class VM_ENUM {
 
 
     //** DB CHILD
+    public static final String DB_ALARMS = "alarms";
     public  static final String DB_chatList="chatList";
     public static final String DB_S_ID="s_id";
     public static final String DB_USER_TYPE="type";
