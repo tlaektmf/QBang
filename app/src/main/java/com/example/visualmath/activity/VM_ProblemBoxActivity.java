@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     private static List<PostCustomData> unmatched; //포스트 데이터 unmatched 리스트 /id/title/date
     private static List<PostCustomData> matched; //포스트 데이터 matched 리스트 /id/title/date
 
+    //    로딩창
+    private ProgressBar cal_loading_bar;
+    private View cal_loading_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,11 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         btn_unmatched = findViewById(R.id.btn_unmatched);
         btn_matched = findViewById(R.id.btn_matched);
         recycler_view = findViewById(R.id.problem_recyclerview);
+
+        //로딩창
+        cal_loading_bar = findViewById(R.id.cal_loading_bar);
+        cal_loading_back = findViewById(R.id.cal_loading_back);
+
         needToBlock=null;
         fromStudentUnmatched=null;
 //        화면 초기 상태에서는 미완료 목록이 클릭된 상태
@@ -274,8 +283,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
-        });
 
+        });
         return true;
     }
 
@@ -318,6 +327,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 //                recycler_view.setAdapter(mAdapater);
 
                 //list_loading_bar.setVisibility(View.INVISIBLE);
+
+                cal_loading_back.setVisibility(View.INVISIBLE);
+                cal_loading_bar.setVisibility(View.INVISIBLE);
             }
 
             @Override
