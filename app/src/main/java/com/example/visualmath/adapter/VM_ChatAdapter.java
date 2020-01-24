@@ -54,13 +54,18 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
     public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher) {
         this.chatList = _chatList;
-        if(chatList==null){
-            Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]: chatList가 null임");
+
+        if(chatList!=null){
+            if(chatList.size()==0){
+                Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]: chatList가 비어있음");
+            }
         }
+
         this.context = context;
         this.userType=userType;
         this.matchSet_student=matchSet_student;
         this.matchSet_teacher=matchSet_teacher;
+        Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]:"+matchSet_student+","+matchSet_teacher);
     }
 
     @NonNull
