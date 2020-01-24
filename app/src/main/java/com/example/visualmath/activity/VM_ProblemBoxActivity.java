@@ -400,19 +400,7 @@ return true;
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode== Activity.RESULT_OK){
-            if(resultCode==VM_ENUM.RC_PROBLEM_SOLVE){
-                Log.d(TAG, "[ProblemBox]onActivityResult " );
-                matched=null;
-                unmatched=null;
-                setMatchedData();
-                setUnmatchedData();
-            }
-        }
-    }
+
 }
 
