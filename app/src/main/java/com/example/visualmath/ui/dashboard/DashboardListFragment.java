@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,9 @@ import com.example.visualmath.activity.HomeActivity;
 import com.example.visualmath.R;
 import com.example.visualmath.calendarListAdapater;
 import com.example.visualmath.date_data;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +39,9 @@ public class DashboardListFragment extends Fragment {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     calendarListAdapater recyclerViewAdapter;
+
+    //점찍힌 날짜 배열
+    private ArrayList<CalendarDay> dotted_date_list;
 
     long now = System.currentTimeMillis();
     Date date = new Date(now);
@@ -65,7 +72,8 @@ public class DashboardListFragment extends Fragment {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_dashboard_list, container, false);
         rootView=(ViewGroup)inflater.inflate(R.layout.fragment_dashboard_list, container, false);
-
+        //배열 초기화
+        dotted_date_list = new ArrayList<CalendarDay>();
 
         //캘린더 모드 변경
         Button btn = rootView.findViewById(R.id.button);
@@ -99,7 +107,7 @@ public class DashboardListFragment extends Fragment {
             date_list.add(new date_data(year,month+i,day));
         }
 
-        recyclerViewAdapter = new calendarListAdapater(this,date_list);
+        recyclerViewAdapter = new calendarListAdapater(this,date_list,dotted_date_list);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         //lhj_1_end
@@ -107,5 +115,4 @@ public class DashboardListFragment extends Fragment {
         return rootView;
 
     }
-
 }

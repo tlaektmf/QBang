@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
+import com.example.visualmath.VM_RegisterProblemActivity;
 import com.example.visualmath.activity.VM_FullViewActivity;
 import com.example.visualmath.activity.VM_LoginActivity;
 import com.example.visualmath.activity.VM_ProblemListActivity;
@@ -35,6 +36,7 @@ import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogListener_matchComplete;
 import com.example.visualmath.dialog.VM_Dialog_match;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -136,14 +138,15 @@ public class ItemProblemDetailFragment extends Fragment {
             public void onClick(View v) {
                 //** 매칭완료 다이얼로그 생성
                 final VM_Dialog_match dialog= new VM_Dialog_match(rootView.getContext());
-
+                final VM_Dialog_registerProblem checkDialog = new VM_Dialog_registerProblem(rootView.getContext());
                 dialog.setDialogListener(new VM_DialogListener_matchComplete(){
                     public void onButtonYes(){
 
-                        Toast toast = Toast.makeText(parent,"",Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER,0,0);
-                        toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
-                        toast.show();
+//                        Toast toast = Toast.makeText(parent,"",Toast.LENGTH_LONG);
+//                        toast.setGravity(Gravity.CENTER,0,0);
+//                        toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
+//                        toast.show();
+                        checkDialog.callFunction(5);
 
 //                        if(isDataAvailable()){
 //                            dataUpdate();

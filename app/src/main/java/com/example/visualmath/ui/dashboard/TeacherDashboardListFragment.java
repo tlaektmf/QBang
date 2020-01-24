@@ -91,7 +91,7 @@ public class TeacherDashboardListFragment extends Fragment {
             date_list.add(new date_data(year,month+i,day));
         }
 
-        recyclerViewAdapter = new calendarListAdapater(this,date_list);
+//        recyclerViewAdapter = new calendarListAdapater(this,date_list);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         //lhj_1_end
