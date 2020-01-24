@@ -50,6 +50,7 @@ public  class VM_ENUM {
     public static final String IT_GALLERY_PHOTO="IT_GALLERY_PHOTO";
     public static final String IT_ARG_BLOCK="IT_ARG_BLOCK";
     public static final String IT_FROM_UNMATCHED ="IT_FROM_UNMATCHED" ;
+    public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     //** 상수 String
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";

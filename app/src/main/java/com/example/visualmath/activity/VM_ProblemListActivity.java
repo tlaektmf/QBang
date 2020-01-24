@@ -65,25 +65,68 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_problem_list);
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
         assert recyclerView != null;
-
         list_loading_bar = findViewById(R.id.list_loading_bar);
          btnElement = findViewById(R.id.ib_element);
          btnMid = findViewById(R.id.ib_mid);
          btnHigh = findViewById(R.id.ib_high);
 
-
         unmatched_element=null;
         unmatched_mid=null;
         unmatched_high=null;
 
-        Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
-        setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        //** 인텐트 확인
+        String afterMatchSuccess=getIntent().getStringExtra(VM_ENUM.IT_MATCH_SUCCESS);
 
-        btnElement.setSelected(true);
-        btnMid.setSelected(false);
-        btnHigh.setSelected(false);
 
-        nowGrade=VM_ENUM.GRADE_ELEMENT;
+
+
+        if(afterMatchSuccess==null){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어온 게 아님");
+            btnElement.setSelected(true);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_ELEMENT;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        }else if(afterMatchSuccess.equals(VM_ENUM.GRADE_ELEMENT)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_ELEMENT");
+
+            btnElement.setSelected(true);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_ELEMENT;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        }
+        else if(afterMatchSuccess.equals(VM_ENUM.GRADE_MID)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_MID");
+
+            btnElement.setSelected(false);
+            btnMid.setSelected(true);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_MID;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_MID);
+        }
+        else if(afterMatchSuccess.equals(VM_ENUM.GRADE_HIGH)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_HIGH");
+
+            btnElement.setSelected(false);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(true);
+
+            nowGrade=VM_ENUM.GRADE_HIGH;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_HIGH);
+        }
+
 
     }
 

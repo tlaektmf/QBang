@@ -304,74 +304,27 @@ public class ProblemFragment extends Fragment {
                     @Override
                     public void onButtonComplete() {
                         // 여기는 학생만 누를 수 있으므로  user_id 는 matchset_student 와 동일함 => 따라서 코드에, matchset_student대신 user_id를 그대로 사용함
-                        //Toast.makeText(getActivity(), "문제풀이가 완료 되었습니다. \n <질문 노트>에서 확인 가능합니다.", Toast.LENGTH_LONG).show();
+                       if(problemSolveButtonEvent()){
+                           Log.d(TAG,"problemSolveButtonEvent 완료");
+                       }
 
+
+                        Log.d(TAG,"다이얼로그 호출 시작");
+                       //** 문제 완료 하면 학생은 홈화면으로 액티비티를 전환함
                         AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();     //닫기
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();     //닫기
 
-                                    Intent intent = new Intent(getContext(), HomeActivity.class);
-                                    //parent.setResult(VM_ENUM.RC_PROBLEM_SOLVE, intent);
-                                    parent.startActivity(intent);
-                                    parent.finish();
-                                }
-                            });
-                            alert.setMessage("문제풀이가 완료 되었습니다. \\n <질문 노트>에서 확인 가능합니다.");
-                            alert.show();
-
-
-                        Log.d(VM_ENUM.TAG,"[완료된 포스트 ID ] "+post_id);
-                        long time = System.currentTimeMillis();//시스템 시간
-                        Date date = new Date(time);
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
-                        String doneTime = dateFormat.format(date);//문제 완료 시간
-
-                        //   public PostCustomData(String p_id,String p_title,String grade,String problem,String time)
-                        PostCustomData postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),vmDataDefault.getGrade(),vmDataDefault.getProblem(),doneTime);
-
-                        //** teacher unsolved에서 done으로 이동
-                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
-                                .child(matchset_teacher)
-                                .child(VM_ENUM.DB_TEA_POSTS)
-                                .child(VM_ENUM.DB_TEA_DONE)
-                                .child(post_id)
-                                .setValue(postCustomData);
-                        Log.d(TAG,matchset_teacher+"[teacher done에 저장]");
-
-                        //** student unsolved에서 done으로 이동
-                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
-                                .child(user_id)
-                                .child(VM_ENUM.DB_STU_POSTS)
-                                .child(VM_ENUM.DB_STU_DONE)
-                                .child(post_id)
-                                .setValue(postCustomData);
-                        Log.d(TAG,user_id+"[student done에 저장]");
-
-
-                        //** teacher unsolved에서 삭제
-                        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
-                                .child(matchset_teacher)
-                                .child(VM_ENUM.DB_TEA_POSTS)
-                                .child(VM_ENUM.DB_TEA_UNSOLVED)
-                                .child(post_id)
-                                .removeValue();
-                        Log.d(TAG,"[ "+ matchset_teacher+ "teacher unsolved 에서 삭제]");
-
-                        //** student unsolved에서 삭제
-                        FirebaseDatabase.getInstance().getReference()
-                                .child(VM_ENUM.DB_STUDENTS)
-                                .child(user_id)
-                                .child(VM_ENUM.DB_STU_POSTS)
-                                .child(VM_ENUM.DB_STU_UNSOLVED)
-                                .child(post_id).removeValue();
-
-                        Log.d(TAG,user_id+ "[student unsolved에서 삭제]");
-
-                        //** 완료 한 문제수 증가
-                       onSolveProblemIncrease(matchset_teacher,user_id);
-
+                                Intent intent = new Intent(getContext(), HomeActivity.class);
+                                //parent.setResult(VM_ENUM.RC_PROBLEM_SOLVE, intent);
+                                parent.startActivity(intent);
+                                parent.finish();
+                            }
+                        });
+                        alert.setMessage("문제풀이가 완료 되었습니다. \\n <질문 노트>에서 확인 가능합니다.");
+                        alert.show();
 
                     }
                 });
@@ -390,6 +343,61 @@ public class ProblemFragment extends Fragment {
         return rootView;
     }
 
+    public boolean problemSolveButtonEvent(){
+
+        Log.d(VM_ENUM.TAG,"[완료된 포스트 ID ] "+post_id);
+        long time = System.currentTimeMillis();//시스템 시간
+        Date date = new Date(time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
+        String doneTime = dateFormat.format(date);//문제 완료 시간
+
+        //   public PostCustomData(String p_id,String p_title,String grade,String problem,String time)
+        PostCustomData postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),vmDataDefault.getGrade(),vmDataDefault.getProblem(),doneTime);
+
+        //** teacher unsolved에서 done으로 이동
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                .child(matchset_teacher)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(VM_ENUM.DB_TEA_DONE)
+                .child(post_id)
+                .setValue(postCustomData);
+        Log.d(TAG,matchset_teacher+"[teacher done에 저장]");
+
+        //** student unsolved에서 done으로 이동
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                .child(user_id)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_DONE)
+                .child(post_id)
+                .setValue(postCustomData);
+        Log.d(TAG,user_id+"[student done에 저장]");
+
+
+        //** teacher unsolved에서 삭제
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                .child(matchset_teacher)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(VM_ENUM.DB_TEA_UNSOLVED)
+                .child(post_id)
+                .removeValue();
+        Log.d(TAG,"[ "+ matchset_teacher+ "teacher unsolved 에서 삭제]");
+
+        //** student unsolved에서 삭제
+        FirebaseDatabase.getInstance().getReference()
+                .child(VM_ENUM.DB_STUDENTS)
+                .child(user_id)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_UNSOLVED)
+                .child(post_id).removeValue();
+
+        Log.d(TAG,user_id+ "[student unsolved에서 삭제]");
+
+        //** 완료 한 문제수 증가
+        if(onSolveProblemIncrease(matchset_teacher,user_id)){
+            Log.d(TAG,"[onSolveProblemIncrease 성공]");
+        }
+        return true;
+    }
 ///*** open with addvalueListenr     <<<<<<<
 public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem){
 
@@ -411,7 +419,7 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();     //닫기
                             Intent intent = new Intent(getContext(), TeacherHomeActivity.class);
-                            //parent.setResult(VM_ENUM.RC_PROBLEM_SOLVE, intent);
+
                             parent.startActivity(intent);
                             parent.finish();
                         }
@@ -522,24 +530,12 @@ private void initProblemFragment(){//** 한번만 호출
         });
 }
 
-private void onSolveProblemIncrease(String matchset_teacher, String user_id) {
-
+private boolean onSolveProblemIncrease(String matchset_teacher, String user_id) {
 
 
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS).
                 child(user_id).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_SOLVE_PROBLEM);
 
-//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d(VM_ENUM.TAG,dataSnapshot.get);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
         reference.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -591,7 +587,8 @@ private void onSolveProblemIncrease(String matchset_teacher, String user_id) {
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
         });
-
+    return true;
     }
+
 
 }

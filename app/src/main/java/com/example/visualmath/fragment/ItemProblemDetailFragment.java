@@ -147,11 +147,16 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
 
-                        dataUpdate();
+                        //** 첫번째로 데이터가 유효한지 먼저 판단
+                        //** 유효하다면, DB를 업데이트하고 "문제선택하기"화면으로 다시 전환
 
-                        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
-                        parent.startActivity(intent);
-                        parent.finish();
+                        dataUpdate();
+                        //>> 액티비티 전환을 dataUpdate 함수내에서 진행함
+//                        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
+//                        parent.startActivity(intent);
+//                        parent.finish();
+                        //>>>
+
 
 //                        if(isDataAvailable()){
 //                            dataUpdate();
@@ -212,6 +217,10 @@ public class ItemProblemDetailFragment extends Fragment {
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
         postCustomData=new PostCustomData(post_id,vmDataDefault.getTitle(),solveWay,upLoadDate,matchSet_student,user);
 
+        //** 1. UNMATCHED 에서 삭제
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+                .child(post_id).removeValue();
+        Log.d(TAG,"[UNMATCHED에서 삭제완료]");
 
         //** 2. teacher unsolved 에 저장
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
@@ -247,11 +256,12 @@ public class ItemProblemDetailFragment extends Fragment {
                 .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
         Log.d(TAG,"[POSTS 의 matchset 등록 완료]");
 
-        //** 1. UNMATCHED 에서 삭제
-        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
-                .child(post_id).removeValue();
-        Log.d(TAG,"[UNMATCHED에서 삭제완료]");
 
+        //매치완료 ->문제선택 화면으로 다시 전환
+        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
+        intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS,vmDataDefault.getGrade());
+        parent.startActivity(intent);
+        parent.finish();
     }
 
     /****
