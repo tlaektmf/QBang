@@ -64,20 +64,20 @@ public class VM_DBHandler {
 
 
 ///*** open with addvalueListenr     <<<<<<<
-//    public void newChat(String post_id, List<VM_Data_CHAT> chat) {
-//
-//        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-//        databaseReference.setValue(chat); //** 파이어베이스 DB 등록
-//
-//    }
-///*** open with addvalueListenr <<<<<<<
-
-    public void newChat(String post_id, VM_Data_CHAT chat) {
+    public void newChat(String post_id, List<VM_Data_CHAT> chat) {
 
         databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-        databaseReference.push().setValue(chat); //** 파이어베이스 DB 등록
+        databaseReference.setValue(chat); //** 파이어베이스 DB 등록
 
     }
+///*** open with addvalueListenr <<<<<<<
+
+//    public void newChat(String post_id, VM_Data_CHAT chat) {
+//
+//        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+//        databaseReference.push().setValue(chat); //** 파이어베이스 DB 등록
+//
+//    }
 
     /**
      * USERS 객체 생성

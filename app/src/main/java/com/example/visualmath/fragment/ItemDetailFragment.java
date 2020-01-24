@@ -157,7 +157,7 @@ public class ItemDetailFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
-                Log.d(TAG, "ValueEventListener : " +dataSnapshot );
+                Log.d(TAG, "[ItemDetail] ValueEventListener : " +dataSnapshot );
 
 
                 //** 사진 파일 읽기
