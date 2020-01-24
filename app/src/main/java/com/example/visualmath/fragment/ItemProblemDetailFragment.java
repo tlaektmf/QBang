@@ -199,54 +199,20 @@ public class ItemProblemDetailFragment extends Fragment {
 
     public void isDataAvailable() { //** 데이터를 unmatched에서 검사
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED)
-                .child(post_id);
-
-        final boolean[] flag = {false,false};
-
-        ref.runTransaction(new Transaction.Handler() {
-            @NonNull
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
+        ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                PostCustomData postCustomData=mutableData.getValue(PostCustomData.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (postCustomData== null) {
-
-                    Log.d(VM_ENUM.TAG,"mutableData.getValue()== null 초기화");
-                    return Transaction.success(mutableData);
-                }
-
-
-                if(postCustomData==null){
-                    Log.d(VM_ENUM.TAG, "이미 누가 가져감, flag[0] =true 으로 설정");
-                    flag[0] =true;
-
-                }else{
-                    Log.d(VM_ENUM.TAG, "문제가 유효함.  flag[1] =true 으로 설정");
-                    flag[1] =true;
-
-                }
-
-                // Set value and report transaction success
-                Log.d(VM_ENUM.TAG," Set value and report transaction success");
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-
-                if(flag[0]){
-                    Log.d(VM_ENUM.TAG, " flag 판단 후, 이벤트 처리 : flag[0] =true 인 경우");
+                if (dataSnapshot.getValue() == null) {
+                    Log.d(VM_ENUM.TAG, "이미 누가 가져감");
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent);
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();     //닫기
 
-                            //매치완료 ->문제선택 화면으로 다시 전환
+                            // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
@@ -256,22 +222,9 @@ public class ItemProblemDetailFragment extends Fragment {
                     });
                     alert.setMessage("이미 매치 완료된 문제입니다. 문제를 선택할 수 없습니다.");
                     alert.show();
-                }
-                if(flag[1]){
-                    Log.d(VM_ENUM.TAG, " flag 판단 후, 이벤트 처리 : flag[1] =true 인 경우");
-
-                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
-                            .child(post_id).removeValue();
-                    Log.d(TAG, "[UNMATCHED에서 삭제완료]");
-
+                } else {
+                    Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출");
                     if(dataUpdate()){
-
-//                        PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
-//                        //데이터를 지운다
-//                        //** 1. UNMATCHED 에서 삭제
-//                        Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
-//                        mutableData.setValue(null);
-
                         //매치완료 ->문제선택 화면으로 다시 전환
                         Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -286,6 +239,11 @@ public class ItemProblemDetailFragment extends Fragment {
 
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
@@ -303,10 +261,10 @@ public class ItemProblemDetailFragment extends Fragment {
         postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), solveWay, upLoadDate, matchSet_student, user);
 
         //>>> UNMATCHED 에서의 삭제는 mutable 로 해야되기 때문에 isDataAvailable() 함수에서 조건문에 따라 처리함
-//        //** 1. UNMATCHED 에서 삭제
-//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
-//                .child(post_id).removeValue();
-//        Log.d(TAG, "[UNMATCHED에서 삭제완료]");
+        //** 1. UNMATCHED 에서 삭제
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+                .child(post_id).removeValue();
+        Log.d(TAG, "[UNMATCHED에서 삭제완료]");
 
         //** 2. teacher unsolved 에 저장
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
