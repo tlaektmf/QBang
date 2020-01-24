@@ -258,7 +258,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(VM_ENUM.DB_STU_UNMATCHED);
 
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+        reference.addValueEventListener(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -312,7 +312,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(VM_ENUM.DB_STU_UNSOLVED);
 
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
+        reference.addValueEventListener(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {

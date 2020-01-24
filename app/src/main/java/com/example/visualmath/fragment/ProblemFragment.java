@@ -348,6 +348,7 @@ public class ProblemFragment extends Fragment {
 
                         //** 완료 한 문제수 증가
                        onSolveProblemIncrease(matchset_teacher,user_id);
+                       parent.finish();
                     }
                 });
                 dig.callFunction();
