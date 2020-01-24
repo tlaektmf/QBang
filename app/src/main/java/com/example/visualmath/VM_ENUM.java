@@ -32,7 +32,7 @@ public  class VM_ENUM {
     public static final int RC_PICK_FROM_ALBUM = 998;
     public static final int RC_PICK_FROM_CAMERA = 997;
     public static final int RC_READ_REQUEST_CODE = 995;
-
+    public static final int RC_PROBLEM_SOLVE =990 ;
     public static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     public static final int PICK_FROM_CAMERA = 2;
     public static final int OTHER_DATA_LOAD = 3;
