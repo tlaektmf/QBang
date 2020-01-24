@@ -1,10 +1,12 @@
 package com.example.visualmath.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,6 +78,11 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
         setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+
+        btnElement.setSelected(true);
+        btnMid.setSelected(false);
+        btnHigh.setSelected(false);
+
         nowGrade=VM_ENUM.GRADE_ELEMENT;
 
     }
@@ -360,5 +367,16 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 //            }
 //        });
 //
+//    }
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode==Activity.RESULT_OK){
+//            if(resultCode==VM_ENUM.RC_PROBLEM_SOLVE){
+//                Log.d(VM_ENUM.TAG,"[onActivityResult]");
+//            }
+//        }
 //    }
 }

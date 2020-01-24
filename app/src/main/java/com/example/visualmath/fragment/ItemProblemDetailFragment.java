@@ -146,11 +146,13 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
+
                         dataUpdate();
 
-                        Intent intent=new Intent(parent, VM_TeacherSolveProblemActivity.class);
+                        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
                         parent.startActivity(intent);
                         parent.finish();
+
 //                        if(isDataAvailable()){
 //                            dataUpdate();
 //                        }else{
