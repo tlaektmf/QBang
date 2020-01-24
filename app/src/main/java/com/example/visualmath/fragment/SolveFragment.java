@@ -1,6 +1,8 @@
 package com.example.visualmath.fragment;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +38,8 @@ public class SolveFragment extends Fragment {
     private TextView textViewTitle;
     private TextView textViewGrade;
     private ImageView imageViewProblem;
+    private FrameLayout detail_front;
+    private Button close_btn;
 
     ///private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -64,7 +70,21 @@ public class SolveFragment extends Fragment {
          textViewTitle=_rootView.findViewById(R.id.tv_grade);
          textViewGrade=_rootView.findViewById(R.id.tv_title);
          imageViewProblem=_rootView.findViewById(R.id.iv_file_problem);
-        mGlideRequestManager = Glide.with(this);
+         imageViewProblem.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 zoomImageFromThumb(view);
+             }
+         });
+        detail_front=_rootView.findViewById(R.id.detail_front);
+        close_btn=_rootView.findViewById(R.id.pv_close_btn);
+        close_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                detail_front.setVisibility(View.GONE);
+            }
+        });
+         mGlideRequestManager = Glide.with(this);
         ///firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
         ///firebaseStorage = FirebaseStorage.getInstance();
 
@@ -78,6 +98,16 @@ public class SolveFragment extends Fragment {
 
         //Activity 참조 DB에서 base 읽어오기
         setWidget();
+    }
+    public void zoomImageFromThumb(final View thumView){
+        ImageView smallView = (ImageView) thumView;
+        ImageView bigView = rootView.findViewById(R.id.iv_photo);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) smallView.getDrawable();
+        Bitmap tmpBitmap = bitmapDrawable.getBitmap();
+        bigView.setImageBitmap(tmpBitmap);
+
+        detail_front.setVisibility(View.VISIBLE);
     }
     public void setWidget(){
 
