@@ -20,12 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -48,8 +50,8 @@ public class ItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
-    public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
-    public static String TAG= VM_ENUM.TAG;
+    //public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
+    public static String TAG = VM_ENUM.TAG;
     public View recyclerView;
 
     //lhj_0
@@ -61,6 +63,7 @@ public class ItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
+        recyclerView = findViewById(R.id.item_list);
         //lhj_1
         list_loading_bar = findViewById(R.id.list_loading_bar);
         //lhj_1
@@ -71,7 +74,7 @@ public class ItemListActivity extends AppCompatActivity {
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.hide();
         }
 
@@ -85,29 +88,30 @@ public class ItemListActivity extends AppCompatActivity {
 
         initData();
 
-        recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+//        assert recyclerView != null;
+//        setupRecyclerView((RecyclerView) recyclerView,);
 
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView,   List<AlarmItem> alarms) {
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this,alarms, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, alarms, mTwoPane));
     }
 
     /**
      * itemListView 활성화 비활성화
+     *
      * @param view
      */
     public void showItemList(View view) {
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.drawer_menu);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.drawer_menu);
         View clickview = findViewById(R.id.student_clickview);
-        if(layout.getVisibility()==View.VISIBLE){
+        if (layout.getVisibility() == View.VISIBLE) {
             //현재 뷰가 보이면
             layout.setVisibility(View.GONE);
             clickview.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             //뷰가 보이지 않으면
             layout.setVisibility(View.VISIBLE);
             clickview.setVisibility(View.VISIBLE);
@@ -125,7 +129,7 @@ public class ItemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmItem item = (AlarmItem)view.getTag();
+                AlarmItem item = (AlarmItem) view.getTag();
 
                 if (mTwoPane) {//태블릿 모드 -> 태블릿에서 작동함
                     Bundle arguments = new Bundle();
@@ -160,7 +164,7 @@ public class ItemListActivity extends AppCompatActivity {
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
                                       List<AlarmItem> items,
                                       boolean twoPane) {
-            mAlarms=items;
+            mAlarms = items;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
@@ -183,6 +187,9 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            if(mAlarms==null){
+                return 0;
+            }
             return mAlarms.size();
         }
 
@@ -202,32 +209,39 @@ public class ItemListActivity extends AppCompatActivity {
      * 데이터베이스 트랜젝션
      * write
      */
-    public void initData(){
+    public void initData() {
 
-        alarms=new ArrayList<AlarmItem>();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS);
+        //alarms = new ArrayList<AlarmItem>();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
         String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
-        Log.d(VM_ENUM.TAG,"[ItemListAct] "+user+" 의 데이터 접근");
-        reference=reference.child(user)
-                .child("posts").child("unsolved");
+        Log.d(VM_ENUM.TAG, "[학생 알람] " + user + " 의 데이터 접근");
+        reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+                .child(user)
+                .child(VM_ENUM.DB_ALARMS);
+
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    String post_id=snapshot.getKey();
-                    String post_title=snapshot.child("title").getValue().toString();
-                    alarms.add(new AlarmItem(post_id,post_title,VM_ENUM.SOLVED));
-
-                    ///Log.d(TAG, "ValueEventListener : " +post_id );
-
-                }
-                setupRecyclerView((RecyclerView) recyclerView);
+                GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
+                List<AlarmItem> alarms= new ArrayList<AlarmItem>();
+                alarms=dataSnapshot.getValue(t);
+                Log.d(TAG, "[학생 알람] ValueEventListener : " +dataSnapshot.getValue() );
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//
+//                    String post_id = snapshot.getKey();
+//                    String post_title = snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
+//
+//                    alarms.add(new AlarmItem(post_id, post_title, VM_ENUM.SOLVED));
+//
+//                    ///Log.d(TAG, "ValueEventListener : " +post_id );
+//
+//                }
+                setupRecyclerView((RecyclerView) recyclerView,alarms);
 
                 //lhj_3
                 list_loading_bar.setVisibility(View.INVISIBLE);
@@ -236,7 +250,7 @@ public class ItemListActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
         });

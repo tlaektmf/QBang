@@ -1,10 +1,19 @@
 package com.example.visualmath.data;
 
+/**
+ * 학생
+ * - 문제 매칭 완료
+ * - chat 메세지 오는 경우
+ *
+ * 선생
+ * - chat 메세지 오는 경우
+ * - 학생이 문제 완료 누르는 경우
+ */
 public class AlarmItem {
 
     private  String id;//게시글 아이디
     private String title;//게시글 이름
-    private  String type; //알람 종류
+    private  String type; //알람 종류 (TAG)
 
     private  String details; //상세 내용 [ ] <- 이부분에 들어갈 내용
 
@@ -12,8 +21,14 @@ public class AlarmItem {
         this.id=id;
         this.title=title;
 
-        if(type== "SOLVED"){
-            this.details="[답변이 도착했습니다]";
+        if(type.equals("MATCHED") ){
+            this.details="[매치가 완료되었습니다]";
+        }
+        if(type.equals("NEWMESSAGE")){
+            this.details="[새로운 메세지가 도착했습니다]";
+        }
+        if(type.equals("DONE")){
+            this.details="[학생이 문제를 완료했습니다]";
         }
     }
 
