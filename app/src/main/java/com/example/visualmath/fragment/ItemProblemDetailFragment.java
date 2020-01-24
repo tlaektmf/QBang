@@ -144,7 +144,8 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete,null));
                         toast.show();
-
+                        dataUpdate();
+                        
 //                        if(isDataAvailable()){
 //                            dataUpdate();
 //                        }else{
