@@ -102,7 +102,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                 holder.myChatLayout.setVisibility(View.GONE);
                 holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
                 holder.friendName.setText(this.matchSet_student);
-                //holder.friendImgView.setImageResource(R.drawable.student);
+                holder.friendImgView.setImageResource(R.drawable.student);
                 //holder.friendImgView.setClipToOutline(true);
             }
         }else if(userType.equals(VM_ENUM.STUDENT)){//유저가 학생인 경우
