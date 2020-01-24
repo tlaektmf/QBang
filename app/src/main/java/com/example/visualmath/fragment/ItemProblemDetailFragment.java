@@ -158,6 +158,7 @@ public class ItemProblemDetailFragment extends Fragment {
                         isDataAvailable();
 
 
+
                         //>> 액티비티 전환을 dataUpdate 함수내에서 진행함
 //                        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
 //                        parent.startActivity(intent);
@@ -201,6 +202,8 @@ public class ItemProblemDetailFragment extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED)
                 .child(post_id);
 
+        final boolean[] flag = {false,false};
+
         ref.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -212,7 +215,36 @@ public class ItemProblemDetailFragment extends Fragment {
                 }
 
                 if(mutableData.getValue()==null){
-                    Log.d(VM_ENUM.TAG, "이미 누가 가져감");
+                    Log.d(VM_ENUM.TAG, "이미 누가 가져감, flag[0] =true 으로 설정");
+                    flag[0] =true;
+
+
+                }else{
+                    Log.d(VM_ENUM.TAG, "문제가 유효함.  flag[1] =true 으로 설정");
+                    flag[1] =true;
+
+                    PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
+                    //데이터를 지운다
+                    //** 1. UNMATCHED 에서 삭제
+                    Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
+                    mutableData.setValue(null);
+
+
+                }
+
+                // Set value and report transaction success
+                Log.d(VM_ENUM.TAG," Set value and report transaction success");
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                if(flag[0]){
+                    Log.d(VM_ENUM.TAG, " flag 판단 후, 이벤트 처리 : flag[0] =true 인 경우");
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent);
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
@@ -229,15 +261,9 @@ public class ItemProblemDetailFragment extends Fragment {
                     });
                     alert.setMessage("이미 매치 완료된 문제입니다. 문제를 선택할 수 없습니다.");
                     alert.show();
-
-                }else{
-                    Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출");
-                    PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
-                    //데이터를 지운다
-                    //** 1. UNMATCHED 에서 삭제
-                    Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
-                    mutableData.setValue(null);
-
+                }
+                if(flag[1]){
+                    Log.d(VM_ENUM.TAG, " flag 판단 후, 이벤트 처리 : flag[1] =true 인 경우");
                     if(dataUpdate()){
                         //매치완료 ->문제선택 화면으로 다시 전환
                         Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
@@ -252,25 +278,12 @@ public class ItemProblemDetailFragment extends Fragment {
                         parent.finish();
 
                     }
-
                 }
-
-                // Set value and report transaction success
-                Log.d(VM_ENUM.TAG," Set value and report transaction success");
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
         });
 
 
     }
-
 
     public boolean dataUpdate() {
 
