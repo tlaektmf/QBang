@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     private static List<PostCustomData> unmatched_mid; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private static List<PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private String nowGrade;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

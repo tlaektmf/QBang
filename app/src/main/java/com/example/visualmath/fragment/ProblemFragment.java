@@ -395,11 +395,15 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
 
         //** 유효한 데이터인지 검사
     if(user_type.equals(VM_ENUM.TEACHER)){
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS)
+                .child(user_id)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(VM_ENUM.DB_TEA_UNSOLVED);
+        ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(post_id).getValue()==null){
+
+                if(dataSnapshot.getValue()==null){
                     Log.d(VM_ENUM.TAG,"문제가 이미 완료됨");
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent);
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -414,7 +418,8 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
                     });
                     alert.setMessage("이미 완료된 문제입니다. 질문노트에서 확인 가능합니다.");
                     alert.show();
-                }else{
+                }
+                else{
                     VM_DBHandler dbHandler=new VM_DBHandler();
                     dbHandler.newChat(post_id,chatItem);
                     Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
@@ -426,7 +431,8 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
 
             }
         });
-    }else if(user_type.equals(VM_ENUM.STUDENT)){
+    }
+    else if(user_type.equals(VM_ENUM.STUDENT)){
         //학생이면 검사 없이 그냥 채팅 추가
         VM_DBHandler dbHandler=new VM_DBHandler();
         dbHandler.newChat(post_id,chatItem);

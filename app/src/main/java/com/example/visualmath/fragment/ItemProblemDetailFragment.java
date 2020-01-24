@@ -4,6 +4,7 @@ package com.example.visualmath.fragment;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.InetAddresses;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
 import com.example.visualmath.activity.VM_LoginActivity;
 import com.example.visualmath.activity.VM_ProblemListActivity;
+import com.example.visualmath.activity.VM_TeacherSolveProblemActivity;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogListener_matchComplete;
@@ -119,7 +121,7 @@ public class ItemProblemDetailFragment extends Fragment {
         buttonViewDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent=new Intent(getActivity(),VM_ProblemDetailActivity.class);
+
                 Intent intent = new Intent(getContext(), VM_FullViewActivity.class);
                 intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, post_id);
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,vmDataDefault.getTitle());
@@ -146,6 +148,9 @@ public class ItemProblemDetailFragment extends Fragment {
                         toast.show();
                         dataUpdate();
 
+                        Intent intent=new Intent(parent, VM_TeacherSolveProblemActivity.class);
+                        parent.startActivity(intent);
+                        parent.finish();
 //                        if(isDataAvailable()){
 //                            dataUpdate();
 //                        }else{
