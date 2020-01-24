@@ -208,27 +208,22 @@ public class ItemProblemDetailFragment extends Fragment {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                PostCustomData postCustomData=mutableData.getValue(PostCustomData.class);
 
-                if ( mutableData.getValue()== null) {
+                if (postCustomData== null) {
+
                     Log.d(VM_ENUM.TAG,"mutableData.getValue()== null 초기화");
                     return Transaction.success(mutableData);
                 }
 
-                if(mutableData.getValue()==null){
+
+                if(postCustomData==null){
                     Log.d(VM_ENUM.TAG, "이미 누가 가져감, flag[0] =true 으로 설정");
                     flag[0] =true;
-
 
                 }else{
                     Log.d(VM_ENUM.TAG, "문제가 유효함.  flag[1] =true 으로 설정");
                     flag[1] =true;
-
-                    PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
-                    //데이터를 지운다
-                    //** 1. UNMATCHED 에서 삭제
-                    Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
-                    mutableData.setValue(null);
-
 
                 }
 
@@ -264,7 +259,19 @@ public class ItemProblemDetailFragment extends Fragment {
                 }
                 if(flag[1]){
                     Log.d(VM_ENUM.TAG, " flag 판단 후, 이벤트 처리 : flag[1] =true 인 경우");
+
+                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+                            .child(post_id).removeValue();
+                    Log.d(TAG, "[UNMATCHED에서 삭제완료]");
+
                     if(dataUpdate()){
+
+//                        PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
+//                        //데이터를 지운다
+//                        //** 1. UNMATCHED 에서 삭제
+//                        Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
+//                        mutableData.setValue(null);
+
                         //매치완료 ->문제선택 화면으로 다시 전환
                         Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);

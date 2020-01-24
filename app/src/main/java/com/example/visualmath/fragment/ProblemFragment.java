@@ -542,6 +542,7 @@ private boolean onSolveProblemIncrease(String matchset_teacher, String user_id) 
             public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
 
                 if ( mutableData.getValue()== null) {
+
                     return Transaction.success(mutableData);
                 }
 
