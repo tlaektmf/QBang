@@ -5,154 +5,213 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".fragment.SolveFragment"
     android:background="#f2f2f4">
 
     <!-- TODO: Update blank fragment layout -->
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
-<!--    내용 전체 감싸는 부분-->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent">
+    <!--    내용 전체 감싸는 부분-->
+    <FrameLayout
+        android:id="@+id/detail_back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:elevation="5dp"
-        android:layout_margin="20dp"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:textIsSelectable="true"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
+            android:elevation="5dp"
+            android:layout_margin="20dp"
+            android:layout_gravity="center">
 
-            android:textSize="15dp"
-            android:fontFamily="@font/nanumsquaure_b"
-            android:textColor="#016a96"
-            android:gravity="left"
+            <TextView
+                android:id="@+id/tv_title"
+                android:textIsSelectable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-            android:layout_marginLeft="@dimen/input_margin"
-            android:layout_marginRight="@dimen/input_margin"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
+                android:textSize="15dp"
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#016a96"
+                android:gravity="left"
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_marginLeft="@dimen/input_margin"
+                android:layout_marginRight="@dimen/input_margin"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
 
-        <TextView
-            android:id="@+id/tv_grade"
-            android:textIsSelectable="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_grade"
+                android:textIsSelectable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:textSize="24dp"
+                android:fontFamily="@font/nanumsquaure_eb"
+                android:textColor="#404040"
+
+                android:layout_marginLeft="@dimen/input_margin"
+                android:layout_marginRight="@dimen/input_margin"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+            <View
+                android:id="@+id/detail_line_first"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="#72d8ff"
+                android:layout_marginTop="10dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_grade"/>
+
+            <ImageView
+                android:id="@+id/iv_file_problem"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+
+                android:scaleType="centerCrop"
+
+                app:layout_constraintTop_toBottomOf="@+id/detail_line_first"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"/>
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_answer_text"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+
+    <!--            android:text="정답"-->
+    <!--            android:textSize="@dimen/input_text"-->
+    <!--            android:fontFamily="@font/nanumsquaure_b"-->
+    <!--            android:textColor="#404040"-->
+    <!--            android:gravity="left"-->
+
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            app:layout_constraintRight_toRightOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"-->
+
+    <!--            android:layout_marginLeft="@dimen/input_margin"-->
+    <!--            android:layout_marginRight="@dimen/input_margin"-->
+    <!--            android:layout_marginTop="10dp"/>-->
+            <View
+                android:id="@+id/detail_line_second"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="#72d8ff"
+                android:layout_marginTop="10dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"/>
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_answer"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            app:layout_constraintHeight_default="wrap"-->
+    <!--            android:background="@drawable/answer_back"-->
+    <!--            android:padding="20dp"-->
+
+    <!--            android:text="x = 30, y = 4 "-->
+    <!--            android:textSize="@dimen/input_text"-->
+    <!--            android:fontFamily="@font/nanumsquaure_b"-->
+    <!--            android:textColor="#016a96"-->
+    <!--            android:gravity="left"-->
+
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            app:layout_constraintRight_toRightOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"-->
+
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp"-->
+    <!--            android:layout_marginTop="15dp"/>-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="19dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_line_second"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--    내용 전체 감싸는 부분 끝-->
+    </FrameLayout>
+    <!--    내용 전체 감싸는 부분 끝-->
+
+    <!--    이미지 클릭-->
+    <FrameLayout
+        android:id="@+id/detail_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/photo_view_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:background="#66000000"
+            android:layout_gravity="center">
 
-            android:textSize="24dp"
-            android:fontFamily="@font/nanumsquaure_eb"
-            android:textColor="#404040"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pv_close_btn_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingBottom="15dp">
+                <Button
+                    android:id="@+id/pv_close_btn"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/pv_close_btn"
 
-            android:layout_marginLeft="@dimen/input_margin"
-            android:layout_marginRight="@dimen/input_margin"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
-        <View
-            android:id="@+id/detail_line_first"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="#72d8ff"
-            android:layout_marginTop="10dp"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/iv_photo"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_grade"/>
+                android:scaleType="fitCenter"
 
-        <ImageView
-            android:id="@+id/iv_file_problem"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pv_close_btn_container"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            android:scaleType="centerCrop"
-
-            app:layout_constraintTop_toBottomOf="@+id/detail_line_first"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"/>
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_answer_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-
-<!--            android:text="정답"-->
-<!--            android:textSize="@dimen/input_text"-->
-<!--            android:fontFamily="@font/nanumsquaure_b"-->
-<!--            android:textColor="#404040"-->
-<!--            android:gravity="left"-->
-
-<!--            app:layout_constraintLeft_toLeftOf="parent"-->
-<!--            app:layout_constraintRight_toRightOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"-->
-
-<!--            android:layout_marginLeft="@dimen/input_margin"-->
-<!--            android:layout_marginRight="@dimen/input_margin"-->
-<!--            android:layout_marginTop="10dp"/>-->
-        <View
-            android:id="@+id/detail_line_second"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="#72d8ff"
-            android:layout_marginTop="10dp"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_file_problem"/>
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_answer"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintHeight_default="wrap"-->
-<!--            android:background="@drawable/answer_back"-->
-<!--            android:padding="20dp"-->
-
-<!--            android:text="x = 30, y = 4 "-->
-<!--            android:textSize="@dimen/input_text"-->
-<!--            android:fontFamily="@font/nanumsquaure_b"-->
-<!--            android:textColor="#016a96"-->
-<!--            android:gravity="left"-->
-
-<!--            app:layout_constraintLeft_toLeftOf="parent"-->
-<!--            app:layout_constraintRight_toRightOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"-->
-
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp"-->
-<!--            android:layout_marginTop="15dp"/>-->
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="19dp"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_line_second"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-<!--    내용 전체 감싸는 부분 끝-->
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+    <!--    이미지 클릭 끝-->
+</FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
