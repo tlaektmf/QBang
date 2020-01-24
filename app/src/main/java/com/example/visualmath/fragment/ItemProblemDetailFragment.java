@@ -47,6 +47,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -196,12 +198,20 @@ public class ItemProblemDetailFragment extends Fragment {
 
     public void isDataAvailable() { //** 데이터를 unmatched에서 검사
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
-        ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED)
+                .child(post_id);
 
-                if (dataSnapshot.getValue() == null) {
+        ref.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                if ( mutableData.getValue()== null) {
+                    Log.d(VM_ENUM.TAG,"mutableData.getValue()== null 초기화");
+                    return Transaction.success(mutableData);
+                }
+
+                if(mutableData.getValue()==null){
                     Log.d(VM_ENUM.TAG, "이미 누가 가져감");
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent);
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -219,8 +229,15 @@ public class ItemProblemDetailFragment extends Fragment {
                     });
                     alert.setMessage("이미 매치 완료된 문제입니다. 문제를 선택할 수 없습니다.");
                     alert.show();
-                } else {
+
+                }else{
                     Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출");
+                    PostCustomData unmatchedPost = mutableData.getValue(PostCustomData.class);
+                    //데이터를 지운다
+                    //** 1. UNMATCHED 에서 삭제
+                    Log.d(TAG, "[UNMATCHED에서 삭제완료]: "+unmatchedPost.getP_id());
+                    mutableData.setValue(null);
+
                     if(dataUpdate()){
                         //매치완료 ->문제선택 화면으로 다시 전환
                         Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
@@ -235,14 +252,23 @@ public class ItemProblemDetailFragment extends Fragment {
                         parent.finish();
 
                     }
+
                 }
+
+                // Set value and report transaction success
+                Log.d(VM_ENUM.TAG," Set value and report transaction success");
+                return Transaction.success(mutableData);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
         });
+
+
     }
 
 
@@ -256,10 +282,11 @@ public class ItemProblemDetailFragment extends Fragment {
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
         postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), solveWay, upLoadDate, matchSet_student, user);
 
-        //** 1. UNMATCHED 에서 삭제
-        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
-                .child(post_id).removeValue();
-        Log.d(TAG, "[UNMATCHED에서 삭제완료]");
+        //>>> UNMATCHED 에서의 삭제는 mutable 로 해야되기 때문에 isDataAvailable() 함수에서 조건문에 따라 처리함
+//        //** 1. UNMATCHED 에서 삭제
+//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
+//                .child(post_id).removeValue();
+//        Log.d(TAG, "[UNMATCHED에서 삭제완료]");
 
         //** 2. teacher unsolved 에 저장
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
