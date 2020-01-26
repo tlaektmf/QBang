@@ -181,7 +181,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
     public void matchProgress() { //** 데이터를 unmatched에서 검사
 
-        Log.d(VM_ENUM.TAG,"[matchProgress 시작]");
+        Log.d(VM_ENUM.TAG, "[matchProgress 시작]");
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
         ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -193,13 +193,13 @@ public class ItemProblemDetailFragment extends Fragment {
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
 
                             // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
+                            dialog.dismiss();     //닫기
 
                         }
                     });
@@ -219,28 +219,27 @@ public class ItemProblemDetailFragment extends Fragment {
         });
 
 
-
     }
 
     /**
      *
      */
     public void dataUpdate() { //DB를 업데이트 함
-        Log.d(VM_ENUM.TAG,"[dataUpdate 시작]");
+        Log.d(VM_ENUM.TAG, "[dataUpdate 시작]");
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         assert currentUserEmail != null;
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
         String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
-        if(makeMatchSet(user)){
+        if (makeMatchSet(user)) {
             getFirstTeacher(user);
         }
     }
 
 
-    public boolean makeMatchSet(String user){
+    public boolean makeMatchSet(String user) {
 
-        Log.d(VM_ENUM.TAG,"[makeMatchSet 시작]");
+        Log.d(VM_ENUM.TAG, "[makeMatchSet 시작]");
 
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
         postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), solveWay, upLoadDate, matchSet_student, user);
@@ -267,13 +266,13 @@ public class ItemProblemDetailFragment extends Fragment {
      */
     public void getFirstTeacher(final String user) {
 
-        Log.d(VM_ENUM.TAG,"[getFirstTeacher 시작]");
+        Log.d(VM_ENUM.TAG, "[getFirstTeacher 시작]");
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
                 .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ///Log.d(VM_ENUM.TAG, "[getFirstTeacher]" + dataSnapshot.getChildren().iterator().next().getValue());
-                String firstTeacher= dataSnapshot.getChildren().iterator().next().getValue().toString();
+                String firstTeacher = dataSnapshot.getChildren().iterator().next().getValue().toString();
 
                 if (firstTeacher.equals(user)) {
                     //자신이 first matchSet teacher이면
@@ -318,32 +317,43 @@ public class ItemProblemDetailFragment extends Fragment {
                     Log.d(TAG, "[student unmatched에서 삭제]");
 
                     //매치완료 ->문제선택 화면으로 다시 전환
-                    Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
-                    toast.show();
+//                    Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
+//                    toast.setGravity(Gravity.CENTER, 0, 0);
+//                    toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
+//                    toast.show();
 
-                    Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
-                    Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                    intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                    parent.startActivity(intent);
-                    parent.finish();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();     //닫기
+                            Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
+                            Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                            parent.startActivity(intent);
+                            parent.finish();
+                        }
+                    });
+                    alert.setMessage("매치 완료");
+                    alert.show();
 
 
-                }else{
+
+                } else {
                     //아닌경우
                     Log.d(TAG, "[자신이 first matchSet teacher 아님]");
                     AlertDialog.Builder alert = new AlertDialog.Builder(parent);
                     alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
 
                             // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
+
+                            dialog.dismiss();     //닫기
 
                         }
                     });
