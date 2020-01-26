@@ -237,15 +237,6 @@ public class ProblemFragment extends Fragment {
 
                     Log.d(TAG, "[VM_ProblemFragment]: 보내는 텍스트가 공백 아닌 경우");
 
-                    //VM_Data_CHAT item=new VM_Data_CHAT(user_type, msgEditText.getText().toString());
-                    //loadDatabase(post_id,item);
-
-//                    Map<String, Object> objectMap = new HashMap<String, Object>();
-//
-//                    objectMap.put("chatContent", item.getChatContent());
-//                    objectMap.put("sender", item.getSender());
-//
-//                    reference.child(VM_ENUM.DB_chatList).push().updateChildren(objectMap);
 
 ///*** open with addvalueListenr >>>>>>
                     if(chatList==null){
@@ -442,6 +433,8 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
                     VM_DBHandler dbHandler=new VM_DBHandler();
                     dbHandler.newChat(post_id,chatItem);
                     Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
+                    dbHandler.newAlarm(post_id,post_title,user_type,matchset_student,VM_ENUM.ALARM_NEW);
+                    Log.d(VM_ENUM.TAG,"문제가 유효함. 학생 알람을 추가"+user_type+","+matchset_student);
                 }
             }
 
@@ -456,6 +449,8 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
         VM_DBHandler dbHandler=new VM_DBHandler();
         dbHandler.newChat(post_id,chatItem);
         Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
+        dbHandler.newAlarm(post_id, post_title,user_type,matchset_teacher,VM_ENUM.ALARM_NEW);
+        Log.d(VM_ENUM.TAG,"문제가 유효함. 선생님 알람을 추가"+user_type+","+matchset_teacher);
     }
 
 

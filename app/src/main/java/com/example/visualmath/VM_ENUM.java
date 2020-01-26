@@ -13,8 +13,9 @@ public  class VM_ENUM {
 
 
     //** alarm type
-    public static final String ALARM_DONE="DONE";//풀이된 문제가 도착 (학생)
-    public static final String ALARM_MATCHED="MATCHED";//풀이된 문제가 도착 (학생)
+    public static final String ALARM_DONE="DONE";//문제가 완료됨 (학생)
+    public static final String ALARM_MATCHED="MATCHED";//매칭완료 (학생)
+    public static final String ALARM_NEW ="ALARM_NEW" ;//새로운 chat이 도착함(공통)
 
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
@@ -98,6 +99,7 @@ public  class VM_ENUM {
     public  static final String PRE_ALARM="setAlarm";
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
+
 
 
 }

@@ -29,10 +29,10 @@ public class AlarmItem {
         if(type.equals(VM_ENUM.ALARM_MATCHED) ){
             this.details="[선생님이 문제를 선택하였습니다.]";
         }
-        if(type.equals("NEWMESSAGE")){
+        if(type.equals(VM_ENUM.ALARM_NEW)){
             this.details="[새로운 메세지가 도착했습니다]";
         }
-        if(type.equals("DONE")){
+        if(type.equals(VM_ENUM.ALARM_DONE)){
             this.details="[학생이 문제를 완료했습니다]";
         }
     }

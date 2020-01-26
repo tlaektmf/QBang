@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.data.VM_Data_ADD;
 import com.example.visualmath.data.VM_Data_BASIC;
 import com.example.visualmath.data.VM_Data_CHAT;
@@ -68,6 +69,25 @@ public class VM_DBHandler {
 
         databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
         databaseReference.setValue(chat); //** 파이어베이스 DB 등록
+
+    }
+
+    public void newAlarm(String post_id, String title, String user_type, String receiver,String message){
+        AlarmItem alarmItem=new AlarmItem(post_id,title,message);
+
+        if(user_type.equals(VM_ENUM.TEACHER)){
+            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+                    .child(receiver)
+                    .child(VM_ENUM.DB_STU_ALARM)
+                    .push();
+            databaseReference.setValue(alarmItem);
+        }else if(user_type.equals(VM_ENUM.STUDENT)){
+            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+                    .child(receiver)
+                    .child(VM_ENUM.DB_TEA_ALARM)
+                    .push();
+            databaseReference.setValue(alarmItem);
+        }
 
     }
 ///*** open with addvalueListenr <<<<<<<
