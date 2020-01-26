@@ -1,6 +1,7 @@
 package com.example.visualmath.preference;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -13,6 +14,8 @@ import androidx.preference.PreferenceViewHolder;
 
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
+import com.example.visualmath.activity.VM_LauncherActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DatabaseRemovePreference extends Preference {
     private TextView all_preference_delete_textview;
@@ -27,6 +30,7 @@ public class DatabaseRemovePreference extends Preference {
     @Override
     public void onBindViewHolder(final PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+
         all_preference_delete_textview = (TextView) holder.findViewById(R.id.all_preference_delete);
         all_preference_delete_textview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +42,7 @@ public class DatabaseRemovePreference extends Preference {
                 editor.apply();//commit은 즉시 반영, 따라서 apply함수를 쓰는 게 안전
             }
         });
+
 
     }
 

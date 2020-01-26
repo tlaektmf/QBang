@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 <!--    <CheckBoxPreference-->
 <!--        android:defaultValue="false"-->
@@ -10,6 +12,7 @@
 <!--        android:title="알림 사용" />-->
     
     <Preference
+        android:selectable="false"
         android:layout="@layout/pre_alarm"
         android:key="setAlarm"/>
 
@@ -18,15 +21,18 @@
 <!--        android:key="logout"/>-->
 
     <com.example.visualmath.preference.LogoutPreference
+        android:selectable="false"
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 
     <com.example.visualmath.preference.CountSolveProblemPreference
         android:layout="@layout/pre_count"
+        android:selectable="false"
         android:key="countsolveProblem"/>
 
     <com.example.visualmath.preference.DatabaseRemovePreference
         android:layout="@layout/pre_test"
+        android:selectable="false"
         android:key="dataRemove"/>
 <!--    <Preference-->
 <!--        android:layout="@layout/pre_test"-->
