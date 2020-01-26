@@ -53,6 +53,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -155,15 +157,54 @@ public class ItemProblemDetailFragment extends Fragment {
 
                         //** 첫번째로 데이터가 유효한지 먼저 판단
                         //** 유효하다면, DB를 업데이트하고 "문제선택하기"화면으로 다시 전환
-                        isDataAvailable();
+                        if(isDataAvailable()){
 
+                            if (dataUpdate()) {
+                                //매치완료 ->문제선택 화면으로 다시 전환
+                                Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
+                                toast.show();
 
+                                Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
+                                Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                                intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                                parent.startActivity(intent);
+                                parent.finish();
 
-                        //>> 액티비티 전환을 dataUpdate 함수내에서 진행함
-//                        Intent intent=new Intent(parent, VM_ProblemListActivity.class);
-//                        parent.startActivity(intent);
-//                        parent.finish();
-                        //>>>
+                            }
+                            else{
+                                AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();     //닫기
+
+                                        // ->문제선택 화면으로 다시 전환
+                                        Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                                        intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                                        parent.startActivity(intent);
+                                        parent.finish();
+
+                                    }
+                                });
+                            }
+                        }else{
+                            AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();     //닫기
+
+                                    // ->문제선택 화면으로 다시 전환
+                                    Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                                    intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                                    parent.startActivity(intent);
+                                    parent.finish();
+
+                                }
+                            });
+                        }
 
 
 
@@ -197,7 +238,9 @@ public class ItemProblemDetailFragment extends Fragment {
 
     }
 
-    public void isDataAvailable() { //** 데이터를 unmatched에서 검사
+    public boolean isDataAvailable() { //** 데이터를 unmatched에서 검사
+
+        final boolean[] retValue = {false,false};;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
         ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -205,39 +248,11 @@ public class ItemProblemDetailFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getValue() == null) {
-                    Log.d(VM_ENUM.TAG, "이미 누가 가져감");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
-
-                            // ->문제선택 화면으로 다시 전환
-                            Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                            parent.startActivity(intent);
-                            parent.finish();
-
-                        }
-                    });
-                    alert.setMessage("이미 매치 완료된 문제입니다. 문제를 선택할 수 없습니다.");
-                    alert.show();
+                    Log.d(VM_ENUM.TAG, "이미 누가 가져감 retValue[0] =true");
+                    retValue[0] =true;
                 } else {
-                    Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출");
-                    if(dataUpdate()){
-                        //매치완료 ->문제선택 화면으로 다시 전환
-                        Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
-                        toast.show();
-
-                        Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
-                        Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                        intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                        parent.startActivity(intent);
-                        parent.finish();
-
-                    }
+                    Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출 retValue[1] =true");
+                   retValue[1]=true;
                 }
             }
 
@@ -247,15 +262,24 @@ public class ItemProblemDetailFragment extends Fragment {
             }
         });
 
+        Log.d(VM_ENUM.TAG, "isDataAvailable 함수 종료");
+        if(retValue[0]){
+            Log.d(VM_ENUM.TAG, "retValue[0] 반환");
+            return false;
+        }
+        if(retValue[1]){
+            Log.d(VM_ENUM.TAG, "retValue[1] 반환");
+            return true;
+        }
 
+        //여기까지 온거면 무조건 오류나는 케이스임
+        Log.d(TAG, "[오류]");
+        return false;
     }
 
-    public boolean dataUpdate() {
 
-        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        assert currentUserEmail != null;
-        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+    public boolean makeMatchSet(String user){
+
 
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
         postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), solveWay, upLoadDate, matchSet_student, user);
@@ -266,42 +290,99 @@ public class ItemProblemDetailFragment extends Fragment {
                 .child(post_id).removeValue();
         Log.d(TAG, "[UNMATCHED에서 삭제완료]");
 
-        //** 2. teacher unsolved 에 저장
-        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
-                .child(user)
-                .child(VM_ENUM.DB_TEA_POSTS)
-                .child(VM_ENUM.DB_TEA_UNSOLVED)
-                .child(post_id)
-                .setValue(postCustomData);
-        Log.d(TAG, "[teacher unsolved 에 저장]");
-
-        //** 3. student unsolved에 저장
-        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
-                .child(matchSet_student)
-                .child(VM_ENUM.DB_STU_POSTS)
-                .child(VM_ENUM.DB_STU_UNSOLVED)
-                .child(post_id)
-                .setValue(postCustomData);
-        Log.d(TAG, "[student unsolved에 저장]");
-
-
-        //** 4. student unmatched에서 삭제
-        FirebaseDatabase.getInstance().getReference()
-                .child(VM_ENUM.DB_STUDENTS)
-                .child(matchSet_student)
-                .child(VM_ENUM.DB_STU_POSTS)
-                .child(VM_ENUM.DB_STU_UNMATCHED)
-                .child(post_id).removeValue();
-
-        Log.d(TAG, "[student unmatched에서 삭제]");
-
         //** 5. POSTS 의 matchset에 설정
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
-                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
+                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).push().setValue(user);
         Log.d(TAG, "[POSTS 의 matchset 등록 완료]");
 
-
         return true;
+    }
+
+    public boolean dataUpdate() { //DB를 업데이트 함
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        if(makeMatchSet(user)){
+            String firstTeacher = getFirstTeacher();
+
+            if (firstTeacher.equals(user)) {
+                //자신이 first matchSet teacher이면
+                Log.d(TAG, "[자신이 first matchSet teacher]");
+
+                //** 1. POSTS 의 matchset에 설정
+                FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                        .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(null);
+
+                FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                        .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
+
+                Log.d(TAG, "[POSTS 의 matchset 재등록 완료]");
+
+                //** 2. teacher unsolved 에 저장
+                FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                        .child(user)
+                        .child(VM_ENUM.DB_TEA_POSTS)
+                        .child(VM_ENUM.DB_TEA_UNSOLVED)
+                        .child(post_id)
+                        .setValue(postCustomData);
+                Log.d(TAG, "[teacher unsolved 에 저장]");
+
+                //** 3. student unsolved에 저장
+                FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                        .child(matchSet_student)
+                        .child(VM_ENUM.DB_STU_POSTS)
+                        .child(VM_ENUM.DB_STU_UNSOLVED)
+                        .child(post_id)
+                        .setValue(postCustomData);
+                Log.d(TAG, "[student unsolved에 저장]");
+
+
+                //** 4. student unmatched에서 삭제
+                FirebaseDatabase.getInstance().getReference()
+                        .child(VM_ENUM.DB_STUDENTS)
+                        .child(matchSet_student)
+                        .child(VM_ENUM.DB_STU_POSTS)
+                        .child(VM_ENUM.DB_STU_UNMATCHED)
+                        .child(post_id).removeValue();
+
+                Log.d(TAG, "[student unmatched에서 삭제]");
+
+                return true;
+            }else{
+                //아닌경우
+                Log.d(TAG, "[자신이 first matchSet teacher 아님]");
+                return false;
+            }
+
+        }
+
+        Log.d(TAG, "[오류]");
+        return false;//여기까지 온거면 오류난것임
+    }
+
+    /**
+     * 가장 첫번째 matchSet으로 등록된 teacher를 반환함
+     *
+     * @return
+     */
+    public String getFirstTeacher() {
+        final String[] firstTeacher = new String[1];
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(VM_ENUM.TAG, "[getFirstTeacher]" + dataSnapshot.getChildren().iterator().next().getValue());
+                firstTeacher[0] = dataSnapshot.getChildren().iterator().next().getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return firstTeacher[0];
     }
 
     /****
