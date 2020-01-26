@@ -344,8 +344,6 @@ public class ItemProblemDetailFragment extends Fragment {
                     alert.setMessage("매치 완료");
                     alert.show();
 
-
-
                 } else {
                     //아닌경우
                     Log.d(TAG, "[자신이 first matchSet teacher 아님]");
