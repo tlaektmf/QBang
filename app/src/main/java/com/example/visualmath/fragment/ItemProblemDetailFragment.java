@@ -71,13 +71,17 @@ public class ItemProblemDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
+    public String fromUnmatched;
+    public String needToBlock;
+
+
     private String post_id;
     private String solveWay;
     private String matchSet_student;
     private String upLoadDate;
     View rootView;
     public static final String ARG_ITEM_ID = "post_id";
-    public static final String ARG_ITEM_DETAIL = "item_problem_detail";
+
     public static final String TAG = VM_ENUM.TAG;
     /**
      * The dummy content this fragment is presenting.
@@ -88,6 +92,7 @@ public class ItemProblemDetailFragment extends Fragment {
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
     public Activity parent;
+
 
     public ItemProblemDetailFragment() {
         // Required empty public constructor
@@ -107,6 +112,15 @@ public class ItemProblemDetailFragment extends Fragment {
             parent = (VM_ProblemListActivity) getActivity();
             mGlideRequestManager = Glide.with(this);
             Activity activity = this.getActivity();
+
+            if(getArguments().getString(VM_ENUM.IT_ARG_BLOCK)!=null){
+                Log.d(TAG,"[needToBlock 설정]");
+                needToBlock=VM_ENUM.IT_ARG_BLOCK;
+            }
+            if(getArguments().getString(VM_ENUM.IT_FROM_UNMATCHED)!=null){
+                Log.d(TAG,"[fromUnmatched 설정]");
+                fromUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+            }
 
             initData();
 
@@ -138,6 +152,13 @@ public class ItemProblemDetailFragment extends Fragment {
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE, vmDataDefault.getGrade());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM, vmDataDefault.getProblem());
                 intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);//Teacher 문제 선택에서 넘어왔으므로, 채팅창 모두 막아야됨
+
+                if(needToBlock!=null){ //** 매치 미완료의 경우
+                    intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);//사용자의 채팅창 막음
+                    intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);// 매치셋 생성 하지 않음
+                    Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
+                }
+
                 startActivity(intent);
             }
         });

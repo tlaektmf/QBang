@@ -53,6 +53,10 @@ public class TeacherItemDetailFragment extends Fragment {
     private static final String TAG = "TeacherItemDetail";
     private String post_id;
     private String alarm_message;
+
+    public String fromUnmatched;
+    public String needToBlock;
+
     View rootView;
     /**
      * The dummy content this fragment is presenting.
@@ -81,7 +85,15 @@ public class TeacherItemDetailFragment extends Fragment {
             // to load content from a content provider.
             post_id=getArguments().getString(ARG_ITEM_ID);
             alarm_message=getArguments().getString(VM_ENUM.IT_ALARM_MESSAGE);
-            Log.d(TAG,post_id);
+
+            if(getArguments().getString(VM_ENUM.IT_ARG_BLOCK)!=null){
+                Log.d(TAG,"[needToBlock 설정]");
+                needToBlock=VM_ENUM.IT_ARG_BLOCK;
+            }
+            if(getArguments().getString(VM_ENUM.IT_FROM_UNMATCHED)!=null){
+                Log.d(TAG,"[fromUnmatched 설정]");
+                fromUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+            }
 
             mGlideRequestManager = Glide.with(this);
             Activity activity = this.getActivity();
@@ -118,6 +130,12 @@ public class TeacherItemDetailFragment extends Fragment {
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,vmDataDefault.getTitle());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
                 intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
+
+                if(needToBlock!=null){ //** 매치 미완료의 경우
+                    intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);//사용자의 채팅창 막음
+                    intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);// 매치셋 생성 하지 않음
+                    Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
+                }
 
                 startActivity(intent);
             }

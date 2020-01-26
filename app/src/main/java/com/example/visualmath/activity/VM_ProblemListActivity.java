@@ -160,6 +160,10 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getP_id());
                     arguments.putString(VM_ENUM.DB_SOLVE_WAY,item.getSolveWay());
+
+                    arguments.putString(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);//매치 이전 문제이므로 matchset 찾지 않음
+                    arguments.putString(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//채팅창을 막음
+
                     ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()

@@ -114,6 +114,13 @@ public class TeacherItemListActivity extends AppCompatActivity {
                     Bundle arguments = new Bundle();
                     arguments.putString(TeacherItemDetailFragment.ARG_ITEM_ID, item.getId()); //** TeacherItemDetailFragment로 post_id 전달
                     arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+
+                    if(item.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
+                        arguments.putString(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//채팅창 막아라
+                        arguments.putString(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);//매치셋 생성하지 않는다
+                    }
+
+
                     //** TeacherItemDetailFragment 프래그먼트 생성
                   TeacherItemDetailFragment fragment = new TeacherItemDetailFragment();
                     fragment.setArguments(arguments);//** 프래그먼트 초기 세팅
@@ -125,6 +132,13 @@ public class TeacherItemListActivity extends AppCompatActivity {
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
                     arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+
+                    if(item.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
+                        arguments.putString(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//채팅창 막아라
+                        arguments.putString(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);//매치셋 생성하지 않는다
+                    }
+
+
                     TeacherItemDetailFragment fragment = new TeacherItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
