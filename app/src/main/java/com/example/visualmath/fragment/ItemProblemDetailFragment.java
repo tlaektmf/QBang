@@ -153,7 +153,7 @@ public class ItemProblemDetailFragment extends Fragment {
                 dialog.setDialogListener(new VM_DialogListener_matchComplete() {
                     public void onButtonYes() {
                         matchProgress();
-                        checkDialog.callFunction(5);
+                        //checkDialog.callFunction(5);
                     }
 
                     public void onButtonNo() {
@@ -208,6 +208,8 @@ public class ItemProblemDetailFragment extends Fragment {
 
                         }
                     });
+                    alert.setMessage("이미 매치 완료된 문제입니다.");
+                    alert.show();
 
                 } else {
                     Log.d(VM_ENUM.TAG, "문제가 유효함. dataUpdate 함수 호출 ");
@@ -362,6 +364,8 @@ public class ItemProblemDetailFragment extends Fragment {
 
                         }
                     });
+                    alert.setMessage("이미 매치 완료된 문제입니다.");
+                    alert.show();
                 }
 
                 Log.d(TAG, "[getFirstTeacher 완료]");
