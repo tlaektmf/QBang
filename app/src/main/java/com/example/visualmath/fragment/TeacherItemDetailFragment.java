@@ -135,10 +135,10 @@ public class TeacherItemDetailFragment extends Fragment {
         DatabaseReference reference;
 
 
-        firebaseDatabase= FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference("POSTS");
-        reference=reference.child(post_id)
-                .child("data_default");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
+        reference = reference.child(post_id)
+                .child(VM_ENUM.DB_DATA_DEFAULT);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -171,13 +171,6 @@ public class TeacherItemDetailFragment extends Fragment {
                     }
                 });
 
-
-                //** 프래그먼트 갱신 (가장 마지막에 해야 모든 DB 정보가 들어와서 FullActivity로 이동
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                if (Build.VERSION.SDK_INT >= 26) {
-                    ft.setReorderingAllowed(false);
-                }
-                ft.detach(TeacherItemDetailFragment.this).attach(TeacherItemDetailFragment.this).commit();
             }
 
             @Override

@@ -34,6 +34,7 @@ import com.example.visualmath.adapter.VM_ChatAdapter;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
+import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.data.VM_Data_Default;
@@ -391,6 +392,16 @@ public class ProblemFragment extends Fragment {
                 .child(post_id).removeValue();
 
         Log.d(TAG,user_id+ "[student unsolved에서 삭제]");
+
+        //** teacher alarm에 등록
+        AlarmItem alarmItem=new AlarmItem(post_id,vmDataDefault.getTitle(),VM_ENUM.ALARM_DONE);
+        FirebaseDatabase.getInstance().getReference()
+                .child(VM_ENUM.DB_TEACHERS)
+                .child(matchset_teacher)
+                .child(VM_ENUM.DB_TEA_ALARM)
+                .push().setValue(alarmItem);
+        Log.d(TAG, "[teacher 알람에 등록]");
+
 
         //** 완료 한 문제수 증가
         if(onSolveProblemIncrease(matchset_teacher,user_id)){

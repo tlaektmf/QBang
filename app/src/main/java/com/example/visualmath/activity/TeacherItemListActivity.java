@@ -19,6 +19,7 @@ import com.example.visualmath.fragment.TeacherItemDetailFragment;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.fragment.ItemDetailFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,7 @@ import java.util.List;
 public class TeacherItemListActivity extends AppCompatActivity {
     private View recyclerView;
     private ViewGroup layout;
-    public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
+
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
     private boolean mTwoPane;
@@ -47,9 +48,10 @@ public class TeacherItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_item_list);
 
-        //lhj_1
+
         list_loading_bar = findViewById(R.id.teacher_list_loading_bar);
-        //lhj_1
+        recyclerView = findViewById(R.id.teacher_item_list);
+        layout = (ViewGroup) findViewById(R.id.teacher_item_detail_container);
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -60,19 +62,6 @@ public class TeacherItemListActivity extends AppCompatActivity {
         }
 
         initData();
-
-        init();
-//
-//        //** detailView 클릭 이벤트
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO Auto-generated method stub
-//                Intent intent = new Intent(getApplicationContext(), VM_FullViewActivity.class);
-//                startActivity(intent);
-////                finish();
-//            }
-//        });
 
     }
 
@@ -95,15 +84,8 @@ public class TeacherItemListActivity extends AppCompatActivity {
         }
     }
 
-    public void init(){
-        recyclerView = findViewById(R.id.teacher_item_list);
-        layout = (ViewGroup) findViewById(R.id.teacher_item_detail_container);
 
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView,List<AlarmItem> alarms) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, alarms,mTwoPane));
     }
 
@@ -201,11 +183,17 @@ public class TeacherItemListActivity extends AppCompatActivity {
      * write
      */
     public void initData(){
-        alarms=new ArrayList<AlarmItem>();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        reference=firebaseDatabase.getReference("STUDENTS");
-        reference=reference.child("user_name")
-                .child("posts").child("unsolved");
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+        Log.d(VM_ENUM.TAG, "[선생 알람] " + user + " 의 데이터 접근");
+        reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+                .child(user)
+                .child(VM_ENUM.DB_TEA_ALARM);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -218,7 +206,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
                     Log.d(TAG, "[선생 알람] ValueEventListener : " +snapshot.getValue() );
                 }
 
-                setupRecyclerView((RecyclerView) recyclerView);
+                setupRecyclerView((RecyclerView) recyclerView,alarms);
 
                 //lhj_3
                 list_loading_bar.setVisibility(View.INVISIBLE);

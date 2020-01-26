@@ -13,7 +13,7 @@ public  class VM_ENUM {
 
 
     //** alarm type
-    public static final String ALARM_SOLVED="SOLVED";//풀이된 문제가 도착 (학생)
+    public static final String ALARM_DONE="DONE";//풀이된 문제가 도착 (학생)
     public static final String ALARM_MATCHED="MATCHED";//풀이된 문제가 도착 (학생)
 
     //** requestCode
