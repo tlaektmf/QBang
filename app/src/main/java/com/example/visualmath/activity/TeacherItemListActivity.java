@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -130,7 +131,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
                 if(mTwoPane){//태블릿 모드 -> 태블릿에서 작동함
                     Bundle arguments = new Bundle();
                     arguments.putString(TeacherItemDetailFragment.ARG_ITEM_ID, item.getId()); //** TeacherItemDetailFragment로 post_id 전달
-
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
                     //** TeacherItemDetailFragment 프래그먼트 생성
                   TeacherItemDetailFragment fragment = new TeacherItemDetailFragment();
                     fragment.setArguments(arguments);//** 프래그먼트 초기 세팅
@@ -141,6 +142,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
                     //안드로이드 폰 모드
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
                     TeacherItemDetailFragment fragment = new TeacherItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -205,18 +207,17 @@ public class TeacherItemListActivity extends AppCompatActivity {
         reference=reference.child("user_name")
                 .child("posts").child("unsolved");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
+                List<AlarmItem> alarms= new ArrayList<AlarmItem>();
 
-                    String post_id=snapshot.getKey();
-                    String post_title=snapshot.child("title").getValue().toString();
-                    alarms.add(new AlarmItem(post_id,post_title, VM_ENUM.SOLVED));
-
-                    ///Log.d(TAG, "ValueEventListener : " +post_id );
-
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
+                    alarms.add(snapshot.getValue(AlarmItem.class));
+                    Log.d(TAG, "[선생 알람] ValueEventListener : " +snapshot.getValue() );
                 }
+
                 setupRecyclerView((RecyclerView) recyclerView);
 
                 //lhj_3

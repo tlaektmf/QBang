@@ -36,6 +36,7 @@ import com.example.visualmath.activity.VM_FullViewActivity;
 import com.example.visualmath.activity.VM_LoginActivity;
 import com.example.visualmath.activity.VM_ProblemListActivity;
 import com.example.visualmath.activity.VM_TeacherSolveProblemActivity;
+import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogListener_matchComplete;
@@ -323,6 +324,16 @@ public class ItemProblemDetailFragment extends Fragment {
 
                     Log.d(TAG, "[student unmatched에서 삭제]");
 
+
+                    //** 5. 학생 알람에 등록
+                    AlarmItem alarmItem=new AlarmItem(post_id,vmDataDefault.getTitle(),VM_ENUM.ALARM_MATCHED);
+                    FirebaseDatabase.getInstance().getReference()
+                            .child(VM_ENUM.DB_STUDENTS)
+                            .child(matchSet_student)
+                            .child(VM_ENUM.DB_STU_ALARM)
+                            .push().setValue(alarmItem);
+                    Log.d(TAG, "[student 알람에 등록]");
+
                     //매치완료 ->문제선택 화면으로 다시 전환
 //                    Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
 //                    toast.setGravity(Gravity.CENTER, 0, 0);
@@ -341,7 +352,7 @@ public class ItemProblemDetailFragment extends Fragment {
                             parent.finish();
                         }
                     });
-                    alert.setMessage("매치 완료");
+                    alert.setMessage("매치 완료되었습니다.");
                     alert.show();
 
                 } else {

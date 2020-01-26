@@ -3,7 +3,7 @@ package com.example.visualmath;
 public  class VM_ENUM {
 
     //** post
-    public static final int FINISH=0;  //>>삭제 예정
+
     public static final String PROJECT_EMAIL ="visualmath" ;
 
     public static final String GRADE_HIGH ="고등" ;
@@ -12,18 +12,9 @@ public  class VM_ENUM {
 
 
 
-    static final int BEFORE_MATCH=1; //>>삭제 예정
-    static final int AFTER_MACTH=2; //>>삭제 예정
-
-    //** live
-    static final int LIVE_NONE =0;//라이브 등록 문제가 아님 //>>삭제 예정
-    static final int LIVE_WAIT=1;//라이브 등록 문제(시간 대기 중) //>>삭제 예정
-    static final int LIVE_FINISH=2;//라이브 등록 문제 해결 종료 //>>삭제 예정
-
     //** alarm type
-    public static final String SOLVED="SOLVED";//풀이된 문제가 도착 (학생)
-    public static final String SOLVED_ALARM_MESSAGE="문제 답변이 도착했습니다.";//풀이된 문제가 도착 (학생)
-    public static final String LIVE_ALARM_MESSAGE="라이브 5분전입니다.";//풀이된 문제가 도착 (학생)
+    public static final String ALARM_SOLVED="SOLVED";//풀이된 문제가 도착 (학생)
+    public static final String ALARM_MATCHED="MATCHED";//풀이된 문제가 도착 (학생)
 
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
@@ -51,6 +42,7 @@ public  class VM_ENUM {
     public static final String IT_ARG_BLOCK="IT_ARG_BLOCK";
     public static final String IT_FROM_UNMATCHED ="IT_FROM_UNMATCHED" ;
     public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
+    public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
     //** 상수 String
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
@@ -98,12 +90,15 @@ public  class VM_ENUM {
     public static final String DB_SOLVE_WAY ="solveWay" ;
     public static final String DB_TEA_DONE = "done";
     public static final String DB_SOLVE_PROBLEM ="solve_problem" ;
-
+    public static final String DB_STU_ALARM ="alarms" ;
+    public static final String DB_TEA_ALARM ="alarms" ;
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
     public  static final String PRE_ALARM="setAlarm";
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
+
+
 }
 

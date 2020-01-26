@@ -52,6 +52,7 @@ public class TeacherItemDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "post_id";
     private static final String TAG = "TeacherItemDetail";
     private String post_id;
+    private String alarm_message;
     View rootView;
     /**
      * The dummy content this fragment is presenting.
@@ -60,6 +61,10 @@ public class TeacherItemDetailFragment extends Fragment {
 
     //** Glide Library Exception 처리
     public RequestManager mGlideRequestManager;
+
+    private TextView title;
+    private TextView grade;
+    private TextView alarm;
 
     public TeacherItemDetailFragment() {
         // Required empty public constructor
@@ -75,6 +80,7 @@ public class TeacherItemDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             post_id=getArguments().getString(ARG_ITEM_ID);
+            alarm_message=getArguments().getString(VM_ENUM.IT_ALARM_MESSAGE);
             Log.d(TAG,post_id);
 
             mGlideRequestManager = Glide.with(this);
@@ -92,20 +98,12 @@ public class TeacherItemDetailFragment extends Fragment {
 
          rootView =inflater.inflate(R.layout.fragment_teacher_item_detail, container, false);
 
-        TextView title=(TextView)rootView.findViewById(R.id.tv_title);
-        TextView grade=(TextView)rootView.findViewById(R.id.tv_grade);
-        TextView alarm=(TextView)rootView.findViewById(R.id.tv_alarm);
+
+        title = (TextView) rootView.findViewById(R.id.tv_title);
+        grade = (TextView) rootView.findViewById(R.id.tv_grade);
+        alarm = (TextView) rootView.findViewById(R.id.tv_alarm);
 
 
-        // Show the dummy content as text in a TextView.
-        if (vmDataDefault != null) {//*** 데이터를 DB에서 읽어온 경우
-            title.setText(vmDataDefault.getTitle());
-            grade.setText(vmDataDefault.getGrade());
-            alarm.setText(VM_ENUM.SOLVED_ALARM_MESSAGE);
-            Toast.makeText(getContext(),"로딩완료.",Toast.LENGTH_SHORT).show();
-        }else{ //데이터 읽어오는 중 => 로딩 필요
-            Toast.makeText(getContext(),"로딩중입니다.",Toast.LENGTH_SHORT).show();
-        }
 
         //***프래그먼트의 "상세보기" 버튼 클릭 시 부모 액티비티에서 다른 인텐트 시작
         Button goto_detal_btn = (Button)rootView.findViewById(R.id.teacher_show_detail_btn);
@@ -142,12 +140,15 @@ public class TeacherItemDetailFragment extends Fragment {
         reference=reference.child(post_id)
                 .child("data_default");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
-                Log.d(TAG, "ValueEventListener : " +dataSnapshot );
+                Log.d(TAG, "[TeacherItemDetail] ValueEventListener : " +dataSnapshot );
 
+                title.setText(vmDataDefault.getTitle());
+                grade.setText(vmDataDefault.getGrade());
+                alarm.setText(alarm_message);
 
                 //** 사진 파일 읽기
                 StorageReference storageReference;

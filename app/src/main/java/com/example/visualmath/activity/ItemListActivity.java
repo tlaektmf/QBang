@@ -50,7 +50,6 @@ public class ItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
-    //public List<AlarmItem> alarms; //알람뿌려줄 데이터 리스트
     public static String TAG = VM_ENUM.TAG;
     public View recyclerView;
 
@@ -64,13 +63,7 @@ public class ItemListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_list);
 
         recyclerView = findViewById(R.id.item_list);
-        //lhj_1
         list_loading_bar = findViewById(R.id.list_loading_bar);
-        //lhj_1
-
-        //lhj_2
-//        list_loading_bar.setVisibility(View.VISIBLE);
-        //lhj_2
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
@@ -88,9 +81,6 @@ public class ItemListActivity extends AppCompatActivity {
 
         initData();
 
-
-//        assert recyclerView != null;
-//        setupRecyclerView((RecyclerView) recyclerView,);
 
     }
 
@@ -134,7 +124,7 @@ public class ItemListActivity extends AppCompatActivity {
                 if (mTwoPane) {//태블릿 모드 -> 태블릿에서 작동함
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId()); //** DetailFragment로 post_id 전달
-
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
                     //** DetailFragment 프래그먼트 생성
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments); //** 프래그먼트 초기 세팅
@@ -142,15 +132,11 @@ public class ItemListActivity extends AppCompatActivity {
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
                 } else { //안드로이드 폰 모드
-//                    Context context = view.getContext();
-//                    Intent intent = new Intent(context, ItemDetailActivity.class);
-//                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
-//
-//                    context.startActivity(intent);
 
                     //ds.shim >start<
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -224,23 +210,17 @@ public class ItemListActivity extends AppCompatActivity {
                 .child(VM_ENUM.DB_ALARMS);
 
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
                 List<AlarmItem> alarms= new ArrayList<AlarmItem>();
-                alarms=dataSnapshot.getValue(t);
-                Log.d(TAG, "[학생 알람] ValueEventListener : " +dataSnapshot.getValue() );
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//
-//                    String post_id = snapshot.getKey();
-//                    String post_title = snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
-//
-//                    alarms.add(new AlarmItem(post_id, post_title, VM_ENUM.SOLVED));
-//
-//                    ///Log.d(TAG, "ValueEventListener : " +post_id );
-//
-//                }
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
+                    alarms.add(snapshot.getValue(AlarmItem.class));
+                    Log.d(TAG, "[학생 알람] ValueEventListener : " +snapshot.getValue() );
+                }
+
                 setupRecyclerView((RecyclerView) recyclerView,alarms);
 
                 //lhj_3

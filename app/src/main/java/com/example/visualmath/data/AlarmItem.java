@@ -1,5 +1,7 @@
 package com.example.visualmath.data;
 
+import com.example.visualmath.VM_ENUM;
+
 /**
  * 학생
  * - 문제 매칭 완료
@@ -17,12 +19,15 @@ public class AlarmItem {
 
     private  String details; //상세 내용 [ ] <- 이부분에 들어갈 내용
 
+    public AlarmItem(){
+
+    }
     public AlarmItem(String id,String title, String type) {
         this.id=id;
         this.title=title;
 
-        if(type.equals("MATCHED") ){
-            this.details="[매치가 완료되었습니다]";
+        if(type.equals(VM_ENUM.ALARM_MATCHED) ){
+            this.details="[선생님이 문제를 선택하였습니다.]";
         }
         if(type.equals("NEWMESSAGE")){
             this.details="[새로운 메세지가 도착했습니다]";
