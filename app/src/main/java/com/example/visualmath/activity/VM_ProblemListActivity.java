@@ -1,9 +1,12 @@
 package com.example.visualmath.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +51,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     private static List<PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private String nowGrade;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,20 +65,68 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_problem_list);
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
         assert recyclerView != null;
-
         list_loading_bar = findViewById(R.id.list_loading_bar);
          btnElement = findViewById(R.id.ib_element);
          btnMid = findViewById(R.id.ib_mid);
          btnHigh = findViewById(R.id.ib_high);
 
-
         unmatched_element=null;
         unmatched_mid=null;
         unmatched_high=null;
 
-        Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
-        setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
-        nowGrade=VM_ENUM.GRADE_ELEMENT;
+        //** 인텐트 확인
+        String afterMatchSuccess=getIntent().getStringExtra(VM_ENUM.IT_MATCH_SUCCESS);
+
+
+
+
+        if(afterMatchSuccess==null){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어온 게 아님");
+            btnElement.setSelected(true);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_ELEMENT;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        }else if(afterMatchSuccess.equals(VM_ENUM.GRADE_ELEMENT)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_ELEMENT");
+
+            btnElement.setSelected(true);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_ELEMENT;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+        }
+        else if(afterMatchSuccess.equals(VM_ENUM.GRADE_MID)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_MID");
+
+            btnElement.setSelected(false);
+            btnMid.setSelected(true);
+            btnHigh.setSelected(false);
+
+            nowGrade=VM_ENUM.GRADE_MID;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_MID);
+        }
+        else if(afterMatchSuccess.equals(VM_ENUM.GRADE_HIGH)){
+            Log.d(VM_ENUM.TAG,"[Match 성공 이후, 넘어옴 GRADE_HIGH");
+
+            btnElement.setSelected(false);
+            btnMid.setSelected(false);
+            btnHigh.setSelected(true);
+
+            nowGrade=VM_ENUM.GRADE_HIGH;
+
+            Log.d(VM_ENUM.TAG,"[TeacherProblemSelect],onCreate | setUnmatched 호출");
+            setUnmatchedData(VM_ENUM.GRADE_HIGH);
+        }
+
 
     }
 
@@ -358,5 +410,16 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 //            }
 //        });
 //
+//    }
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode==Activity.RESULT_OK){
+//            if(resultCode==VM_ENUM.RC_PROBLEM_SOLVE){
+//                Log.d(VM_ENUM.TAG,"[onActivityResult]");
+//            }
+//        }
 //    }
 }

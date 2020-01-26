@@ -41,7 +41,7 @@
             android:name=".activity.VM_FullViewActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".VM_RegisterProblemActivity" />
-        <activity android:name=".activity.VM_ProblemDetailActivity" />
+
         <activity
             android:name=".activity.VM_TeacherSolveProblemActivity"
             android:windowSoftInputMode="adjustPan" />

@@ -1,10 +1,12 @@
 package com.example.visualmath.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -258,7 +260,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(VM_ENUM.DB_STU_UNMATCHED);
 
 
-        reference.addValueEventListener(new ValueEventListener() {//**한번만 호출
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -312,7 +314,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(VM_ENUM.DB_STU_UNSOLVED);
 
 
-        reference.addValueEventListener(new ValueEventListener() {//**한번만 호출
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -384,7 +386,7 @@ return true;
                     Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
                 }
 
-                startActivity(intent);
+                startActivityForResult(intent,VM_ENUM.RC_PROBLEM_SOLVE);
 
 
             }
@@ -397,6 +399,8 @@ return true;
         });
 
     }
+
+
 
 }
 

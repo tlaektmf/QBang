@@ -32,7 +32,7 @@ public  class VM_ENUM {
     public static final int RC_PICK_FROM_ALBUM = 998;
     public static final int RC_PICK_FROM_CAMERA = 997;
     public static final int RC_READ_REQUEST_CODE = 995;
-
+    public static final int RC_PROBLEM_SOLVE =990 ;
     public static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     public static final int PICK_FROM_CAMERA = 2;
     public static final int OTHER_DATA_LOAD = 3;
@@ -50,6 +50,7 @@ public  class VM_ENUM {
     public static final String IT_GALLERY_PHOTO="IT_GALLERY_PHOTO";
     public static final String IT_ARG_BLOCK="IT_ARG_BLOCK";
     public static final String IT_FROM_UNMATCHED ="IT_FROM_UNMATCHED" ;
+    public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     //** 상수 String
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
