@@ -157,55 +157,8 @@ public class ItemProblemDetailFragment extends Fragment {
 
                         //** 첫번째로 데이터가 유효한지 먼저 판단
                         //** 유효하다면, DB를 업데이트하고 "문제선택하기"화면으로 다시 전환
-                        if(isDataAvailable()){
 
-                            if (dataUpdate()) {
-                                //매치완료 ->문제선택 화면으로 다시 전환
-                                Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
-                                toast.setGravity(Gravity.CENTER, 0, 0);
-                                toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
-                                toast.show();
-
-                                Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
-                                Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                                intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                                parent.startActivity(intent);
-                                parent.finish();
-
-                            }
-                            else{
-                                AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();     //닫기
-
-                                        // ->문제선택 화면으로 다시 전환
-                                        Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                                        intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                                        parent.startActivity(intent);
-                                        parent.finish();
-
-                                    }
-                                });
-                            }
-                        }else{
-                            AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();     //닫기
-
-                                    // ->문제선택 화면으로 다시 전환
-                                    Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                                    intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
-                                    parent.startActivity(intent);
-                                    parent.finish();
-
-                                }
-                            });
-                        }
-
+                        isDataAvailable();
 
 
                     }
@@ -238,9 +191,8 @@ public class ItemProblemDetailFragment extends Fragment {
 
     }
 
-    public boolean isDataAvailable() { //** 데이터를 unmatched에서 검사
+    public void isDataAvailable() { //** 데이터를 unmatched에서 검사
 
-        final boolean[] retValue = {false,false};;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_UNMATCHED);
         ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -248,11 +200,57 @@ public class ItemProblemDetailFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getValue() == null) {
-                    Log.d(VM_ENUM.TAG, "이미 누가 가져감 retValue[0] =true");
-                    retValue[0] =true;
+                    Log.d(VM_ENUM.TAG, "이미 누가 가져감");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();     //닫기
+
+                            // ->문제선택 화면으로 다시 전환
+                            Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                            parent.startActivity(intent);
+                            parent.finish();
+
+                        }
+                    });
+
                 } else {
-                    Log.d(VM_ENUM.TAG, "문제가 유효함. 매치 완료 함수 호출 retValue[1] =true");
-                   retValue[1]=true;
+                    Log.d(VM_ENUM.TAG, "문제가 유효함. dataUpdate 함수 호출 ");
+
+                    if (dataUpdate()) {
+                        //매치완료 ->문제선택 화면으로 다시 전환
+                        Toast toast = Toast.makeText(parent, "", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
+                        toast.show();
+
+                        Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
+                        Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                        intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                        parent.startActivity(intent);
+                        parent.finish();
+
+                    }
+                    else{
+                        AlertDialog.Builder alert = new AlertDialog.Builder(parent);
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();     //닫기
+
+                                // ->문제선택 화면으로 다시 전환
+                                Intent intent = new Intent(parent, VM_ProblemListActivity.class);
+                                intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                                parent.startActivity(intent);
+                                parent.finish();
+
+                            }
+                        });
+                    }
+
+
                 }
             }
 
@@ -263,18 +261,7 @@ public class ItemProblemDetailFragment extends Fragment {
         });
 
         Log.d(VM_ENUM.TAG, "isDataAvailable 함수 종료");
-        if(retValue[0]){
-            Log.d(VM_ENUM.TAG, "retValue[0] 반환");
-            return false;
-        }
-        if(retValue[1]){
-            Log.d(VM_ENUM.TAG, "retValue[1] 반환");
-            return true;
-        }
 
-        //여기까지 온거면 무조건 오류나는 케이스임
-        Log.d(TAG, "[오류]");
-        return false;
     }
 
 
@@ -358,7 +345,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
         }
 
-        Log.d(TAG, "[오류]");
+        Log.d(TAG, "[makeMatchSet 오류]");
         return false;//여기까지 온거면 오류난것임
     }
 
