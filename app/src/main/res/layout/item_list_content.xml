@@ -14,7 +14,7 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/detail"
+            android:id="@+id/title"
             android:singleLine="true"
             android:ellipsize="end"
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_marginBottom="3dp"/>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/detail"
             android:singleLine="true"
             android:ellipsize="end"
             android:layout_width="wrap_content"

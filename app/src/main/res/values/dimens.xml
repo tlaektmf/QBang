@@ -72,6 +72,7 @@
     <dimen name="bottom_nav_top_margin">10dp</dimen>
     <dimen name="blue_line_margin">20dp</dimen>
     <dimen name="pre_top_margin">5dp</dimen>
+    <dimen name="home_btn_margin">5dp</dimen>
 
 <!--    버튼-->
     <dimen name="close_button_size">14dp</dimen>

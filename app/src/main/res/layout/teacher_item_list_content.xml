@@ -22,7 +22,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:text="[알람종류]"
             android:textColor="#016a96"
             android:textSize="16dp"
             android:layout_marginLeft="5dp"
@@ -38,7 +37,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_r"
-            android:text="문항제목"
             android:textColor="#404040"
             android:textSize="@dimen/alarm_text"
             android:layout_marginLeft="5dp"

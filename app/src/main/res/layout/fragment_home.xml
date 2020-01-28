@@ -27,7 +27,8 @@
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_qVideo"/>
+            app:layout_constraintTop_toBottomOf="@+id/ib_qVideo"
+            android:layout_marginTop="@dimen/home_btn_margin"/>
 
         <ImageButton
             android:id="@+id/ib_qBox"
@@ -37,7 +38,8 @@
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_qText"/>
+            app:layout_constraintTop_toBottomOf="@+id/ib_qText"
+            android:layout_marginTop="@dimen/home_btn_margin"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
