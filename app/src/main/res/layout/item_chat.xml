@@ -125,9 +125,8 @@
                 android:textColor="#016a96"
                 android:gravity="center"
 
-
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

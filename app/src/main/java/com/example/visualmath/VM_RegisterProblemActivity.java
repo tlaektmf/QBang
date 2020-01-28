@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
@@ -71,6 +72,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private Button buttonGrade;
     private Button buttonGoOther;
     private ImageView imageViewProblem;
+    private ConstraintLayout explainView;
 
     //** 데이터
     private VM_Data_ADD receiveData; //<내용추가뷰> -> <문제등록뷰> : "문제등록"버튼 클릭시, 현 액티비티에서 DB를 저장하기 위함
@@ -109,6 +111,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         vmDataBasic = new VM_Data_BASIC();
         intent = getIntent();
         solveWay = intent.getStringExtra(VM_ENUM.SOLVE_WAY);
+        explainView = findViewById(R.id.explain_view);
+        explainView.setVisibility(View.VISIBLE);
         Log.d(TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
     }
 
@@ -117,7 +121,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void changeProblemFile(View view) {
         //** 권한 설정
         tedPermission();
-
     }
 
 
@@ -645,6 +648,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             }
 
+            explainView.setVisibility(View.GONE);
 
         } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
@@ -671,6 +675,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 saveFile();
             }
 
+            explainView.setVisibility(View.GONE);
         } else if (requestCode == VM_ENUM.OTHER_DATA_LOAD) {
             Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
