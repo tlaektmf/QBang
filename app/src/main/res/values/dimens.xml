@@ -80,5 +80,7 @@
     <dimen name="checkbos_size">15dp</dimen>
     <dimen name="menu_button_size">20dp</dimen>
     <dimen name="check_btn_size">18dp</dimen>
+    <dimen name="alarm_btn_size">20dp</dimen>
+    <dimen name="webview_btn_size">25dp</dimen>
 
 </resources>

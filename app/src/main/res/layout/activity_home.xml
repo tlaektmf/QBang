@@ -18,27 +18,27 @@
 
         <ImageButton
             android:id="@+id/ib_live"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:backgroundTint="@android:color/transparent"
+            android:layout_width="@dimen/webview_btn_size"
+            android:layout_height="@dimen/webview_btn_size"
             android:scaleType="fitCenter"
-            android:src="@drawable/home_top_left"
+            android:background="@drawable/home_top_left"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="@dimen/close_button_margin"/>
 
         <ImageButton
             android:id="@+id/ib_alarm"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
+            android:layout_width="@dimen/alarm_btn_size"
+            android:layout_height="@dimen/alarm_btn_size"
             android:scaleType="fitCenter"
-            android:src="@drawable/home_top_right"
+            android:background="@drawable/home_top_right"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="@dimen/close_button_margin"/>
 
         <TextView
             android:id="@+id/home_title"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanumsquaure_eb"
             android:gravity="center"
-            android:text="영 상   수 학"
+            android:text="Visual Math"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/title_text"
 
