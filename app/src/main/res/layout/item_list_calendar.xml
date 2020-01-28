@@ -6,7 +6,7 @@
     android:layout_height="70dp"
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="4dp"
     android:background="@drawable/calendar_list_back"
     android:gravity="center"
     android:layout_gravity="center_horizontal">
@@ -15,15 +15,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginLeft="4dp">
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="10dp">
             <TextView
                 android:id="@+id/startTime"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
 
                 android:text="2:00 PM"
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="12dp"
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textSize="@dimen/date_text"
                 android:layout_marginBottom="3dp"
                 android:textColor="#FF5D5D"/>
 
@@ -33,9 +34,8 @@
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
 
-
-                android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="12dp"
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textSize="@dimen/date_text"
                 android:textColor="#FF5D5D"/>
         </LinearLayout>
     <TextView
@@ -45,12 +45,14 @@
 
         android:text="교육청 1"
         android:fontFamily="@font/nanumsquaure_b"
-        android:textSize="17dp"
+        android:textSize="@dimen/title_text"
         android:textColor="#016a96"
-        android:layout_marginBottom="2dp"/>
+        android:layout_marginBottom="2dp"
+        android:paddingLeft="5dp"
+        android:layout_marginRight="10dp"/>
     <ImageView
-        android:layout_width="23dp"
-        android:layout_height="23dp"
+        android:layout_width="@dimen/check_btn_size"
+        android:layout_height="@dimen/check_btn_size"
         android:background="@drawable/complete_btn"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="2.2dp"/>
 </LinearLayout>

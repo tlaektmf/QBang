@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:textSize="15dp"
+                    android:textSize="@dimen/explain_small_text"
                     android:fontFamily="@font/nanumsquaure_b"
                     android:textColor="#016a96"
                     android:gravity="left"
@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:textSize="24dp"
+                    android:textSize="@dimen/title_text"
                     android:fontFamily="@font/nanumsquaure_eb"
                     android:textColor="#404040"
 
@@ -79,10 +79,10 @@
                     android:id="@+id/detail_line_first"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/blue_line_margin"
+                    android:layout_marginRight="@dimen/blue_line_margin"
                     android:background="#72d8ff"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
 
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -116,11 +116,11 @@
 
 
                     android:textSize="@dimen/input_text"
-                    android:fontFamily="@font/nanumsquaure_b"
+                    android:fontFamily="@font/nanumsquaure_r"
                     android:textColor="#016a96"
                     android:gravity="left"
 
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
 
@@ -150,8 +150,8 @@
                     android:id="@+id/detail_line_second"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/blue_line_margin"
+                    android:layout_marginRight="@dimen/blue_line_margin"
                     android:background="#72d8ff"
                     android:layout_marginTop="10dp"
 
@@ -170,7 +170,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/detail_line_second"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginBottom="20dp">
                     <ImageView
                         android:id="@+id/extra_img_one"

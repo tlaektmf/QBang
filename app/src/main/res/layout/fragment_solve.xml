@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:textSize="15dp"
+                android:textSize="@dimen/explain_small_text"
                 android:fontFamily="@font/nanumsquaure_b"
                 android:textColor="#016a96"
                 android:gravity="left"
@@ -56,12 +56,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:textSize="24dp"
+                android:textSize="@dimen/title_text"
                 android:fontFamily="@font/nanumsquaure_eb"
                 android:textColor="#404040"
 
                 android:layout_marginLeft="@dimen/input_margin"
                 android:layout_marginRight="@dimen/input_margin"
+                android:layout_marginTop="5dp"
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -70,10 +71,10 @@
                 android:id="@+id/detail_line_first"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="@dimen/blue_line_margin"
+                android:layout_marginRight="@dimen/blue_line_margin"
                 android:background="#72d8ff"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -90,9 +91,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
 
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginLeft="@dimen/blue_line_margin"
+                android:layout_marginRight="@dimen/blue_line_margin"
+                android:layout_marginTop="15dp"/>
 
     <!--        <TextView-->
     <!--            android:id="@+id/tv_answer_text"-->
@@ -116,10 +117,10 @@
                 android:id="@+id/detail_line_second"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="@dimen/blue_line_margin"
+                android:layout_marginRight="@dimen/blue_line_margin"
                 android:background="#72d8ff"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

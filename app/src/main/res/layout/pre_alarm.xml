@@ -4,15 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:padding="10dp"
+    android:layout_height="@dimen/pre_height"
     android:layout_gravity="center_horizontal"
     android:gravity="center"
-    android:layout_marginTop="10dp">
+    android:padding="5dp"
+    android:layout_marginTop="@dimen/pre_top_margin">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/pre_line"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="#e6e6e6"
@@ -34,15 +34,16 @@
                 android:text="알림 설정"
 
                 android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="16dp"
-                android:textColor="#040404"/>
+                android:textSize="@dimen/pre_title_text"
+                android:textColor="#404040"
+                android:layout_marginBottom="3dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="문제풀이가 도착하면 알람이 울립니다"
 
                 android:fontFamily="@font/nanumsquaure_r"
-                android:textSize="15dp"
+                android:textSize="@dimen/pre_sub_text"
                 android:textColor="#a1a1a1"/>
         </LinearLayout>
 

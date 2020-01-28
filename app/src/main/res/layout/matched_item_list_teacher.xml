@@ -3,93 +3,93 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_width="350dp"
-    android:layout_height="110dp"
-    android:layout_marginBottom="5dp"
-    android:background="@drawable/calendar_list_back"
-
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
     android:layout_gravity="center_horizontal">
-    <TextView
-        android:id="@+id/problem_solveWay"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
 
-
-        android:fontFamily="@font/nanumsquaure_b"
-        android:textSize="14dp"
-        android:layout_marginBottom="7dp"
-        android:textColor="#FF5D5D"
-        android:layout_marginLeft="20dp"
-        android:textAlignment="center"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-<!--    문제 제목과 날짜 보여주는 container-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/problem_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-
-        app:layout_constraintLeft_toRightOf="@+id/problem_solveWay"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:background="@drawable/match_list_background"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="12dp">
+        android:elevation="4dp">
         <TextView
-            android:id="@+id/problem_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/problem_solveWay"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:textSize="17dp"
-            android:textColor="#016a96"
+            android:textSize="14dp"
+            android:textColor="#FF5D5D"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
 
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-            android:id="@+id/problem_date"
-            android:layout_width="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <!--    문제 제목과 날짜 보여주는 container-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/problem_container"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+
+            app:layout_constraintLeft_toRightOf="@+id/problem_solveWay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <TextView
+                android:id="@+id/problem_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textSize="@dimen/title_text"
+                android:textColor="#016a96"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:id="@+id/problem_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textSize="12dp"
+                android:textColor="#595959"
+                android:layout_marginTop="5dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/problem_name"/>
+            <TextView
+                android:id="@+id/problem_matchSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanumsquaure_r"
+                android:textSize="12dp"
+                android:textColor="#595959"
+                android:layout_marginTop="5dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/problem_date"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            android:fontFamily="@font/nanumsquaure_r"
-            android:textSize="12dp"
-            android:textColor="#595959"
-            android:layout_marginTop="5dp"
+        <!--    라이브일 경우에만 visible-->
+        <ImageView
+            android:id="@+id/problem_live"
+            android:visibility="invisible"
+            android:layout_width="@dimen/check_btn_size"
+            android:layout_height="@dimen/check_btn_size"
+            android:background="@drawable/complete_btn"
+            android:layout_marginRight="20dp"
 
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/problem_name"/>
-        <TextView
-            android:id="@+id/problem_matchSet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-           
-            android:fontFamily="@font/nanumsquaure_r"
-            android:textSize="12dp"
-            android:textColor="#595959"
-            android:layout_marginTop="5dp"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/problem_date"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--    라이브일 경우에만 visible-->
-    <ImageView
-        android:id="@+id/problem_live"
-        android:visibility="invisible"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/complete_btn"
-        android:layout_marginBottom="2dp"
-        android:layout_marginRight="20dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

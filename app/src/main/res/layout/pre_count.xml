@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:padding="10dp"
->
+    android:layout_height="@dimen/pre_height"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:padding="5dp">
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="@dimen/pre_line"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="#e6e6e6"
@@ -24,8 +23,8 @@
                 android:layout_weight="4"
                 android:text="해결한 문제수"
                 android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="16dp"
-                android:textColor="#040404"
+                android:textSize="@dimen/pre_title_text"
+                android:textColor="#404040"
                 android:layout_marginLeft="15dp"/>
 
             <TextView
@@ -34,7 +33,7 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nanumsquaure_eb"
-                android:textSize="15dp"
+                android:textSize="@dimen/pre_sub_text"
                 android:textColor="#72d8ff"
                 android:layout_marginRight="16dp"
                 android:background="@color/transparent"

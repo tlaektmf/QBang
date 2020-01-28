@@ -34,6 +34,13 @@
     <dimen name="register_problem_button_width">330dp</dimen>
     <dimen name="register_problem_image_width">330dp</dimen>
     <dimen name="bottom_btn_container_height">55dp</dimen>
+    <dimen name="home_btn_height">150dp</dimen>
+    <dimen name="home_btn_width">345dp</dimen>
+    <dimen name="blue_btn_height">45dp</dimen>
+    <dimen name="blue_btn_width">200dp</dimen>
+    <dimen name="alarm_line_height">1.2dp</dimen>
+    <dimen name="pre_height">70dp</dimen>
+    <dimen name="pre_line">1dp</dimen>
 
 <!--    글씨체-->
     <dimen name="title_text">17dp</dimen>
@@ -46,6 +53,11 @@
     <dimen name="login_input_text">14dp</dimen>
     <dimen name="explain_small_text">12dp</dimen>
     <dimen name="register_title_input_text">16dp</dimen>
+    <dimen name="chat_title_text">16dp</dimen>
+    <dimen name="date_text">11dp</dimen>
+    <dimen name="alarm_text">13dp</dimen>
+    <dimen name="pre_title_text">13dp</dimen>
+    <dimen name="pre_sub_text">12dp</dimen>
 
 <!--    패딩-->
     <dimen name="input_padding">12dp</dimen>
@@ -58,11 +70,14 @@
     <dimen name="close_button_margin">15dp</dimen>
     <dimen name="button_top_margin">15dp</dimen>
     <dimen name="bottom_nav_top_margin">10dp</dimen>
+    <dimen name="blue_line_margin">20dp</dimen>
+    <dimen name="pre_top_margin">5dp</dimen>
 
 <!--    버튼-->
     <dimen name="close_button_size">14dp</dimen>
     <dimen name="register_button_size">14dp</dimen>
     <dimen name="checkbos_size">15dp</dimen>
     <dimen name="menu_button_size">20dp</dimen>
+    <dimen name="check_btn_size">18dp</dimen>
 
 </resources>

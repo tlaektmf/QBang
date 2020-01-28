@@ -6,70 +6,66 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="215dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="20dp">
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical">
 
 <!--        학년-->
 <!--        맨 아래 세줄은 기존 코드에서 가져온 부분-->
         <TextView
             android:id="@+id/problem_content_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
 
-            android:fontFamily="@font/nanumsquaure_eb"
-            android:textColor="#404040"
-            android:textSize="17dp"
-            android:layout_marginLeft="5dp"
-
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceListItem"/>
-
-        <TextView
-            android:id="@+id/problem_content_detail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-
+            android:text="[문제종류]"
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#404040"
-            android:textSize="16dp"
+            android:textSize="@dimen/alarm_text"
             android:layout_marginLeft="5dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="5dp"
 
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="?attr/textAppearanceListItem"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/problem_content_time"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
             android:text="시간"
-            android:fontFamily="@font/nanumsquaure_b"
+            android:fontFamily="@font/nanumsquaure_r"
             android:textColor="#404040"
-            android:textSize="16dp"
+            android:textSize="@dimen/alarm_text"
             android:layout_marginLeft="5dp"
+            android:layout_marginBottom="3dp"
 
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/problem_content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            android:text="제목"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#016a96"
+            android:textSize="@dimen/dp16"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="?attr/textAppearanceListItem"/>
     </LinearLayout>
-
-
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alarm_line_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#e6e6e6"/>
 </LinearLayout>

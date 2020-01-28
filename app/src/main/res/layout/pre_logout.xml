@@ -4,14 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="@dimen/pre_height"
     android:layout_gravity="center_horizontal"
     android:gravity="center"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/pre_line"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="#e6e6e6"
@@ -26,8 +26,8 @@
             android:layout_weight="4"
             android:text="계정"
             android:fontFamily="@font/nanumsquaure_b"
-            android:textSize="16dp"
-            android:textColor="#040404"
+            android:textSize="@dimen/pre_title_text"
+            android:textColor="#404040"
 
             android:layout_marginLeft="15dp"/>
 
@@ -37,7 +37,7 @@
             android:layout_height="30dp"
             android:text="로그아웃"
             android:fontFamily="@font/nanumsquaure_eb"
-            android:textSize="15dp"
+            android:textSize="@dimen/pre_sub_text"
             android:textColor="#72d8ff"
             android:layout_marginRight="16dp"
             style="?android:attr/borderlessButtonStyle"

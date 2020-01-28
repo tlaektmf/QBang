@@ -40,14 +40,14 @@
             android:fontFamily="@font/nanumsquaure_r"
             android:text="교육청 1"
             android:textColor="#404040"
-            android:textSize="15dp"
+            android:textSize="@dimen/alarm_text"
             android:layout_marginLeft="5dp"
             android:gravity="center_vertical"/>
 
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"
+        android:layout_height="@dimen/alarm_line_height"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="#e6e6e6"/>

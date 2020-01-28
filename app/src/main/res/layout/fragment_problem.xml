@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
 
             android:textColor="#016a96"
-            android:textSize="@dimen/title_text"
+            android:textSize="@dimen/chat_title_text"
             android:gravity="center"
             android:fontFamily="@font/nanumsquaure_b"
 
