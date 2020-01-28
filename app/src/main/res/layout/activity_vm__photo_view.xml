@@ -24,8 +24,8 @@
 
         <Button
             android:id="@+id/pv_close_btn"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="@dimen/close_button_size"
+            android:layout_height="@dimen/close_button_size"
             android:background="@drawable/pv_close_btn"
             android:onClick="cancel"
 

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context=".activity.VM_RegisterUserActivity"
+    tools:context=".activity.VM_RegisterUserActivity"
     android:background="#1097d0">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/user_register_top"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/home_top_height"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -21,13 +22,13 @@ tools:context=".activity.VM_RegisterUserActivity"
             android:onClick="cancel"
             android:background="@drawable/pv_close_btn"
             android:id="@+id/btn_close"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/close_button_size"
+            android:layout_height="@dimen/close_button_size"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginLeft="@dimen/close_button_margin"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +46,7 @@ tools:context=".activity.VM_RegisterUserActivity"
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/user_register_input_container"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/loogin_input_width"
         android:layout_height="0dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
@@ -103,14 +104,14 @@ tools:context=".activity.VM_RegisterUserActivity"
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/login_input_height"
                 android:background="@drawable/login_id_back"
 
                 android:hint="이메일"
                 android:textColorHint="#fff"
                 android:fontFamily="@font/nanumsquaure_r"
                 android:inputType="textPersonName"
-                android:textSize="17dp"
+                android:textSize="@dimen/login_input_text"
                 android:textColor="#fff"
 
                 app:layout_constraintTop_toBottomOf="@+id/login_logo_container"
@@ -118,19 +119,19 @@ tools:context=".activity.VM_RegisterUserActivity"
                 app:layout_constraintRight_toRightOf="parent"
 
                 android:layout_marginTop="15dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                android:paddingLeft="@dimen/login_input_padding"
+                android:paddingRight="@dimen/login_input_padding"/>
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/login_input_height"
                 android:background="@drawable/login_id_back"
 
                 android:hint="사용할 비밀번호를 입력해주세요"
                 android:textColorHint="#fff"
                 android:fontFamily="@font/nanumsquaure_r"
                 android:inputType="textPassword"
-                android:textSize="17dp"
+                android:textSize="@dimen/login_input_text"
                 android:textColor="#fff"
 
                 app:layout_constraintTop_toBottomOf="@+id/et_email"
@@ -138,28 +139,28 @@ tools:context=".activity.VM_RegisterUserActivity"
                 app:layout_constraintRight_toRightOf="parent"
 
                 android:layout_marginTop="15dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                android:paddingLeft="@dimen/login_input_padding"
+                android:paddingRight="@dimen/login_input_padding"/>
             <Button
                 android:onClick="registerUser"
                 android:id="@+id/btn_signUp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/login_input_height"
                 android:background="@drawable/login_btn_back"
 
                 android:text="이메일 인증하기"
                 android:textAlignment="center"
                 android:textColor="#1097d0"
                 android:fontFamily="@font/nanumsquaure_b"
-                android:textSize="18dp"
+                android:textSize="@dimen/login_input_text"
 
                 app:layout_constraintTop_toBottomOf="@+id/et_password"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
 
                 android:layout_marginTop="15dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                android:paddingLeft="@dimen/login_input_padding"
+                android:paddingRight="@dimen/login_input_padding"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

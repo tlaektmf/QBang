@@ -19,14 +19,14 @@
         <Button
             android:onClick="cancel"
             android:id="@+id/btn_goOrigin"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/close_button_size"
+            android:layout_height="@dimen/close_button_size"
             android:background="@drawable/close"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginLeft="@dimen/close_button_margin"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,6 +44,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/register_other_main_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
@@ -53,7 +54,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/other_top_header"
-        app:layout_constraintBottom_toTopOf="@+id/btn_add"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         android:layout_margin="20dp">
 
         <TextView
@@ -126,7 +127,7 @@
             android:text="더 정확하고 빠른 답변이 가능합니다"
             android:fontFamily="@font/nanumsquaure_r"
             android:textColor="#b8bcbb"
-            android:textSize="15dp"
+            android:textSize="@dimen/explain_small_text"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -187,20 +188,30 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:onClick="loadAddInfo"
-        android:id="@+id/btn_add"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_btn_height"
-        style="?android:attr/borderlessButtonStyle"
-        android:background="#f8c55a"
-        android:elevation="5dp"
+        android:layout_height="@dimen/bottom_btn_container_height"
 
-        android:text="내용 추가하기"
-        android:fontFamily="@font/nanumsquaure_b"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/title_text"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent">
+        <Button
+            android:onClick="loadAddInfo"
+            android:id="@+id/btn_add"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_btn_height"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="#f8c55a"
+            android:elevation="5dp"
+
+            android:text="내용 추가하기"
+            android:fontFamily="@font/nanumsquaure_b"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/title_text"
+            android:textAlignment="center"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
