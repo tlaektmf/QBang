@@ -190,8 +190,8 @@
                 android:paddingBottom="15dp">
                 <Button
                     android:id="@+id/pv_close_btn"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="@dimen/close_button_size"
+                    android:layout_height="@dimen/close_button_size"
                     android:background="@drawable/pv_close_btn"
 
                     app:layout_constraintLeft_toLeftOf="parent"

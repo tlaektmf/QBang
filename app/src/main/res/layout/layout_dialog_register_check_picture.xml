@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
+    android:layout_width="@dimen/dialog_width"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
                 android:text="알     림"
                 android:fontFamily="@font/nanumsquaure_eb"
                 android:textColor="#016a96"
-                android:textSize="20dp"/>
+                android:textSize="@dimen/title_text"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/dialog_contents"
@@ -48,7 +48,7 @@
 
             android:fontFamily="@font/nanumsquaure_b"
             android:textColor="#014a67"
-            android:textSize="18dp"
+            android:textSize="@dimen/view_text"
             android:textAlignment="center"/>
         </LinearLayout>
     </LinearLayout>

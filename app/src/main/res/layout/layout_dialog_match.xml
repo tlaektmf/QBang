@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="400dp"
+    android:layout_width="@dimen/dialog_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:padding="15dp"
@@ -30,7 +30,7 @@
                 android:text="이 문제를 선택하시겠습니까"
                 android:fontFamily="@font/nanumsquaure_eb"
                 android:textColor="#016a96"
-                android:textSize="20dp"
+                android:textSize="@dimen/title_text"
                 android:textAlignment="center"/>
         </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +43,7 @@
             <Button
                 android:id="@+id/solve_yes_btn"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/white_btn_height"
                 android:layout_weight="2"
                 android:text="네"
 
@@ -53,7 +53,7 @@
 
                 android:fontFamily="@font/nanumsquaure_b"
                 android:textColor="#014a67"
-                android:textSize="18dp"
+                android:textSize="@dimen/view_text"
 
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
@@ -68,7 +68,7 @@
             <Button
                 android:id="@+id/solve_no_btn"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/white_btn_height"
                 android:layout_weight="2"
                 android:text="아니오"
 
@@ -78,7 +78,7 @@
 
                 android:fontFamily="@font/nanumsquaure_b"
                 android:textColor="#014a67"
-                android:textSize="18dp"
+                android:textSize="@dimen/view_text"
 
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
