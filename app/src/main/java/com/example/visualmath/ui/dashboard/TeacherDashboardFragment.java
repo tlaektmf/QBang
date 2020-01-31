@@ -90,7 +90,7 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     public static List<Pair<VM_Data_Default, Pair<String, String>>> posts; //포스트 데이터 전체 리스트 post/id/date
 
     public TeacherHomeActivity parent;
-    public static String TAG = "TeacherDashboardFrag";
+    public static String TAG = VM_ENUM.TAG;
     public int focusedYear;
     public int focusedMonth;
     public int focusedDay;
@@ -148,10 +148,11 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         search_editText.addTextChangedListener(this);
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         searched_list=root.findViewById(R.id.teacher_searched_list);
+        setupRecyclerView(recyclerView);
 
         dateInit();
         readDataBase();
-        setupRecyclerView(recyclerView);
+
 
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +192,7 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     private void hideKeyboard(){
         imm.hideSoftInputFromWindow(search_editText.getWindowToken(),0);
     }
+
     private void dateInit() {
         final long now = System.currentTimeMillis();//현재시간
         final Date date = new Date(now);//현재날짜

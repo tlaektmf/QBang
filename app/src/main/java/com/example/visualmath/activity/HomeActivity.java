@@ -47,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
+        Log.d(VM_ENUM.TAG,"[HomeActivity 호출]");
          init();
 
         // ActionBar 숨기기
@@ -83,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.navigation_dashboard: {
+                        dashboardFragment = new DashboardFragment();
                         transaction.replace(R.id.nav_host_fragment, dashboardFragment).commitAllowingStateLoss();
                         break;
                     }
@@ -153,22 +155,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
 
-//        new AlertDialog.Builder(this)
-//                .setTitle("VM")
-//                .setMessage("정말 종료하시겠습니까?")
-//                .setPositiveButton("네", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        moveTaskToBack(true);
-//                        ActivityCompat.finishAffinity(HomeActivity.this);
-//
-//                    }
-//                })
-//                .setNegativeButton("아니오",null)
-//                .show();
-        ///super.onBackPressed();
 
 //        커스텀 다이얼로그로 변경
         final VM_Dialog_finish_app dialog = new VM_Dialog_finish_app(HomeActivity.this);

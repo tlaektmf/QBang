@@ -153,11 +153,12 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         //검색 목록 리사이클러뷰
         searched_list = root.findViewById(R.id.searched_list);
+        setupRecyclerView(recyclerView);
 
         dateInit();
         readDataBase();
 
-        setupRecyclerView(recyclerView);
+
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
