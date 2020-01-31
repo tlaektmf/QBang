@@ -7,12 +7,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 
 public class VM_LauncherActivity extends AppCompatActivity {
 
-    private static final String TAG="Launcher";
+    private static final String TAG= VM_ENUM.TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,27 +43,26 @@ public class VM_LauncherActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        //** 권한 설정
-        Log.i(TAG,Build.VERSION.SDK_INT+"");
-        if (Build.VERSION.SDK_INT >= 26) { //6.0 마시멜로우 -> API Level 26
-            // Sdk 26버전부터 실행할 코드
-            tedPermission();
+        //** 특정 시간동안 런쳐 이미지 보여준 후 퍼미션 체크 진행
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //** 권한 설정
+                Log.i(TAG,Build.VERSION.SDK_INT+"");
+                if (Build.VERSION.SDK_INT >= 26) { //6.0 마시멜로우 -> API Level 26
+                    // Sdk 26버전부터 실행할 코드
+                    tedPermission();
 
-        }else{
-            tedPermission();
-        }
+                }else{
+                    tedPermission();
+                }
+
+            }
+        },3000);//3초 홀딩
 
 
-//** 3초 후 화면 전환
-//        Handler handler=new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent=new Intent(VM_LauncherActivity.this,VM_AutoLoginCheckActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        },3000);
+
 
 
     }
