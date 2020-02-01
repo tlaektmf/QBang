@@ -112,7 +112,8 @@
                     android:paddingLeft="5dp"
                     android:layout_marginRight="10dp"
                     android:background="@null"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/search_text"
+                    android:fontFamily="@font/nanumsquaure_r"
 
                     app:layout_constraintLeft_toRightOf="@+id/teacher_search_img"
                     app:layout_constraintRight_toRightOf="parent"
@@ -124,7 +125,7 @@
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:text="취소"
-                android:textSize="16dp"
+                android:textSize="@dimen/cancel_text"
                 style="?android:attr/borderlessButtonStyle"
                 android:fontFamily="@font/nanumsquaure_b"
 
