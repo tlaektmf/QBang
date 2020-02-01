@@ -85,5 +85,6 @@
     <dimen name="check_btn_size">18dp</dimen>
     <dimen name="alarm_btn_size">20dp</dimen>
     <dimen name="webview_btn_size">25dp</dimen>
+    <dimen name="chat_menu_btn_size">60dp</dimen>
 
 </resources>
