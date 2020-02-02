@@ -75,8 +75,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private ConstraintLayout explainView;
 
     //** 데이터
-    private VM_Data_ADD receiveData; //<내용추가뷰> -> <문제등록뷰> : "문제등록"버튼 클릭시, 현 액티비티에서 DB를 저장하기 위함
-    private VM_Data_ADD sendData;// <문제등록뷰> -> <내용추가뷰> : 바로 이전에 온 <내용추가뷰>에서의 기록을 보관하기 위함
+    ///private VM_Data_ADD receiveData; //<내용추가뷰> -> <문제등록뷰> : "문제등록"버튼 클릭시, 현 액티비티에서 DB를 저장하기 위함
+    ///private VM_Data_ADD sendData;// <문제등록뷰> -> <내용추가뷰> : 바로 이전에 온 <내용추가뷰>에서의 기록을 보관하기 위함
+    //** static 변수 설계
+    public static VM_Data_ADD add;
 
     //** DB에 저장될 데이터
     private VM_Data_BASIC vmDataBasic;
@@ -113,6 +115,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         solveWay = intent.getStringExtra(VM_ENUM.SOLVE_WAY);
         explainView = findViewById(R.id.explain_view);
         explainView.setVisibility(View.VISIBLE);
+        add=new VM_Data_ADD();
         Log.d(TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
     }
 
@@ -139,49 +142,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
 
-
-    /**
-     * Fires an intent to spin up the "file chooser" UI and select an image.
-     */
-    public void performFileSearch() {
-
-        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
-        // browser.
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-
-        // Filter to only show results that can be "opened", such as a
-        // file (as opposed to a list of contacts or timezones)
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
-        intent.setType("image/*");
-
-        startActivityForResult(intent, VM_ENUM.RC_READ_REQUEST_CODE);
-    }
-
-    /**
-     * 내장드라이브에서 미디어 스토어 주소를 찾고, 이를 통해 실제 경로를 가져온다 (disply name을 가져오기 위한 method)
-     *
-     * @param contentUri
-     * @return
-     */
-    public String getRealPathFromURI(Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
 
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
@@ -260,20 +220,14 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
-        sendData = receiveData;//<문제등록뷰>에서 <내용추가뷰>로 보내는 데이터는 바로 이전에 <내용추가뷰>로부터 받은 데이터
-        intent.putExtra(VM_ENUM.ALL, sendData); //Parcel객체인 sendData intent에 추가
+        ///sendData = receiveData;//<문제등록뷰>에서 <내용추가뷰>로 보내는 데이터는 바로 이전에 <내용추가뷰>로부터 받은 데이터
+        ///intent.putExtra(VM_ENUM.ALL, sendData); //Parcel객체인 sendData intent에 추가
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent, VM_ENUM.OTHER_DATA_LOAD);
     }
 
 
-//    private void setImage() {
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        Bitmap originalBm = BitmapFactory.decodeFile(galleryFile.getAbsolutePath(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
-//        imageViewProblem.setImageBitmap(originalBm); //이미지 set
-//        if (originalBm == null) {
-//            Log.d(TAG, "[VM_RegisterProblemActivity]: set할 이미지가 없음");
-//        }
-//    }
+
 
     private void setImageByUri(Uri _uri) {
 
@@ -459,11 +413,11 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             //** <내용추가>뷰에서 받아온 값들 (content provider가 벗겨져 있기 때문에, 이를 씌워서 DB에 올린다
             //** Firebase 정책
-            wrapContentProvider();
+            ///wrapContentProvider();
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
             VM_DBHandler vmDbHandler = new VM_DBHandler();
-            vmDbHandler.newPost(receiveData, vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
+            vmDbHandler.newPost(add , vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
             finish();
         } else {
@@ -473,25 +427,25 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
-    public void wrapContentProvider() {
-        Log.d(TAG, "[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-
-            if (receiveData != null) {
-                for (int i = 0; i < 3; i++) {
-                    if (receiveData.getFilePathElement(i) != null) {
-                        Uri photoUri = FileProvider.getUriForFile(this,
-                                "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
-                        receiveData.setFilePathElement(photoUri, i);
-                    }
-                }
-            }
-
-        } else { //** content provider 불필요함
-
-
-        }
-    }
+//    public void wrapContentProvider() {
+//        Log.d(TAG, "[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//
+//            if (receiveData != null) {
+//                for (int i = 0; i < 3; i++) {
+//                    if (receiveData.getFilePathElement(i) != null) {
+//                        Uri photoUri = FileProvider.getUriForFile(this,
+//                                "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
+//                        receiveData.setFilePathElement(photoUri, i);
+//                    }
+//                }
+//            }
+//
+//        } else { //** content provider 불필요함
+//
+//
+//        }
+//    }
 
     public void cancel(View view) {
         finish();
@@ -594,7 +548,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
-                    Log.i(TAG, "Uri: " + uri.toString());
+                    Log.i(TAG, "[RegiProblem]onActivityResult  Uri: " + uri.toString());
                     ///dumpImageMetaData(uri);
                     try {
                         getBitmapFromUri(uri);
@@ -679,43 +633,41 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         } else if (requestCode == VM_ENUM.OTHER_DATA_LOAD) {
             Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
 
-            if (resultCode == RESULT_OK) {
-                String notice = "";
+            String notice = "";
 
-                //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
-                //receiveDatat 변수에 저장함
-                assert data != null;
-                receiveData = data.getParcelableExtra(VM_ENUM.ALL);
+            //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
+            //receiveDatat 변수에 저장함
+            assert data != null;
 
-                assert receiveData != null;
-                if (receiveData.getDetail() == null) {
-                    Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
-                }
 
-                if (!receiveData.getDetail().equals("")) {
-                    notice = "추가 설명 등록.";
+            assert add != null;
+            if (add .getDetail() == null) {
+                Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
+            }
 
-                }
-                int count = 0;
-
-                for (int i = 0; i < 3; i++) {
-                    if (receiveData.getFilePathElement(i) != null) {
-                        count++;
-                        Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + ",," + receiveData.getFilePathElement(i).toString());
-                    }
-                }
-                if (count != 0) {
-                    notice += "사진 " + count + "개 추가.";
-                }
-
-                //** 버튼에 정보 표시
-                if (!notice.equals("")) {
-                    buttonGoOther.setText(notice);
-                } else if (notice.equals("")) {
-                    buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
-                }
+            if (add .getDetail()!=null) {
+                notice = "추가 설명 등록.";
 
             }
+            int count = 0;
+
+            for (int i = 0; i < 3; i++) {
+                if (add .getFilePathElement(i) != null) {
+                    count++;
+                    Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + "-->" + add .getFilePathElement(i).toString());
+                }
+            }
+            if (count != 0) {
+                notice += "사진 " + count + "개 추가.";
+            }
+
+            //** 버튼에 정보 표시
+            if (!notice.equals("")) {
+                buttonGoOther.setText(notice);
+            } else {
+                buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
+            }
+
         }
 
 
