@@ -22,6 +22,9 @@ public class VM_Data_POST {
     //private int state; //>>삭제 예정
     //private int live_state;  ////>>삭제 예정
 
+    public VM_Data_POST(){
+
+    }
     public VM_Data_POST(VM_Data_Default _vm_data_default,
                         VM_Data_EXTRA _vm_data_extra,
                         String _s_id,String _key,String _uploadDate,String _solveWay){
