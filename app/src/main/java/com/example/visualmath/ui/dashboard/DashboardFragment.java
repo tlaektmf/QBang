@@ -3,6 +3,7 @@ package com.example.visualmath.ui.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +32,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.visualmath.adapter.FilterAdapter;
 import com.example.visualmath.activity.HomeActivity;
+import com.example.visualmath.calendarListAdapater;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
+import com.example.visualmath.fragment.CalendarFullViewFragment;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
 import com.example.visualmath.data.VM_Data_Default;
@@ -55,27 +59,20 @@ import java.util.Objects;
 public class DashboardFragment extends Fragment implements TextWatcher {
 
     private DashboardViewModel dashboardViewModel;
-    private boolean mTwoPane;
 
-    private String this_year;
-    private String this_month;
-    private String this_day;
 
-    private TextView datecheck;
-    private  CalendarView calendar;
-    private RecyclerView recyclerView;
     private Button cal_mode_btn;
 
     //    검색창
     private Button search_btn;
     private Button search_cancel_btn;
-//    private ConstraintLayout search_input_lay;
+
     private ConstraintLayout search_container;
     private InputMethodManager imm;
     private EditText search_editText;
     //검색 목록
     private RecyclerView searched_list;
-    private FilterAdapter filterAdapter;
+    public static FilterAdapter filterAdapter;
 
     //lhj_0
 //    로딩창
@@ -83,7 +80,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private View cal_loading_back;
     //lhj_0
 
-    //** DB
+//    //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
 
@@ -92,12 +89,14 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
     public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
-
-    public HomeActivity parent;
-    public static String TAG="DashboardFrag";
+    public static List <String> dates;
+   public HomeActivity parent;
+    public static String TAG=VM_ENUM.TAG;
     public int focusedYear;
     public int focusedMonth;
     public int focusedDay;
+
+    public  int view_click_count;
 
     public DashboardFragment() {
 
@@ -114,7 +113,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         assert currentUserEmail != null;
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
         user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
-
+        DashboardFragment.dates=new ArrayList<String>();
         if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
             //선생님
             user_type=VM_ENUM.TEACHER;
@@ -125,13 +124,14 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     }
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
-        recyclerView = root.findViewById(R.id.calendar_recyclerview);
-        datecheck = root.findViewById(R.id.datecheck);
-        calendar = root.findViewById(R.id.calendar);
+
+
 
         //lhj_1
         //로딩창
@@ -153,23 +153,33 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         //검색 목록 리사이클러뷰
         searched_list = root.findViewById(R.id.searched_list);
-        setupRecyclerView(recyclerView);
 
-        dateInit();
         readDataBase();
-
-
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                view_click_count++;
                 FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
 
-                //대시보드리스트 프레그먼트로 replace
-                tran.replace(R.id.nav_host_fragment, new DashboardListFragment());
-                tran.commit();
+               if(view_click_count%2==0){
+                   view_click_count=0;
+
+                   //small view mode
+                   CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+                   tran.replace(R.id.frame, calendarFullViewFragment);
+                   tran.commit();
+
+               }else{
+
+                   //대시보드리스트 프레그먼트로 replace
+                   DashboardListFragment dashboardListFragment=new DashboardListFragment();
+                   tran.replace(R.id.frame, dashboardListFragment);
+                   tran.commit();
+
+               }
+
             }
         });
 
@@ -180,7 +190,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                 //검색 어댑터 생성
                 Log.d("filter","posts 사이즈 : "+posts.size());
-//                filterAdapter = new FilterAdapter(getContext(),posts);
+                filterAdapter = new FilterAdapter(getContext(),posts);
                 searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                 searched_list.setAdapter(filterAdapter);
             }
@@ -201,86 +211,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private void hideKeyboard(){
         imm.hideSoftInputFromWindow(search_editText.getWindowToken(),0);
     }
-    private void dateInit() {
-        final long now = System.currentTimeMillis();//현재시간
-        final Date date = new Date(now);//현재날짜
-
-        final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);//현재 지역의 년도
-        final SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-        final SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.KOREA);//현재 몇일
-
-        final String year = yearFormat.format(date);
-        final String month = monthFormat.format(date);
-        final String day = dayFormat.format(date);
-
-        this_year = year;
-        this_month = month;
-        this_day = day;
-
-
-        //현재 포커싱된 달력뷰(년,월,일) 초기값
-        focusedYear=Integer.parseInt(this_year);
-        focusedMonth=Integer.parseInt(this_month);
-        focusedDay=Integer.parseInt(this_day);
-
-        datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
-
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                //선택한 날짜가 전돨됨
-
-
-                //현재 포커싱된 달력뷰(년,월,일) 정보 저장
-//                focusedYear=year;
-//                focusedMonth=month+1;
-//                focusedDay=dayOfMonth;
-                Log.d(TAG,"선택 -> 포커싱 변경: "+year+"-"+(month+1)+"-"+dayOfMonth);
-
-//                this_year = Integer.toString(year);
-
-                datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
-
-                subs=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
-
-                String selectedDate=year+"-";
-
-                if((month+1)<10){
-                    selectedDate+="0"+(month+1)+"-";
-                }else{
-                    selectedDate+=(month+1)+"-";
-                }
-
-                if(dayOfMonth<10){
-                    selectedDate+="0"+(dayOfMonth);
-                }else{
-                    selectedDate+=dayOfMonth;
-                }
-
-                Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
-
-                if(posts!=null){
-                    for(int i=0;i<posts.size();i++){
-                        Log.d(TAG,"[클릭이벤트]포스트 날짜: "+posts.get(i).second.second);
-                        if(posts.get(i).second.second.contains(selectedDate)){
-                            ///subs.add(Pair.create(posts.get(i),Pair.create(ids.get(i),dates.get(i))));
-                            subs.add(Pair.create(posts.get(i).first,
-                                    Pair.create(posts.get(i).second.first,posts.get(i).second.second)));
-                        }
-                    }
-                }
-
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
-
-            }
-        });
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-       /// recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(posts, mTwoPane,(HomeActivity)getActivity()));
-
-    }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -296,84 +226,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable editable) {
 
     }
-
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        ///private final List<VM_Data_Default> mValues;
-        private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
-        private final boolean mTwoPane;
-        private final HomeActivity mParentActivity;
-
-        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items, boolean twoPane,HomeActivity parent) {
-            mValues = items;
-            mTwoPane = twoPane;
-            mParentActivity = parent;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_calendar, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-
-            holder.mContentView.setText(mValues.get(position).first.getTitle());//내용(post_title)
-            holder.itemView.setTag(mValues.get(position));
-
-            //** Date 에서 시간만 표기 (시:분)
-            String token=mValues.get(position).second.second;
-            holder.mTimeView.setText(token);//시간
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            final TextView mContentView;
-            final TextView mTimeView;
-            ViewHolder(View view) {
-                super(view);
-
-                mContentView = (TextView) view.findViewById(R.id.problem_name);
-                mTimeView = (TextView) view.findViewById(R.id.endTime);
-
-
-                //** 아이템 클릭 이벤트
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = getAdapterPosition();
-
-                        if (pos != RecyclerView.NO_POSITION) {
-                            //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
-                            // post_id 인자
-                            Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-//                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, ids.get(pos));
-//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).getTitle());
-//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,posts.get(pos).getGrade());
-//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,posts.get(pos).getProblem());
-                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
-                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
-                            mParentActivity.startActivity(intent);
-                            Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-            }
-        }
-    }
-
-
 
     /****
      * 데이터베이스 트랜젝션
@@ -413,7 +265,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                     post_title=postCustomData.getTitle();
                     post_grade=postCustomData.getGrade();
                     post_problem=postCustomData.getProblem();
-
+                    dates.add(post_date);
                     posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
                             Pair.create(post_id,post_date)));
 
@@ -425,11 +277,11 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                 //** 현재 포커싱된 날짜
 
-                ///subs=new ArrayList<VM_Data_Default>();
+
                 subs=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
 
-                String today=this_year+"-"+this_month+"-"+this_day;
-                Log.d(TAG,"오늘 날짜: "+today);
+//                String today=this_year+"-"+this_month+"-"+this_day;
+//                Log.d(TAG,"오늘 날짜: "+today);
 
                 String focusedDate=focusedYear+"-";
 
@@ -458,14 +310,22 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                     }
                 }
 
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
-
+//                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
                 filterAdapter = new FilterAdapter(getContext(),posts);
 
                 //lhj_3
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
                 //lhj_3
+
+                FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+
+                //대시보드리스트 프레그먼트로 replace
+                CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+                tran.replace(R.id.frame, calendarFullViewFragment);
+                tran.commit();
+
 
             }
 
@@ -476,19 +336,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             }
         });
 
-///>>>
-//        //** 처음 DashBoard 세팀
-//        if(posts!=null){
-//            for(int i=0;i<posts.size();i++){
-//                Log.d(TAG,"포스트 날짜: "+dates.get(i));
-//                if(dates.get(i).contains(today)){
-//                    subs.add(posts.get(i));
-//                }
-//            }
-//        }
-//
-//        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
-///>>>
 
     }
 
