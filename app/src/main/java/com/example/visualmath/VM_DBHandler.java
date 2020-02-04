@@ -286,7 +286,7 @@ public class VM_DBHandler {
      * @param uri
      * @param fileName
      */
-    public void storageFileLoad(Uri uri, String fileName) {
+    public void storageFileLoad(final Uri uri, String fileName) {
 
         StorageReference riversRef = storageReference.child
                 (user + "/" +
@@ -306,7 +306,7 @@ public class VM_DBHandler {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
-                        Log.i(TAG, "[파이어베이스 저장소 저장] 실패...");
+                        Log.i(TAG, "[파이어베이스 저장소 저장] 실패..."+uri);
                     }
                 });
     }

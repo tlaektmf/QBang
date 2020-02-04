@@ -598,14 +598,13 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                     int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
                     galleryFile = new File(cursor.getString(column_index));
-                    createData(Uri.parse(galleryFile.getAbsolutePath()));
+                    createData(photo_problem);
                     setImageIDandURI(imageviewID, Uri.parse(galleryFile.getAbsolutePath()));
                 } finally {
                     if (cursor != null) {
                         cursor.close();
                     }
                 }
-
             }
 
 
@@ -624,60 +623,60 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 photoUri = Uri.fromFile(takeFile);
             }
             createData(photoUri);//provider 가 씌워진 파일을 DB에 저장함
-            ///createData(Uri.parse(takeFile.getAbsolutePath()));
             setImageIDandURI(imageviewID, Uri.parse(takeFile.getAbsolutePath()));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
             }
-        } else if (requestCode == VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW) {
-
-            int deleteIndex;
-            int photoIndex;
-            Uri newGalleryPhotoURi;
-            Uri newTakePhotoURi;
-
-
-            deleteIndex = data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX, -1);
-            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deleteIndex" + deleteIndex);
-            if (deleteIndex != -1) {
-                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deletePhoto");
-                deletePhoto(deleteIndex);
-            }
-
-            //**
-            photoIndex = data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX, -1);
-            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] photoIndex" + photoIndex);
-            newGalleryPhotoURi = data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
-            if (newGalleryPhotoURi != null && photoIndex != -1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    try {
-                        getBitmapFromUriandIndex(newGalleryPhotoURi, photoIndex);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    setImageByUri(photoIndex, newGalleryPhotoURi);
-                }
-                createData(newGalleryPhotoURi);
-            }
-
-            //** IT_TAKE_PHOTO
-            newTakePhotoURi = data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
-            if (newTakePhotoURi != null && photoIndex != -1) {
-                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] IT_TAKE_PHOTO");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity]newTakePhotoURi" + newTakePhotoURi);
-
-                    setImageByUri(photoIndex, newTakePhotoURi);
-                } else {
-                    setImageByUri(photoIndex, newTakePhotoURi);
-                }
-
-            }
-
-
         }
+//        else if (requestCode == VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW) {
+//
+//            int deleteIndex;
+//            int photoIndex;
+//            Uri newGalleryPhotoURi;
+//            Uri newTakePhotoURi;
+//
+//
+//            deleteIndex = data.getIntExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX, -1);
+//            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deleteIndex" + deleteIndex);
+//            if (deleteIndex != -1) {
+//                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deletePhoto");
+//                deletePhoto(deleteIndex);
+//            }
+//
+//            //**
+//            photoIndex = data.getIntExtra(VM_ENUM.IT_PHOTO_INDEX, -1);
+//            Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] photoIndex" + photoIndex);
+//            newGalleryPhotoURi = data.getParcelableExtra(VM_ENUM.IT_GALLERY_PHOTO);
+//            if (newGalleryPhotoURi != null && photoIndex != -1) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    try {
+//                        getBitmapFromUriandIndex(newGalleryPhotoURi, photoIndex);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    setImageByUri(photoIndex, newGalleryPhotoURi);
+//                }
+//                createData(newGalleryPhotoURi);
+//            }
+//
+//            //** IT_TAKE_PHOTO
+//            newTakePhotoURi = data.getParcelableExtra(VM_ENUM.IT_TAKE_PHOTO);
+//            if (newTakePhotoURi != null && photoIndex != -1) {
+//                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] IT_TAKE_PHOTO");
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity]newTakePhotoURi" + newTakePhotoURi);
+//
+//                    setImageByUri(photoIndex, newTakePhotoURi);
+//                } else {
+//                    setImageByUri(photoIndex, newTakePhotoURi);
+//                }
+//
+//            }
+//
+//
+//        }
 
     }
 
