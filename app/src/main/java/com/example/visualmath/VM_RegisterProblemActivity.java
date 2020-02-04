@@ -74,9 +74,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private ImageView imageViewProblem;
     private ConstraintLayout explainView;
 
-    //** 데이터
-    ///private VM_Data_ADD receiveData; //<내용추가뷰> -> <문제등록뷰> : "문제등록"버튼 클릭시, 현 액티비티에서 DB를 저장하기 위함
-    ///private VM_Data_ADD sendData;// <문제등록뷰> -> <내용추가뷰> : 바로 이전에 온 <내용추가뷰>에서의 기록을 보관하기 위함
+
     //** static 변수 설계
     public static VM_Data_ADD add;
 
@@ -84,8 +82,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     private VM_Data_BASIC vmDataBasic;
 
     //** 풀이법 선택 변수 받기
-    Intent intent;
-    String solveWay;
+    private Intent intent;
+    private String solveWay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,12 +218,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void addOther(View view) {
         Intent intent;
         intent = new Intent(VM_RegisterProblemActivity.this, VM_RegiserOtherThingsActivity.class);
-        ///sendData = receiveData;//<문제등록뷰>에서 <내용추가뷰>로 보내는 데이터는 바로 이전에 <내용추가뷰>로부터 받은 데이터
-        ///intent.putExtra(VM_ENUM.ALL, sendData); //Parcel객체인 sendData intent에 추가
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityForResult(intent, VM_ENUM.OTHER_DATA_LOAD);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
-
 
 
 
@@ -240,7 +235,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {//** 파일 경로를 이미 생성(시간으로 중복문제 해결)
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         // 이미지 파일 이름 ( {시간})
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String imageFileName = timeStamp;
@@ -271,12 +266,9 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void saveFile() {
-        ///String seconDir = "visual_math";
-        ///Log.d(VM_ENUM.TAG,"[VM_RegisterProblem], seconDir "+seconDir);
-        ContentValues values = new ContentValues();
-        ///values.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, seconDir);
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
 
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
 
 
@@ -286,7 +278,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         }
         ContentResolver contentResolver = getContentResolver();
 
-        //Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Uri item = contentResolver.insert(collection, values);
 
@@ -378,7 +369,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onPermissionGranted() {
                 //** 권한 요청 성공
                 Toast.makeText(VM_RegisterProblemActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-
                 showPickDialog();
 
             }
@@ -419,7 +409,16 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             VM_DBHandler vmDbHandler = new VM_DBHandler();
             vmDbHandler.newPost(add , vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
+            if(VM_RegiserOtherThingsActivity.activity!=null){
+                Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
+                VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+                activity.finish();
+                VM_RegiserOtherThingsActivity.activity=null;
+            }else{
+                Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+            }
             finish();
+
         } else {
             Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
         }
@@ -448,7 +447,34 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 //    }
 
     public void cancel(View view) {
+
+        if(VM_RegiserOtherThingsActivity.activity!=null){
+            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
+            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+            activity.finish();
+            VM_RegiserOtherThingsActivity.activity=null;
+        }else{
+            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+        }
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        if(VM_RegiserOtherThingsActivity.activity!=null){
+            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
+
+            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+            activity.finish();
+            VM_RegiserOtherThingsActivity.activity=null;
+
+        }else{
+            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+        }
+        finish();
+
     }
 
     /***
@@ -540,8 +566,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             }
 
-            return;
-
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -549,7 +573,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 if (data != null) {
                     uri = data.getData();
                     Log.i(TAG, "[RegiProblem]onActivityResult  Uri: " + uri.toString());
-                    ///dumpImageMetaData(uri);
                     try {
                         getBitmapFromUri(uri);
                         vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
@@ -587,19 +610,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
                 setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
 
-                //데이터 등록
-//                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//
-//                    try {
-//                        getGalleryImages();
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                } else {
-//                    setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
-//                }
-
             }
 
             explainView.setVisibility(View.GONE);
@@ -630,22 +640,29 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             }
 
             explainView.setVisibility(View.GONE);
-        } else if (requestCode == VM_ENUM.OTHER_DATA_LOAD) {
-            Log.d(TAG, "[VM_RegisterProblemActivity]: <내용추가뷰> -> <문제등록뷰>로 이동됨");
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+            Log.d(TAG, "[VM_RegisterProblemActivity]: Onresume");
 
             String notice = "";
 
             //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
             //receiveDatat 변수에 저장함
-            assert data != null;
+            assert add != null;
 
 
             assert add != null;
-            if (add .getDetail() == null) {
+            if (add .getDetail() == null || add.getDetail().equals("")) {
                 Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
             }
 
-            if (add .getDetail()!=null) {
+            if (add .getDetail()!=null && !add.getDetail().equals("")) {
                 notice = "추가 설명 등록.";
 
             }
@@ -670,8 +687,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         }
 
-
-    }
 
 
 }

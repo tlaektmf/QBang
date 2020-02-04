@@ -49,32 +49,94 @@ import java.util.Locale;
 
 public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private static final String TAG = VM_ENUM.TAG;
+    public static VM_RegiserOtherThingsActivity activity = null;    //액티비티 변수 선언
 
     private EditText editTextdetail;
     private ImageView[] imageViewsOtherPictureList;
 
+    public VM_Data_ADD saveData;
+
     private int imageviewID;
     private File takeFile;
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
-    ///private VM_Data_ADD vm_data_add; //<내용추가뷰> -> <문제등록뷰>
-    ///private VM_Data_ADD receiveData;//** <문제등록뷰> -> <내용추가뷰> 기존의 <내용추가뷰>의 항목을 유지시키기 위해서 // 이 뷰에서 변경 될 일 없음
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__regiser_other_things);
-
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        activity=this;
+        Log.d(VM_ENUM.TAG,"[RegiOtherActivity onCreate]");
+        init();
 
     }
 
-    public void init() throws IOException {
+    private Bitmap getBitmap(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+
+        return image;
+    }
+
+    public void resetWidget() throws IOException {
+        //기존의 데이터와 save 가 다른 경우에만 원래의 데이터로 바꾼다.
+        Log.d(VM_ENUM.TAG,"[RegiOther/ add.getDetail()]"+VM_RegisterProblemActivity.add.getDetail());
+        for(int i=0;i<3;i++){
+            Log.d(VM_ENUM.TAG,"[RegiOther/ add.getFilePathElement "+i+","+VM_RegisterProblemActivity.add.getFilePathElement(i));
+        }
+
+        if (VM_RegisterProblemActivity.add.getDetail()!=null){
+            editTextdetail.setText(VM_RegisterProblemActivity.add.getDetail());
+            saveData.setDetail(VM_RegisterProblemActivity.add.getDetail());
+        }else{
+            editTextdetail.setText("");
+            saveData.setDetail(null);
+        }
+
+
+        for(int i=0;i<3;i++){
+            if (VM_RegisterProblemActivity.add.getFilePathElement(i)!=null){
+                Bitmap image=getBitmap(VM_RegisterProblemActivity.add.getFilePathElement(i));
+                if (image != null) {
+                    imageViewsOtherPictureList[i].setImageBitmap(image); //이미지 set
+                    saveData.setFilePathElement(VM_RegisterProblemActivity.add.getFilePathElement(i),i);//이미지 set
+                }
+            }else{
+                imageViewsOtherPictureList[i].setImageResource(R.drawable.add_extra_img);
+                saveData.setFilePathElement(null,i);
+            }
+        }
+
+    }
+    public void cancel(View view) {
+        //finish();
+        try {
+            resetWidget();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        try {
+            resetWidget();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
+    public void init()  {
 
         editTextdetail = findViewById(R.id.tv_detail);
         imageviewID = -1;
@@ -82,50 +144,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         imageViewsOtherPictureList[0] = findViewById(R.id.iv_picture1);
         imageViewsOtherPictureList[1] = findViewById(R.id.iv_picture2);
         imageViewsOtherPictureList[2] = findViewById(R.id.iv_picture3);
-        ///vm_data_add = new VM_Data_ADD();
+        saveData=new VM_Data_ADD();
 
 
-        //** 데이터 넘어온 게 있는 지 확인
-//        Intent intent = getIntent();
-//        if (intent != null) {// 넘어온 데이터가 있는 경우
-//            receiveData = intent.getParcelableExtra(VM_ENUM.ALL);
-//
-//            if (receiveData != null) {//혹시 모르니 한번 더 확인
-//                ///vm_data_add = receiveData;
-//                init_set();
-//            }
-//
-//        }
-
-        //init_set();
     }
 
-
-    public void init_set() throws IOException {
-        //1. edittext 채우기
-        if(VM_RegisterProblemActivity.add.getDetail()!=null){
-            editTextdetail.setText(VM_RegisterProblemActivity.add.getDetail());
-        }
-
-
-        //2. picture 채우기
-        for (int i = 0; i < 3; i++) {
-            Uri path = VM_RegisterProblemActivity.add.getFilePathElement(i);
-
-            if (path != null) {
-                Log.i(VM_ENUM.TAG, "init_set: " + VM_RegisterProblemActivity.add.getFilePathElement(i));
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    getBitmapFromUriandIndex( VM_RegisterProblemActivity.add.getFilePathElement(i),i);
-                }else{
-                    setImageByIndex(i);
-
-                }
-
-            } else {
-                Log.i(VM_ENUM.TAG, "init_set: " + "파일 없음");
-            }
-        }
-    }
 
 
     //** 사용자 카메라, 사진첩에 접근하여 파일 추가
@@ -167,17 +190,22 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     //** 추가 정보 등록 버튼 클릭
     public void loadAddInfo(View view) {
 
+
+        Log.d(VM_ENUM.TAG,"[RegiOther/ saveData.getDetail()]"+editTextdetail.getText().toString());
+        for(int i=0;i<3;i++){
+            Log.d(VM_ENUM.TAG,"[RegiOther/ saveData.getFilePathElement "+i+","+saveData.getFilePathElement(i));
+        }
+
+        //** 이때만 데이터 저장
+        VM_RegisterProblemActivity.add.setDetail(editTextdetail.getText().toString());
+
+        for(int i=0;i<3;i++){
+            VM_RegisterProblemActivity.add.setFilePathElement(saveData.getFilePathElement(i),i);
+        }
+
         Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
-        //intent.putExtra(VM_ENUM.ALL, add); //Parcel객체인 vm_data_add를 intent에 추가
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        ///setResult(RESULT_OK, intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
-        ///finish(); //-> 이렇게 하면 다시 돌아 왔을 때, 정보 유지 안됨
-
-//        } else {
-//            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
-//        }
 
     }
 
@@ -334,14 +362,16 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         Bitmap originalBm = BitmapFactory.decodeFile(_uri.toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         if (originalBm != null) {
             imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
-            VM_RegisterProblemActivity.add.setFilePathElement(_uri, index);
+            ///VM_RegisterProblemActivity.add.setFilePathElement(_uri, index);
+            saveData.setFilePathElement(_uri,index);
         }
 
     }
 
     private void deletePhoto(int index) {
         imageViewsOtherPictureList[index].setImageResource(R.drawable.add_extra_img);
-        VM_RegisterProblemActivity.add.setFilePathElement(null, index);
+        ///VM_RegisterProblemActivity.add.setFilePathElement(null, index);
+        saveData.setFilePathElement(null, index);
     }
 
     private void createData(Uri _uri) {
@@ -359,8 +389,11 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         }
 
         Log.i(TAG, "[RegiOther] createdata: " + index+","+_uri);
-        ///vm_data_add.setFilePathElement(_uri, index);
-        VM_RegisterProblemActivity.add.setFilePathElement(_uri,index);
+
+        //** 데이터 등록
+        ///VM_RegisterProblemActivity.add.setFilePathElement(_uri,index);
+        saveData.setFilePathElement(_uri,index);
+
 
     }
 
@@ -398,7 +431,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private void setImageByIndex(int index) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(VM_RegisterProblemActivity.add.getFilePathElement(index).toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+        ///Bitmap originalBm = BitmapFactory.decodeFile(VM_RegisterProblemActivity.add.getFilePathElement(index).toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
+        Bitmap originalBm = BitmapFactory.decodeFile(saveData.getFilePathElement(index).toString(), options);// galleryFile의 경로를 불러와 bitmap 파일로 변경
         imageViewsOtherPictureList[index].setImageBitmap(originalBm); //이미지 set
 
     }
@@ -457,9 +491,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
 
-    public void cancel(View view) {
-        finish();
-    }
+
 
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
