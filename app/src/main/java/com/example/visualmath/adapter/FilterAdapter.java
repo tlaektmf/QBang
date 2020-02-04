@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
 import com.example.visualmath.activity.VM_FullViewActivity;
@@ -112,6 +113,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
                         intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,FilteredList.get(pos).first.getTitle());
                         intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,FilteredList.get(pos).first.getGrade());
                         intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,FilteredList.get(pos).first.getProblem());
+                        intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);
                         context.startActivity(intent);
                         Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
                     }
