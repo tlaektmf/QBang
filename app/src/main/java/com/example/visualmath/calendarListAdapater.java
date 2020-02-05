@@ -58,7 +58,7 @@ public class calendarListAdapater extends RecyclerView.Adapter<calendarListAdapa
             top_month = itemView.findViewById(R.id.cal_top);//캘린더 탑
             cal.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
             cal.setTopbarVisible(false);
-
+            cal.setPagingEnabled(false);
             cal.addDecorator(new EventDecorator(Color.RED, dotted_date_list));
         }
     }
