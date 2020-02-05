@@ -31,6 +31,8 @@ import com.example.visualmath.VM_RegisterProblemActivity;
 import com.example.visualmath.data.VM_Data_ADD;
 import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -58,7 +60,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     private int picViewIndex;
     private int imageviewID;
     private File takeFile;
-    private File galleryFile; //갤러리로부터 받아온 이미지를 저장
+    ///private File galleryFile; //갤러리로부터 받아온 이미지를 저장
 
 
     @Override
@@ -112,7 +114,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     }
     public void cancel(View view) {
-        //finish();
         try {
             resetWidget();
         } catch (IOException e) {
@@ -173,9 +174,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         if (saveData!= null) {
             if (saveData.getFilePathElement(picViewIndex) != null) {//** imageView에 이미지가 있는 경우
                 Intent intent = new Intent(VM_RegiserOtherThingsActivity.this, VM_PhotoViewActivity.class);
-
-                VM_PhotoViewActivity.photoViewUri=saveData.getFilePathElement(picViewIndex);
-                Log.d(TAG, "[전달할 사진 uri] " + VM_PhotoViewActivity.photoViewUri);
                 intent.putExtra(VM_ENUM.IT_PHOTO_INDEX, picViewIndex);
                 startActivityForResult(intent, VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW);
 
@@ -354,7 +352,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     private void deletePhoto(int index) {
         imageViewsOtherPictureList[index].setImageResource(R.drawable.add_extra_img);
-        ///VM_RegisterProblemActivity.add.setFilePathElement(null, index);
         saveData.setFilePathElement(null, index);
     }
 
@@ -375,7 +372,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         Log.i(TAG, "[RegiOther] createdata: " + index+","+_uri);
 
         //** 데이터 등록
-        ///VM_RegisterProblemActivity.add.setFilePathElement(_uri,index);
         saveData.setFilePathElement(_uri,index);
 
 
@@ -592,17 +588,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 deletePhoto(picViewIndex);
             }
 
-            boolean isChangePhoto=data.getBooleanExtra(VM_ENUM.CHANGED_PHOTO,false);
-            if(isChangePhoto){
+            boolean isChangePhotoFromGallery=data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_GALLERY,false);
+            if(isChangePhotoFromGallery){
                 //** 위젯에 있는 사진 변경
-                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] changePhoto" + picViewIndex);
-                try {
-                    Bitmap image=getBitmap(saveData.getFilePathElement(picViewIndex));
-                    imageViewsOtherPictureList[picViewIndex].setImageBitmap(image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] changePhoto-> getAlbumFile()" + picViewIndex);
+                getAlbumFile();
             }
+
+            boolean isChangePhotoFromTakePhoto=data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_TAKE,false);
+            if(isChangePhotoFromTakePhoto){
+                //** 위젯에 있는 사진 변경
+                Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] changePhoto -> takePhoto()" + picViewIndex);
+                takePhoto();
+            }
+
         }
 
     }

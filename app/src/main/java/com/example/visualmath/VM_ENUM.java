@@ -37,7 +37,8 @@ public  class VM_ENUM {
 
     //** intent
     public static final String SOLVE_WAY="SOLVE_WAY";
-    public static final String CHANGED_PHOTO="CHANGED_PHOTO";
+    public static final String IT_CHANGE_PHOTO_GET_FROM_GALLERY="IT_CHANGE_PHOTO_GET_FROM_GALLERY";
+    public static final String IT_CHANGE_PHOTO_GET_FROM_TAKE = "IT_CHANGE_PHOTO_GET_FROM_TAKE";
     public static final String IT_DELETE_PHOTO_INDEX="IT_DELETE_PHOTO_INDEX";
     public static final String IT_PHOTO_INDEX="IT_PHOTO_INDEX";
     public static final String IT_TAKE_PHOTO="IT_TAKE_PHOTO";
