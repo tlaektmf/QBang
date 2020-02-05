@@ -426,25 +426,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
-//    public void wrapContentProvider() {
-//        Log.d(TAG, "[VM_RegisterProblemActivity]: 내용추가 버튼에서 넘어온 값들 검사");
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-//
-//            if (receiveData != null) {
-//                for (int i = 0; i < 3; i++) {
-//                    if (receiveData.getFilePathElement(i) != null) {
-//                        Uri photoUri = FileProvider.getUriForFile(this,
-//                                "com.example.visualmath.provider", new File(receiveData.getFilePathElement(i).toString()));
-//                        receiveData.setFilePathElement(photoUri, i);
-//                    }
-//                }
-//            }
-//
-//        } else { //** content provider 불필요함
-//
-//
-//        }
-//    }
+
 
     public void cancel(View view) {
 
@@ -568,7 +550,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+ //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
@@ -580,37 +562,38 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            } else {
-                assert data != null;
-                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
-
-                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem " + photo_problem);
-
-                Cursor cursor = null;
-
-                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-                try {
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    assert photo_problem != null;
-                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-                    assert cursor != null;
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    galleryFile = new File(cursor.getString(column_index));
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
-
-                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem " + photo_problem);
-                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
-                        + Uri.parse(galleryFile.getAbsolutePath()));
-
-                vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
-                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
-
-            }
+ //           }
+//            else {
+//                assert data != null;
+//                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
+//
+//                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전 photo_problem " + photo_problem);
+//
+//                Cursor cursor = null;
+//
+//                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+//                try {
+//                    String[] proj = {MediaStore.Images.Media.DATA};
+//                    assert photo_problem != null;
+//                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+//                    assert cursor != null;
+//                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                    cursor.moveToFirst();
+//                    galleryFile = new File(cursor.getString(column_index));
+//                } finally {
+//                    if (cursor != null) {
+//                        cursor.close();
+//                    }
+//                }
+//
+//                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 원본 photo_problem " + photo_problem);
+//                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem "
+//                        + Uri.parse(galleryFile.getAbsolutePath()));
+//
+//                vmDataBasic.setProblem(photo_problem);//provider 가 씌워진 파일을 DB에 저장함
+//                setImageByUri(Uri.parse(galleryFile.getAbsolutePath()));
+//
+//            }
 
             explainView.setVisibility(View.GONE);
 

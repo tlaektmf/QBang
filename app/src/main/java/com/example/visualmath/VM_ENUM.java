@@ -37,8 +37,7 @@ public  class VM_ENUM {
 
     //** intent
     public static final String SOLVE_WAY="SOLVE_WAY";
-    public static final String PHOTO_URI="PHOTO_URI";
-    public static final String CHANGED_PHOTO_URI="CHANGED_PHOTO_URI";
+    public static final String CHANGED_PHOTO="CHANGED_PHOTO";
     public static final String IT_DELETE_PHOTO_INDEX="IT_DELETE_PHOTO_INDEX";
     public static final String IT_PHOTO_INDEX="IT_PHOTO_INDEX";
     public static final String IT_TAKE_PHOTO="IT_TAKE_PHOTO";
@@ -47,6 +46,8 @@ public  class VM_ENUM {
     public static final String IT_FROM_UNMATCHED ="IT_FROM_UNMATCHED" ;
     public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
+
+
     //** 상수 String
     public static final String TEXT="TEXT";
     public static final String VIDEO="VIDEO";
