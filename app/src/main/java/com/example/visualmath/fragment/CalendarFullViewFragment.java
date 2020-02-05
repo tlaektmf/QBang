@@ -60,11 +60,12 @@ public class CalendarFullViewFragment extends Fragment {
 
 
     public HomeActivity parent;
-    public static String TAG=VM_ENUM.TAG;
+    private   String TAG=VM_ENUM.TAG;
     public int focusedYear;
     public int focusedMonth;
     public int focusedDay;
 
+    private List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
 
     public CalendarFullViewFragment() {
         // Required empty public constructor
@@ -114,57 +115,93 @@ public class CalendarFullViewFragment extends Fragment {
         focusedMonth=Integer.parseInt(this_month);
         focusedDay=Integer.parseInt(this_day);
 
-        datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
+//        datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
+
+        //초기셋팅
+        setSubItem(focusedYear,focusedMonth-1,focusedDay);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //선택한 날짜가 전돨됨
 
-
-                datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
-
-                DashboardFragment.subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
-
-                String selectedDate=year+"-";
-
-                if((month+1)<10){
-                    selectedDate+="0"+(month+1)+"-";
-                }else{
-                    selectedDate+=(month+1)+"-";
-                }
-
-                if(dayOfMonth<10){
-                    selectedDate+="0"+(dayOfMonth);
-                }else{
-                    selectedDate+=dayOfMonth;
-                }
-
-                Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
-
-                if(DashboardFragment.posts!=null){
-                    for(int i=0;i<DashboardFragment.posts.size();i++){
-                        Log.d(TAG,"[클릭이벤트]포스트 날짜: "+DashboardFragment.posts.get(i).second.second);
-                        if(DashboardFragment.posts.get(i).second.second.contains(selectedDate)){
-                            DashboardFragment.subs.add(Pair.create(DashboardFragment.posts.get(i).first,
-                                    Pair.create(DashboardFragment.posts.get(i).second.first,DashboardFragment.posts.get(i).second.second)));
-                        }
-                    }
-                }
-
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DashboardFragment.subs, mTwoPane,parent));
+                setSubItem(year,month,dayOfMonth);
+//                datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
+//                subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
+//
+//                String selectedDate=year+"-";
+//
+//                if((month+1)<10){
+//                    selectedDate+="0"+(month+1)+"-";
+//                }else{
+//                    selectedDate+=(month+1)+"-";
+//                }
+//
+//                if(dayOfMonth<10){
+//                    selectedDate+="0"+(dayOfMonth);
+//                }else{
+//                    selectedDate+=dayOfMonth;
+//                }
+//
+//                Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
+//
+//                if(DashboardFragment.posts!=null){
+//                    for(int i=0;i<DashboardFragment.posts.size();i++){
+//                        Log.d(TAG,"[클릭이벤트]포스트 날짜: "+DashboardFragment.posts.get(i).second.second);
+//                        if(DashboardFragment.posts.get(i).second.second.contains(selectedDate)){
+//                            subs.add(Pair.create(DashboardFragment.posts.get(i).first,
+//                                    Pair.create(DashboardFragment.posts.get(i).second.first,DashboardFragment.posts.get(i).second.second)));
+//                        }
+//                    }
+//                }
+//
+//                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
 
             }
         });
     }
 
+    private void setSubItem(int year, int month, int dayOfMonth){
+
+        datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
+
+        subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
+
+        String selectedDate=year+"-";
+
+        if((month+1)<10){
+            selectedDate+="0"+(month+1)+"-";
+        }else{
+            selectedDate+=(month+1)+"-";
+        }
+
+        if(dayOfMonth<10){
+            selectedDate+="0"+(dayOfMonth);
+        }else{
+            selectedDate+=dayOfMonth;
+        }
+
+        Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
+
+        if(DashboardFragment.posts!=null){
+            for(int i=0;i<DashboardFragment.posts.size();i++){
+                Log.d(TAG,"[클릭이벤트]포스트 날짜: "+DashboardFragment.posts.get(i).second.second);
+                if(DashboardFragment.posts.get(i).second.second.contains(selectedDate)){
+                    subs.add(Pair.create(DashboardFragment.posts.get(i).first,
+                            Pair.create(DashboardFragment.posts.get(i).second.first,DashboardFragment.posts.get(i).second.second)));
+                }
+            }
+        }
+
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+    }
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
 
-    public static class SimpleItemRecyclerViewAdapter
+    public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
@@ -221,10 +258,10 @@ public class CalendarFullViewFragment extends Fragment {
                             //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
                             // post_id 인자
                             Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, DashboardFragment.subs.get(pos).second.first);
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,DashboardFragment.subs.get(pos).first.getTitle());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,DashboardFragment.subs.get(pos).first.getGrade());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,DashboardFragment.subs.get(pos).first.getProblem());
+                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
+                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
                             intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
                             mParentActivity.startActivity(intent);
                             Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();

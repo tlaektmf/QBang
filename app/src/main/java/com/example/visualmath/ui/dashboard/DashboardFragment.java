@@ -89,14 +89,11 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private String user_id;
     private String user_type;
 
-    public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
+//    public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
     public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
     public static List <String> dates;
    public HomeActivity parent;
     public static String TAG=VM_ENUM.TAG;
-    private int focusedYear;
-    private int focusedMonth;
-    private int focusedDay;
 
     private  int view_click_count;
 
@@ -300,7 +297,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
         Log.d(TAG, "[DashboardFragment] 데이터 접근 : " +user_id+","+user_type);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -329,42 +326,6 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                 //** 처음 DashBoard 세팅
 
-                //** 현재 포커싱된 날짜
-
-
-                subs=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
-
-//                String today=this_year+"-"+this_month+"-"+this_day;
-//                Log.d(TAG,"오늘 날짜: "+today);
-
-                String focusedDate=focusedYear+"-";
-
-                if((focusedMonth)<10){
-                    focusedDate+="0"+focusedMonth+"-";
-                }else{
-                    focusedDate+=focusedMonth+"-";
-                }
-                if(focusedDay<10){
-                    focusedDate+="0"+focusedDay;
-                }else{
-                    focusedDate+=focusedDay;
-                }
-                Log.d(TAG,"[ DashBoard ]현재포지션 날짜:"+focusedDate);
-
-
-                if(posts!=null){
-                    for(int i=0;i<posts.size();i++){
-                        Log.d(TAG,"[ValueListener]포스트 날짜: "+posts.get(i).second.second);
-                        if(posts.get(i).second.second.contains(focusedDate)){
-
-                            ///subs.add(posts.get(i));
-                            subs.add(Pair.create(posts.get(i).first,
-                                    Pair.create(posts.get(i).second.first,posts.get(i).second.second)));
-                        }
-                    }
-                }
-
-//                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
                 filterAdapter = new FilterAdapter(getContext(),posts);
 
                 //lhj_3
