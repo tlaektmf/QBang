@@ -47,7 +47,7 @@ public  class VM_ENUM {
     public static final String IT_FROM_UNMATCHED ="IT_FROM_UNMATCHED" ;
     public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
-
+    public static final String IT_ARG_USER_JOIN_DATE ="IT_ARG_USER_JOIN_DATE" ;
 
     //** 상수 String
     public static final String TEXT="TEXT";
@@ -98,6 +98,7 @@ public  class VM_ENUM {
     public static final String DB_SOLVE_PROBLEM ="solve_problem" ;
     public static final String DB_STU_ALARM ="alarms" ;
     public static final String DB_TEA_ALARM ="alarms" ;
+    public static final String DB_JOIN_DATE ="date" ;
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";

@@ -77,6 +77,9 @@ public class DashboardListFragment extends Fragment {
 
     private List<String> dates=DashboardFragment.dates; //포스트 데이터 전체 리스트 post/id/date
 
+    //** 사용자 최초 회원 가입 날짜
+    private String user_join_date;
+
     public DashboardListFragment() {
         // Required empty public constructor
     }
@@ -94,6 +97,13 @@ public class DashboardListFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
+        //** 사용자 최초 회원 가입 날짜
+        user_join_date=null;
+        if(getArguments().containsKey(VM_ENUM.IT_ARG_USER_JOIN_DATE)){
+            user_join_date= getArguments().getString(VM_ENUM.IT_ARG_USER_JOIN_DATE);
+            Log.d(VM_ENUM.TAG, "[DashListFragment] 사용자 최초 회원가입 일자 "+user_join_date);
+        }
 //        달력에 데이터 넣는 부분
         List<date_data> date_list = new ArrayList<>();
 

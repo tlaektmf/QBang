@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.navigation_dashboard: {
-                        dashboardFragment = new DashboardFragment();
+                        ///dashboardFragment = new DashboardFragment();
                         transaction.replace(R.id.nav_host_fragment, dashboardFragment).commitAllowingStateLoss();
                         break;
                     }

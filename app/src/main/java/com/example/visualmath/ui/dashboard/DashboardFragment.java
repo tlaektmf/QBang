@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -84,6 +85,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
 
+    private String user_join_date;
     private String user_id;
     private String user_type;
 
@@ -92,11 +94,11 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     public static List <String> dates;
    public HomeActivity parent;
     public static String TAG=VM_ENUM.TAG;
-    public int focusedYear;
-    public int focusedMonth;
-    public int focusedDay;
+    private int focusedYear;
+    private int focusedMonth;
+    private int focusedDay;
 
-    public  int view_click_count;
+    private  int view_click_count;
 
     public DashboardFragment() {
 
@@ -120,6 +122,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         }else{
             user_type=VM_ENUM.STUDENT;
         }
+
+        //Fragment 초기화
 
 
     }
@@ -154,6 +158,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         //검색 목록 리사이클러뷰
         searched_list = root.findViewById(R.id.searched_list);
 
+        Log.d(VM_ENUM.TAG,"[DashBoardFragment] 데이터베이스 호출");
         readDataBase();
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
@@ -173,10 +178,22 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                }else{
 
-                   //대시보드리스트 프레그먼트로 replace
-                   DashboardListFragment dashboardListFragment=new DashboardListFragment();
-                   tran.replace(R.id.frame, dashboardListFragment);
-                   tran.commit();
+                   if(user_join_date!=null){
+                       Log.d(VM_ENUM.TAG,"[DashBoardFrag] user_join_date 이미 생성완료");
+                       //대시보드리스트 프레그먼트로 replace
+                       Bundle arguments = new Bundle();
+                       arguments.putString(VM_ENUM.IT_ARG_USER_JOIN_DATE,user_join_date);
+
+                       DashboardListFragment dashboardListFragment=new DashboardListFragment();
+                       dashboardListFragment.setArguments(arguments);
+
+                       tran.replace(R.id.frame, dashboardListFragment);
+                       tran.commit();
+                   }else{
+                       Log.d(VM_ENUM.TAG,"[DashBoardFrag] user_join_date 생성 필요");
+                       getJoinDate();
+                   }
+
 
                }
 
@@ -227,15 +244,52 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     }
 
+
+    public void getJoinDate(){
+        //** 최초 회원가입 날짜
+        DatabaseReference ref;
+        if (user_type.equals(VM_ENUM.STUDENT)) {
+            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_STUDENTS);
+        }else {
+            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS);
+        }
+
+        ref.child(user_id).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_JOIN_DATE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+
+                Log.d(VM_ENUM.TAG,"[DashBoardFrag] 최초 회원가입 날짜"+dataSnapshot.getValue());
+
+                user_join_date= Objects.requireNonNull(dataSnapshot.getValue()).toString();
+                Bundle arguments = new Bundle();
+                arguments.putString(VM_ENUM.IT_ARG_USER_JOIN_DATE,user_join_date);
+
+                DashboardListFragment dashboardListFragment=new DashboardListFragment();
+                dashboardListFragment.setArguments(arguments);
+
+                tran.replace(R.id.frame, dashboardListFragment);
+                tran.commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     /****
      * 데이터베이스 트랜젝션
      * write
      */
     public void readDataBase(){
 
+
         //** 데이터 읽기
         firebaseDatabase= FirebaseDatabase.getInstance();
         if (user_type.equals(VM_ENUM.STUDENT)) {
+
             reference=firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
             .child(user_id)
             .child(VM_ENUM.DB_STU_POSTS).child(VM_ENUM.DB_STU_DONE);
