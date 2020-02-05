@@ -73,7 +73,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private EditText search_editText;
     //검색 목록
     private RecyclerView searched_list;
-    public static FilterAdapter filterAdapter;
+    private  FilterAdapter filterAdapter;
 
     //lhj_0
 //    로딩창
