@@ -11,18 +11,41 @@
 <!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_marginLeft="5dp"-->
 <!--    android:layout_marginRight="5dp"/>-->
-<com.prolificinteractive.materialcalendarview.MaterialCalendarView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/calendar_listitem"
-    android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    app:mcv_selectionColor="#6fd2f8"
-    app:mcv_calendarMode="month"
-    app:mcv_selectionMode="single"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_gravity="center_horizontal">
+    <TextView
+        android:id="@+id/cal_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14dp"
+        android:textColor="#040404"
 
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calendar_listitem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
+        app:mcv_selectionColor="#6fd2f8"
+        app:mcv_calendarMode="month"
+        app:mcv_selectionMode="single"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cal_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

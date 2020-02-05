@@ -36,6 +36,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +54,6 @@ public class DashboardListFragment extends Fragment {
 
     //점찍힌 날짜 배열
     private ArrayList<CalendarDay> dotted_date_list;
-
 
     long now = System.currentTimeMillis();
     Date date = new Date(now);
@@ -86,10 +86,8 @@ public class DashboardListFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView=(ViewGroup)inflater.inflate(R.layout.fragment_dashboard_list, container, false);
 
-
         //배열 초기화
         dotted_date_list = new ArrayList<CalendarDay>();
-
 
         //lhj_1_start
         recyclerView = rootView.findViewById(R.id.continuous_cal_rview);
@@ -99,16 +97,25 @@ public class DashboardListFragment extends Fragment {
 //        달력에 데이터 넣는 부분
         List<date_data> date_list = new ArrayList<>();
 
+        for(int i=0;i<12;i++) {
+            date_list.add(new date_data(year, month + i, day));
+        }
         //>> ds.shim 2020-01-26
         for(int i=0;i<dates.size();i++){
             String year=dates.get(i).split("-")[0];
             String month=dates.get(i).split("-")[1];
             String day=dates.get(i).split("-")[2];
 
-            date_list.add(new date_data(Integer.parseInt(year),
-                    Integer.parseInt(month),
-                    Integer.parseInt(day)));
+//            date_list.add(new date_data(Integer.parseInt(year),
+//                    Integer.parseInt(month),
+//                    Integer.parseInt(day)));
+
+            CalendarDay test_dotted_date = CalendarDay.from(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+            dotted_date_list.add(test_dotted_date);
+
+//            Log.d("날짜 확인","뭐지 "+test_dotted_date);
         }
+
 
         recyclerViewAdapter = new calendarListAdapater(this,date_list,dotted_date_list);
         recyclerView.setAdapter(recyclerViewAdapter);

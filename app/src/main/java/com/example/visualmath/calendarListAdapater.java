@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,27 +50,16 @@ public class calendarListAdapater extends RecyclerView.Adapter<calendarListAdapa
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCalendarView cal;
+        TextView top_month;
 
         public ViewHolder(View itemView) {
             super(itemView);
             cal = itemView.findViewById(R.id.calendar_listitem);
+            top_month = itemView.findViewById(R.id.cal_top);//캘린더 탑
+            cal.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
+            cal.setTopbarVisible(false);
 
-//            캘린더 목록 클릭은 필요없을 듯
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    Toast.makeText(view.getContext(), "달력 클릭 확인", Toast.LENGTH_SHORT).show();
-//
-//                }
-//            });
-            cal.setOnDateChangedListener(new OnDateSelectedListener() {
-                @Override
-                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-//                    Toast.makeText(this,Integer.toString(date.getDay())+" 배열에 추가",Toast.LENGTH_LONG).show();
-                    dotted_date_list.add(date);
-                    cal.addDecorator(new EventDecorator(Color.RED, dotted_date_list));
-                }
-            });
+            cal.addDecorator(new EventDecorator(Color.RED, dotted_date_list));
         }
     }
 
@@ -103,5 +93,7 @@ public class calendarListAdapater extends RecyclerView.Adapter<calendarListAdapa
 //        holder.cal.setCurrentDate(one_data);
         CalendarDay calday = CalendarDay.from(year,month,day);
         holder.cal.setCurrentDate(calday);
+
+        holder.top_month.setText(Integer.toString(year)+"년  "+Integer.toString(month)+"월");
     }
 }
