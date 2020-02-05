@@ -92,8 +92,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 //    public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
     public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
     public static List <String> dates;
-   public HomeActivity parent;
-    public static String TAG=VM_ENUM.TAG;
+    private HomeActivity parent;
+    private String TAG=VM_ENUM.TAG;
 
     private  int view_click_count;
 
@@ -108,6 +108,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         parent=(HomeActivity)getActivity();
 
         //** 유저 정보 설정
+        user_join_date=null;
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         assert currentUserEmail != null;
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
