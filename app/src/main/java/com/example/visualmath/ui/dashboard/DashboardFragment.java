@@ -336,14 +336,21 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                 cal_loading_bar.setVisibility(View.INVISIBLE);
                 //lhj_3
 
+                if (getFragmentManager() != null) {
+                    Log.d(VM_ENUM.TAG, "[DashBoardFragment] visible");
+                    FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
+                    FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
 
-                FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
-                FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+                    //대시보드리스트 프레그먼트로 replace
+                    CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+                    tran.replace(R.id.frame, calendarFullViewFragment);
+                    tran.commit();
 
-                //대시보드리스트 프레그먼트로 replace
-                CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
-                tran.replace(R.id.frame, calendarFullViewFragment);
-                tran.commit();
+                }
+                else{
+                    Log.d(VM_ENUM.TAG,"[DashBoardFragment] invisible");
+                }
+
 
 
             }
