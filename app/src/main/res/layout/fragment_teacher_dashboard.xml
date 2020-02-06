@@ -8,6 +8,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
     <Button
         android:id="@+id/teacher_cal_mode_change"
         android:layout_width="20dp"
@@ -29,41 +40,57 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
         android:layout_marginRight="42dp"/>
-    <CalendarView
-        android:id="@+id/teacher_calendar"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:layout_height="0dp">
 
-        app:layout_constraintTop_toBottomOf="@+id/teacher_cal_search_btn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
-    <TextView
-        android:id="@+id/teacher_datecheck"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-        android:text="확인"
-        android:textColor="#FF5D5D"
-        android:fontFamily="@font/nanumsquaure_b"
-        android:textSize="@dimen/view_text"
+<!--    <CalendarView-->
+<!--        android:id="@+id/teacher_calendar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
 
-        app:layout_constraintTop_toBottomOf="@+id/teacher_calendar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="30dp"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/teacher_calendar_recyclerview"
-        tools:listitem="@layout/item_list_calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+<!--        app:layout_constraintTop_toBottomOf="@+id/teacher_cal_search_btn"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:layout_marginRight="5dp"/>-->
 
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacher_datecheck"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="10dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/teacher_datecheck"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+
+<!--        android:text="확인"-->
+<!--        android:textColor="#FF5D5D"-->
+<!--        android:fontFamily="@font/nanumsquaure_b"-->
+<!--        android:textSize="@dimen/view_text"-->
+
+<!--        app:layout_constraintTop_toBottomOf="@+id/teacher_calendar"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        android:layout_marginLeft="30dp"/>-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/teacher_calendar_recyclerview"-->
+<!--        tools:listitem="@layout/item_list_calendar"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="0dp"-->
+
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/teacher_datecheck"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:layout_marginTop="10dp"/>-->
 
     <!--    검색창 부분-->
     <androidx.constraintlayout.widget.ConstraintLayout

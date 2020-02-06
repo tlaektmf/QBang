@@ -90,8 +90,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     private String user_type;
 
 //    public static List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
-    public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
-    public static List <String> dates;
+//    public static List<Pair<VM_Data_Default,Pair<String,String>>> posts; //포스트 데이터 전체 리스트 post/id/date
+//    public static List <String> dates;
     private HomeActivity parent;
     private String TAG=VM_ENUM.TAG;
 
@@ -113,7 +113,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         assert currentUserEmail != null;
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
         user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
-        DashboardFragment.dates=new ArrayList<String>();
+        ///dates=new ArrayList<String>();
         if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
             //선생님
             user_type=VM_ENUM.TEACHER;
@@ -204,8 +204,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                 search_container.setVisibility(search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
                 //검색 어댑터 생성
-                Log.d("filter","posts 사이즈 : "+posts.size());
-                filterAdapter = new FilterAdapter(getContext(),posts);
+                Log.d("filter","posts 사이즈 : "+CalendarData.posts.size());
+                filterAdapter = new FilterAdapter(getContext(),CalendarData.posts);
                 searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                 searched_list.setAdapter(filterAdapter);
             }
@@ -245,14 +245,16 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     public void getJoinDate(){
         //** 최초 회원가입 날짜
-        DatabaseReference ref;
-        if (user_type.equals(VM_ENUM.STUDENT)) {
-            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_STUDENTS);
-        }else {
-            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS);
-        }
 
-        ref.child(user_id).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_JOIN_DATE).addListenerForSingleValueEvent(new ValueEventListener() {
+//        DatabaseReference ref;
+//        if (user_type.equals(VM_ENUM.STUDENT)) {
+//            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_STUDENTS) ;
+//        }else {
+//            ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS);
+//        }
+
+        FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_STUDENTS).child(user_id).child(VM_ENUM.DB_INFO).child(VM_ENUM.DB_JOIN_DATE)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
@@ -302,8 +304,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-                posts=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
+                CalendarData.dates=new ArrayList<String>();
+                CalendarData.posts=new ArrayList<Pair<VM_Data_Default,Pair<String,String>>>();
                 String post_id,post_date,post_title,post_grade,post_problem;
                 PostCustomData postCustomData;
 
@@ -317,8 +319,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                     post_title=postCustomData.getTitle();
                     post_grade=postCustomData.getGrade();
                     post_problem=postCustomData.getProblem();
-                    dates.add(post_date);
-                    posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
+                    CalendarData.dates.add(post_date);
+                    CalendarData.posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
                             Pair.create(post_id,post_date)));
 
                     Log.d(TAG, "[Student DashBoard]ValueEventListener : " + snapshot);
@@ -327,12 +329,13 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
                 //** 처음 DashBoard 세팅
 
-                filterAdapter = new FilterAdapter(getContext(),posts);
+                filterAdapter = new FilterAdapter(getContext(),CalendarData.posts);
 
                 //lhj_3
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
                 //lhj_3
+
 
                 FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
                 FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기

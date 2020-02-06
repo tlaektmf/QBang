@@ -70,8 +70,8 @@ public class TeacherHomeActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.teacher_navigation_dashboard: {
-                        dashboardFragment = new TeacherDashboardFragment();
-                        transaction.replace(R.id.teacher_nav_host_fragment, dashboardFragment).commitAllowingStateLoss();
+                        ///dashboardFragment = new TeacherDashboardFragment();
+                        transaction.replace(R.id.teacher_nav_host_fragment, dashboardFragment,"TeacherDashBoardFragment").commitAllowingStateLoss();
                         break;
                     }
                     case R.id.teacher_navigation_notifications: {

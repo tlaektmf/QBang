@@ -1,6 +1,7 @@
 package com.example.visualmath.fragment;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,6 +28,7 @@ import com.example.visualmath.activity.VM_FullViewActivity;
 import com.example.visualmath.adapter.FilterAdapter;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.ui.dashboard.CalendarData;
 import com.example.visualmath.ui.dashboard.DashboardFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +61,7 @@ public class CalendarFullViewFragment extends Fragment {
     private RecyclerView recyclerView;
 
 
-    public HomeActivity parent;
+    public Activity parent;
     private   String TAG=VM_ENUM.TAG;
     public int focusedYear;
     public int focusedMonth;
@@ -81,7 +83,7 @@ public class CalendarFullViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_calendar_full_view, container, false);
-        parent=(HomeActivity)getActivity();
+        parent=getActivity();
 
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
         datecheck = root.findViewById(R.id.datecheck);
@@ -183,12 +185,12 @@ public class CalendarFullViewFragment extends Fragment {
 
         Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
 
-        if(DashboardFragment.posts!=null){
-            for(int i=0;i<DashboardFragment.posts.size();i++){
-                Log.d(TAG,"[클릭이벤트]포스트 날짜: "+DashboardFragment.posts.get(i).second.second);
-                if(DashboardFragment.posts.get(i).second.second.contains(selectedDate)){
-                    subs.add(Pair.create(DashboardFragment.posts.get(i).first,
-                            Pair.create(DashboardFragment.posts.get(i).second.first,DashboardFragment.posts.get(i).second.second)));
+        if(CalendarData.posts!=null){
+            for(int i=0;i<CalendarData.posts.size();i++){
+                Log.d(TAG,"[클릭이벤트]포스트 날짜: "+CalendarData.posts.get(i).second.second);
+                if(CalendarData.posts.get(i).second.second.contains(selectedDate)){
+                    subs.add(Pair.create(CalendarData.posts.get(i).first,
+                            Pair.create(CalendarData.posts.get(i).second.first,CalendarData.posts.get(i).second.second)));
                 }
             }
         }
@@ -206,9 +208,9 @@ public class CalendarFullViewFragment extends Fragment {
 
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
         private final boolean mTwoPane;
-        private final HomeActivity mParentActivity;
+        private final Activity mParentActivity;
 
-        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items, boolean twoPane,HomeActivity parent) {
+        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items, boolean twoPane,Activity parent) {
             mValues = items;
             mTwoPane = twoPane;
             mParentActivity = parent;

@@ -75,7 +75,7 @@ public class DashboardListFragment extends Fragment {
 
     ViewGroup rootView;
 
-    private List<String> dates=DashboardFragment.dates; //포스트 데이터 전체 리스트 post/id/date
+    private List<String> dates=CalendarData.dates; //포스트 데이터 전체 리스트 post/id/date
 
     //** 사용자 최초 회원 가입 날짜
     private String user_join_date;
@@ -111,6 +111,7 @@ public class DashboardListFragment extends Fragment {
             date_list.add(new date_data(year, month + i, day));
         }
         //>> ds.shim 2020-01-26
+
         for(int i=0;i<dates.size();i++){
             String year=dates.get(i).split("-")[0];
             String month=dates.get(i).split("-")[1];
