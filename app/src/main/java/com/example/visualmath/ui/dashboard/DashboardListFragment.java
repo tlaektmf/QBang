@@ -62,13 +62,13 @@ public class DashboardListFragment extends Fragment {
     SimpleDateFormat dayFormat = new SimpleDateFormat("dd",Locale.KOREA);
 
     //1. 현재 시간으로 가져오는 방법
-//    Integer year = Integer.parseInt(yearFormat.format(date));
-//    Integer month = Integer.parseInt(monthFormat.format(date));
+    Integer year = Integer.parseInt(yearFormat.format(date));
+    Integer month = Integer.parseInt(monthFormat.format(date));
 //    Integer day = Integer.parseInt(dayFormat.format(date));
 
     //2. 무조건 1월부터 시작하는 방법
-    Integer year = Integer.parseInt(yearFormat.format(date));
-    Integer month = 0;
+//    Integer year = Integer.parseInt(yearFormat.format(date));
+//    Integer month = 0;
     Integer day = 1;
 
     //lhj_0_end
@@ -107,9 +107,29 @@ public class DashboardListFragment extends Fragment {
 //        달력에 데이터 넣는 부분
         List<date_data> date_list = new ArrayList<>();
 
-        for(int i=0;i<12;i++) {
-            date_list.add(new date_data(year, month + i, day));
+        //"회원 가입" 연도, 월 ~ "현재" 연도, 월까지 표시해야함
+        String[] user_join_arr = user_join_date.split("-");
+//        for(int i=0;i<user_join_arr.length;i++) {
+//            Log.d("가입 날짜 확인",user_join_arr[i]);
+//        }
+        Integer user_join_year = Integer.parseInt(user_join_arr[0]);
+        Integer user_join_month = Integer.parseInt(user_join_arr[1]);
+
+
+
+        for(int i=user_join_year;i<=year;i++){
+//            Log.d("가입 연도 확인",i+"년도 ");
+            for(int j=user_join_month-1;j<=month-1;j++){
+//                Log.d("가입 월 확인",j+"월");
+//                Log.d("가입 연도, 월 확인",i+"년도 "+j+"월");
+                date_list.add(new date_data(i, j, day));
+            }
         }
+
+        //1월부터 12월까지 테스트로 넣는 코드
+//        for(int i=0;i<12;i++) {
+//            date_list.add(new date_data(year, month + i, day));
+//        }
         //>> ds.shim 2020-01-26
 
         for(int i=0;i<dates.size();i++){
@@ -124,7 +144,6 @@ public class DashboardListFragment extends Fragment {
             CalendarDay test_dotted_date = CalendarDay.from(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
             dotted_date_list.add(test_dotted_date);
 
-//            Log.d("날짜 확인","뭐지 "+test_dotted_date);
         }
 
 
