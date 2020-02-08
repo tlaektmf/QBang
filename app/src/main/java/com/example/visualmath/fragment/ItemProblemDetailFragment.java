@@ -76,7 +76,10 @@ public class ItemProblemDetailFragment extends Fragment {
     public String fromUnmatched;
     public String needToBlock;
 
-
+    private ImageView problem;
+    private TextView textViewTitle;
+    private TextView textViewProblemGrade;
+    private TextView textViewSolveWay;
     private String post_id;
     private String solveWay;
     private String matchSet_student;
@@ -135,10 +138,10 @@ public class ItemProblemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_item_problem_detail, container, false);
-
-        TextView textViewTitle = (TextView) rootView.findViewById(R.id.tv_problem_title);
-        TextView textViewProblemGrade = ((TextView) rootView.findViewById(R.id.tv_problem_grade));
-        TextView textViewSolveWay = ((TextView) rootView.findViewById(R.id.tv_alarm));
+         problem = (ImageView) rootView.findViewById(R.id.iv_problem_image);
+         textViewTitle = (TextView) rootView.findViewById(R.id.tv_problem_title);
+         textViewProblemGrade = ((TextView) rootView.findViewById(R.id.tv_problem_grade));
+         textViewSolveWay = ((TextView) rootView.findViewById(R.id.tv_alarm));
 
         Button buttonViewDetail = rootView.findViewById(R.id.bt_viewDetail);
         Button buttonMatch = rootView.findViewById(R.id.bt_match);
@@ -191,18 +194,18 @@ public class ItemProblemDetailFragment extends Fragment {
 
 
         // Show the dummy content as text in a TextView.
-        if (vmDataDefault != null) {
-            textViewProblemGrade.setText(vmDataDefault.getGrade());
-            textViewTitle.setText(vmDataDefault.getTitle());
-            if (solveWay.equals(VM_ENUM.VIDEO)) {
-                textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
-            } else if (solveWay.equals(VM_ENUM.TEXT)) {
-                textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
-            }
-
-        } else {
-            Log.i(TAG, "null");
-        }
+//        if (vmDataDefault != null) {
+//            textViewProblemGrade.setText(vmDataDefault.getGrade());
+//            textViewTitle.setText(vmDataDefault.getTitle());
+//            if (solveWay.equals(VM_ENUM.VIDEO)) {
+//                textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
+//            } else if (solveWay.equals(VM_ENUM.TEXT)) {
+//                textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
+//            }
+//
+//        } else {
+//            Log.i(TAG, "null");
+//        }
 
         return rootView;
 
@@ -430,6 +433,19 @@ public class ItemProblemDetailFragment extends Fragment {
                 vmDataDefault = dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
                 matchSet_student = dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue(String.class);
                 upLoadDate = dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue(String.class);
+
+                if (vmDataDefault != null) {
+                    textViewProblemGrade.setText(vmDataDefault.getGrade());
+                    textViewTitle.setText(vmDataDefault.getTitle());
+                    if (solveWay.equals(VM_ENUM.VIDEO)) {
+                        textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
+                    } else if (solveWay.equals(VM_ENUM.TEXT)) {
+                        textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
+                    }
+                } else {
+                    Log.i(TAG, "null");
+                }
+
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] ValueEventListener : " + dataSnapshot);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] matchSet_student : " + matchSet_student);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] upLoadDate : " + upLoadDate);
@@ -442,7 +458,6 @@ public class ItemProblemDetailFragment extends Fragment {
                     @Override
                     public void onSuccess(Uri uri) {
                         //** 사진파일 이미지뷰에 삽입
-                        ImageView problem = (ImageView) rootView.findViewById(R.id.iv_problem_image);
 
                         mGlideRequestManager
                                 .load(uri)

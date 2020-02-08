@@ -220,19 +220,6 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 mDetailView = (TextView) view.findViewById(R.id.problem_content_detail);
                 mDateView = (TextView) view.findViewById(R.id.problem_content_time);
 
-//                //** 아이템 클릭 이벤트
-//                itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        final int pos = getAdapterPosition();
-//
-//
-//
-//
-//                    }
-//                });
-
-
             }
         }
     }
