@@ -167,7 +167,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
         tran.replace(R.id.frame, calendarFullViewFragment);
         tran.commit();
         //>>
-        
+
         readDataBase();
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
