@@ -98,7 +98,7 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 회원가입 성공
                             sendVerifyEmail();
-                            Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
+                            ///Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
                         } else {
                             // 회원가입 실패
                             Toast.makeText(VM_RegisterUserActivity.this, R.string.failed_signup, Toast.LENGTH_SHORT).show();
