@@ -329,7 +329,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         reference=firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
 
-        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {//**한번만 호출
+        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
