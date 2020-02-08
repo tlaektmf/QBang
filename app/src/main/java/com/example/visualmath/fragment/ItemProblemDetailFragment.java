@@ -59,6 +59,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -216,22 +218,21 @@ public class ItemProblemDetailFragment extends Fragment {
 
                 if (dataSnapshot.getValue() == null) {
                     Log.d(VM_ENUM.TAG, "이미 누가 가져감");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                            // ->문제선택 화면으로 다시 전환
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(7,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
-                            dialog.dismiss();     //닫기
-
                         }
-                    });
-                    alert.setMessage("이미 매치 완료된 문제입니다.");
-                    alert.show();
+                    }, 2000);
 
                 } else {
                     Log.d(VM_ENUM.TAG, "문제가 유효함. dataUpdate 함수 호출 ");
@@ -361,41 +362,41 @@ public class ItemProblemDetailFragment extends Fragment {
 //                    toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
 //                    toast.show();
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(5,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
                         }
-                    });
-                    alert.setMessage("매치 완료되었습니다.");
-                    alert.show();
+                    }, 2000);
 
                 } else {
                     //아닌경우
                     Log.d(TAG, "[자신이 first matchSet teacher 아님]");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(7,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
 
-                            dialog.dismiss();     //닫기
-
                         }
-                    });
-                    alert.setMessage("이미 매치 완료된 문제입니다.");
-                    alert.show();
+                    }, 2000);
                 }
 
                 Log.d(TAG, "[getFirstTeacher 완료]");
