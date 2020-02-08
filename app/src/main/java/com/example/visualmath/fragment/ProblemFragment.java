@@ -276,24 +276,24 @@ public class ProblemFragment extends Fragment {
                 dig.setDialogListener(new VM_DialogLIstener_chatMenu() { //chats 에 추가 되는 내용이기 때문에, 동시 접근에 대해서 허용가능, 별도의 이벤트 처리를 하지 않음
                     @Override
                     public void onButtonCamera() {
-                        Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
+                        ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onButtonGallery() {
-                        Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
+                        ///Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onButtonLive() {
-                        Toast.makeText(getActivity(), "라이브버튼", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "2020년 03월부터 시행 예정", Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onButtonVoice() {
-                        Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
+                        ///Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
 
                     }
 

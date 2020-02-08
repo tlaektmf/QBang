@@ -89,6 +89,7 @@ public  class VM_ENUM {
     public static final String DB_UPLOAD_DATE="uploadDate";
     public static final String DB_STU_POSTS="posts";
     public static final String DB_DATA_DEFAULT="data_default";
+    public static final String DB_DATA_EXTRA = "data_extra";
     public static final String DB_TEA_POSTS ="posts" ;
     public static final String DB_TEA_UNSOLVED = "unsolved";
     public static final String DB_MATCH_STUDENT = "matchSet_student";

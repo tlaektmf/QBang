@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -98,6 +99,10 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 회원가입 성공
                             sendVerifyEmail();
+                            //회원가입 성공. 메일 인증을 완료해주세요.
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
+                            checkDialog.callFunction(9);
                             ///Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
                         } else {
                             // 회원가입 실패

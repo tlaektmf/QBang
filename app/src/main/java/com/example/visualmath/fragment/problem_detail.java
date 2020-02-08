@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
 import com.example.visualmath.data.VM_Data_EXTRA;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -58,7 +59,7 @@ public class problem_detail extends Fragment {
     private DatabaseReference reference;
 
     private String post_id;
-    public static final String TAG="problem_detail_fr";
+    public static final String TAG= VM_ENUM.TAG;
     private VM_Data_EXTRA vmDataExtra;
 
     //** Glide Library Exception 처리
@@ -163,9 +164,9 @@ public class problem_detail extends Fragment {
         firebaseDatabase= FirebaseDatabase.getInstance();
         storageReference=FirebaseStorage.getInstance().getReference();
 
-        reference=firebaseDatabase.getReference("POSTS");
+        reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
         reference=reference.child(post_id)
-                .child("data_extra");
+                .child(VM_ENUM.DB_DATA_EXTRA);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

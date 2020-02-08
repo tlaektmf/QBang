@@ -201,7 +201,10 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                             }
                       else {//로그인 실패
-                            Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
+                            ///Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(VM_LoginActivity.this);
+                            checkDialog.callFunction(10);
                         }
                     }
                 });
@@ -315,7 +318,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                             Toast.makeText(VM_LoginActivity.this, "아이디 생성완료", Toast.LENGTH_SHORT).show();
                         } else {
-
+                            Log.d(VM_ENUM.TAG,"아이디 생성 실패! 다시 시도해주세요");
                             Toast.makeText(VM_LoginActivity.this, "아이디 생설실패", Toast.LENGTH_SHORT).show();
                         }
                     }
