@@ -193,15 +193,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
 
                             }else{
-//                                AlertDialog.Builder alert = new AlertDialog.Builder(VM_LoginActivity.this);
-//                                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();     //닫기
-//                                    }
-//                                });
-//                                alert.setMessage("이메일 인증을 완료해 주세요");
-//                                alert.show();
+
                                 final VM_Dialog_registerProblem checkDialog =
                                         new VM_Dialog_registerProblem(VM_LoginActivity.this);
                                 checkDialog.callFunction(4);
