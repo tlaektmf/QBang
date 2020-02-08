@@ -18,6 +18,7 @@ import com.example.visualmath.activity.VM_ProblemListActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// tmpNum 11까지 함
 public class VM_Dialog_registerProblem {
     private Context context;
     public static Dialog dig;
@@ -75,6 +76,9 @@ public class VM_Dialog_registerProblem {
         }else if(tmpNum==10){
             //로그인 실패
             dig.setContentView(R.layout.layout_dialog_alarm_login_fail);
+        }else if(tmpNum==11){
+            //비디오 불가
+            dig.setContentView(R.layout.layout_dialog_alarm_no_video);
         }
         else{
             Log.d("registerProblem 오류","다이얼로그 if문 조건 범위 오류");

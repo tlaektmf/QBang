@@ -1,6 +1,7 @@
 package com.example.visualmath.fragment;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import com.example.visualmath.activity.HomeActivity;
 import com.example.visualmath.activity.TeacherHomeActivity;
 import com.example.visualmath.activity.VM_ProblemBoxActivity;
 import com.example.visualmath.activity.VM_ProblemListActivity;
+import com.example.visualmath.activity.VM_RegiserOtherThingsActivity;
 import com.example.visualmath.adapter.VM_ChatAdapter;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
@@ -40,6 +42,8 @@ import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
+import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
+import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +58,8 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -606,5 +612,57 @@ private boolean onSolveProblemIncrease(String matchset_teacher, String user_id) 
     return true;
     }
 
+    private void tedPermission() {
 
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //** 권한 요청 성공
+                Toast.makeText(parent, "Permission Granted", Toast.LENGTH_SHORT).show();
+                showPickDialog();
+
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                // ** 권한 요청 실패
+                Toast.makeText(parent, deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        TedPermission.with(parent)
+                .setPermissionListener(permissionListener)
+                .setDeniedMessage(getResources().getString(R.string.permission_notice))
+                .setDeniedCloseButtonText(getResources().getString(R.string.permission_close))
+                .setGotoSettingButtonText(getResources().getString(R.string.permission_setting))
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .check();
+
+    }
+
+    private void showPickDialog() {
+        //** 다이얼로그 실행
+
+        // 커스텀 다이얼로그를 생성
+        final VM_Dialog_PickHowToGetPicture dialog = new VM_Dialog_PickHowToGetPicture(parent);
+
+        // 커스텀 다이얼로그의 결과를 담을 매개변수로 같이 넘겨준다.
+
+        dialog.setDialogListener(new VM_DialogListener_PickHowToGetPicture() {
+            @Override
+            public void onButtonTakePhotoClicked() {
+
+                ///takePhoto();
+            }
+
+            @Override
+            public void onButtonGetAlbumFileClicked() {
+
+                ///getAlbumFile();
+            }
+        });
+        dialog.callFunction();// 커스텀 다이얼로그를 호출
+
+
+    }
 }
