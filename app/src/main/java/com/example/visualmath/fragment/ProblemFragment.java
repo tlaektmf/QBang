@@ -30,6 +30,7 @@ import com.example.visualmath.VM_RegisterProblemActivity;
 import com.example.visualmath.activity.HomeActivity;
 import com.example.visualmath.activity.TeacherHomeActivity;
 import com.example.visualmath.activity.VM_ProblemBoxActivity;
+import com.example.visualmath.activity.VM_ProblemListActivity;
 import com.example.visualmath.adapter.VM_ChatAdapter;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
@@ -40,6 +41,7 @@ import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +63,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -303,20 +307,22 @@ public class ProblemFragment extends Fragment {
 
                         Log.d(TAG,"다이얼로그 호출 시작");
                        //** 문제 완료 하면 학생은 홈화면으로 액티비티를 전환함
-                        AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();     //닫기
 
-                                Intent intent = new Intent(getContext(), HomeActivity.class);
-                                //parent.setResult(VM_ENUM.RC_PROBLEM_SOLVE, intent);
-                                parent.startActivity(intent);
-                                parent.finish();
+                        final VM_Dialog_registerProblem checkDialog =
+                                new VM_Dialog_registerProblem(parent);
+                        checkDialog.callFunction(6,parent);
+
+                        final Timer t = new Timer();
+                        t.schedule(new TimerTask() {
+                            public void run() {
+                                VM_Dialog_registerProblem.dig.dismiss();
+                                t.cancel();
+                                    Intent intent = new Intent(getContext(), HomeActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    parent.startActivity(intent);
+                                    parent.finish();
                             }
-                        });
-                        alert.setMessage("문제풀이가 완료 되었습니다. \\n <질문 노트>에서 확인 가능합니다.");
-                        alert.show();
+                        }, 2000);
 
                     }
                 });
@@ -415,19 +421,22 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
 
                 if(dataSnapshot.getValue()==null){
                     Log.d(VM_ENUM.TAG,"문제가 이미 완료됨");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
-                            Intent intent = new Intent(getContext(), TeacherHomeActivity.class);
 
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(8,parent);
+
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
+                            Intent intent = new Intent(getContext(), TeacherHomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             parent.startActivity(intent);
                             parent.finish();
                         }
-                    });
-                    alert.setMessage("이미 완료된 문제입니다. 질문노트에서 확인 가능합니다.");
-                    alert.show();
+                    }, 2000);
                 }
                 else{
                     VM_DBHandler dbHandler=new VM_DBHandler();
