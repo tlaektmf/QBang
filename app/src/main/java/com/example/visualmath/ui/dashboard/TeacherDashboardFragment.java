@@ -159,7 +159,13 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         Log.d(VM_ENUM.TAG,"[DashBoardFragment] 데이터베이스 호출");
         readDataBase();
 
-
+        //** 프래그먼트 초기 설정
+        FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
+        FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+        CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+        tran.replace(R.id.frame, calendarFullViewFragment);
+        tran.commit();
+        //>>>
 
         cal_mode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -470,25 +476,25 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
 
 
                 filterAdapter = new FilterAdapter(getContext(),CalendarData.posts);
-                
+
                 //로딩창 숨기기
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
 
 
 
-                if (getFragmentManager() != null) {
-                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] visible");
-                    //대시보드리스트 프레그먼트로 replace
-                    FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
-                    FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
-                    CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
-                    tran.replace(R.id.frame, calendarFullViewFragment);
-                    tran.commit();
-
-                }else{
-                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] invisible");
-                }
+//                if (getFragmentManager() != null) {
+//                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] visible");
+//                    //대시보드리스트 프레그먼트로 replace
+//                    FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
+//                    FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
+//                    CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+//                    tran.replace(R.id.frame, calendarFullViewFragment);
+//                    tran.commit();
+//
+//                }else{
+//                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] invisible");
+//                }
 
 
             }
