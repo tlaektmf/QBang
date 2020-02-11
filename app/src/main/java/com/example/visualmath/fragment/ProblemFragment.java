@@ -293,6 +293,12 @@ public class ProblemFragment extends Fragment {
                         ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
                         Intent intent=new Intent(parent, VM_ViewActivity.class);
                         intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_TAKE_PHOTO);
+                        intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                        intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                        intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                        intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                        intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                        intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
                         startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
                     }
 
@@ -301,6 +307,12 @@ public class ProblemFragment extends Fragment {
                         ///Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
                        Intent intent=new Intent(parent, VM_ViewActivity.class);
                        intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_GALLERY_PHOTO);
+                        intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                        intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                        intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                        intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                        intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                        intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
                        startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
 
                     }

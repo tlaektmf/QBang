@@ -45,6 +45,12 @@ public  class VM_ENUM {
     public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
     public static final String IT_ARG_USER_JOIN_DATE ="IT_ARG_USER_JOIN_DATE" ;
     public static final String IT_PICK_FLAG ="IT_PICK_FLAG" ;
+    public static final String IT_POST_ID ="IT_POST_ID" ;
+    public static final String IT_USER_TYPE = "IT_USER_TYPE";
+    public static final String IT_USER_ID = "IT_USER_ID";
+    public static final String IT_POST_TITLE ="IT_POST_TITLE" ;
+    public static final String IT_MATCHSET_STD = "IT_MATCHSET_STD";
+    public static final String IT_MATCHSET_TEA = "IT_MATCHSET_TEA";
 
     //** 상수 String
     public static final String TEXT="TEXT";
@@ -108,6 +114,7 @@ public  class VM_ENUM {
     public  static final String PRE_ALARM="setAlarm";
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
+
 
 
 }

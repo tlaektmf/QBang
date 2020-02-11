@@ -20,16 +20,25 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.VM_RegisterProblemActivity;
+import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -44,9 +53,14 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VM_ViewActivity extends AppCompatActivity {
+
+    private Activity parent;
 
     private File takeFile;
     private PhotoView imageViewPhoto;
@@ -56,12 +70,25 @@ public class VM_ViewActivity extends AppCompatActivity {
     private Button playButton;
     private Button stopButton;
 
+    private Uri db_save_uri;
     private String pick;
+
+    //** 넘어온 인텐트
+    private String post_id;
+    private String user_type;
+    private String user_id;
+    private String post_title;
+    private String matchset_student;
+    private String matchset_teacher;
+    private String index;
+    //>>>>>>>>>>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm_view);
+
+        parent=VM_ViewActivity.this;
 
         imageViewPhoto = (PhotoView) findViewById(R.id.iv_photo);
         videoView=findViewById(R.id.iv_video);
@@ -69,9 +96,22 @@ public class VM_ViewActivity extends AppCompatActivity {
         playButton=findViewById(R.id.btn_play);
         stopButton=findViewById(R.id.btn_stop);
 
+        //** 인텐트 확인
         PICK_FLAG=getIntent().getStringExtra(VM_ENUM.IT_PICK_FLAG);
         Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, PICK_FLAG  "+PICK_FLAG);
-
+        post_id=getIntent().getStringExtra(VM_ENUM.IT_POST_ID);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, post_id  "+post_id);
+        user_type=getIntent().getStringExtra(VM_ENUM.IT_USER_TYPE);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, user_type  "+user_type);
+        user_id=getIntent().getStringExtra(VM_ENUM.IT_USER_ID);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, user_id  "+user_id);
+        post_title=getIntent().getStringExtra(VM_ENUM.IT_POST_TITLE);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, post_title  "+post_title);
+        matchset_student=getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_STD);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, matchset_student  "+matchset_student);
+        matchset_teacher=getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_TEA);
+        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, matchset_teacher  "+matchset_teacher);
+        //>>>>
 
         if(PICK_FLAG.equals(VM_ENUM.IT_TAKE_PHOTO)){
             repickButton.setBackgroundResource(R.drawable.pv_camera_btn);
@@ -91,6 +131,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                 tedPermission(VM_ENUM.IT_GALLERY_PHOTO);
                 break;
         }
+
 
 
     }
@@ -295,6 +336,114 @@ public class VM_ViewActivity extends AppCompatActivity {
 
     public void send(View view) {
         //** 데이터베이스 저장
+
+        if(db_save_uri.equals("video")){
+            Log.d(VM_ENUM.TAG,"비디오 데이터 채팅에 추가");
+            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(),VM_ENUM.CHAT_VIDEO);
+            loadDatabase(post_id,data);
+        }else {
+            Log.d(VM_ENUM.TAG,"이미지 데이터 채팅에 추가");
+            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(),VM_ENUM.CHAT_IMAGE);
+            loadDatabase(post_id,data);
+        }
+
+
+    }
+
+    public void loadDatabase(final String post_id, final VM_Data_CHAT chatItem){
+
+        //** 유효한 데이터인지 검사
+        if(user_type.equals(VM_ENUM.TEACHER)){
+            DatabaseReference ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS)
+                    .child(user_id)
+                    .child(VM_ENUM.DB_TEA_POSTS)
+                    .child(VM_ENUM.DB_TEA_UNSOLVED);
+            ref.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if(dataSnapshot.getValue()==null){
+                        Log.d(VM_ENUM.TAG,"문제가 이미 완료됨");
+
+                        final VM_Dialog_registerProblem checkDialog =
+                                new VM_Dialog_registerProblem(parent);
+                        checkDialog.callFunction(8,parent);
+
+                        final Timer t = new Timer();
+                        t.schedule(new TimerTask() {
+                            public void run() {
+                                VM_Dialog_registerProblem.dig.dismiss();
+                                t.cancel();
+                                Intent intent = new Intent(VM_ViewActivity.this, TeacherHomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();//***** 종료
+                            }
+                        }, 2000);
+                    }
+                    else{
+                        //** chat size  실시간 변화 검사
+                        FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList).addListenerForSingleValueEvent(new ValueEventListener() {
+                                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+                                @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.d(VM_ENUM.TAG, "[VM_View] ValueEventListener : " +dataSnapshot );
+                                List<VM_Data_CHAT> chats=dataSnapshot.getValue(t);
+                                index=Integer.toString(chats.size());
+                                Log.d(VM_ENUM.TAG, "[VM_View] index // size: " +index );
+                                VM_DBHandler dbHandler=new VM_DBHandler();
+                                dbHandler.newChatItem(post_id,chatItem,index,user_id);
+                                Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
+                                dbHandler.newAlarm(post_id,post_title,user_type,matchset_student,VM_ENUM.ALARM_NEW);
+                                Log.d(VM_ENUM.TAG,"문제가 유효함. 학생 알람을 추가"+user_type+","+matchset_student);
+                                    finish();//***** 종료
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else if(user_type.equals(VM_ENUM.STUDENT)){
+            //학생이면 검사 없이 그냥 채팅 추가
+            FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList).addListenerForSingleValueEvent(new ValueEventListener() {
+                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.d(VM_ENUM.TAG, "[VM_View] ValueEventListener : " +dataSnapshot );
+                    List<VM_Data_CHAT> chats=dataSnapshot.getValue(t);
+                    index=Integer.toString(chats.size());
+                    Log.d(VM_ENUM.TAG, "[VM_View] index // size: " +index );
+                    VM_DBHandler dbHandler=new VM_DBHandler();
+                    dbHandler.newChatItem(post_id,chatItem,index,user_id);
+                    Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
+                    dbHandler.newAlarm(post_id, post_title,user_type,matchset_teacher,VM_ENUM.ALARM_NEW);
+                    Log.d(VM_ENUM.TAG,"문제가 유효함. 선생님 알람을 추가"+user_type+","+matchset_teacher);
+                    finish();//***** 종료
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+
     }
 
     @Override
@@ -326,6 +475,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
+                    db_save_uri=uri;
                     if(uri.toString().contains("video")){
                         Log.d(VM_ENUM.TAG,"[ViewActivity], video");
                         imageViewPhoto.setVisibility(View.GONE);
@@ -377,6 +527,8 @@ public class VM_ViewActivity extends AppCompatActivity {
                 photoUri = Uri.fromFile(takeFile);
             }
 
+            db_save_uri=photoUri;
+
             //** 비디오, 이미지 판단
             if(photoUri.toString().contains("video")){
                 Log.d(VM_ENUM.TAG,"[ViewActivity], video");
@@ -396,6 +548,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                 }
             }
 
+            //Q 이상이면 디렉토리 내 파일 다시 저장
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
             }
@@ -406,9 +559,15 @@ public class VM_ViewActivity extends AppCompatActivity {
 
     public void rePick(View view) {
         if(pick.equals(VM_ENUM.IT_TAKE_PHOTO)){
+            db_save_uri=null;
+            imageViewPhoto.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
             takePhoto();
 
         }else if(pick.equals(VM_ENUM.IT_GALLERY_PHOTO)){
+            db_save_uri=null;
+            imageViewPhoto.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
             getAlbumFile();
         }
     }

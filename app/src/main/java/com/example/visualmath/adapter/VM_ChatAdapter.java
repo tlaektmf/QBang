@@ -1,6 +1,7 @@
 package com.example.visualmath.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,13 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.VM_Data_CHAT;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -29,6 +38,9 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     private String matchSet_student;
     private String matchSet_teacher;
 
+    ///Glide Library Exception 처리
+    public RequestManager mGlideRequestManager;
+
     public class VM_CustomViewHolder extends RecyclerView.ViewHolder {
 
         //위젯
@@ -41,6 +53,12 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         //** 내 채팅창 동영상 버젼
         private View myChatLayoutVideoVersion;
+        private VideoView myMsgVideoView;
+
+        //** 내 채팅창 이미지 버젼
+        private View myChatLayoutImageVersion;
+        private PhotoView myMsgPhotoView;
+
 
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +73,12 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
             //** 내 채팅창 동영상 버젼
             this.myChatLayoutVideoVersion=itemView.findViewById(R.id.myChatLayoutVideoVersion);
+            this.myMsgVideoView=itemView.findViewById(R.id.myMsgVideoView);
+
+            //** 내 채팅창 동영상 버젼
+            this.myChatLayoutImageVersion=itemView.findViewById(R.id.myChatLayoutImageVersion);
+            this.myMsgPhotoView=itemView.findViewById(R.id.myMsgImageView);
+
         }
     }
 
@@ -68,6 +92,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         }
 
         this.context = context;
+        mGlideRequestManager=Glide.with(context);
         this.userType=userType;
         this.matchSet_student=matchSet_student;
         this.matchSet_teacher=matchSet_teacher;
@@ -86,7 +111,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VM_ChatAdapter.VM_CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final VM_ChatAdapter.VM_CustomViewHolder holder, int position) {
         int chatSize = chatList.size();
 
         Log.d(TAG, "[VM_ChatAdapter] chatsize" + chatSize + "");
@@ -102,14 +127,48 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 String flag=chatList.get(position).getType();
                 Log.d(TAG, "[VM_ChatAdapter] Flag"+flag);
+                StorageReference storageReference;
+                storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference pathReference;
+                pathReference = storageReference.child(chatList.get(position).getChatContent());
+
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
-                        holder.myChatLayout.setVisibility(View.VISIBLE);
+                        holder.myChatLayoutImageVersion.setVisibility(View.GONE);
                         holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
                         break;
                     case VM_ENUM.CHAT_IMAGE:
+                        holder.myChatLayoutImageVersion.setVisibility(View.VISIBLE);
+                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                //** 사진파일 이미지뷰에 삽입
+                                mGlideRequestManager
+                                        .load(uri)
+                                        .into(holder.myMsgPhotoView);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
                         break;
                     case VM_ENUM.CHAT_VIDEO:
+                        holder.myChatLayoutVideoVersion.setVisibility(View.VISIBLE);
+                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                //** 사진파일 이미지뷰에 삽입
+                               holder.myMsgVideoView.setVideoURI(uri);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
                         break;
                 }
 
