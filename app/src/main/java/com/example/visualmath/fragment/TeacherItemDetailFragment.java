@@ -193,8 +193,8 @@ public class TeacherItemDetailFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "Failed to read value", databaseError.toException());
+                //Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.d(VM_ENUM.TAG, "<<<<<<Failed to read value>>>>>>>", databaseError.toException());
             }
         });
 

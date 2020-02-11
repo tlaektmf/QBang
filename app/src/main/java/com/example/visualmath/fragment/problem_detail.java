@@ -256,7 +256,8 @@ public class problem_detail extends Fragment {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                                Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
                             }
                         });
                     }
@@ -275,7 +276,8 @@ public class problem_detail extends Fragment {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                                Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
                             }
                         });
                     }
@@ -294,7 +296,8 @@ public class problem_detail extends Fragment {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+                                Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
                             }
                         });
                     }
@@ -305,8 +308,8 @@ public class problem_detail extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "Failed to read value", databaseError.toException());
+                //Toast.makeText(getActivity().getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "<<<<Failed to read value>>>>  [problem_detail]", databaseError.toException());
             }
         });
 

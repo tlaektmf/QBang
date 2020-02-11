@@ -178,7 +178,7 @@ public class ProblemFragment extends Fragment {
         textViewChatRoomTitle = rootView.findViewById(R.id.chat_problem_title);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.chatRoomListView);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         //chatList =new ArrayList<>();
@@ -375,7 +375,7 @@ public class ProblemFragment extends Fragment {
                         @Override
                         public void onButtonCamera() {
                             ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
-                            Log.d(VM_ENUM.TAG, "[problemFragment]카메라버튼 ");
+
                             Intent intent = new Intent(parent, VM_ViewActivity.class);
                             intent.putExtra(VM_ENUM.IT_PICK_FLAG, VM_ENUM.IT_TAKE_PHOTO);
                             intent.putExtra(VM_ENUM.IT_POST_ID, post_id);
@@ -402,7 +402,7 @@ public class ProblemFragment extends Fragment {
 
                         @Override
                         public void onButtonSetTime() {
-                            Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(parent, "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
@@ -447,7 +447,7 @@ public class ProblemFragment extends Fragment {
 
                         @Override
                         public void onButtonLive() {
-                            Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(parent, "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
 
                         }
 
