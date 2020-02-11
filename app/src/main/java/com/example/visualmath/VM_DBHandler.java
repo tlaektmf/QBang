@@ -72,15 +72,12 @@ public class VM_DBHandler {
 
     }
     public void newChatItem(String post_id, final VM_Data_CHAT chatitem, String index, String user_id) {
-
-        StorageReference riversRef = storageReference.child
-                (user_id + "/" +
-                        post_id + "/" +
-                        chatitem.getChatContent());
-
+        String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         String fileName=user_id + "/" +
                 post_id + "/" +
-                chatitem.getChatContent();
+                timeStamp;
+
+        StorageReference riversRef = storageReference.child(fileName);
 
         //** 파일 이름 변경
         chatitem.setChatContent(fileName);
