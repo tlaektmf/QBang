@@ -73,7 +73,7 @@
                         android:text="카메라"
                         android:fontFamily="@font/nanumsquaure_b"
                         android:textColor="#014a67"
-                        android:textSize="15dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -101,7 +101,7 @@
                         android:text="음 성"
                         android:fontFamily="@font/nanumsquaure_b"
                         android:textColor="#014a67"
-                        android:textSize="15dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -128,7 +128,7 @@
                         android:text="갤러리"
                         android:fontFamily="@font/nanumsquaure_b"
                         android:textColor="#014a67"
-                        android:textSize="15dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -163,7 +163,7 @@
                         android:text="문제 완료"
                         android:fontFamily="@font/nanumsquaure_b"
                         android:textColor="#014a67"
-                        android:textSize="15dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -191,7 +191,7 @@
                         android:text="라이브 신청"
                         android:fontFamily="@font/nanumsquaure_b"
                         android:textColor="#014a67"
-                        android:textSize="15dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
