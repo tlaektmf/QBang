@@ -70,7 +70,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:onClick="videoStart"
-        android:background="@drawable/ic_play_button_svgrepo_com"
+        android:background="@drawable/play"
         />
 
     <Button
@@ -83,7 +83,7 @@
         app:layout_constraintBottom_toTopOf="@+id/pv_btn_container"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/ic_stop_button_svgrepo_com"
+        android:background="@drawable/stop"
         />
 <!--    버튼 담는 곳-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,7 +106,7 @@
             android:id="@+id/ib_camera"
             android:layout_width="23dp"
             android:layout_height="23dp"
-            android:background="@drawable/check_on"
+            android:background="@drawable/video_check"
             android:onClick="send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.273"
