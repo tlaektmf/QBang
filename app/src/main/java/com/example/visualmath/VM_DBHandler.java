@@ -46,32 +46,18 @@ public class VM_DBHandler {
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 
-//    public VM_DBHandler(String TABLE){//default constructor
-//
-////        databaseReference=firebaseDatabase.getReference(TABLE);
-//
-//
-//
-////        if(databaseReference==null){
-////            //table이 없으면 생성
-////            Log.i(TAG,"[POSTS TABLE 생성] ");
-////            databaseReference.child(TABLE);
-////        }else{
-////            //table이 있으면 진행하지 않음
-////            Log.i(TAG,"[POSTS TABLE 이미 있음] ");
-////        }
-//
-//    }
+
 
 
 ///*** open with addvalueListenr     <<<<<<<
-    public void newChat(String post_id, List<VM_Data_CHAT> chat) {
+//    public void newChat(String post_id, List<VM_Data_CHAT> chat) {
+//
+//        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+//        databaseReference.setValue(chat); //** 파이어베이스 DB 등록
+//
+//    }
 
-        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-        databaseReference.setValue(chat); //** 파이어베이스 DB 등록
-
-    }
-    public void newChatItem(final String post_id, final VM_Data_CHAT chatitem, final String index, String user_id) {
+    public void newChatMediaItem(final String post_id, final VM_Data_CHAT chatitem, String user_id) {
         String timeStamp = new SimpleDateFormat("HHmmss", Locale.KOREA).format(new Date());
         final String fileName=user_id + "/" +
                 post_id + "/" +
@@ -90,7 +76,9 @@ public class VM_DBHandler {
                         chatitem.setChatContent(fileName);
 
                         databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
-                        databaseReference.child(index).setValue(chatitem); //** 파이어베이스 DB 등록
+
+                        ///databaseReference.child(index).setValue(chatitem); //** 파이어베이스 DB 등록 -> List 형태의 경우 이렇게 등록
+                        databaseReference.push().setValue(chatitem); //** 파이어베이스 DB 등록
 
                         Log.i(TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
 
@@ -108,6 +96,16 @@ public class VM_DBHandler {
 
 
     }
+
+    public void newChatItem(final String post_id, final VM_Data_CHAT chatitem) {
+
+        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+        databaseReference.push().setValue(chatitem); //** 파이어베이스 DB 등록
+
+        Log.i(TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
+
+    }
+
     public void newAlarm(String post_id, String title, String user_type, String receiver,String message){
         AlarmItem alarmItem=new AlarmItem(post_id,title,message);
 

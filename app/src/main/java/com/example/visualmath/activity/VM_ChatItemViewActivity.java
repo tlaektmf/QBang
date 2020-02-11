@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -49,6 +50,23 @@ public class VM_ChatItemViewActivity extends AppCompatActivity {
         init();
 
 
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                Log.d(VM_ENUM.TAG,"동영상 재생준비 완료");
+                playButton.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.GONE);
+
+            }
+        });
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                Log.d(VM_ENUM.TAG,"동영상 재생 완료");
+                playButton.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void init(){
@@ -98,8 +116,10 @@ public class VM_ChatItemViewActivity extends AppCompatActivity {
                  }
              });
          }
-    }
 
+
+
+    }
 
 
     public void cancel(View view) {
@@ -107,8 +127,14 @@ public class VM_ChatItemViewActivity extends AppCompatActivity {
     }
 
     public void videoStart(View view) {
+        playButton.setVisibility(View.GONE);
+        stopButton.setVisibility(View.VISIBLE);
+        videoView.start();
     }
 
     public void vidoStop(View view) {
+        playButton.setVisibility(View.VISIBLE);
+        stopButton.setVisibility(View.GONE);
+        videoView.pause();
     }
 }

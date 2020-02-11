@@ -111,20 +111,28 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
 
             //** 아이템 클릭 이벤트
-            itemView.setOnClickListener(new View.OnClickListener() {
+            myMsgVideoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
 
                     if (pos != RecyclerView.NO_POSITION) {
                         //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+
                         String uri = chatList.get(pos).getChatContent();
                         String type = chatList.get(pos).getType();
-                        Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
-                        intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
-                        intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
-                        parent.startActivity(intent);
-                        Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+
+                        if (type.equals(VM_ENUM.CHAT_TEXT)) {
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 안함 타입이 text");
+
+                        }else{
+                            Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
+                            parent.startActivity(intent);
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+                        }
+
 
                     }
                 }
