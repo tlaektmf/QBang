@@ -4,11 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 
 public class VM_Dialog_chatMenu_teacher implements View.OnClickListener {
 
@@ -56,26 +58,27 @@ public class VM_Dialog_chatMenu_teacher implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.dig_btnCamera:
+            case R.id.dig_btnCamera_teacher:
                 returnResult=0;
                 digListener.onButtonCamera();
                 dig.dismiss();
                 break;
-            case R.id.dig_btnGallery:
+            case R.id.dig_btnGallery_teacher:
                 returnResult=1;
                 digListener.onButtonGallery();
                 dig.dismiss();
                 break;
-            case R.id.dig_btnLive:
+            case R.id.dig_btnSettime_teacher:
                 returnResult=2;
                 digListener.onButtonSetTime();
                 dig.dismiss();
                 break;
-            case R.id.dig_btnVoice:
+            case R.id.dig_btnVoice_teacher:
                 returnResult=3;
                 digListener.onButtonVoice();
                 dig.dismiss();
                 break;
+
         }
     }
 }

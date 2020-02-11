@@ -231,7 +231,7 @@ public class ProblemFragment extends Fragment {
                     Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
 
                     if(getActivity()!=null){
-                        adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
+                        adapter = new VM_ChatAdapter(chatList, getContext(),user_type,matchset_student,matchset_teacher,parent);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -296,17 +296,35 @@ public class ProblemFragment extends Fragment {
                     dig.setDialogListener(new VM_DialogLIstener_chatMenu_teacher() {
                         @Override
                         public void onButtonCamera() {
-
+                            ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
+                            Log.d(VM_ENUM.TAG,"[problemFragment]카메라버튼 ");
+                            Intent intent=new Intent(parent, VM_ViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_TAKE_PHOTO);
+                            intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                            intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                            intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                            intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
+                            startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
                         }
 
                         @Override
                         public void onButtonGallery() {
-
+                            Intent intent=new Intent(parent, VM_ViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_GALLERY_PHOTO);
+                            intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                            intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                            intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                            intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
+                            startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
                         }
 
                         @Override
                         public void onButtonSetTime() {
-
+                            Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
                         }
 
                         @Override

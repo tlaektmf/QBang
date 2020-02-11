@@ -4,11 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 
 public class VM_Dialog_chatMenu implements View.OnClickListener {
 
