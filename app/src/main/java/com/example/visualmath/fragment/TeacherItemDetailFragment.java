@@ -158,7 +158,7 @@ public class TeacherItemDetailFragment extends Fragment {
         reference = reference.child(post_id)
                 .child(VM_ENUM.DB_DATA_DEFAULT);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);

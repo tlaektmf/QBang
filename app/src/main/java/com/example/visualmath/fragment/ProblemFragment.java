@@ -229,8 +229,12 @@ public class ProblemFragment extends Fragment {
                 if(chats!=null){ //** chatList에 데이터가 있는 경우
                     chatList=chats;
                     Log.d(TAG, "[VM_ProblemFragment]: chatList가 null아님");
-                    adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
-                    recyclerView.setAdapter(adapter);
+
+                    if(getActivity()!=null){
+                        adapter = new VM_ChatAdapter(chatList, getActivity(),user_type,matchset_student,matchset_teacher);
+                        recyclerView.setAdapter(adapter);
+                    }
+
                 }else{
                     //** chatList에 데이터가 없는 초기 상태의 경우
                     Log.d(TAG, "[VM_ProblemFragment]: chatList가 null임<초기상태>");
