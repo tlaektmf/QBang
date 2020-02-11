@@ -3,34 +3,44 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.visualmath">
 
-
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
-    
+
     <dist:module dist:instant="true" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <dist:module dist:instant="true" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.VM_ChatItemViewActivity"
+            android:theme="@style/AppTheme.blackStatusBar"></activity>
         <activity
             android:name=".activity.VM_PhotoViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
-
         <activity
             android:name=".activity.VM_ViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
-
         <activity android:name=".activity.VM_GoogleLoginActivity" />
         <activity
             android:name=".activity.VM_ProblemBoxActivity"
@@ -38,7 +48,6 @@
         <activity
             android:name=".activity.VM_RegisterUserActivity"
             android:theme="@style/AppTheme.blueStatusBar_notitle" />
-
         <activity
             android:name=".activity.VM_RegiserOtherThingsActivity"
             android:theme="@style/AppTheme.notitlebar" />
@@ -46,7 +55,6 @@
             android:name=".activity.VM_FullViewActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".VM_RegisterProblemActivity" />
-
         <activity
             android:name=".activity.VM_TeacherSolveProblemActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -104,17 +112,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <dist:module dist:instant="true" />
 
 </manifest>
