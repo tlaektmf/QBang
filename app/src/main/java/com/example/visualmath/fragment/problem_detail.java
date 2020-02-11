@@ -3,9 +3,11 @@ package com.example.visualmath.fragment;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 
 import android.net.Uri;
@@ -70,6 +72,7 @@ public class problem_detail extends Fragment {
     private FrameLayout detail_front;
     private Button close_btn;
 
+    private Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +83,7 @@ public class problem_detail extends Fragment {
             // to load content from a content provider.
             post_id=getArguments().getString(ItemDetailFragment.ARG_ITEM_ID);
             mGlideRequestManager = Glide.with(this);
+            context=getContext();
 
             initData();//DB는 한번만 읽음
         }
@@ -119,23 +123,49 @@ public class problem_detail extends Fragment {
         imageViewsOtherPictureList[0].setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                zoomImageFromThumb(view);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Drawable.ConstantState constantState = context.getResources()
+                            .getDrawable(R.drawable.add_extra_img, context.getTheme())
+                            .getConstantState();
+
+                    if ( imageViewsOtherPictureList[0].getDrawable().getConstantState() != constantState) {
+                        zoomImageFromThumb(view);
+                    }
+
+                } else {
+                    if(imageViewsOtherPictureList[0].getDrawable().getConstantState() != getResources().getDrawable(R.drawable.add_extra_img).getConstantState()){
+                        zoomImageFromThumb(view);
+                    }
+                }
+
             }
         });
         imageViewsOtherPictureList[1] = _rootView.findViewById(R.id.extra_img_two);
         imageViewsOtherPictureList[1].setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //테스트용
-                zoomImageFromThumb(view);
+                Drawable.ConstantState constantState = context.getResources()
+                        .getDrawable(R.drawable.add_extra_img, context.getTheme())
+                        .getConstantState();
+
+                if ( imageViewsOtherPictureList[1].getDrawable().getConstantState() != constantState) {
+                    zoomImageFromThumb(view);
+                }
+
             }
         });
         imageViewsOtherPictureList[2] = _rootView.findViewById(R.id.extra_img_three);
         imageViewsOtherPictureList[2].setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //테스트용
-                zoomImageFromThumb(view);
+                Drawable.ConstantState constantState = context.getResources()
+                        .getDrawable(R.drawable.add_extra_img, context.getTheme())
+                        .getConstantState();
+
+                if ( imageViewsOtherPictureList[2].getDrawable().getConstantState() != constantState) {
+                    zoomImageFromThumb(view);
+                }
             }
         });
 
@@ -148,10 +178,21 @@ public class problem_detail extends Fragment {
         ImageView bigView = rootView.findViewById(R.id.iv_photo);
 
         BitmapDrawable  bitmapDrawable = (BitmapDrawable) smallView.getDrawable();
-        Bitmap tmpBitmap = bitmapDrawable.getBitmap();
-        bigView.setImageBitmap(tmpBitmap);
+        if(bitmapDrawable!=null){
+            Bitmap tmpBitmap = bitmapDrawable.getBitmap();
 
-        detail_front.setVisibility(View.VISIBLE);
+            if(tmpBitmap!=null){
+                bigView.setImageBitmap(tmpBitmap);
+                detail_front.setVisibility(View.VISIBLE);
+            }else{
+                Log.d(VM_ENUM.TAG,"[problem_detiail] tmpBitmap==null ");
+            }
+
+        }else{
+            Log.d(VM_ENUM.TAG,"[problem_detiail] bitmapDrawable==null ");
+        }
+
+
     }
 
 
@@ -277,11 +318,13 @@ public class problem_detail extends Fragment {
         }
 
         if(vmDataExtra!=null){ //*** 데이터를 DB에서 읽어온 경우
-            Toast.makeText(getContext(),"로딩완료.",Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(getContext(),"로딩완료.",Toast.LENGTH_SHORT).show();
+            Log.d(VM_ENUM.TAG,"[problem_detail] 로딩완료.");
 
         }else {
             //데이터 읽어오는 중 => 로딩 필요
-            Toast.makeText(getContext(), "로딩중입니다.", Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(getContext(), "로딩중입니다.", Toast.LENGTH_SHORT).show();
+            Log.d(VM_ENUM.TAG,"[problem_detail] 로딩중입니다.");
         }
 
     }
