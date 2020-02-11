@@ -47,9 +47,11 @@ import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.data.VM_Data_Default;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
+import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu_teacher;
 import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
+import com.example.visualmath.dialog.VM_Dialog_chatMenu_teacher;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -284,81 +286,108 @@ public class ProblemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //** 다이얼로그 위치
+                if(user_type.equals(VM_ENUM.TEACHER)){//선생님
+                    final VM_Dialog_chatMenu_teacher dig = new VM_Dialog_chatMenu_teacher(getContext());
 
-                final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
+                    dig.setDialogListener(new VM_DialogLIstener_chatMenu_teacher() {
+                        @Override
+                        public void onButtonCamera() {
 
-                dig.setDialogListener(new VM_DialogLIstener_chatMenu() { //chats 에 추가 되는 내용이기 때문에, 동시 접근에 대해서 허용가능, 별도의 이벤트 처리를 하지 않음
-                    @Override
-                    public void onButtonCamera() {
-                        ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent(parent, VM_ViewActivity.class);
-                        intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_TAKE_PHOTO);
-                        intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
-                        intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
-                        intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
-                        intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
-                        intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
-                        intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
-                        startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
-                    }
+                        }
 
-                    @Override
-                    public void onButtonGallery() {
-                        ///Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
-                       Intent intent=new Intent(parent, VM_ViewActivity.class);
-                       intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_GALLERY_PHOTO);
-                        intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
-                        intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
-                        intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
-                        intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
-                        intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
-                        intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
-                       startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+                        @Override
+                        public void onButtonGallery() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onButtonLive() {
-                        Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onButtonSetTime() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onButtonVoice() {
-                        ///Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onButtonVoice() {
 
-                    }
+                        }
+                    });
 
-                    @Override
-                    public void onButtonComplete() {
-                        // 여기는 학생만 누를 수 있으므로  user_id 는 matchset_student 와 동일함 => 따라서 코드에, matchset_student대신 user_id를 그대로 사용함
-                       if(problemSolveButtonEvent()){
-                           Log.d(TAG,"problemSolveButtonEvent 완료");
-                       }
+                    dig.callFunction();
+                }else{//학생
+                    final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
+
+                    dig.setDialogListener(new VM_DialogLIstener_chatMenu() { //chats 에 추가 되는 내용이기 때문에, 동시 접근에 대해서 허용가능, 별도의 이벤트 처리를 하지 않음
+                        @Override
+                        public void onButtonCamera() {
+                            ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(parent, VM_ViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_TAKE_PHOTO);
+                            intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                            intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                            intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                            intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
+                            startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+                        }
+
+                        @Override
+                        public void onButtonGallery() {
+                            ///Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(parent, VM_ViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_GALLERY_PHOTO);
+                            intent.putExtra(VM_ENUM.IT_POST_ID,post_id);
+                            intent.putExtra(VM_ENUM.IT_USER_TYPE,user_type);
+                            intent.putExtra(VM_ENUM.IT_USER_ID,user_id);
+                            intent.putExtra(VM_ENUM.IT_POST_TITLE,post_title);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_STD,matchset_student);
+                            intent.putExtra(VM_ENUM.IT_MATCHSET_TEA,matchset_teacher);
+                            startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+
+                        }
+
+                        @Override
+                        public void onButtonLive() {
+                            Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void onButtonVoice() {
+                            ///Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void onButtonComplete() {
+                            // 여기는 학생만 누를 수 있으므로  user_id 는 matchset_student 와 동일함 => 따라서 코드에, matchset_student대신 user_id를 그대로 사용함
+                            if(problemSolveButtonEvent()){
+                                Log.d(TAG,"problemSolveButtonEvent 완료");
+                            }
 
 
-                        Log.d(TAG,"다이얼로그 호출 시작");
-                       //** 문제 완료 하면 학생은 홈화면으로 액티비티를 전환함
+                            Log.d(TAG,"다이얼로그 호출 시작");
+                            //** 문제 완료 하면 학생은 홈화면으로 액티비티를 전환함
 
-                        final VM_Dialog_registerProblem checkDialog =
-                                new VM_Dialog_registerProblem(parent);
-                        checkDialog.callFunction(6,parent);
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(parent);
+                            checkDialog.callFunction(6,parent);
 
-                        final Timer t = new Timer();
-                        t.schedule(new TimerTask() {
-                            public void run() {
-                                VM_Dialog_registerProblem.dig.dismiss();
-                                t.cancel();
+                            final Timer t = new Timer();
+                            t.schedule(new TimerTask() {
+                                public void run() {
+                                    VM_Dialog_registerProblem.dig.dismiss();
+                                    t.cancel();
                                     Intent intent = new Intent(getContext(), HomeActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     parent.startActivity(intent);
                                     parent.finish();
-                            }
-                        }, 2000);
+                                }
+                            }, 2000);
 
-                    }
-                });
-                dig.callFunction();
+                        }
+                    });
+                    dig.callFunction();
+                }
             }
         });
 
