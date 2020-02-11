@@ -3,17 +3,12 @@ package com.example.visualmath.data;
 public class VM_Data_CHAT {
     private String chatContent;//채팅내용
     private String sender;//보내는 사람 : student, teacher
+    private String type;// text, video, image
 
-    //**여기부터지움
-    private String receiver;//받는이 id
-    private int who;
-    private int profile;
-
-    public VM_Data_CHAT(String sender, String chat, int who, int profile){
+    public VM_Data_CHAT(String sender, String chat, String type){
         this.sender = sender;
         this.chatContent = chat;
-        this.who = who;
-        this.profile=profile;
+        this.type=type;
 
     }
 
@@ -25,12 +20,12 @@ public class VM_Data_CHAT {
 
     }
 
-    public VM_Data_CHAT(String sender, String chat){
-        this.sender = sender;
-        this.chatContent = chat;
-
-
-    }
+//    public VM_Data_CHAT(String sender, String chat){
+//        this.sender = sender;
+//        this.chatContent = chat;
+//
+//
+//    }
 
     public String getChatContent() {
         return chatContent;
@@ -48,5 +43,11 @@ public class VM_Data_CHAT {
         this.sender = sender;
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

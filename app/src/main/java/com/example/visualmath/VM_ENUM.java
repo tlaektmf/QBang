@@ -23,14 +23,10 @@ public  class VM_ENUM {
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
     public static final int RC_REGIOTHER_TO_PHOTOVIEW=999;
-
-    public static final int RC_PICK_FROM_ALBUM = 998;
-    public static final int RC_PICK_FROM_CAMERA = 997;
-    public static final int RC_READ_REQUEST_CODE = 995;
     public static final int RC_PROBLEM_SOLVE =990 ;
     public static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     public static final int PICK_FROM_CAMERA = 2;
-    public static final int OTHER_DATA_LOAD = 3;
+    public static final int RC_ProblemFragment_to_ViewActivity=800;
 
     //** Log TAG
     public static final String TAG="다슬";
@@ -48,6 +44,7 @@ public  class VM_ENUM {
     public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
     public static final String IT_ARG_USER_JOIN_DATE ="IT_ARG_USER_JOIN_DATE" ;
+    public static final String IT_PICK_FLAG ="IT_PICK_FLAG" ;
 
     //** 상수 String
     public static final String TEXT="TEXT";
@@ -58,6 +55,11 @@ public  class VM_ENUM {
     public static final int CAMERA = 2;
     public static final int NOTHING = -1;
     public static final String ALL = "all";
+    public static final String CHAT_TEXT ="CHAT_TEXT" ;
+    public static final String CHAT_VIDEO="CHAT_VIDEO" ;
+    public static final String CHAT_IMAGE ="CHAT_IMAGE" ;
+
+
 
 
 
@@ -106,7 +108,6 @@ public  class VM_ENUM {
     public  static final String PRE_ALARM="setAlarm";
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
-
 
 
 }

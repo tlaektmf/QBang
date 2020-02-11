@@ -39,6 +39,9 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         private View myChatLayout;
         private TextView friendName;
 
+        //** 내 채팅창 동영상 버젼
+        private View myChatLayoutVideoVersion;
+
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -49,6 +52,9 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.myChatLayout = itemView.findViewById(R.id.myChatLayout);
             this.friendChatLayout = itemView.findViewById(R.id.friendChatLayout);
             this.friendName=itemView.findViewById(R.id.friend_name_tv);
+
+            //** 내 채팅창 동영상 버젼
+            this.myChatLayoutVideoVersion=itemView.findViewById(R.id.myChatLayoutVideoVersion);
         }
     }
 
@@ -90,35 +96,79 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         }
 
         if(userType.equals(VM_ENUM.TEACHER)){ //유저가 선생인 경우
-            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) {
+            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) { //보내는 이가 학생
 
                 holder.friendChatLayout.setVisibility(View.GONE);
-                holder.myChatLayout.setVisibility(View.VISIBLE);
-                holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
 
-            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {
+                String flag=chatList.get(position).getType();
+                Log.d(TAG, "[VM_ChatAdapter] Flag"+flag);
+                switch (flag){
+                    case VM_ENUM.CHAT_TEXT:
+                        holder.myChatLayout.setVisibility(View.VISIBLE);
+                        holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
+                        break;
+                    case VM_ENUM.CHAT_IMAGE:
+                        break;
+                    case VM_ENUM.CHAT_VIDEO:
+                        break;
+                }
 
-                holder.friendChatLayout.setVisibility(View.VISIBLE);
+
+            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {//보내는 이가 나(선생)인 경우
+
+                String flag=chatList.get(position).getType();
                 holder.myChatLayout.setVisibility(View.GONE);
-                holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+                switch (flag){
+                    case VM_ENUM.CHAT_TEXT:
+                        holder.friendChatLayout.setVisibility(View.VISIBLE);
+                        holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+
+                        break;
+                    case VM_ENUM.CHAT_IMAGE:
+                        break;
+                    case VM_ENUM.CHAT_VIDEO:
+                        break;
+                }
                 holder.friendName.setText(this.matchSet_student);
                 holder.friendImgView.setImageResource(R.drawable.student);
-                //holder.friendImgView.setClipToOutline(true);
+
             }
         }else if(userType.equals(VM_ENUM.STUDENT)){//유저가 학생인 경우
-            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) {
-
-                holder.friendChatLayout.setVisibility(View.VISIBLE);
+            if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) { //보내는 이가 선생인 경우
                 holder.myChatLayout.setVisibility(View.GONE);
-                holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+                String flag=chatList.get(position).getType();
+                switch (flag){
+                    case VM_ENUM.CHAT_TEXT:
+                        holder.friendChatLayout.setVisibility(View.VISIBLE);
+                        holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
+                        break;
+                    case VM_ENUM.CHAT_IMAGE:
+                        break;
+                    case VM_ENUM.CHAT_VIDEO:
+                        break;
+                }
+
+
                 holder.friendName.setText(this.matchSet_teacher);
                 holder.friendImgView.setImageResource(R.drawable.teacher);
 
-            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {
-
+            } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {//보내는 이가 나(학생)인 경우
                 holder.friendChatLayout.setVisibility(View.GONE);
-                holder.myChatLayout.setVisibility(View.VISIBLE);
-                holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
+
+                String flag=chatList.get(position).getType();
+                switch (flag){
+                    case VM_ENUM.CHAT_TEXT:
+                        holder.myChatLayout.setVisibility(View.VISIBLE);
+                        holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
+                        break;
+                    case VM_ENUM.CHAT_IMAGE:
+                        break;
+                    case VM_ENUM.CHAT_VIDEO:
+                        break;
+                }
+
+
+
 
 
             }

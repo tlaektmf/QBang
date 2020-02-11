@@ -5,16 +5,20 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +37,7 @@ import com.example.visualmath.activity.TeacherHomeActivity;
 import com.example.visualmath.activity.VM_ProblemBoxActivity;
 import com.example.visualmath.activity.VM_ProblemListActivity;
 import com.example.visualmath.activity.VM_RegiserOtherThingsActivity;
+import com.example.visualmath.activity.VM_ViewActivity;
 import com.example.visualmath.adapter.VM_ChatAdapter;
 import com.example.visualmath.VM_DBHandler;
 import com.example.visualmath.VM_ENUM;
@@ -61,6 +66,8 @@ import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,6 +115,7 @@ public class ProblemFragment extends Fragment {
     private Button showActionDialog;
 
     //>>>>>
+    private File takeFile;
 
 //DashBoardFragment
 // VM_ProblemBoxActivity
@@ -253,13 +261,13 @@ public class ProblemFragment extends Fragment {
                         //** 초기 상태의 경우(chatList에 데이터가 하나도 없는 경우
                         Log.d(TAG, "[VM_ProblemFragment]: chatList에 데이터가 하나도 없는 경우");
                         List<VM_Data_CHAT> data = new ArrayList<>();
-                        data.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
+                        data.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString(),VM_ENUM.CHAT_TEXT));
                         loadDatabase(post_id,data);
 
                     }else{
                         //** chatList에 데이터가 하나라도 있는 경우
                         ///*** open with addvalueListenr
-                        chatList.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString()));
+                        chatList.add(new VM_Data_CHAT(user_type, msgEditText.getText().toString(),VM_ENUM.CHAT_TEXT));
                         loadDatabase(post_id,chatList);
                     }
 ///*** open with addvalueListenr <<<<<<<<<<<<<
@@ -283,17 +291,23 @@ public class ProblemFragment extends Fragment {
                     @Override
                     public void onButtonCamera() {
                         ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(parent, VM_ViewActivity.class);
+                        intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_TAKE_PHOTO);
+                        startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
                     }
 
                     @Override
                     public void onButtonGallery() {
                         ///Toast.makeText(getActivity(), "갤러리버튼", Toast.LENGTH_LONG).show();
+                       Intent intent=new Intent(parent, VM_ViewActivity.class);
+                       intent.putExtra(VM_ENUM.IT_PICK_FLAG,VM_ENUM.IT_GALLERY_PHOTO);
+                       startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
 
                     }
 
                     @Override
                     public void onButtonLive() {
-                        Toast.makeText(getActivity(), "2020년 03월부터 시행 예정", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
 
                     }
 
@@ -477,79 +491,6 @@ public void loadDatabase(final String post_id, final List<VM_Data_CHAT> chatItem
 //        dbHandler.newChat(post_id,chatItem);
 //}
 
-private void initProblemFragment(){//** 한번만 호출
-    Log.d(TAG, "[VM_ProblemFragment]:initProblemFragment 시작 ");
-             reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "[VM_ProblemFragment] ValueEventListener : " +dataSnapshot );
-
-                if(!fromStudentUnmatched){
-                    matchset_student= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue()).toString();
-                    matchset_teacher= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_MATCH_TEACHER).getValue()).toString();
-                    Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: "+matchset_teacher+", matchset_student: "+matchset_student);
-                }else{
-                    Log.d(TAG, "[VM_ProblemFragment]: 매치 미완료이므로 matchset_teacher을 찾지 않음");
-                }
-
-
-                vmDataDefault=dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
-                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: "+vmDataDefault);
-
-
-//                for(DataSnapshot ds : dataSnapshot.child(VM_ENUM.DB_chatList).getChildren()) {
-//                    chatList.add(ds.getValue(VM_Data_CHAT.class));
-//                    Log.d(TAG, "[VM_ProblemFragment]: chatList: "+ds.getValue(VM_Data_CHAT.class).getChatContent());
-//                }
-//                adapter = new VM_ChatAdapter(chatList, parent,user_type,matchset_student,matchset_teacher);
-//                recyclerView.setAdapter(adapter);
-
-                //** chat 데이터 생성
-                reference.child(VM_ENUM.DB_chatList).addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Log.d(TAG, "<<<<<<[VM_ProblemFragment]: onChildAdded 호출>>>>>>: "+dataSnapshot);
-                        String key=dataSnapshot.getKey();
-                        Log.d(TAG, "[VM_ProblemFragment]: dataSnapshot.getValue(): "+ dataSnapshot.getValue());
-
-                       // dataSnapshot.child(key).getValue();
-//                        chatList.add(new VM_Data_CHAT(dataSnapshot.getValue()..toString(),
-//                                dataSnapshot.child(key).child("sender").getValue().toString()));
-//
-//                        adapter = new VM_ChatAdapter(chatList, parent,user_type,matchset_student,matchset_teacher);
-//                        recyclerView.setAdapter(adapter);
-
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-}
 
 private boolean onSolveProblemIncrease(String matchset_teacher, String user_id) {
 
@@ -612,57 +553,17 @@ private boolean onSolveProblemIncrease(String matchset_teacher, String user_id) 
     return true;
     }
 
-    private void tedPermission() {
 
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                //** 권한 요청 성공
-                Toast.makeText(parent, "Permission Granted", Toast.LENGTH_SHORT).show();
-                showPickDialog();
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(VM_ENUM.TAG, "[ProblemFragment] " + requestCode + " ," + resultCode);
+
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == VM_ENUM.RC_ProblemFragment_to_ViewActivity){
 
             }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                // ** 권한 요청 실패
-                Toast.makeText(parent, deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        TedPermission.with(parent)
-                .setPermissionListener(permissionListener)
-                .setDeniedMessage(getResources().getString(R.string.permission_notice))
-                .setDeniedCloseButtonText(getResources().getString(R.string.permission_close))
-                .setGotoSettingButtonText(getResources().getString(R.string.permission_setting))
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .check();
-
-    }
-
-    private void showPickDialog() {
-        //** 다이얼로그 실행
-
-        // 커스텀 다이얼로그를 생성
-        final VM_Dialog_PickHowToGetPicture dialog = new VM_Dialog_PickHowToGetPicture(parent);
-
-        // 커스텀 다이얼로그의 결과를 담을 매개변수로 같이 넘겨준다.
-
-        dialog.setDialogListener(new VM_DialogListener_PickHowToGetPicture() {
-            @Override
-            public void onButtonTakePhotoClicked() {
-
-                ///takePhoto();
-            }
-
-            @Override
-            public void onButtonGetAlbumFileClicked() {
-
-                ///getAlbumFile();
-            }
-        });
-        dialog.callFunction();// 커스텀 다이얼로그를 호출
-
-
-    }
+        }
+}
 }
