@@ -1,104 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@color/transparent">
 
     <!--    다른 사람이 보내는 메세지-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
-        android:id="@+id/friendChatLayout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-<!--        상대방 정보가 보이는 부분-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/your_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            android:id="@+id/friendChatLayout"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:visibility="visible"
-                android:id="@+id/friendImgView"
+            <!--        상대방 정보가 보이는 부분-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/your_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
 
-                android:contentDescription="@string/app_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/friend_name_tv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:visibility="visible"
+                    android:id="@+id/friendImgView"
+
+                    android:contentDescription="@string/app_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <TextView
+                    android:id="@+id/friend_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/friendImgView"
+                    android:text="상대방 이름"
+
+                    android:fontFamily="@font/nanumsquaure_r"
+                    android:textColor="#404040"
+                    android:textSize="@dimen/chat_name_text"
+                    android:layout_marginLeft="10dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--        상대방 채팅 내용-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/txtParentLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/your_info"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="50dp">
+
+                <TextView
+                    android:id="@+id/friendMsgTxtView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/your_chat_back"
+                    android:fontFamily="@font/nanumsquaure_r"
+                    android:gravity="center"
+
+                    android:padding="8dp"
+                    android:elevation="3dp"
+                    android:textAlignment="center"
+                    android:textColor="#016a96"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    tools:text="상대방이 보낸 메세지" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--    상대방이 보내는 메세지 : 동영상 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/myFriendLayoutVideoVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/your_info"
+
+                android:layout_marginLeft="50dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <VideoView
+                        android:id="@+id/friendMsgVideoView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/your_chat_back"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:padding="8dp"
+                        android:elevation="3dp"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--    상대방이 보내는 메세지 : 이미지 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/myFriendChatLayoutImageVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/your_info"
+
+                android:layout_marginLeft="50dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <com.github.chrisbanes.photoview.PhotoView
+                        android:id="@+id/friendMsgImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/your_chat_back"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:padding="8dp"
+                        android:elevation="3dp"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--    내가 보내는 메세지-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:id="@+id/myChatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="15dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/myParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/friendImgView"
-                android:text="상대방 이름"
+                app:layout_constraintRight_toRightOf="parent">
 
-                android:fontFamily="@font/nanumsquaure_r"
-                android:textColor="#404040"
-                android:textSize="@dimen/chat_name_text"
-                android:layout_marginLeft="10dp"/>
+                <TextView
+                    android:id="@+id/myMsgTxtView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/my_chat_back"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="내가 보낸 메세지"
+
+                    android:padding="8dp"
+                    android:elevation="3dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanumsquaure_r"
+                    android:textColor="#016a96"
+                    android:gravity="center"
+
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        상대방 채팅 내용-->
+        <!--    내가 보내는 메세지 : 동영상 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:visibility="gone"
-            android:id="@+id/txtParentLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/your_info"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="50dp">
-
-            <TextView
-                android:id="@+id/friendMsgTxtView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/your_chat_back"
-                android:fontFamily="@font/nanumsquaure_r"
-                android:gravity="center"
-
-                android:padding="8dp"
-                android:elevation="3dp"
-                android:textAlignment="center"
-                android:textColor="#016a96"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                tools:text="상대방이 보낸 메세지" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--    상대방이 보내는 메세지 : 동영상 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="gone"
-            android:id="@+id/myFriendLayoutVideoVersion"
+            android:id="@+id/myChatLayoutVideoVersion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/your_info"
-
-            android:layout_marginLeft="50dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="15dp">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -107,11 +234,11 @@
                 app:layout_constraintRight_toRightOf="parent">
 
                 <VideoView
-                    android:id="@+id/friendMsgVideoView"
+                    android:id="@+id/myMsgVideoView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="fitCenter"
-                    android:background="@drawable/your_chat_back"
+                    android:background="@drawable/my_chat_back"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -126,17 +253,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--    상대방이 보내는 메세지 : 이미지 -->
+        <!--    내가 보내는 메세지 : 이미지 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:visibility="gone"
-            android:id="@+id/myFriendChatLayoutImageVersion"
-            android:layout_width="wrap_content"
+            android:id="@+id/myChatLayoutImageVersion"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/your_info"
-
-            android:layout_marginLeft="50dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="15dp">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -145,11 +271,11 @@
                 app:layout_constraintRight_toRightOf="parent">
 
                 <com.github.chrisbanes.photoview.PhotoView
-                    android:id="@+id/friendMsgImageView"
+                    android:id="@+id/myMsgImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="fitCenter"
-                    android:background="@drawable/your_chat_back"
+                    android:background="@drawable/my_chat_back"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -160,130 +286,9 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:layout_marginLeft="10dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    내가 보내는 메세지-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
-        android:id="@+id/myChatLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="15dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/myParent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <TextView
-                android:id="@+id/myMsgTxtView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/my_chat_back"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="내가 보낸 메세지"
-
-                android:padding="8dp"
-                android:elevation="3dp"
-                android:textAlignment="center"
-                android:fontFamily="@font/nanumsquaure_r"
-                android:textColor="#016a96"
-                android:gravity="center"
-
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    내가 보내는 메세지 : 동영상 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
-        android:id="@+id/myChatLayoutVideoVersion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="15dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <VideoView
-                android:id="@+id/myMsgVideoView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="fitCenter"
-                android:background="@drawable/my_chat_back"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:padding="8dp"
-                android:elevation="3dp"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    내가 보내는 메세지 : 이미지 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
-        android:id="@+id/myChatLayoutImageVersion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="15dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <com.github.chrisbanes.photoview.PhotoView
-                android:id="@+id/myMsgImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="fitCenter"
-                android:background="@drawable/my_chat_back"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:padding="8dp"
-                android:elevation="3dp"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-            />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
