@@ -1,14 +1,17 @@
 package com.example.visualmath.fragment;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
+import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_FullViewActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +45,7 @@ public class SolveFragment extends Fragment {
     private FrameLayout detail_front;
     private Button close_btn;
 
+    private Context context;
     ///private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
     ///private FirebaseAuth firebaseAuth;
@@ -61,6 +66,7 @@ public class SolveFragment extends Fragment {
         // Inflate the layout for this fragment
 
         rootView=(ViewGroup)inflater.inflate(R.layout.fragment_solve, container, false);
+        context=getContext();
         init(rootView);
         //return inflater.inflate(R.layout.fragment_solve, container, false);
         return rootView;
@@ -73,7 +79,14 @@ public class SolveFragment extends Fragment {
          imageViewProblem.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 zoomImageFromThumb(view);
+                 Drawable.ConstantState constantState = context.getResources()
+                         .getDrawable(R.drawable.add_extra_img, context.getTheme())
+                         .getConstantState();
+                 if ( imageViewProblem.getDrawable().getConstantState() != constantState) {
+                     zoomImageFromThumb(view);
+                 }
+
+
              }
          });
         detail_front=_rootView.findViewById(R.id.detail_front);
@@ -104,10 +117,22 @@ public class SolveFragment extends Fragment {
         ImageView bigView = rootView.findViewById(R.id.iv_photo);
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) smallView.getDrawable();
-        Bitmap tmpBitmap = bitmapDrawable.getBitmap();
-        bigView.setImageBitmap(tmpBitmap);
 
-        detail_front.setVisibility(View.VISIBLE);
+        if(bitmapDrawable!=null){
+            Bitmap tmpBitmap = bitmapDrawable.getBitmap();
+
+            if(tmpBitmap!=null){
+                bigView.setImageBitmap(tmpBitmap);
+                detail_front.setVisibility(View.VISIBLE);
+            }else{
+                Log.d(VM_ENUM.TAG,"[SolveFragment] tmpBitmap==null ");
+            }
+        }
+        else{
+            Log.d(VM_ENUM.TAG,"[SolveFragment] bitmapDrawable==null ");
+        }
+
+
     }
     public void setWidget(){
 
