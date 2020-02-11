@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.visualmath.activity.VM_LoginActivity;
 import com.example.visualmath.activity.VM_RegiserOtherThingsActivity;
 import com.example.visualmath.data.VM_Data_ADD;
 import com.example.visualmath.data.VM_Data_BASIC;
@@ -518,6 +520,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         return image;
     }
 
+
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
      * 이때 startActivityForResult 의 두번 째 파라미터로 보낸 값 { PICK_FROM_ALBUM }이 requestCode 로 반환됨
@@ -550,16 +553,23 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
+
  //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
-                    Log.i(TAG, "[RegiProblem]onActivityResult  Uri: " + uri.toString());
-                    try {
-                        getBitmapFromUri(uri);
-                        vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(uri.toString().contains("video")){
+                        final VM_Dialog_registerProblem checkDialog =
+                                new VM_Dialog_registerProblem(VM_RegisterProblemActivity.this);
+                        checkDialog.callFunction(11);
+                    }else{
+                        try {
+                            getBitmapFromUri(uri);
+                            vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        explainView.setVisibility(View.GONE);
                     }
                 }
  //           }
@@ -595,7 +605,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 //
 //            }
 
-            explainView.setVisibility(View.GONE);
+
 
         } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;

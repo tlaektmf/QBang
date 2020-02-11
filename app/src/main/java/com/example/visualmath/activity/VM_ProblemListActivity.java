@@ -220,19 +220,6 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 mDetailView = (TextView) view.findViewById(R.id.problem_content_detail);
                 mDateView = (TextView) view.findViewById(R.id.problem_content_time);
 
-//                //** 아이템 클릭 이벤트
-//                itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        final int pos = getAdapterPosition();
-//
-//
-//
-//
-//                    }
-//                });
-
-
             }
         }
     }
@@ -329,7 +316,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         reference=firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
 
-        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {//**한번만 호출
+        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

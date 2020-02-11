@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_horizontal"
+    android:padding="15dp"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/dialog_back_entire">
+        <LinearLayout
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_back_top"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="알     림"
+                android:fontFamily="@font/nanumsquaure_eb"
+                android:textColor="#016a96"
+                android:textSize="@dimen/title_text"
+                android:textAlignment="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/dialog_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_back_bottom"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미 매치 완료된 문제입니다."
+
+                android:fontFamily="@font/nanumsquaure_b"
+                android:textColor="#014a67"
+                android:textSize="@dimen/view_text"
+                android:textAlignment="center"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

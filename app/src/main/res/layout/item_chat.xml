@@ -91,7 +91,7 @@
 
     <!--    내가 보내는 메세지-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="visible"
+        android:visibility="invisible"
         android:id="@+id/myChatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,6 +130,81 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    내가 보내는 메세지 : 동영상 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/myChatLayoutVideoVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="15dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <VideoView
+                android:id="@+id/myMsgVideoView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/my_chat_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:padding="8dp"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    내가 보내는 메세지 : 이미지 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/myChatLayoutImageVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="15dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/myMsgImageView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="fitCenter"
+                android:background="@drawable/my_chat_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:padding="8dp"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+            />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

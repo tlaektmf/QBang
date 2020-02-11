@@ -26,6 +26,11 @@
         <activity
             android:name=".activity.VM_PhotoViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
+
+        <activity
+            android:name=".activity.VM_ViewActivity"
+            android:theme="@style/AppTheme.blackStatusBar" />
+
         <activity android:name=".activity.VM_GoogleLoginActivity" />
         <activity
             android:name=".activity.VM_ProblemBoxActivity"

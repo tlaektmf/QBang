@@ -59,6 +59,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -74,7 +76,10 @@ public class ItemProblemDetailFragment extends Fragment {
     public String fromUnmatched;
     public String needToBlock;
 
-
+    private ImageView problem;
+    private TextView textViewTitle;
+    private TextView textViewProblemGrade;
+    private TextView textViewSolveWay;
     private String post_id;
     private String solveWay;
     private String matchSet_student;
@@ -133,10 +138,10 @@ public class ItemProblemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_item_problem_detail, container, false);
-
-        TextView textViewTitle = (TextView) rootView.findViewById(R.id.tv_problem_title);
-        TextView textViewProblemGrade = ((TextView) rootView.findViewById(R.id.tv_problem_grade));
-        TextView textViewSolveWay = ((TextView) rootView.findViewById(R.id.tv_alarm));
+         problem = (ImageView) rootView.findViewById(R.id.iv_problem_image);
+         textViewTitle = (TextView) rootView.findViewById(R.id.tv_problem_title);
+         textViewProblemGrade = ((TextView) rootView.findViewById(R.id.tv_problem_grade));
+         textViewSolveWay = ((TextView) rootView.findViewById(R.id.tv_alarm));
 
         Button buttonViewDetail = rootView.findViewById(R.id.bt_viewDetail);
         Button buttonMatch = rootView.findViewById(R.id.bt_match);
@@ -189,18 +194,18 @@ public class ItemProblemDetailFragment extends Fragment {
 
 
         // Show the dummy content as text in a TextView.
-        if (vmDataDefault != null) {
-            textViewProblemGrade.setText(vmDataDefault.getGrade());
-            textViewTitle.setText(vmDataDefault.getTitle());
-            if (solveWay.equals(VM_ENUM.VIDEO)) {
-                textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
-            } else if (solveWay.equals(VM_ENUM.TEXT)) {
-                textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
-            }
-
-        } else {
-            Log.i(TAG, "null");
-        }
+//        if (vmDataDefault != null) {
+//            textViewProblemGrade.setText(vmDataDefault.getGrade());
+//            textViewTitle.setText(vmDataDefault.getTitle());
+//            if (solveWay.equals(VM_ENUM.VIDEO)) {
+//                textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
+//            } else if (solveWay.equals(VM_ENUM.TEXT)) {
+//                textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
+//            }
+//
+//        } else {
+//            Log.i(TAG, "null");
+//        }
 
         return rootView;
 
@@ -216,22 +221,21 @@ public class ItemProblemDetailFragment extends Fragment {
 
                 if (dataSnapshot.getValue() == null) {
                     Log.d(VM_ENUM.TAG, "이미 누가 가져감");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                            // ->문제선택 화면으로 다시 전환
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(7,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
-                            dialog.dismiss();     //닫기
-
                         }
-                    });
-                    alert.setMessage("이미 매치 완료된 문제입니다.");
-                    alert.show();
+                    }, 2000);
 
                 } else {
                     Log.d(VM_ENUM.TAG, "문제가 유효함. dataUpdate 함수 호출 ");
@@ -361,41 +365,41 @@ public class ItemProblemDetailFragment extends Fragment {
 //                    toast.setView(getLayoutInflater().inflate(R.layout.layout_dialog_match_complete, null));
 //                    toast.show();
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();     //닫기
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(5,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
                         }
-                    });
-                    alert.setMessage("매치 완료되었습니다.");
-                    alert.show();
+                    }, 2000);
 
                 } else {
                     //아닌경우
                     Log.d(TAG, "[자신이 first matchSet teacher 아님]");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(parent);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(parent);
+                    checkDialog.callFunction(7,parent);
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
                             // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
                             intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
 
-                            dialog.dismiss();     //닫기
-
                         }
-                    });
-                    alert.setMessage("이미 매치 완료된 문제입니다.");
-                    alert.show();
+                    }, 2000);
                 }
 
                 Log.d(TAG, "[getFirstTeacher 완료]");
@@ -429,6 +433,19 @@ public class ItemProblemDetailFragment extends Fragment {
                 vmDataDefault = dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
                 matchSet_student = dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue(String.class);
                 upLoadDate = dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue(String.class);
+
+                if (vmDataDefault != null) {
+                    textViewProblemGrade.setText(vmDataDefault.getGrade());
+                    textViewTitle.setText(vmDataDefault.getTitle());
+                    if (solveWay.equals(VM_ENUM.VIDEO)) {
+                        textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
+                    } else if (solveWay.equals(VM_ENUM.TEXT)) {
+                        textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
+                    }
+                } else {
+                    Log.i(TAG, "null");
+                }
+
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] ValueEventListener : " + dataSnapshot);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] matchSet_student : " + matchSet_student);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] upLoadDate : " + upLoadDate);
@@ -441,7 +458,6 @@ public class ItemProblemDetailFragment extends Fragment {
                     @Override
                     public void onSuccess(Uri uri) {
                         //** 사진파일 이미지뷰에 삽입
-                        ImageView problem = (ImageView) rootView.findViewById(R.id.iv_problem_image);
 
                         mGlideRequestManager
                                 .load(uri)
@@ -455,12 +471,12 @@ public class ItemProblemDetailFragment extends Fragment {
                 });
 
 
-                //** 프래그먼트 갱신 (가장 마지막에 해야 모든 DB 정보가 들어와서 FullActivity로 이동
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                if (Build.VERSION.SDK_INT >= 26) {
-                    ft.setReorderingAllowed(false);
-                }
-                ft.detach(ItemProblemDetailFragment.this).attach(ItemProblemDetailFragment.this).commit();
+//                //** 프래그먼트 갱신 (가장 마지막에 해야 모든 DB 정보가 들어와서 FullActivity로 이동
+//                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                if (Build.VERSION.SDK_INT >= 26) {
+//                    ft.setReorderingAllowed(false);
+//                }
+//                ft.detach(ItemProblemDetailFragment.this).attach(ItemProblemDetailFragment.this).commit();
             }
 
             @Override

@@ -71,7 +71,41 @@ public class VM_DBHandler {
         databaseReference.setValue(chat); //** 파이어베이스 DB 등록
 
     }
+    public void newChatItem(String post_id, final VM_Data_CHAT chatitem, String index, String user_id) {
 
+        StorageReference riversRef = storageReference.child
+                (user_id + "/" +
+                        post_id + "/" +
+                        chatitem.getChatContent());
+
+        String fileName=user_id + "/" +
+                post_id + "/" +
+                chatitem.getChatContent();
+
+        //** 파일 이름 변경
+        chatitem.setChatContent(fileName);
+
+        riversRef.putFile(Uri.parse(chatitem.getChatContent()))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Log.i(TAG, "[파이어베이스 저장소 저장] 성공");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                        Log.i(TAG, "[파이어베이스 저장소 저장] 실패..."+Uri.parse(chatitem.getChatContent()));
+                    }
+                });
+
+        databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
+        databaseReference.child(index).setValue(chatitem); //** 파이어베이스 DB 등록
+
+    }
     public void newAlarm(String post_id, String title, String user_type, String receiver,String message){
         AlarmItem alarmItem=new AlarmItem(post_id,title,message);
 

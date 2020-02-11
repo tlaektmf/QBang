@@ -106,7 +106,6 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
         isUnMatchedClick=true;
 
-        Toast.makeText(this, "매치 미완료 목록",Toast.LENGTH_LONG).show();
         btn_unmatched.setSelected(true);
         btn_matched.setSelected(false);
 
@@ -128,7 +127,6 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     public void show_matched_list(View view){
 
         isUnMatchedClick=false;
-        Toast.makeText(this, "매치 완료 목록",Toast.LENGTH_LONG).show();
         btn_unmatched.setSelected(false);
         btn_matched.setSelected(true);
 

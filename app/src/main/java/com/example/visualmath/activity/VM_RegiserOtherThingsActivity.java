@@ -31,6 +31,7 @@ import com.example.visualmath.VM_RegisterProblemActivity;
 import com.example.visualmath.data.VM_Data_ADD;
 import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
+import com.example.visualmath.dialog.VM_Dialog_registerProblem;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.gun0912.tedpermission.PermissionListener;
@@ -525,13 +526,20 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                     uri = data.getData();
                     Log.i(TAG, "[RegiOther] onActivityResult Uri: " + uri.toString());
 
-                    try {
-                        setBitmapFromUri(uri);
-                        createData(uri);
+                    if(uri.toString().contains("video")){
+                        final VM_Dialog_registerProblem checkDialog =
+                                new VM_Dialog_registerProblem(VM_RegiserOtherThingsActivity.this);
+                        checkDialog.callFunction(11);
+                    }else{
+                        try {
+                            setBitmapFromUri(uri);
+                            createData(uri);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 }
 
 

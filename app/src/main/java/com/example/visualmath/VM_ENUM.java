@@ -23,14 +23,10 @@ public  class VM_ENUM {
     //** requestCode
     public static final int RC_GOOGLE_LOGIN=1000;
     public static final int RC_REGIOTHER_TO_PHOTOVIEW=999;
-
-    public static final int RC_PICK_FROM_ALBUM = 998;
-    public static final int RC_PICK_FROM_CAMERA = 997;
-    public static final int RC_READ_REQUEST_CODE = 995;
     public static final int RC_PROBLEM_SOLVE =990 ;
     public static final int PICK_FROM_ALBUM = 1; //onActivityResult 에서 requestCode 로 반환되는 값
     public static final int PICK_FROM_CAMERA = 2;
-    public static final int OTHER_DATA_LOAD = 3;
+    public static final int RC_ProblemFragment_to_ViewActivity=800;
 
     //** Log TAG
     public static final String TAG="다슬";
@@ -48,6 +44,13 @@ public  class VM_ENUM {
     public static final String IT_MATCH_SUCCESS = "IT_MATCH_SUCCESS";
     public static final String IT_ALARM_MESSAGE ="IT_ALARM_MESSAGE" ;
     public static final String IT_ARG_USER_JOIN_DATE ="IT_ARG_USER_JOIN_DATE" ;
+    public static final String IT_PICK_FLAG ="IT_PICK_FLAG" ;
+    public static final String IT_POST_ID ="IT_POST_ID" ;
+    public static final String IT_USER_TYPE = "IT_USER_TYPE";
+    public static final String IT_USER_ID = "IT_USER_ID";
+    public static final String IT_POST_TITLE ="IT_POST_TITLE" ;
+    public static final String IT_MATCHSET_STD = "IT_MATCHSET_STD";
+    public static final String IT_MATCHSET_TEA = "IT_MATCHSET_TEA";
 
     //** 상수 String
     public static final String TEXT="TEXT";
@@ -58,6 +61,11 @@ public  class VM_ENUM {
     public static final int CAMERA = 2;
     public static final int NOTHING = -1;
     public static final String ALL = "all";
+    public static final String CHAT_TEXT ="CHAT_TEXT" ;
+    public static final String CHAT_VIDEO="CHAT_VIDEO" ;
+    public static final String CHAT_IMAGE ="CHAT_IMAGE" ;
+
+
 
 
 
@@ -89,6 +97,7 @@ public  class VM_ENUM {
     public static final String DB_UPLOAD_DATE="uploadDate";
     public static final String DB_STU_POSTS="posts";
     public static final String DB_DATA_DEFAULT="data_default";
+    public static final String DB_DATA_EXTRA = "data_extra";
     public static final String DB_TEA_POSTS ="posts" ;
     public static final String DB_TEA_UNSOLVED = "unsolved";
     public static final String DB_MATCH_STUDENT = "matchSet_student";
