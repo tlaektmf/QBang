@@ -152,6 +152,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
     }
 
     public void cancel(View view) {
+        //부착되어 있는 프래그먼트 삭제
         finish();
     }
 }
