@@ -44,12 +44,13 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     public class VM_CustomViewHolder extends RecyclerView.ViewHolder {
 
         //위젯
-        private ImageView friendImgView;
-        private TextView friendMsgTxtView;
-        private TextView myMsgTxtView;
         private View friendChatLayout;
-        private View myChatLayout;
+        private ImageView friendImgView;
         private TextView friendName;
+
+        //** 내 채팅창 텍스트 버젼
+        private TextView myMsgTxtView;
+        private View myChatLayout;
 
         //** 내 채팅창 동영상 버젼
         private View myChatLayoutVideoVersion;
@@ -61,9 +62,16 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         //** 상대 채팅창 동영상 버전
         private VideoView friendMsgVideoView;
+        private View friendChatLayoutVideoVersion;
+
         //** 상대 채팅창 이미지 버젼
+        private View friendChatLayoutImageVersion;
         private PhotoView friendMsgPhotoView;
 
+
+        //** 상대 채팅창 텍스트 버젼
+        private View friendChatLayoutTextVersion;
+        private TextView friendMsgTxtView;
 
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,12 +94,15 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.myMsgPhotoView=itemView.findViewById(R.id.myMsgImageView);
 
             //** 상대 채팅창 동영상 버전
+            this.friendChatLayoutImageVersion=itemView.findViewById(R.id.myFriendLayoutVideoVersion);
             this.friendMsgVideoView=itemView.findViewById(R.id.friendMsgVideoView);
 
             //** 상대 채팅창 이미지 버전
+            this.friendChatLayoutImageVersion=itemView.findViewById(R.id.myFriendChatLayoutImageVersion);
             this.friendMsgPhotoView=itemView.findViewById(R.id.friendMsgImageView);
 
             //** 상대 채팅창 텍스트 버젼
+            this.friendChatLayoutTextVersion=itemView.findViewById(R.id.txtParentLayout);
             this.friendMsgTxtView = itemView.findViewById(R.id.friendMsgTxtView);
 
         }
@@ -200,18 +211,18 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
-                        holder.friendMsgTxtView.setVisibility(View.VISIBLE);
+                        holder.friendChatLayoutTextVersion.setVisibility(View.VISIBLE);
                         holder.friendMsgTxtView.setText(chatList.get(position).getChatContent());
                         break;
                     case VM_ENUM.CHAT_IMAGE:
-                        holder.friendImgView.setVisibility(View.VISIBLE);
+                        holder.friendChatLayoutImageVersion.setVisibility(View.VISIBLE);
                         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 //** 사진파일 이미지뷰에 삽입
                                 mGlideRequestManager
                                         .load(uri)
-                                        .into(holder.myMsgPhotoView);
+                                        .into(holder.friendMsgPhotoView);
                                 Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -223,17 +234,18 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                         break;
                     case VM_ENUM.CHAT_VIDEO:
-                        holder.friendImgView.setVisibility(View.VISIBLE);
+                        holder.friendChatLayoutVideoVersion.setVisibility(View.VISIBLE);
                         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 //** 사진파일 이미지뷰에 삽입
-                                holder.myMsgVideoView.setVideoURI(uri);
+                                holder.friendMsgVideoView.setVideoURI(uri);
+                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
                             }
                         });
                         break;
