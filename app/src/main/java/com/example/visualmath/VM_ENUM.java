@@ -51,6 +51,8 @@ public  class VM_ENUM {
     public static final String IT_POST_TITLE ="IT_POST_TITLE" ;
     public static final String IT_MATCHSET_STD = "IT_MATCHSET_STD";
     public static final String IT_MATCHSET_TEA = "IT_MATCHSET_TEA";
+    public static final String IT_CHAT_ITEM_URI ="IT_CHAT_ITEM_URI" ;
+    public static final String IT_CHAT_ITEM_TYPE = "IT_CHAT_ITEM_TYPE";
 
     //** 상수 String
     public static final String TEXT="TEXT";

@@ -1,6 +1,8 @@
 package com.example.visualmath.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
+import com.example.visualmath.activity.VM_ChatItemViewActivity;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +37,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     private static final String TAG = VM_ENUM.TAG;
     private List<VM_Data_CHAT> chatList;
     private Context context;
+    private Activity parent;
     private String userType;
     private String matchSet_student;
     private String matchSet_teacher;
@@ -89,12 +93,12 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.myChatLayoutVideoVersion=itemView.findViewById(R.id.myChatLayoutVideoVersion);
             this.myMsgVideoView=itemView.findViewById(R.id.myMsgVideoView);
 
-            //** 내 채팅창 동영상 버젼
+            //** 내 채팅창 이미지 버젼
             this.myChatLayoutImageVersion=itemView.findViewById(R.id.myChatLayoutImageVersion);
             this.myMsgPhotoView=itemView.findViewById(R.id.myMsgImageView);
 
             //** 상대 채팅창 동영상 버전
-            this.friendChatLayoutImageVersion=itemView.findViewById(R.id.myFriendLayoutVideoVersion);
+            this.friendChatLayoutVideoVersion=itemView.findViewById(R.id.myFriendLayoutVideoVersion);
             this.friendMsgVideoView=itemView.findViewById(R.id.friendMsgVideoView);
 
             //** 상대 채팅창 이미지 버전
@@ -105,10 +109,31 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.friendChatLayoutTextVersion=itemView.findViewById(R.id.txtParentLayout);
             this.friendMsgTxtView = itemView.findViewById(R.id.friendMsgTxtView);
 
+
+            //** 아이템 클릭 이벤트
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+
+                    if (pos != RecyclerView.NO_POSITION) {
+                        //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+                        String uri = chatList.get(pos).getChatContent();
+                        String type = chatList.get(pos).getType();
+                        Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
+                        intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
+                        intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
+                        parent.startActivity(intent);
+                        Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+
+                    }
+                }
+            });
+
         }
     }
 
-    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher) {
+    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher, Activity parent) {
         this.chatList = _chatList;
 
         if(chatList!=null){
@@ -117,6 +142,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             }
         }
 
+        this.parent=parent;
         this.context = context;
         mGlideRequestManager=Glide.with(context);
         this.userType=userType;

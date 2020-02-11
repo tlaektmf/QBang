@@ -469,8 +469,7 @@ public class VM_ViewActivity extends AppCompatActivity {
             }
 
             finish();
-
-        }else if(resultCode== Activity.RESULT_OK){
+        }else {
             if(requestCode==VM_ENUM.PICK_FROM_ALBUM){
                 Uri uri = null;
                 if (data != null) {
@@ -515,49 +514,53 @@ public class VM_ViewActivity extends AppCompatActivity {
                 }else{
                     Log.d(VM_ENUM.TAG,"[ViewActivity] data null임");
                 }
-            }
-        }else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
-            Uri photoUri;
+            }else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
+                Uri photoUri;
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
-                Log.d(VM_ENUM.TAG, "[VM_VieActivity /PICK_FROM_CAMERA]: photoUri " + photoUri);
-            } else {
-                photoUri = Uri.fromFile(takeFile);
-            }
-
-            db_save_uri=photoUri;
-
-            //** 비디오, 이미지 판단
-            if(photoUri.toString().contains("video")){
-                Log.d(VM_ENUM.TAG,"[ViewActivity], video");
-                imageViewPhoto.setVisibility(View.GONE);
-                videoView.setVisibility(View.VISIBLE);
-                videoView.setVideoURI(photoUri);
-                videoView.start();
-
-            }else{
-                Log.d(VM_ENUM.TAG,"[ViewActivity], image");
-                try {
-                    imageViewPhoto.setVisibility(View.VISIBLE);
-                    videoView.setVisibility(View.GONE);
-                    setBitmapFromUri(photoUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    photoUri = FileProvider.getUriForFile(this,
+                            "com.example.visualmath.provider", takeFile);
+                    Log.d(VM_ENUM.TAG, "[VM_VieActivity /PICK_FROM_CAMERA]: photoUri " + photoUri);
+                } else {
+                    photoUri = Uri.fromFile(takeFile);
                 }
-            }
 
-            //Q 이상이면 디렉토리 내 파일 다시 저장
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                saveFile();
-            }
-           //>>>>>>>>>
+                db_save_uri=photoUri;
 
+                //** 비디오, 이미지 판단
+                if(photoUri.toString().contains("video")){
+                    Log.d(VM_ENUM.TAG,"[ViewActivity], video");
+                    imageViewPhoto.setVisibility(View.GONE);
+                    videoView.setVisibility(View.VISIBLE);
+                    videoView.setVideoURI(photoUri);
+                    videoView.start();
+
+                }else{
+                    Log.d(VM_ENUM.TAG,"[ViewActivity], image");
+                    try {
+                        imageViewPhoto.setVisibility(View.VISIBLE);
+                        videoView.setVisibility(View.GONE);
+                        setBitmapFromUri(photoUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                //Q 이상이면 디렉토리 내 파일 다시 저장
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    saveFile();
+                }
+                //>>>>>>>>>
+
+            }
         }
     }
 
     public void rePick(View view) {
+
+        playButton.setVisibility(View.GONE);
+        stopButton.setVisibility(View.GONE);
+
         if(pick.equals(VM_ENUM.IT_TAKE_PHOTO)){
             db_save_uri=null;
             imageViewPhoto.setVisibility(View.GONE);
