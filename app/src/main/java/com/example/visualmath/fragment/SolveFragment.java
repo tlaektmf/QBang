@@ -82,10 +82,13 @@ public class SolveFragment extends Fragment {
                  Drawable.ConstantState constantState = context.getResources()
                          .getDrawable(R.drawable.add_extra_img, context.getTheme())
                          .getConstantState();
-                 if ( imageViewProblem.getDrawable().getConstantState() != constantState) {
-                     zoomImageFromThumb(view);
+                 if(imageViewProblem.getDrawable()!=null && imageViewProblem.getDrawable().getConstantState()!=null){
+                     if ( imageViewProblem.getDrawable().getConstantState() != constantState) {
+                         zoomImageFromThumb(view);
+                     }
+                 }else{
+                     Log.d(VM_ENUM.TAG,"[SolveFragment] imageViewProblem.getDrawable()  imageViewProblem.getDrawable().getConstantState() 둘중 하나 null");
                  }
-
 
              }
          });

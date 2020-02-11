@@ -128,16 +128,20 @@ public class problem_detail extends Fragment {
                     Drawable.ConstantState constantState = context.getResources()
                             .getDrawable(R.drawable.add_extra_img, context.getTheme())
                             .getConstantState();
-
-                    if ( imageViewsOtherPictureList[0].getDrawable().getConstantState() != constantState) {
-                        zoomImageFromThumb(view);
+                    if(imageViewsOtherPictureList[0].getDrawable()!=null && imageViewsOtherPictureList[0].getDrawable().getConstantState()!=null){
+                        if ( imageViewsOtherPictureList[0].getDrawable().getConstantState() != constantState) {
+                            zoomImageFromThumb(view);
+                        }
+                    }else{
+                        Log.d(VM_ENUM.TAG,"[problem_detail] imageViewProblem.getDrawable()  imageViewProblem.getDrawable().getConstantState() 둘중 하나 null");
                     }
 
-                } else {
-                    if(imageViewsOtherPictureList[0].getDrawable().getConstantState() != getResources().getDrawable(R.drawable.add_extra_img).getConstantState()){
-                        zoomImageFromThumb(view);
-                    }
                 }
+//                else { //현재 minSdk 23 이므로 22이하는 커버 안해도 되긴 함 (주석처리) -> 추후 대응 필요할 시 오픈
+//                    if(imageViewsOtherPictureList[0].getDrawable().getConstantState() != getResources().getDrawable(R.drawable.add_extra_img).getConstantState()){
+//                        zoomImageFromThumb(view);
+//                    }
+//                }
 
             }
         });
@@ -149,8 +153,13 @@ public class problem_detail extends Fragment {
                         .getDrawable(R.drawable.add_extra_img, context.getTheme())
                         .getConstantState();
 
-                if ( imageViewsOtherPictureList[1].getDrawable().getConstantState() != constantState) {
-                    zoomImageFromThumb(view);
+                if(imageViewsOtherPictureList[1].getDrawable()!=null && imageViewsOtherPictureList[1].getDrawable().getConstantState()!=null){
+                    if ( imageViewsOtherPictureList[1].getDrawable().getConstantState() != constantState) {
+                        zoomImageFromThumb(view);
+                    }
+                }
+                else{
+                    Log.d(VM_ENUM.TAG,"[problem_detail] imageViewProblem.getDrawable()  imageViewProblem.getDrawable().getConstantState() 둘중 하나 null");
                 }
 
             }
@@ -162,10 +171,14 @@ public class problem_detail extends Fragment {
                 Drawable.ConstantState constantState = context.getResources()
                         .getDrawable(R.drawable.add_extra_img, context.getTheme())
                         .getConstantState();
-
-                if ( imageViewsOtherPictureList[2].getDrawable().getConstantState() != constantState) {
-                    zoomImageFromThumb(view);
+                if(imageViewsOtherPictureList[2].getDrawable()!=null && imageViewsOtherPictureList[2].getDrawable().getConstantState()!=null){
+                    if ( imageViewsOtherPictureList[2].getDrawable().getConstantState() != constantState) {
+                        zoomImageFromThumb(view);
+                    }
+                }else{
+                    Log.d(VM_ENUM.TAG,"[problem_detail] imageViewProblem.getDrawable()  imageViewProblem.getDrawable().getConstantState() 둘중 하나 null");
                 }
+
             }
         });
 
