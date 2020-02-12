@@ -248,11 +248,11 @@ public class ProblemFragment extends Fragment {
                 VM_Data_CHAT chatItem = dataSnapshot.getValue(VM_Data_CHAT.class);
                 if (chatItem != null) {
                     chatList.add(chatItem);
+
                     if(adapter!=null){
-                        adapter.notifyItemInserted(chatList.size()-1);
+                       /// adapter.notifyItemInserted(chatList.size()-1);
+                        adapter.notifyDataSetChanged();
                     }
-
-
 
                 } else {
                     Log.d(TAG, "[VM_ProblemFragment]: chatList 초기 상태");
@@ -262,17 +262,17 @@ public class ProblemFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Log.d(TAG, "[ProblemFragment] onChildChanged : " + dataSnapshot);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                Log.d(TAG, "[ProblemFragment] onChildRemoved : " + dataSnapshot);
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Log.d(TAG, "[ProblemFragment] onChildMoved : " + dataSnapshot);
             }
 
             @Override

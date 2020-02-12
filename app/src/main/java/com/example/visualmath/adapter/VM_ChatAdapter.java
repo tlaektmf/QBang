@@ -110,10 +110,12 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.friendMsgTxtView = itemView.findViewById(R.id.friendMsgTxtView);
 
 
-            //** 아이템 클릭 이벤트
+            //** 아이템 클릭 이벤트 (my layout widget)
             myMsgVideoView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+                    Log.d(VM_ENUM.TAG,"[VM_chatAdapter 클릭리스너] myMsgVideoView" );
                     int pos = getAdapterPosition();
 
                     if (pos != RecyclerView.NO_POSITION) {
@@ -138,6 +140,93 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                 }
             });
 
+            myMsgPhotoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(VM_ENUM.TAG,"[VM_chatAdapter 클릭리스너] myMsgPhotoView" );
+                    int pos = getAdapterPosition();
+
+                    if (pos != RecyclerView.NO_POSITION) {
+                        //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+
+                        String uri = chatList.get(pos).getChatContent();
+                        String type = chatList.get(pos).getType();
+
+                        if (type.equals(VM_ENUM.CHAT_TEXT)) {
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 안함 타입이 text");
+
+                        }else{
+                            Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
+                            parent.startActivity(intent);
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+                        }
+
+
+                    }
+                }
+            });
+
+            //** 아이템 클릭 이벤트 (friend layout widget)
+            friendMsgVideoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(VM_ENUM.TAG,"[VM_chatAdapter 클릭리스너] friendMsgVideoView" );
+
+                    int pos = getAdapterPosition();
+
+                    if (pos != RecyclerView.NO_POSITION) {
+                        //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+
+                        String uri = chatList.get(pos).getChatContent();
+                        String type = chatList.get(pos).getType();
+
+                        if (type.equals(VM_ENUM.CHAT_TEXT)) {
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 안함 타입이 text");
+
+                        }else{
+                            Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
+                            parent.startActivity(intent);
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+                        }
+
+
+                    }
+                }
+            });
+
+            friendMsgPhotoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(VM_ENUM.TAG,"[VM_chatAdapter 클릭리스너] friendMsgPhotoView" );
+
+                    int pos = getAdapterPosition();
+
+                    if (pos != RecyclerView.NO_POSITION) {
+                        //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+
+                        String uri = chatList.get(pos).getChatContent();
+                        String type = chatList.get(pos).getType();
+
+                        if (type.equals(VM_ENUM.CHAT_TEXT)) {
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 안함 타입이 text");
+
+                        }else{
+                            Intent intent=new Intent(context, VM_ChatItemViewActivity.class);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_URI,uri);
+                            intent.putExtra(VM_ENUM.IT_CHAT_ITEM_TYPE,type);
+                            parent.startActivity(intent);
+                            Log.d(VM_ENUM.TAG,"[VM_chatAdapter] -> ChatItemView 전환 , uri : "+uri+"| type"+type);
+                        }
+
+
+                    }
+                }
+            });
+            //>>> 아이템 클릭 이벤트 종료
         }
     }
 
