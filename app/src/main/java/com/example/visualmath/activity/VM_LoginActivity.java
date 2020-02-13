@@ -371,7 +371,7 @@ public class VM_LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //뒤로가기 버튼 막음
         //super.onBackPressed();
     }
 

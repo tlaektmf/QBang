@@ -103,7 +103,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //앱을 완전 종료해야되므로 단순히 finish 함수만 사용하지 않음
 
         final VM_Dialog_finish_app dialog = new VM_Dialog_finish_app(TeacherHomeActivity.this);
 

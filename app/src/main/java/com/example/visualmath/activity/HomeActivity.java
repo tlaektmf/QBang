@@ -154,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //앱을 완전 종료해야되므로 단순히 finish 함수만 사용하지 않음
 
 
 //        커스텀 다이얼로그로 변경

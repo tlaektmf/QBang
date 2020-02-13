@@ -132,7 +132,7 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
         });
 
     }
-    public void onBackPressed() {
+    public void onBackPressed() { //뒤로가기 버튼 막음
         ///super.onBackPressed();
     }
 
