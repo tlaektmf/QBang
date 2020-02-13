@@ -310,11 +310,12 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                             public void onSuccess(Uri uri) {
                                 //** 사진파일 이미지뷰에 삽입
                                holder.myMsgVideoView.setVideoURI(uri);
+                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
                             }
                         });
                         break;
@@ -325,7 +326,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 String flag=chatList.get(position).getType();
                 holder.friendChatLayout.setVisibility(View.VISIBLE);
-                Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag);
+                Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag+", contents"+chatList.get(position).getChatContent());
 
                 holder.friendName.setText(this.matchSet_student);
                 holder.friendImgView.setImageResource(R.drawable.student);
