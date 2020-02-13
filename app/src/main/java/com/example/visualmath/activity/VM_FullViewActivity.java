@@ -2,6 +2,7 @@ package com.example.visualmath.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -84,7 +85,7 @@ public class VM_FullViewActivity extends AppCompatActivity {
 
         solveFragment.setArguments(arguments);
 
-        transaction.replace(R.id.container,solveFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.container,solveFragment).commit();
 
 
     }
@@ -99,7 +100,8 @@ public class VM_FullViewActivity extends AppCompatActivity {
         btn03.setSelected(false);
 
         transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container, solveFragment).commitAllowingStateLoss();
+
+        transaction.replace(R.id.container, solveFragment).commit();
     }
 
     public void showUsersLoad(View view) {
@@ -114,7 +116,8 @@ public class VM_FullViewActivity extends AppCompatActivity {
         transaction = fragmentManager.beginTransaction();
         arguments.putString(ItemDetailFragment.ARG_ITEM_ID, post_id);
         problemDetailFragment.setArguments(arguments);
-        transaction.replace(R.id.container, problemDetailFragment).commitAllowingStateLoss();
+
+        transaction.replace(R.id.container, problemDetailFragment).commit();
     }
 
     public void showSolve(View view) {//** ProblemBoxActivity
@@ -148,11 +151,12 @@ public class VM_FullViewActivity extends AppCompatActivity {
         }
 
         problemFragment.setArguments(arguments);
-        transaction.replace(R.id.container, problemFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.container, problemFragment).commit();
     }
 
     public void cancel(View view) {
         //부착되어 있는 프래그먼트 삭제
+
         finish();
     }
 }
