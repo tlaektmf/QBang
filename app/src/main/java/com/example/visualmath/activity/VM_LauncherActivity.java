@@ -91,6 +91,7 @@ public class VM_LauncherActivity extends AppCompatActivity {
                 Toast.makeText(VM_LauncherActivity.this,"Permission Granted",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(VM_LauncherActivity.this, VM_AutoLoginCheckActivity.class);
                 startActivity(intent);
+                finish();
 
             }
 
@@ -100,6 +101,7 @@ public class VM_LauncherActivity extends AppCompatActivity {
                 Toast.makeText(VM_LauncherActivity.this,deniedPermissions.toString(),Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(VM_LauncherActivity.this,VM_AutoLoginCheckActivity.class);
                 startActivity(intent);
+                finish();
             }
         };
 
