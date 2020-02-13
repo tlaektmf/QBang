@@ -37,11 +37,12 @@ public class TeacherItemListActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
     private boolean mTwoPane;
-    public static String TAG="TeacherItemList";
+    public static String TAG=VM_ENUM.TAG;
 
     //lhj_0
     private ProgressBar list_loading_bar;
     //lhj_0
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
+        Log.d(VM_ENUM.TAG,"[TeacherItemListActivity] onCreate 호출");
         initData();
 
     }
@@ -209,7 +210,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
                 .child(user)
                 .child(VM_ENUM.DB_TEA_ALARM);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        valueEventListener=new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
@@ -232,7 +233,33 @@ public class TeacherItemListActivity extends AppCompatActivity {
                 ///Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Failed to read value", databaseError.toException());
             }
-        });
+        };
     }
 
+    @Override
+    protected void onStop() {
+        //리스너 해제
+        Log.d(TAG, "[TeacherItemListActivity] onStop addValueEventListener  리스너 삭제");
+        reference.removeEventListener(valueEventListener);
+
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {//리스너 해제
+        Log.d(TAG, "[TeacherItemListActivity] onDestroy addValueEventListener  리스너 삭제");
+        reference.removeEventListener(valueEventListener);
+
+        super.onDestroy();
+
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "[TeacherItemListActivity] addValueEventListener 호출");
+        reference.addValueEventListener(valueEventListener);
+
+        super.onStart();
+    }
 }
