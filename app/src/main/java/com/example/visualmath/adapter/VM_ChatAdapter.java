@@ -48,21 +48,9 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     public class VM_CustomViewHolder extends RecyclerView.ViewHolder {
 
         //위젯
-        private View friendChatLayout;
+        private View friendChatLayout; //상대방 채팅창 전체 레이아웃
         private ImageView friendImgView;
         private TextView friendName;
-
-        //** 내 채팅창 텍스트 버젼
-        private TextView myMsgTxtView;
-        private View myChatLayout;
-
-        //** 내 채팅창 동영상 버젼
-        private View myChatLayoutVideoVersion;
-        private VideoView myMsgVideoView;
-
-        //** 내 채팅창 이미지 버젼
-        private View myChatLayoutImageVersion;
-        private PhotoView myMsgPhotoView;
 
         //** 상대 채팅창 동영상 버전
         private VideoView friendMsgVideoView;
@@ -77,6 +65,22 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         private View friendChatLayoutTextVersion;
         private TextView friendMsgTxtView;
 
+        //** 위젯
+        private View myChatLayout; //내 채팅창 전체 레이아웃
+
+        //** 내 채팅창 텍스트 버젼
+        private TextView myMsgTxtView;
+        private View myChatLayoutTextVersion;
+
+        //** 내 채팅창 동영상 버젼
+        private View myChatLayoutVideoVersion;
+        private VideoView myMsgVideoView;
+
+        //** 내 채팅창 이미지 버젼
+        private View myChatLayoutImageVersion;
+        private PhotoView myMsgPhotoView;
+
+
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -85,9 +89,13 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.friendChatLayout = itemView.findViewById(R.id.friendChatLayout);
             this.friendName=itemView.findViewById(R.id.friend_name_tv);
 
+
+            this.myChatLayout = itemView.findViewById(R.id.myChatLayout);
+
             //** 내 채팅창 텍스트 버젼
             this.myMsgTxtView = itemView.findViewById(R.id.myMsgTxtView);
-            this.myChatLayout = itemView.findViewById(R.id.myChatLayout);
+            this.myChatLayoutTextVersion=itemView.findViewById(R.id.myChatLayoutTextVersion);
+
 
             //** 내 채팅창 동영상 버젼
             this.myChatLayoutVideoVersion=itemView.findViewById(R.id.myChatLayoutVideoVersion);
@@ -106,7 +114,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.friendMsgPhotoView=itemView.findViewById(R.id.friendMsgImageView);
 
             //** 상대 채팅창 텍스트 버젼
-            this.friendChatLayoutTextVersion=itemView.findViewById(R.id.txtParentLayout);
+            this.friendChatLayoutTextVersion=itemView.findViewById(R.id.myFriendLayoutTextVersion);
             this.friendMsgTxtView = itemView.findViewById(R.id.friendMsgTxtView);
 
 
@@ -273,6 +281,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) { //보내는 이가 선생(나)
 
                 holder.friendChatLayout.setVisibility(View.GONE);
+                holder.myChatLayout.setVisibility(View.VISIBLE);
 
                 String flag=chatList.get(position).getType();
                 Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag);
@@ -281,7 +290,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
-                        holder.myChatLayout.setVisibility(View.VISIBLE);
+                        holder.myChatLayoutTextVersion.setVisibility(View.VISIBLE);
                         holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
                         break;
                     case VM_ENUM.CHAT_IMAGE:
@@ -326,6 +335,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 String flag=chatList.get(position).getType();
                 holder.friendChatLayout.setVisibility(View.VISIBLE);
+                holder.myChatLayout.setVisibility(View.GONE);
+
                 Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag+", contents"+chatList.get(position).getChatContent());
 
                 holder.friendName.setText(this.matchSet_student);
@@ -382,6 +393,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 String flag=chatList.get(position).getType();
                 holder.friendChatLayout.setVisibility(View.VISIBLE);
+                holder.myChatLayout.setVisibility(View.GONE);
                 holder.friendName.setText(this.matchSet_teacher);
                 holder.friendImgView.setImageResource(R.drawable.teacher);
 
@@ -440,7 +452,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
             } else if (chatList.get(position).getSender().equals(VM_ENUM.STUDENT)) {//보내는 이가 나(학생)인 경우
                 holder.friendChatLayout.setVisibility(View.GONE);
-
+                holder.myChatLayout.setVisibility(View.VISIBLE);
                 String flag=chatList.get(position).getType();
 
                 Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag);
@@ -449,7 +461,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
-                        holder.myChatLayout.setVisibility(View.VISIBLE);
+                        holder.myChatLayoutTextVersion.setVisibility(View.VISIBLE);
                         holder.myMsgTxtView.setText(chatList.get(position).getChatContent());
                         break;
                     case VM_ENUM.CHAT_IMAGE:
