@@ -266,7 +266,7 @@ public class CalendarFullViewFragment extends Fragment {
                             intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
                             intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
                             mParentActivity.startActivity(intent);
-                            Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
+
                         }
                     }
                 });

@@ -198,8 +198,8 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
+               /// Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.d(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
             }
         });
 
@@ -239,8 +239,8 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
+                ///Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.d(VM_ENUM.TAG, "Failed to read value", databaseError.toException());
             }
         });
 
