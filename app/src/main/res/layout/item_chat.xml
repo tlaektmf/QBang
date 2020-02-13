@@ -10,9 +10,7 @@
     android:background="@color/transparent">
 
     <!--    다른 사람이 보내는 메세지-->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:visibility="gone"
             android:id="@+id/friendChatLayout"
@@ -60,7 +58,7 @@
             <!--        상대방 채팅 내용-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:visibility="gone"
-                android:id="@+id/txtParentLayout"
+                android:id="@+id/myFriendLayoutTextVersion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -99,7 +97,7 @@
                 android:layout_height="wrap_content"
 
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtParentLayout"
+                app:layout_constraintTop_toBottomOf="@+id/myFriendLayoutTextVersion"
 
                 android:layout_marginLeft="50dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -168,11 +166,8 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
         <!--    내가 보내는 메세지-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:visibility="gone"
@@ -181,7 +176,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp">
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/myParent"
+                android:id="@+id/myChatLayoutTextVersion"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -219,7 +215,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myParent"
+                app:layout_constraintTop_toBottomOf="@+id/myChatLayoutTextVersion"
                 android:layout_marginLeft="15dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
@@ -284,7 +280,5 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </FrameLayout>
 
 </LinearLayout>
