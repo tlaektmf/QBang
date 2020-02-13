@@ -152,7 +152,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             Log.d(VM_ENUM.TAG, "[VM_RegisterProblem]+content provider 전 fromFile" + Uri.fromFile(takeFile));
 
         } catch (IOException e) {
-            Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "createImageFile 처리 오류! 다시 시도해주세요.");
             finish();
             e.printStackTrace();
         }
@@ -371,6 +372,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onPermissionGranted() {
                 //** 권한 요청 성공
                 Toast.makeText(VM_RegisterProblemActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "[VM_RegisterProblemActivity] Permission Granted");
                 showPickDialog();
 
             }
@@ -537,8 +539,8 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         //** 예외 사항 처리
         if (resultCode != Activity.RESULT_OK) {
 
-            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-
+            ///Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "[VM_RegisterProblemActivity]onActivityResult 선택이 취소 되었습니다");
             if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
                 if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
                     if (takeFile.exists()) {

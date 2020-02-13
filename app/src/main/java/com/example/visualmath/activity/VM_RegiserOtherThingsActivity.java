@@ -231,7 +231,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             Log.d(VM_ENUM.TAG, "[RegiOther]+content provider 전 fromFile" + Uri.fromFile(takeFile));
 
         } catch (IOException e) {
-            Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "[RegiOther] takePhoto처리 오류! 다시 시도해주세요 ");
             finish();
             e.printStackTrace();
         }
@@ -503,7 +504,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         //** 예외 사항 처리
         if (resultCode != Activity.RESULT_OK) {
 
-            Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            ///Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "[VM_RegisterOtherActivity]onActivityResult 선택이 취소 되었습니다");
 
             if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
                 if (takeFile != null) {

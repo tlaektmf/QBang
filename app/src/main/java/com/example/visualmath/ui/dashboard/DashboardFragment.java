@@ -368,8 +368,8 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(parent,"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "Failed to read value", databaseError.toException());
+                ///Toast.makeText(parent,"데이터베이스 오류",Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Failed to read value", databaseError.toException());
             }
         });
 
