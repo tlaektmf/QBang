@@ -213,12 +213,12 @@ public class TeacherItemListActivity extends AppCompatActivity {
         valueEventListener=new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
+                ///GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
                 List<AlarmItem> alarms= new ArrayList<AlarmItem>();
-
+                Log.d(TAG, "[선생 알람] ValueEventListener : " +dataSnapshot );
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
                     alarms.add(snapshot.getValue(AlarmItem.class));
-                    Log.d(TAG, "[선생 알람] ValueEventListener : " +snapshot.getValue() );
+                    Log.d(TAG, "[선생 알람] ValueEventListener : " +snapshot.getKey() );
                 }
 
                 setupRecyclerView((RecyclerView) recyclerView,alarms);

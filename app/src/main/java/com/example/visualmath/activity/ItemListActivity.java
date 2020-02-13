@@ -223,7 +223,7 @@ public class ItemListActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
                     alarms.add(snapshot.getValue(AlarmItem.class));
-                    Log.d(TAG, "[학생 알람] ValueEventListener : " +snapshot.getValue() );
+                    Log.d(TAG, "[학생 알람] ValueEventListener : " +snapshot.getKey() );
                 }
 
                 setupRecyclerView((RecyclerView) recyclerView,alarms);
