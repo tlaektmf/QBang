@@ -203,6 +203,51 @@ public class ProblemFragment extends Fragment {
         Log.d(VM_ENUM.TAG, "[ProblemFragment] onCreateView 호출");
         chatList = new ArrayList<>();
 
+        childEventListener=new ChildEventListener() {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d(TAG, "[ProblemFragment] addChildEventListener : " + dataSnapshot);
+
+                VM_Data_CHAT chatItem = dataSnapshot.getValue(VM_Data_CHAT.class);
+                if (chatItem != null) {
+                    chatList.add(chatItem);
+
+                    if(adapter!=null){
+                        adapter.notifyItemInserted(chatList.size());
+                        ///adapter.notifyDataSetChanged();
+                    }else{
+                        Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+                    }
+
+                } else {
+                    Log.d(TAG, "[VM_ProblemFragment]: chatList 초기 상태");
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d(TAG, "[ProblemFragment] onChildChanged : " + dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "[ProblemFragment] onChildRemoved : " + dataSnapshot);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d(TAG, "[ProblemFragment] onChildMoved : " + dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+
+
+
         ///*** 기본 데이터 생성 //>>>>>>>>>>
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -226,8 +271,12 @@ public class ProblemFragment extends Fragment {
                 }
 
                 vmDataDefault = dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class); //문제 완료 버튼을 누를 경우 필요하므로 미리 저장해둠
-                Log.d(TAG, "[VM_ProblemFragment]: vmDataDefault: " + vmDataDefault);
 
+                Log.d(TAG, "[VM_ProblemFragment] addListenerForSingleValueEvent 완료!, childEventListener 호출");
+
+
+
+               reference.child(VM_ENUM.DB_chatList).addChildEventListener(childEventListener);
 
             }
 
@@ -236,12 +285,12 @@ public class ProblemFragment extends Fragment {
 
             }
         });
-///*** 기본 데이터 생성 //>>>>>>>>>>
+
+///>>>>>>>>>>>>>*** 기본 데이터 생성 //>>>>>>>>>>
 
 
 //** chat 데이터 생성
-///*** open with addvalueListenr <<<<<<<<<<<
-
+///*** open with childEventListener 동적생성 <<<<<<<<<<<
 
 //        reference.child(VM_ENUM.DB_chatList).addChildEventListener(new ChildEventListener() {
 //            @Override
@@ -285,50 +334,8 @@ public class ProblemFragment extends Fragment {
 //
 //            }
 //        });
+///*** open with childEventListener 동적생성 <<<<<<<<<<<
 
-       childEventListener=new ChildEventListener() {
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d(TAG, "[ProblemFragment] addChildEventListener : " + dataSnapshot);
-
-                VM_Data_CHAT chatItem = dataSnapshot.getValue(VM_Data_CHAT.class);
-                if (chatItem != null) {
-                    chatList.add(chatItem);
-
-                    if(adapter!=null){
-                        adapter.notifyItemInserted(chatList.size());
-                        ///adapter.notifyDataSetChanged();
-                    }else{
-                        Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
-                    }
-
-                } else {
-                    Log.d(TAG, "[VM_ProblemFragment]: chatList 초기 상태");
-                }
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d(TAG, "[ProblemFragment] onChildChanged : " + dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "[ProblemFragment] onChildRemoved : " + dataSnapshot);
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d(TAG, "[ProblemFragment] onChildMoved : " + dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-        reference.child(VM_ENUM.DB_chatList).addChildEventListener(childEventListener);
 
 
 ///*** open with addvalueListenr //>>>>>>>>>>
@@ -375,7 +382,7 @@ public class ProblemFragment extends Fragment {
 //
 //            }
 //        });
-///*** open with addvalueListenr //>>>>>>>>>>
+///>*** open with addvalueListenr //>>>>>>>>>>
 
 
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
