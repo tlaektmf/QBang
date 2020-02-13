@@ -3,6 +3,7 @@ package com.example.visualmath.activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +55,8 @@ public class ItemListActivity extends AppCompatActivity {
     public static String TAG = VM_ENUM.TAG;
     public View recyclerView;
 
+    private ValueEventListener valueEventListener;
+
     //lhj_0
     private ProgressBar list_loading_bar;
     //lhj_0
@@ -79,6 +83,8 @@ public class ItemListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
+
+        Log.d(VM_ENUM.TAG,"[ItemListActivity] onCreate 호출");
         initData();
 
 
@@ -209,8 +215,7 @@ public class ItemListActivity extends AppCompatActivity {
                 .child(user)
                 .child(VM_ENUM.DB_ALARMS);
 
-
-        reference.addValueEventListener(new ValueEventListener() {
+        valueEventListener=new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
@@ -230,10 +235,41 @@ public class ItemListActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
+                ///Toast.makeText(getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "Failed to read value", databaseError.toException());
             }
-        });
+        };
 
+
+
+
+    }
+
+
+    @Override
+    protected void onStop() {
+        //리스너 해제
+        Log.d(TAG, "[ItemListActivity] onStop addValueEventListener  리스너 삭제");
+        reference.removeEventListener(valueEventListener);
+
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {//리스너 해제
+        Log.d(TAG, "[ItemListActivity] onDestroy addValueEventListener  리스너 삭제");
+        reference.removeEventListener(valueEventListener);
+
+        super.onDestroy();
+
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "[ItemListActivity] addValueEventListener 호출");
+        reference.addValueEventListener(valueEventListener);
+
+        super.onStart();
     }
 }
