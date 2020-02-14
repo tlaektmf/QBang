@@ -22,7 +22,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_b"
-            android:text="[도오착]"
             android:textColor="#016a96"
             android:textSize="@dimen/dp16"
             android:layout_marginLeft="5dp"
@@ -38,7 +37,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
 
             android:fontFamily="@font/nanumsquaure_r"
-            android:text="교육청 1"
             android:textColor="#404040"
             android:textSize="@dimen/alarm_text"
             android:layout_marginLeft="5dp"
