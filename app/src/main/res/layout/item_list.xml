@@ -43,7 +43,8 @@
             tools:context="com.example.visualmath.activity.ItemListActivity"
             tools:listitem="@layout/item_list_content"
             android:background="#ffffff"
-
+            app:reverseLayout="true"
+            app:stackFromEnd="true"
             android:layout_marginRight="20dp"
             android:elevation="10dp"/>
     </RelativeLayout>
