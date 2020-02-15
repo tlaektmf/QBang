@@ -195,7 +195,7 @@ public class VM_DBHandler {
                 if (databaseError != null) {
                     Log.d(VM_ENUM.TAG,"[기존 알람 삭제 실패] "+ databaseError.getMessage());
                 } else {
-                    Log.d(VM_ENUM.TAG,"[기존 알람 삭제 완료");
+                    Log.d(VM_ENUM.TAG,"[기존 알람 삭제 완료]");
                     databaseReference.getParent().child(push_key).setValue(alarmItem,setCompletionListener);
 
                 }
