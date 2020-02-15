@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.data.VM_Data_ADD;
@@ -14,19 +15,34 @@ import com.example.visualmath.data.VM_Data_EXTRA;
 import com.example.visualmath.data.VM_Data_POST;
 import com.example.visualmath.data.VM_Data_STUDENT;
 import com.example.visualmath.data.VM_Data_TEACHER;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 public class VM_DBHandler {
     private static final String TAG = VM_ENUM.TAG;
@@ -122,6 +138,126 @@ public class VM_DBHandler {
                     .push();
             databaseReference.setValue(alarmItem);
         }
+
+    }
+
+    public void newMessageAlarm(final String post_id, String title, String user_type, String receiver, String message){
+
+        final AlarmItem alarmItem=new AlarmItem(post_id,title,message);
+
+
+        //** DB 생성 작업
+        final String path;
+        if(user_type.equals(VM_ENUM.TEACHER)){
+
+            //path=VM_ENUM.DB_STUDENTS+"/"+receiver+"/"+VM_ENUM.DB_NEW_MESSAGE_ALARM+"/"+post_id;
+            path=VM_ENUM.DB_STUDENTS+"/"+receiver+"/"+post_id;
+
+            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+                    .child(receiver)
+                    .child(VM_ENUM.DB_NEW_MESSAGE_ALARM)
+                    .child(post_id);
+
+
+        }else {
+            //path=VM_ENUM.DB_TEACHERS+"/"+receiver+"/"+VM_ENUM.DB_NEW_MESSAGE_ALARM+"/"+post_id;
+            path=VM_ENUM.DB_TEACHERS+"/"+receiver+"/"+post_id;
+            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+                    .child(receiver)
+                    .child(VM_ENUM.DB_NEW_MESSAGE_ALARM)
+                    .child(post_id);
+
+        }
+
+        //** 공통 작업
+        final String push_key=databaseReference.push().getKey();
+        Log.d(VM_ENUM.TAG,"[VM_DBHandler] 새로 삽입할 ALARM_NEW key : "+push_key);
+
+
+        //** 리스너 생성>>>>>>>>>>
+
+        final DatabaseReference.CompletionListener setCompletionListener=new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable final DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                if (databaseError != null) {
+                    Log.d(VM_ENUM.TAG,"[setCompletionListener 실패] "+ databaseError.getMessage());
+                } else {
+                    Log.d(VM_ENUM.TAG,"[setCompletionListener 완료] :   Alarms 새로운 알람 추가 완료");
+                    
+                }
+            }
+
+        };
+
+        final DatabaseReference.CompletionListener deleteCompletionListener=new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                if (databaseError != null) {
+                    Log.d(VM_ENUM.TAG,"[기존 알람 삭제 실패] "+ databaseError.getMessage());
+                } else {
+                    Log.d(VM_ENUM.TAG,"[기존 알람 삭제 완료");
+                    databaseReference.child(push_key).setValue(alarmItem,setCompletionListener);
+
+                }
+            }
+
+        };
+
+        //>>>>>>>>>>>>>>>>>>> 리스너 생성
+
+
+        //1. 데이터를 삽입
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("key",push_key);
+
+        db.collection(path)
+                .document(push_key)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "FirebaseFirestore: DocumentSnapshot successfully written!");
+
+                        //** 바로 위의 key 값을 가져옴
+                        CollectionReference reference = db.collection(path);
+                        reference.whereLessThan("key",push_key).orderBy("key", Query.Direction.DESCENDING).limit(1).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                String upper_key=null;
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        upper_key=document.getId();
+                                    }
+
+                                    //** 2. alarms 에서 value 삭제
+                                    //** Alarms 에서 삭제
+                                    if(upper_key!=null){
+                                        FirebaseDatabase.getInstance().getReference(path).child(upper_key).removeValue(deleteCompletionListener);
+                                    }else{
+                                        Log.d(TAG, "upper_key가 null임");
+                                    }
+
+                                }
+
+                                else {
+                                    Log.d(TAG, "Error => ", task.getException());
+                                }
+                            }
+
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
+
 
     }
 ///*** open with addvalueListenr <<<<<<<

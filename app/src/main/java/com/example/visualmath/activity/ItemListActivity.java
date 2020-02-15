@@ -13,6 +13,7 @@ import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.AlarmItem;
 
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -56,10 +58,13 @@ public class ItemListActivity extends AppCompatActivity {
     public View recyclerView;
 
     private ValueEventListener valueEventListener;
+    ///private ValueEventListener singleEventListener;
+    private  String user;
 
     //lhj_0
     private ProgressBar list_loading_bar;
     //lhj_0
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class ItemListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.item_list);
         list_loading_bar = findViewById(R.id.list_loading_bar);
+
 
         // ActionBar 숨기기
         ActionBar actionBar = getSupportActionBar();
@@ -90,7 +96,7 @@ public class ItemListActivity extends AppCompatActivity {
 
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView,   List<AlarmItem> alarms) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView,   List<Pair<String, AlarmItem>> alarms) {
 
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, alarms, mTwoPane));
     }
@@ -115,34 +121,42 @@ public class ItemListActivity extends AppCompatActivity {
         }
     }
 
-    public static class SimpleItemRecyclerViewAdapter
+    public  class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<AlarmItem> mAlarms; //알람뿌려줄 데이터 리스트
+        private final List<Pair<String,AlarmItem>> mAlarms; //알람뿌려줄 데이터 리스트
         private final boolean mTwoPane;
 
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmItem item = (AlarmItem) view.getTag();
+                Pair<String,AlarmItem> item = (Pair<String, AlarmItem>) view.getTag();
 
-                if (mTwoPane) {//태블릿 모드 -> 태블릿에서 작동함
+                if (mTwoPane) {//안드로이드 폰 모드
+                    Log.d(VM_ENUM.TAG,"[ItemListActivity] 아이템 선택");
+                    deleteAlarmData(item.first);
+
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId()); //** DetailFragment로 post_id 전달
-                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.second.getId()); //** DetailFragment로 post_id 전달
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.second.getDetails());
                     //** DetailFragment 프래그먼트 생성
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments); //** 프래그먼트 초기 세팅
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
-                } else { //안드로이드 폰 모드
+                } else {//태블릿 모드 -> 태블릿에서 작동함
 
                     //ds.shim >start<
+                    //** Alarm 에서 삭제
+                    //** 1. UNMATCHED 에서 삭제
+                    Log.d(VM_ENUM.TAG,"[ItemListActivity] 아이템 선택");
+                    deleteAlarmData(item.first);
+
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
-                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.second.getId());
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.second.getDetails());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -154,7 +168,7 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<AlarmItem> items,
+                                      List<Pair<String,AlarmItem>> items,
                                       boolean twoPane) {
             mAlarms = items;
             mParentActivity = parent;
@@ -170,8 +184,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mDetailView.setText(mAlarms.get(position).getDetails());
-            holder.mTitleView.setText(mAlarms.get(position).getTitle());
+            holder.mDetailView.setText(mAlarms.get(position).second.getDetails());
+            holder.mTitleView.setText(mAlarms.get(position).second.getTitle());
 
             holder.itemView.setTag(mAlarms.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -203,26 +217,26 @@ public class ItemListActivity extends AppCompatActivity {
      */
     public void initData() {
 
-        //alarms = new ArrayList<AlarmItem>();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+        user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
         Log.d(VM_ENUM.TAG, "[학생 알람] " + user + " 의 데이터 접근");
         reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                 .child(user)
                 .child(VM_ENUM.DB_ALARMS);
 
+
         valueEventListener=new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
-                List<AlarmItem> alarms= new ArrayList<AlarmItem>();
+                ///GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
+                List<Pair<String,AlarmItem>> alarms= new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
-                    alarms.add(snapshot.getValue(AlarmItem.class));
+                    alarms.add(Pair.create(snapshot.getKey(),snapshot.getValue(AlarmItem.class)));
                     Log.d(TAG, "[학생 알람] ValueEventListener : " +snapshot.getKey() );
                 }
 
@@ -241,8 +255,28 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
 
+        //** 알람 데이터 삭제 전, 데이터가 유효한지 검사 가능
+//        singleEventListener=new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                Log.d(TAG, "[Alarm 에서 삭제완료]"+dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        };
+//>> 알람 데이터 삭제 시, 데이터가 있는지를 확인 할 수 있음
+    }
 
-
+    public void deleteAlarmData(String key){
+        //>>알람 데이터 삭제전, 데이터가 유효한 지 확인하려면 코드 오픈
+        ///reference.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleEventListener);
+        //>>>>
+        reference.child(key).removeValue();
+        Log.d(TAG, "[ItemListActivity]deleteAlarmData 데이터 삭제-> "+ key);
     }
 
 

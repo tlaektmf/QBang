@@ -715,7 +715,8 @@ public class ProblemFragment extends Fragment {
                         VM_DBHandler dbHandler = new VM_DBHandler();
                         dbHandler.newChatItem(post_id, chatItem);
                         Log.d(VM_ENUM.TAG, "문제가 유효함. 채팅을 추가");
-                        dbHandler.newAlarm(post_id, post_title, user_type, matchset_student, VM_ENUM.ALARM_NEW);
+                        ///dbHandler.newAlarm(post_id, post_title, user_type, matchset_student, VM_ENUM.ALARM_NEW);
+                        dbHandler.newMessageAlarm(post_id, post_title, user_type, matchset_student, VM_ENUM.ALARM_NEW);
                         Log.d(VM_ENUM.TAG, "문제가 유효함. 학생 알람을 추가" + user_type + "," + matchset_student);
                     }
                 }
@@ -730,7 +731,8 @@ public class ProblemFragment extends Fragment {
             VM_DBHandler dbHandler = new VM_DBHandler();
             dbHandler.newChatItem(post_id, chatItem);
             Log.d(VM_ENUM.TAG, "문제가 유효함. 채팅을 추가");
-            dbHandler.newAlarm(post_id, post_title, user_type, matchset_teacher, VM_ENUM.ALARM_NEW);
+            ///dbHandler.newAlarm(post_id, post_title, user_type, matchset_teacher, VM_ENUM.ALARM_NEW);
+            dbHandler.newMessageAlarm(post_id, post_title, user_type, matchset_teacher, VM_ENUM.ALARM_NEW);
             Log.d(VM_ENUM.TAG, "문제가 유효함. 선생님 알람을 추가" + user_type + "," + matchset_teacher);
         }
 

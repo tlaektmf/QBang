@@ -110,14 +110,13 @@ public  class VM_ENUM {
     public static final String DB_STU_ALARM ="alarms" ;
     public static final String DB_TEA_ALARM ="alarms" ;
     public static final String DB_JOIN_DATE ="date" ;
+    public static final String DB_NEW_MESSAGE_ALARM ="messages" ;
 
     //** Preference Key
     public  static final String PRE_LOGOUT="logout";
     public  static final String PRE_ALARM="setAlarm";
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
-
-
 
 }
 
