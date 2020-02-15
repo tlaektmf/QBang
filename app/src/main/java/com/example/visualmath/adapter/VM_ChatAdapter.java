@@ -3,6 +3,8 @@ package com.example.visualmath.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +29,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
@@ -37,6 +40,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
     private static final String TAG = VM_ENUM.TAG;
     private List<VM_Data_CHAT> chatList;
+    private List<Bitmap> bitmaps;
     private Context context;
     private Activity parent;
     private String userType;
@@ -54,7 +58,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
         private TextView friendName;
 
         //** 상대 채팅창 동영상 버전
-        private VideoView friendMsgVideoView;
+        ///private VideoView friendMsgVideoView;
+        private ImageView friendMsgVideoView;
         private View friendChatLayoutVideoVersion;
 
         //** 상대 채팅창 이미지 버젼
@@ -76,13 +81,15 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         //** 내 채팅창 동영상 버젼
         private View myChatLayoutVideoVersion;
-        private VideoView myMsgVideoView;
+        ///private VideoView myMsgVideoView;
+        private ImageView myMsgVideoView;
 
         //** 내 채팅창 이미지 버젼
         private View myChatLayoutImageVersion;
         //private PhotoView myMsgPhotoView;
         private ImageView myMsgPhotoView;
 
+        ///private RequestManager mGlideRequestManager;
 
         public VM_CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,6 +127,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             this.friendChatLayoutTextVersion=itemView.findViewById(R.id.myFriendLayoutTextVersion);
             this.friendMsgTxtView = itemView.findViewById(R.id.friendMsgTxtView);
 
+
+            ///this.mGlideRequestManager=Glide.with(itemView.getContext());
 
             //** 아이템 클릭 이벤트 (my layout widget)
             myMsgVideoView.setOnClickListener(new View.OnClickListener() {
@@ -238,12 +247,13 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                 }
             });
             //>>> 아이템 클릭 이벤트 종료
+
         }
     }
 
-    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher, Activity parent) {
+    public VM_ChatAdapter(List<VM_Data_CHAT> _chatList, Context context,String userType,String matchSet_student, String matchSet_teacher, Activity parent,List<Bitmap> _bitmaps) {
         this.chatList = _chatList;
-
+        this.bitmaps=_bitmaps;
         if(chatList!=null){
             if(chatList.size()==0){
                 Log.d(TAG, "[VM_ChatAdapter/VM_ChatAdapter()]: chatList가 비어있음");
@@ -252,7 +262,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         this.parent=parent;
         this.context = context;
-        mGlideRequestManager=Glide.with(context);
+        this.mGlideRequestManager=Glide.with(context);
         this.userType=userType;
         this.matchSet_student=matchSet_student;
         this.matchSet_teacher=matchSet_teacher;
@@ -280,6 +290,26 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
             Log.d(TAG, "[VM_ChatAdapter]: chatList가 null임");
         }
 
+        //** 아이템 뷰의 visibility 모두 초기화
+        holder.friendChatLayout.setVisibility(View.GONE);
+        holder.myChatLayout.setVisibility(View.GONE);
+
+        holder.myChatLayoutTextVersion.setVisibility(View.GONE);
+        holder.myChatLayoutImageVersion.setVisibility(View.GONE);
+        holder.myChatLayoutVideoVersion.setVisibility(View.GONE);
+
+        holder.friendChatLayoutTextVersion.setVisibility(View.GONE);
+        holder.friendChatLayoutImageVersion.setVisibility(View.GONE);
+        holder.friendChatLayoutVideoVersion.setVisibility(View.GONE);
+        //>>>>>>
+
+        //** 아이템 뷰의 리소스 모두 초기화
+        holder.myMsgPhotoView.setImageResource(R.drawable.my_chat_back);
+        holder.myMsgVideoView.setImageResource(R.drawable.my_chat_back);
+        holder.friendMsgPhotoView.setImageResource(R.drawable.your_chat_back);
+        holder.friendMsgVideoView.setImageResource(R.drawable.your_chat_back);
+        //>>>
+
         if(userType.equals(VM_ENUM.TEACHER)){ //유저가 선생인 경우
             if (chatList.get(position).getSender().equals(VM_ENUM.TEACHER)) { //보내는 이가 선생(나)
 
@@ -289,7 +319,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                 String flag=chatList.get(position).getType();
                 Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag);
 
-                StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                ///StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
@@ -298,38 +328,80 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                         break;
                     case VM_ENUM.CHAT_IMAGE:
                         holder.myChatLayoutImageVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//
+//                                //Glide.with(holder.myMsgPhotoView.getContext())
+//                                mGlideRequestManager
+//                                        .load(uri)
+//                                        .placeholder(R.drawable.camera)
+//                                        .into(holder.myMsgPhotoView);
+//
+//                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
+//                            }
+//                        });
+
+                        if(bitmaps.get(position)!=null){
+                            holder.myMsgPhotoView.setImageBitmap(bitmaps.get(position));
+                        }else{
+                            StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 //** 사진파일 이미지뷰에 삽입
+
+                                //Glide.with(holder.myMsgPhotoView.getContext())
                                 mGlideRequestManager
                                         .load(uri)
+                                        .placeholder(R.drawable.camera)
                                         .into(holder.myMsgPhotoView);
+
                                 Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d(VM_ENUM.TAG,"사진 로드 실패");
+
+                                int errorCode=((StorageException)e).getErrorCode();
+                                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                    Log.d(VM_ENUM.TAG,"[ChatAdapter]StorageException.ERROR_QUOTA_EXCEEDED");
+                                    holder.myMsgPhotoView.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                }
+
                             }
                         });
+
+                        }
+
 
                         break;
                     case VM_ENUM.CHAT_VIDEO:
                         holder.myChatLayoutVideoVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                               holder.myMsgVideoView.setVideoURI(uri);
-                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//                               holder.myMsgVideoView.setVideoURI(uri);
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
+//                            }
+//                        });
+
+                        holder.myMsgVideoView.setImageResource(R.drawable.ic_video_call_svgrepo_com);
                         break;
                 }
 
@@ -345,7 +417,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                 holder.friendName.setText(this.matchSet_student);
                 holder.friendImgView.setImageResource(R.drawable.student);
 
-                StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                ///StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
@@ -354,38 +426,79 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                         break;
                     case VM_ENUM.CHAT_IMAGE:
                         holder.friendChatLayoutImageVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                mGlideRequestManager
-                                        .load(uri)
-                                        .into(holder.friendMsgPhotoView);
-                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//
+//                                //Glide.with(holder.friendMsgPhotoView.getContext())
+//                                mGlideRequestManager
+//                                        .load(uri)
+//                                        .placeholder(R.drawable.camera)
+//                                        .into(holder.friendMsgPhotoView);
+//                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
+//                            }
+//                        });
+
+                        if(bitmaps.get(position)!=null){
+                            holder.friendMsgPhotoView.setImageBitmap(bitmaps.get(position));
+                        }else{
+                            StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //** 사진파일 이미지뷰에 삽입
+
+                                    //Glide.with(holder.myMsgPhotoView.getContext())
+                                    mGlideRequestManager
+                                            .load(uri)
+                                            .placeholder(R.drawable.camera)
+                                            .into(holder.friendMsgPhotoView);
+
+                                    Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(VM_ENUM.TAG,"사진 로드 실패");
+
+                                    int errorCode=((StorageException)e).getErrorCode();
+                                    if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                        Log.d(VM_ENUM.TAG,"[ChatAdapter]StorageException.ERROR_QUOTA_EXCEEDED");
+                                        holder.friendMsgPhotoView.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                    }
+
+                                }
+                            });
+
+                        }
+
+
 
                         break;
                     case VM_ENUM.CHAT_VIDEO:
                         holder.friendChatLayoutVideoVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                holder.friendMsgVideoView.setVideoURI(uri);
-                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//                                holder.friendMsgVideoView.setVideoURI(uri);
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
+//                            }
+//                        });
+                        holder.friendMsgVideoView.setImageResource(R.drawable.ic_video_call_svgrepo_com);
                         break;
                 }
 
@@ -404,7 +517,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
 
 
-                StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                //StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
@@ -414,39 +527,80 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                         break;
                     case VM_ENUM.CHAT_IMAGE:
                         holder.friendChatLayoutImageVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                mGlideRequestManager
-                                        .load(uri)
-                                        .into(holder.friendMsgPhotoView);
-                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//
+//                                //Glide.with(holder.friendMsgPhotoView.getContext())
+//                                mGlideRequestManager
+//                                        .load(uri)
+//                                        .placeholder(R.drawable.camera)
+//                                        .into(holder.friendMsgPhotoView);
+//                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
+//                            }
+//                        });
+
+                        if(bitmaps.get(position)!=null){
+                            holder.friendMsgPhotoView.setImageBitmap(bitmaps.get(position));
+                        }else{
+                            StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //** 사진파일 이미지뷰에 삽입
+
+                                    //Glide.with(holder.myMsgPhotoView.getContext())
+                                    mGlideRequestManager
+                                            .load(uri)
+                                            .placeholder(R.drawable.camera)
+                                            .into(holder.friendMsgPhotoView);
+
+                                    Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(VM_ENUM.TAG,"사진 로드 실패");
+
+                                    int errorCode=((StorageException)e).getErrorCode();
+                                    if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                        Log.d(VM_ENUM.TAG,"[ChatAdapter]StorageException.ERROR_QUOTA_EXCEEDED");
+                                        holder.friendMsgPhotoView.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                    }
+
+                                }
+                            });
+
+                        }
+
 
 
                         break;
                     case VM_ENUM.CHAT_VIDEO:
                         holder.friendChatLayoutVideoVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                holder.friendMsgVideoView.setVideoURI(uri);
-                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//                                holder.friendMsgVideoView.setVideoURI(uri);
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"동영상 로드 실패");
+//                            }
+//                        });
+
+                        holder.friendMsgVideoView.setImageResource(R.drawable.ic_video_call_svgrepo_com);
                         break;
                 }
 
@@ -460,7 +614,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
                 Log.d(TAG, "[VM_ChatAdapter] Flag>> "+flag);
 
-                StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                ///StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
 
                 switch (flag){
                     case VM_ENUM.CHAT_TEXT:
@@ -469,41 +623,80 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                         break;
                     case VM_ENUM.CHAT_IMAGE:
                         holder.myChatLayoutImageVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                mGlideRequestManager
-                                        .load(uri)
-                                        .into(holder.myMsgPhotoView);
-                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
-                            }
-                        });
+
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//
+//                                //Glide.with(holder.myMsgPhotoView.getContext())
+//                                mGlideRequestManager
+//                                        .load(uri)
+//                                        .placeholder(R.drawable.camera)
+//                                        .into(holder.myMsgPhotoView);
+//                                Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d(VM_ENUM.TAG,"사진 로드 실패");
+//                            }
+//                        });
+
+                        if(bitmaps.get(position)!=null){
+                            holder.myMsgPhotoView.setImageBitmap(bitmaps.get(position));
+                        }else{
+                            StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(chatList.get(position).getChatContent());
+                            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //** 사진파일 이미지뷰에 삽입
+
+                                    //Glide.with(holder.myMsgPhotoView.getContext())
+                                    mGlideRequestManager
+                                            .load(uri)
+                                            .placeholder(R.drawable.camera)
+                                            .into(holder.myMsgPhotoView);
+
+                                    Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(VM_ENUM.TAG,"사진 로드 실패");
+
+                                    int errorCode=((StorageException)e).getErrorCode();
+                                    if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                        Log.d(VM_ENUM.TAG,"[ChatAdapter]StorageException.ERROR_QUOTA_EXCEEDED");
+                                        holder.myMsgPhotoView.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                    }
+
+                                }
+                            });
+
+                        }
+
+
                         break;
                     case VM_ENUM.CHAT_VIDEO:
                         holder.myChatLayoutVideoVersion.setVisibility(View.VISIBLE);
-                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //** 사진파일 이미지뷰에 삽입
-                                holder.myMsgVideoView.setVideoURI(uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
 
-                            }
-                        });
+//                        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                //** 사진파일 이미지뷰에 삽입
+//                                holder.myMsgVideoView.setVideoURI(uri);
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//                            }
+//                        });
+
+                        holder.myMsgVideoView.setImageResource(R.drawable.ic_video_call_svgrepo_com);
                         break;
                 }
-
-
-
 
 
             }
@@ -512,6 +705,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
 
     }
+
+
 
     @Override
     public int getItemCount() {

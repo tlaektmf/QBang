@@ -5,6 +5,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +56,8 @@ import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu_teacher;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +69,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -105,6 +111,7 @@ public class ProblemFragment extends Fragment {
     private DatabaseReference reference;
 
     private List<VM_Data_CHAT> chatList;
+    private List<Bitmap> bitmaps;
 
     //** 액티비티 넘어온 번들
     private String post_id;
@@ -118,6 +125,9 @@ public class ProblemFragment extends Fragment {
 
     //>>>>>
     private File takeFile;
+    private ProgressBar chat_loading_bar;
+    private View chat_loading_back;
+    private boolean isDataAdded;
 
     //DashBoardFragment
 // VM_ProblemBoxActivity
@@ -150,7 +160,7 @@ public class ProblemFragment extends Fragment {
         parent = getActivity();
         needToBlock = false;
         fromStudentUnmatched = false;
-
+        isDataAdded=false;
         assert getArguments() != null;
         needToBlock = getArguments().getBoolean(VM_ENUM.IT_ARG_BLOCK);
         fromStudentUnmatched = getArguments().getBoolean(VM_ENUM.IT_FROM_UNMATCHED);
@@ -179,6 +189,9 @@ public class ProblemFragment extends Fragment {
         showActionDialog = rootView.findViewById(R.id.showActionDialog);
         textViewChatRoomTitle = rootView.findViewById(R.id.chat_problem_title);
 
+        chat_loading_bar = rootView.findViewById(R.id.chat_loading_bar);
+        chat_loading_back = rootView.findViewById(R.id.chat_loading_back);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.chatRoomListView);
         linearLayoutManager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -202,6 +215,7 @@ public class ProblemFragment extends Fragment {
         }
         Log.d(VM_ENUM.TAG, "[ProblemFragment] onCreateView 호출");
         chatList = new ArrayList<>();
+        bitmaps= new ArrayList<>();
 
         childEventListener=new ChildEventListener() {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -210,13 +224,64 @@ public class ProblemFragment extends Fragment {
                 VM_Data_CHAT chatItem = dataSnapshot.getValue(VM_Data_CHAT.class);
                 if (chatItem != null) {
                     chatList.add(chatItem);
+                    bitmaps.add(null);
 
-                    if(adapter!=null){
-                        adapter.notifyItemInserted(chatList.size());
-                        ///adapter.notifyDataSetChanged();
-                    }else{
-                        Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+                    //>> storage url 을 bitmap으로 변환해서 저장함
+                    if(chatItem.getType().equals(VM_ENUM.CHAT_TEXT)){
+                        Log.d(VM_ENUM.TAG, "[ProblemFragment] text 이므로 bitmap을 생성하지 않음");
+                        ///bitmaps.add(null);
+
+                        if(adapter!=null){
+                            adapter.notifyItemInserted(chatList.size());
+                            Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
+                            ///adapter.notifyDataSetChanged();
+                        }else{
+                            Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비 안됨 ");
+                        }
+
                     }
+                    else if(chatItem.getType().equals(VM_ENUM.CHAT_IMAGE)){
+                        Log.d(VM_ENUM.TAG, "[ProblemFragment] image 는 bitmap을 생성함");
+
+///-> 비트맵 오류나서 잠시 닫아둠 ->모든 이미지는 url을 통해 Glide로 삽입
+
+                        //>> 이미지 삽입시에만 프로그래스바 생성
+//                        Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 생성");
+//                        chat_loading_back.setVisibility(View.VISIBLE);
+//                        chat_loading_bar.setVisibility(View.VISIBLE);
+//                        //>> 이미지 삽입시에만 프로그래스바 생성
+//
+//                        downloadInMemory(chatItem.getChatContent());
+
+                        
+
+                    }
+                    else if(chatItem.getType().equals(VM_ENUM.CHAT_VIDEO)){
+                        Log.d(VM_ENUM.TAG, "[ProblemFragment] video 는 bitmap을 생성하지 않음");
+                        ///bitmaps.add(null);
+
+                        if(adapter!=null){
+                            adapter.notifyItemInserted(chatList.size());
+                            Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
+                            ///adapter.notifyDataSetChanged();
+                        }else{
+                            Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비 안됨 ");
+                        }
+
+
+                    }
+
+                    //>>>>>
+
+                    //>>> downloadinmemeory 함수에 추가
+//                    if(adapter!=null){
+//                        adapter.notifyItemInserted(chatList.size());
+//                        ///adapter.notifyDataSetChanged();
+//                    }else{
+//                        Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+//                    }
+                    //>>>>>>
+
 
                 } else {
                     Log.d(TAG, "[VM_ProblemFragment]: chatList 초기 상태");
@@ -260,7 +325,7 @@ public class ProblemFragment extends Fragment {
                     Log.d(TAG, "[VM_ProblemFragment]: matchset_teacher: " + matchset_teacher + ", matchset_student: " + matchset_student);
 
                     if (parent != null && getContext()!=null) {
-                        adapter = new VM_ChatAdapter(chatList, getContext(), user_type, matchset_student, matchset_teacher, parent);
+                        adapter = new VM_ChatAdapter(chatList, getContext(), user_type, matchset_student, matchset_teacher, parent,bitmaps);
                         recyclerView.setAdapter(adapter);
                     }else{
                         Log.d(TAG, "[VM_ProblemFragment]:parent 또는 getContext 둘중하나가 null임 ");
@@ -681,6 +746,74 @@ public class ProblemFragment extends Fragment {
 //    }
 ///*** open with addvalueListenr <<<<<<<
 
+    public void downloadInMemory(String storagePath){
+        final long ONE_MEGABYTE=1024*1024;
+
+        StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(storagePath);
+        Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 시작: "+storagePath);
+
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                ///bitmaps.add(bitmap);
+
+                bitmaps.set(chatList.size()-1,bitmap);
+                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 성공");
+
+                if(adapter!=null){
+                    adapter.notifyItemInserted(chatList.size());
+                    Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
+
+
+                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
+                    Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 삭제");
+                    chat_loading_back.setVisibility(View.GONE);
+                    chat_loading_bar.setVisibility(View.GONE);
+                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
+
+                    ///adapter.notifyDataSetChanged();
+                }else{
+                    Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패");
+
+                int errorCode=((StorageException)e).getErrorCode();
+                String  erroMessage=e.getMessage();
+                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패//"+errorCode);
+                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패//"+erroMessage);
+                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                    Log.d(VM_ENUM.TAG,"[ProblemFragment]StorageException.ERROR_QUOTA_EXCEEDED");
+                    Toast.makeText( parent,"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                }
+
+                //>>
+                ///bitmaps.add(null);
+                if(adapter!=null){
+                    adapter.notifyItemInserted(chatList.size());
+
+                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
+                    Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 삭제");
+                    chat_loading_back.setVisibility(View.GONE);
+                    chat_loading_bar.setVisibility(View.GONE);
+                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
+
+                    Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
+                    ///adapter.notifyDataSetChanged();
+                }else{
+                    Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+                }
+
+            }
+        });
+
+    }
     public void itemLoad(final String post_id, final VM_Data_CHAT chatItem) {
 
         //** 유효한 데이터인지 검사
@@ -801,16 +934,22 @@ public class ProblemFragment extends Fragment {
     }
 
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(VM_ENUM.TAG, "[ProblemFragment] " + requestCode + " ," + resultCode);
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == VM_ENUM.RC_ProblemFragment_to_ViewActivity) {
+//        if (resultCode == Activity.RESULT_OK) {
+//            if (requestCode == VM_ENUM.RC_ProblemFragment_to_ViewActivity) {
+//                Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 생성");
+//                isDataAdded=true;
+//                chat_loading_back.setVisibility(View.VISIBLE);
+//                chat_loading_bar.setVisibility(View.VISIBLE);
+//            }
+//        }
 
-            }
-        }
+
     }
 
     @Override
