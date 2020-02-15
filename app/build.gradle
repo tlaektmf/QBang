@@ -46,6 +46,9 @@ dependencies {
     //** firestore 사용
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
 
+    //** firebase function 사용
+    implementation 'com.google.firebase:firebase-functions:19.0.1'
+
     //**카메라 권한
     implementation "gun0912.ted:tedpermission:2.0.0"
 

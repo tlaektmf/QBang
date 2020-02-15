@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.fragment.ItemDetailFragment;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +42,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -291,22 +294,32 @@ public class ItemListActivity extends AppCompatActivity {
 
         //** 바로 위의 key 값을 가져옴
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        path=VM_ENUM.DB_STUDENTS+"/"+user+"/"+VM_ENUM.DB_ALARMS;
+        path=VM_ENUM.DB_STUDENTS+"/"+user+"/"+post_id;
 
-        db.collection(path).document(post_id)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 하위 데이터만 삭제 -> collection을 제거
+        db.collection(path).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "[firestore 데이터 삭제 성공]");
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, "[firestore 데이터 삭제 성공]"+document.getId());
+                                db.collection(path).document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d(TAG, "Error => ", task.getException());
+                        }
+
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "[firestore 데이터 삭제 실패]", e);
-                    }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "[firestore 데이터 삭제 실패]");
+            }
+        });
+
+
 
 
     }
