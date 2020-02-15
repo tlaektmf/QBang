@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.example.visualmath.fragment.TeacherItemDetailFragment;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.fragment.ItemDetailFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,9 +30,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TeacherItemListActivity extends AppCompatActivity {
     private View recyclerView;
@@ -43,6 +51,8 @@ public class TeacherItemListActivity extends AppCompatActivity {
     private ProgressBar list_loading_bar;
     //lhj_0
     private ValueEventListener valueEventListener;
+    private  String user;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +96,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
     }
 
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView,List<AlarmItem> alarms) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Pair<String, AlarmItem>> alarms) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, alarms,mTwoPane));
     }
 
@@ -95,11 +105,11 @@ public class TeacherItemListActivity extends AppCompatActivity {
     /**
      * class SimpleItemRecyclerViewAdapter
      */
-    public static class SimpleItemRecyclerViewAdapter
+    public  class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final TeacherItemListActivity mParentActivity;
-        private final List<AlarmItem> mAlarms; //알람뿌려줄 데이터 리스트
+        private final  List<Pair<String, AlarmItem>> mAlarms; //알람뿌려줄 데이터 리스트
         private final boolean mTwoPane;
 
         /**
@@ -108,15 +118,18 @@ public class TeacherItemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG,"클릭함");
-                AlarmItem item = (AlarmItem)view.getTag();
+
+                Pair<String,AlarmItem>  item = (Pair<String, AlarmItem>) view.getTag();
 
                 if(mTwoPane){//태블릿 모드 -> 태블릿에서 작동함
-                    Bundle arguments = new Bundle();
-                    arguments.putString(TeacherItemDetailFragment.ARG_ITEM_ID, item.getId()); //** TeacherItemDetailFragment로 post_id 전달
-                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+                    Log.d(VM_ENUM.TAG,"[TeacherItemListActivity] 아이템 선택");
+                    deleteAlarmData(item.first,item.second.getId());
 
-                    if(item.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
+                    Bundle arguments = new Bundle();
+                    arguments.putString(TeacherItemDetailFragment.ARG_ITEM_ID, item.second.getId()); //** TeacherItemDetailFragment로 post_id 전달
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.second.getDetails());
+
+                    if(item.second.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
                         arguments.putString(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//채팅창 막아라
                         arguments.putString(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);//매치셋 생성하지 않는다
                     }
@@ -129,12 +142,15 @@ public class TeacherItemListActivity extends AppCompatActivity {
                             .replace(R.id.teacher_item_detail_container, fragment)
                             .commit();
                 }else{
+                    Log.d(VM_ENUM.TAG,"[TeacherItemListActivity] 아이템 선택");
+                    deleteAlarmData(item.first,item.second.getId());
+
                     //안드로이드 폰 모드
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
-                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.getDetails());
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.second.getId());
+                    arguments.putString(VM_ENUM.IT_ALARM_MESSAGE, item.second.getDetails());
 
-                    if(item.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
+                    if(item.second.getDetails().equals(VM_ENUM.MESSAGE_DONE)){//이미 완료된 문제의 경우
                         arguments.putString(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);//채팅창 막아라
                         arguments.putString(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);//매치셋 생성하지 않는다
                     }
@@ -151,7 +167,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(TeacherItemListActivity parent,
-                                      List<AlarmItem> items,boolean twoPane) {
+                                      List<Pair<String,AlarmItem>> items,boolean twoPane) {
             mAlarms=items;
             mParentActivity = parent;
             mTwoPane = twoPane;
@@ -168,8 +184,8 @@ public class TeacherItemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
 
-            holder.mDetailView.setText(mAlarms.get(position).getDetails());
-            holder.mTitleView.setText(mAlarms.get(position).getTitle());
+            holder.mDetailView.setText(mAlarms.get(position).second.getDetails());
+            holder.mTitleView.setText(mAlarms.get(position).second.getTitle());
 
             holder.itemView.setTag(mAlarms.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -178,7 +194,11 @@ public class TeacherItemListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            if(mAlarms==null){
+                return 0;
+            }
             return mAlarms.size();
+
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -204,7 +224,7 @@ public class TeacherItemListActivity extends AppCompatActivity {
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+         user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
         Log.d(VM_ENUM.TAG, "[선생 알람] " + user + " 의 데이터 접근");
         reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
                 .child(user)
@@ -214,10 +234,10 @@ public class TeacherItemListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ///GenericTypeIndicator<List<AlarmItem>> t = new GenericTypeIndicator<List<AlarmItem>>() {};
-                List<AlarmItem> alarms= new ArrayList<AlarmItem>();
-                Log.d(TAG, "[선생 알람] ValueEventListener : " +dataSnapshot );
+                List<Pair<String,AlarmItem>> alarms= new ArrayList<>();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//hash key를 돌면서 시작
-                    alarms.add(snapshot.getValue(AlarmItem.class));
+                    alarms.add(Pair.create(snapshot.getKey(),snapshot.getValue(AlarmItem.class)));
                     Log.d(TAG, "[선생 알람] ValueEventListener : " +snapshot.getKey() );
                 }
 
@@ -234,6 +254,43 @@ public class TeacherItemListActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to read value", databaseError.toException());
             }
         };
+    }
+
+    public void deleteAlarmData(String key,String post_id){
+
+        reference.child(key).removeValue();
+        Log.d(TAG, "[TeacherItemListActivity]deleteAlarmData 데이터 삭제-> "+ key);
+
+        //** 바로 위의 key 값을 가져옴
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        path=VM_ENUM.DB_TEACHERS+"/"+user+"/"+post_id;
+
+        // 하위 데이터만 삭제 -> collection을 제거
+        db.collection(path).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, "[firestore 데이터 삭제 성공]"+document.getId());
+                                db.collection(path).document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d(TAG, "Error => ", task.getException());
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "[firestore 데이터 삭제 실패]");
+            }
+        });
+
+
+
+
     }
 
     @Override
