@@ -271,7 +271,7 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     public void onBindViewHolder(@NonNull final VM_ChatAdapter.VM_CustomViewHolder holder, int position) {
         int chatSize = chatList.size();
 
-        Log.d(TAG, "[VM_ChatAdapter] chatsize" + chatSize + ", 현재 position"+position);
+        Log.d(TAG, "[VM_ChatAdapter] chatsize" + chatSize + ", 현재 position"+position+", chat item"+chatList.get(position).getChatContent());
 
         if(chatList==null){
             Log.d(TAG, "[VM_ChatAdapter]: chatList가 null임");
