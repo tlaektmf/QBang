@@ -155,8 +155,7 @@ public class VM_DBHandler {
 
             databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                     .child(receiver)
-                    .child(VM_ENUM.DB_NEW_MESSAGE_ALARM)
-                    .child(post_id);
+                    .child(VM_ENUM.DB_ALARMS);
 
 
         }else {
@@ -164,8 +163,7 @@ public class VM_DBHandler {
             path=VM_ENUM.DB_TEACHERS+"/"+receiver+"/"+post_id;
             databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
                     .child(receiver)
-                    .child(VM_ENUM.DB_NEW_MESSAGE_ALARM)
-                    .child(post_id);
+                    .child(VM_ENUM.DB_ALARMS);
 
         }
 
@@ -184,7 +182,7 @@ public class VM_DBHandler {
                     Log.d(VM_ENUM.TAG,"[setCompletionListener 실패] "+ databaseError.getMessage());
                 } else {
                     Log.d(VM_ENUM.TAG,"[setCompletionListener 완료] :   Alarms 새로운 알람 추가 완료");
-                    
+
                 }
             }
 
@@ -198,7 +196,7 @@ public class VM_DBHandler {
                     Log.d(VM_ENUM.TAG,"[기존 알람 삭제 실패] "+ databaseError.getMessage());
                 } else {
                     Log.d(VM_ENUM.TAG,"[기존 알람 삭제 완료");
-                    databaseReference.child(push_key).setValue(alarmItem,setCompletionListener);
+                    databaseReference.getParent().child(push_key).setValue(alarmItem,setCompletionListener);
 
                 }
             }
@@ -237,9 +235,11 @@ public class VM_DBHandler {
                                     //** 2. alarms 에서 value 삭제
                                     //** Alarms 에서 삭제
                                     if(upper_key!=null){
-                                        FirebaseDatabase.getInstance().getReference(path).child(upper_key).removeValue(deleteCompletionListener);
+                                        Log.d(TAG, "upper_key: "+upper_key);
+                                        databaseReference.child(upper_key).removeValue(deleteCompletionListener);
                                     }else{
-                                        Log.d(TAG, "upper_key가 null임");
+                                        Log.d(TAG, "upper_key가 null임, alarms에서 삭제 진행하지 않고 alarms에 추가만 함");
+                                        databaseReference.child(push_key).setValue(alarmItem,setCompletionListener);
                                     }
 
                                 }
