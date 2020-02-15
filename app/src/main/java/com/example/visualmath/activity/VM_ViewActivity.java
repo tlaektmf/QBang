@@ -388,6 +388,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                                 Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
                                 dbHandler.newAlarm(post_id,post_title,user_type,matchset_student,VM_ENUM.ALARM_NEW);
                                 Log.d(VM_ENUM.TAG,"문제가 유효함. 학생 알람을 추가"+user_type+","+matchset_student);
+                                Toast.makeText(parent,"컨텐츠를 로딩중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG).show();
                                     finish();//***** 종료
 
                     }
@@ -407,6 +408,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                     Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
                     dbHandler.newAlarm(post_id, post_title,user_type,matchset_teacher,VM_ENUM.ALARM_NEW);
                     Log.d(VM_ENUM.TAG,"문제가 유효함. 선생님 알람을 추가"+user_type+","+matchset_teacher);
+                    Toast.makeText(parent,"컨텐츠를 로딩중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG).show();
                     finish();//***** 종료
 
         }
