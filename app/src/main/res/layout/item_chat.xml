@@ -145,7 +145,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
-                    <com.github.chrisbanes.photoview.PhotoView
+                    <ImageView
                         android:id="@+id/friendMsgImageView"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -260,7 +260,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
-                    <com.github.chrisbanes.photoview.PhotoView
+                    <ImageView
                         android:id="@+id/myMsgImageView"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
