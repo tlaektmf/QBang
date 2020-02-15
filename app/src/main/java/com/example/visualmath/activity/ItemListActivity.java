@@ -24,6 +24,10 @@ import android.widget.Toast;
 
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.fragment.ItemDetailFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,10 +36,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Items. This activity
@@ -60,6 +70,7 @@ public class ItemListActivity extends AppCompatActivity {
     private ValueEventListener valueEventListener;
     ///private ValueEventListener singleEventListener;
     private  String user;
+    private String path;
 
     //lhj_0
     private ProgressBar list_loading_bar;
@@ -135,7 +146,7 @@ public class ItemListActivity extends AppCompatActivity {
 
                 if (mTwoPane) {//안드로이드 폰 모드
                     Log.d(VM_ENUM.TAG,"[ItemListActivity] 아이템 선택");
-                    deleteAlarmData(item.first);
+                    deleteAlarmData(item.first,item.second.getId());
 
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.second.getId()); //** DetailFragment로 post_id 전달
@@ -152,7 +163,7 @@ public class ItemListActivity extends AppCompatActivity {
                     //** Alarm 에서 삭제
                     //** 1. UNMATCHED 에서 삭제
                     Log.d(VM_ENUM.TAG,"[ItemListActivity] 아이템 선택");
-                    deleteAlarmData(item.first);
+                    deleteAlarmData(item.first,item.second.getId());
 
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.second.getId());
@@ -271,12 +282,33 @@ public class ItemListActivity extends AppCompatActivity {
 //>> 알람 데이터 삭제 시, 데이터가 있는지를 확인 할 수 있음
     }
 
-    public void deleteAlarmData(String key){
+    public void deleteAlarmData(String key,String post_id){
         //>>알람 데이터 삭제전, 데이터가 유효한 지 확인하려면 코드 오픈
         ///reference.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleEventListener);
         //>>>>
         reference.child(key).removeValue();
         Log.d(TAG, "[ItemListActivity]deleteAlarmData 데이터 삭제-> "+ key);
+
+        //** 바로 위의 key 값을 가져옴
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        path=VM_ENUM.DB_STUDENTS+"/"+user+"/"+VM_ENUM.DB_ALARMS;
+
+        db.collection(path).document(post_id)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "[firestore 데이터 삭제 성공]");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "[firestore 데이터 삭제 실패]", e);
+                    }
+                });
+
+
     }
 
 
