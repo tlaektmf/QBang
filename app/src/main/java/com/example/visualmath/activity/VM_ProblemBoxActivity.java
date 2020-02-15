@@ -75,17 +75,19 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         btn_matched = findViewById(R.id.btn_matched);
         recycler_view = findViewById(R.id.problem_recyclerview);
 
+//        레이아웃 매니저 생성 및 지정
+        recycler_view.setLayoutManager(new LinearLayoutManager(this));
+
         //로딩창
         cal_loading_bar = findViewById(R.id.cal_loading_bar);
         cal_loading_back = findViewById(R.id.cal_loading_back);
 
         needToBlock=null;
         fromStudentUnmatched=null;
+
 //        화면 초기 상태에서는 미완료 목록이 클릭된 상태
         btn_unmatched.setSelected(true);
 
-//        레이아웃 매니저 생성 및 지정
-        recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
         //** 데이터 초기화
         unmatched=null;
@@ -271,6 +273,11 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 }
 
 ////                //        리사이클러뷰에 객체 지정
+                if(isUnMatchedClick){
+                    mAdapater = new ProblemListAdapter(unmatched);
+                    recycler_view.setAdapter(mAdapater);
+                }
+
 //        mAdapater = new ProblemListAdapter(unmatched);
 //       recycler_view.setAdapter(mAdapater);
 
@@ -321,10 +328,15 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
                 }
 
+                //// 리사이클러뷰에 객체 지정
+                if(!isUnMatchedClick){
+                    mAdapater = new ProblemListAdapter(matched);
+                    recycler_view.setAdapter(mAdapater);
+                }
+
                 //        리사이클러뷰에 객체 지정
 //                mAdapater = new ProblemListAdapter(matched);
 //                recycler_view.setAdapter(mAdapater);
-
 
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
