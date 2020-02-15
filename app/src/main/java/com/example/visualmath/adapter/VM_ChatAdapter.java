@@ -3,6 +3,7 @@ package com.example.visualmath.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -58,7 +59,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         //** 상대 채팅창 이미지 버젼
         private View friendChatLayoutImageVersion;
-        private PhotoView friendMsgPhotoView;
+        //private PhotoView friendMsgPhotoView;
+        private ImageView friendMsgPhotoView;
 
 
         //** 상대 채팅창 텍스트 버젼
@@ -78,7 +80,8 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
 
         //** 내 채팅창 이미지 버젼
         private View myChatLayoutImageVersion;
-        private PhotoView myMsgPhotoView;
+        //private PhotoView myMsgPhotoView;
+        private ImageView myMsgPhotoView;
 
 
         public VM_CustomViewHolder(@NonNull View itemView) {
