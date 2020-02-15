@@ -382,29 +382,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                         }, 2000);
                     }
                     else{
-                        //** chat size  실시간 변화 검사
-//                        FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList).addListenerForSingleValueEvent(new ValueEventListener() {
-//                                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
-//                                @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                Log.d(VM_ENUM.TAG, "[VM_View] ValueEventListener : " +dataSnapshot );
-//                                List<VM_Data_CHAT> chats=dataSnapshot.getValue(t);
-//                                index=Integer.toString(chats.size());
-//                                Log.d(VM_ENUM.TAG, "[VM_View] index // size: " +index );
-//                                VM_DBHandler dbHandler=new VM_DBHandler();
-//                                dbHandler.newChatItem(post_id,chatItem,index,user_id);
-//                                Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
-//                                dbHandler.newAlarm(post_id,post_title,user_type,matchset_student,VM_ENUM.ALARM_NEW);
-//                                Log.d(VM_ENUM.TAG,"문제가 유효함. 학생 알람을 추가"+user_type+","+matchset_student);
-//                                    finish();//***** 종료
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                            }
-//                        });
-//                        //** chat size  실시간 변화 검사>>>>>>>>>>
+
                         VM_DBHandler dbHandler=new VM_DBHandler();
                                 dbHandler.newChatMediaItem(post_id,chatItem,user_id);
                                 Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
@@ -424,28 +402,6 @@ public class VM_ViewActivity extends AppCompatActivity {
         else if(user_type.equals(VM_ENUM.STUDENT)){
             //학생이면 검사 없이 그냥 채팅 추가
 
-            //** chat size  실시간 변화 검사
-//            FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList).addListenerForSingleValueEvent(new ValueEventListener() {
-//                GenericTypeIndicator<List<VM_Data_CHAT>> t = new GenericTypeIndicator<List<VM_Data_CHAT>>() {};
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    Log.d(VM_ENUM.TAG, "[VM_View] ValueEventListener : " +dataSnapshot );
-//                    List<VM_Data_CHAT> chats=dataSnapshot.getValue(t);
-//                    index=Integer.toString(chats.size());
-//                    Log.d(VM_ENUM.TAG, "[VM_View] index // size: " +index );
-//                    VM_DBHandler dbHandler=new VM_DBHandler();
-//                    dbHandler.newChatItem(post_id,chatItem,index,user_id);
-//                    Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
-//                    dbHandler.newAlarm(post_id, post_title,user_type,matchset_teacher,VM_ENUM.ALARM_NEW);
-//                    Log.d(VM_ENUM.TAG,"문제가 유효함. 선생님 알람을 추가"+user_type+","+matchset_teacher);
-//                    finish();//***** 종료
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
             VM_DBHandler dbHandler=new VM_DBHandler();
                     dbHandler.newChatMediaItem(post_id,chatItem,user_id);
                     Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
