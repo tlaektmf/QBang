@@ -252,8 +252,16 @@ public class ProblemFragment extends Fragment {
 //                        //>> 이미지 삽입시에만 프로그래스바 생성
 //
 //                        downloadInMemory(chatItem.getChatContent());
+///-> 비트맵 오류나서 잠시 닫아둠>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-                        
+                        if (adapter != null) {
+                            adapter.notifyItemInserted(chatList.size());
+                            ///adapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(VM_ENUM.TAG, "[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
+                        }
+
+///-> 비트맵 오류나서 위부분 추가
 
                     }
                     else if(chatItem.getType().equals(VM_ENUM.CHAT_VIDEO)){
