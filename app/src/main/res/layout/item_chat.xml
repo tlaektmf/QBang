@@ -107,11 +107,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
-                    <VideoView
+                    <ImageView
                         android:id="@+id/friendMsgVideoView"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:scaleType="fitCenter"
+
                         android:background="@drawable/your_chat_back"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -223,7 +224,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
-                    <VideoView
+                    <ImageView
                         android:id="@+id/myMsgVideoView"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
