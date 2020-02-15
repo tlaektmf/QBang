@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 /**
@@ -177,6 +178,13 @@ public class ItemDetailFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
 
+                        int errorCode=((StorageException)e).getErrorCode();
+                        if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                            Log.d(VM_ENUM.TAG,"[ItemDetailFragment]StorageException.ERROR_QUOTA_EXCEEDED");
+                            Toast.makeText( getContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                            ImageView problem = (ImageView) rootView.findViewById(R.id.iv_problem);
+                            problem.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                        }
                     }
                 });
 

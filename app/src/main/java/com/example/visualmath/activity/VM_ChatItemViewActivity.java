@@ -12,6 +12,8 @@ import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +24,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.FileDescriptor;
@@ -99,6 +102,13 @@ public class VM_ChatItemViewActivity extends AppCompatActivity {
                  @Override
                  public void onFailure(@NonNull Exception e) {
                      Log.d(VM_ENUM.TAG,"사진 로드 실패");
+                     int errorCode=((StorageException)e).getErrorCode();
+                     if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                         Log.d(VM_ENUM.TAG,"[ChatViewActivity]StorageException.ERROR_QUOTA_EXCEEDED");
+                         Toast.makeText( getApplicationContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                         imageViewPhoto.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                     }
+
                  }
              });
          }else if(fileType.equals(VM_ENUM.CHAT_VIDEO)){
@@ -112,7 +122,12 @@ public class VM_ChatItemViewActivity extends AppCompatActivity {
              }).addOnFailureListener(new OnFailureListener() {
                  @Override
                  public void onFailure(@NonNull Exception e) {
-
+                     int errorCode=((StorageException)e).getErrorCode();
+                     if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                         Log.d(VM_ENUM.TAG,"[ChatViewActivity]StorageException.ERROR_QUOTA_EXCEEDED");
+                         Toast.makeText( getApplicationContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                         videoView.setVisibility(View.GONE);
+                     }
                  }
              });
          }

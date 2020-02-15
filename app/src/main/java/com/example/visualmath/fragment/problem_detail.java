@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 public class problem_detail extends Fragment {
@@ -258,6 +259,13 @@ public class problem_detail extends Fragment {
                             public void onFailure(@NonNull Exception e) {
                                 //Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
                                 Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
+
+                                int errorCode=((StorageException)e).getErrorCode();
+                                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                    Log.d(VM_ENUM.TAG,"[problem_detail]StorageException.ERROR_QUOTA_EXCEEDED");
+                                    Toast.makeText( getContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                                    imageViewOther1.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                }
                             }
                         });
                     }
@@ -278,6 +286,15 @@ public class problem_detail extends Fragment {
                             public void onFailure(@NonNull Exception e) {
 //                                Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
                                 Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
+
+
+                                int errorCode=((StorageException)e).getErrorCode();
+                                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                    Log.d(VM_ENUM.TAG,"[problem_detail]StorageException.ERROR_QUOTA_EXCEEDED");
+                                    Toast.makeText( getContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                                    imageViewOther2.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                }
+
                             }
                         });
                     }
@@ -298,6 +315,14 @@ public class problem_detail extends Fragment {
                             public void onFailure(@NonNull Exception e) {
                                 //Toast.makeText(getActivity(), "다운로드 실패", Toast.LENGTH_SHORT).show();
                                 Log.d(VM_ENUM.TAG,"[problem_detail] 다운로드 실패");
+
+                                int errorCode=((StorageException)e).getErrorCode();
+                                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+                                    Log.d(VM_ENUM.TAG,"[problem_detail]StorageException.ERROR_QUOTA_EXCEEDED");
+                                    Toast.makeText( getContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+                                    imageViewOther3.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+                                }
+
                             }
                         });
                     }
