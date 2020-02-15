@@ -155,7 +155,8 @@ public class VM_ViewActivity extends AppCompatActivity {
         pick=VM_ENUM.IT_GALLERY_PHOTO;
 
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        ///intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType("image/* video/*");
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
 
     }
