@@ -122,24 +122,26 @@ public class VM_DBHandler {
 
     }
 
-    public void newAlarm(String post_id, String title, String user_type, String receiver,String message){
-        AlarmItem alarmItem=new AlarmItem(post_id,title,message);
 
-        if(user_type.equals(VM_ENUM.TEACHER)){
-            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
-                    .child(receiver)
-                    .child(VM_ENUM.DB_STU_ALARM)
-                    .push();
-            databaseReference.setValue(alarmItem);
-        }else if(user_type.equals(VM_ENUM.STUDENT)){
-            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
-                    .child(receiver)
-                    .child(VM_ENUM.DB_TEA_ALARM)
-                    .push();
-            databaseReference.setValue(alarmItem);
-        }
-
-    }
+    // 기존 알람 생성 create data
+//    public void newAlarm(String post_id, String title, String user_type, String receiver,String message){
+//        AlarmItem alarmItem=new AlarmItem(post_id,title,message);
+//
+//        if(user_type.equals(VM_ENUM.TEACHER)){
+//            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+//                    .child(receiver)
+//                    .child(VM_ENUM.DB_STU_ALARM)
+//                    .push();
+//            databaseReference.setValue(alarmItem);
+//        }else if(user_type.equals(VM_ENUM.STUDENT)){
+//            databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+//                    .child(receiver)
+//                    .child(VM_ENUM.DB_TEA_ALARM)
+//                    .push();
+//            databaseReference.setValue(alarmItem);
+//        }
+//
+//    }
 
     public void newMessageAlarm(final String post_id, String title, String user_type, String receiver, String message){
 
