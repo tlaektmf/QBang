@@ -297,6 +297,7 @@ public class ItemListActivity extends AppCompatActivity {
         path=VM_ENUM.DB_STUDENTS+"/"+user+"/"+post_id;
 
         // 하위 데이터만 삭제 -> collection을 제거
+        Log.d(TAG, "[ItemListActivity]collection을  삭제-> "+ path);
         db.collection(path).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
