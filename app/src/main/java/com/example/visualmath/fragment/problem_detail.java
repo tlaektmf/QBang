@@ -187,7 +187,7 @@ public class problem_detail extends Fragment {
 
     }
     public void zoomImageFromThumb(final View thumView){
-//        Toast.makeText(thumView.getContext(),"아아아악",Toast.LENGTH_LONG).show();
+
         ImageView smallView = (ImageView) thumView;
         ImageView bigView = rootView.findViewById(R.id.iv_photo);
 
