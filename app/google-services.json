@@ -45,7 +45,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCyFdBjLl7vQRQ7MqZYHpyNceONZ82GkKE"
+          "current_key": "AIzaSyBD4LWSySOASsdxdNQa0p7LnLTj7JkUCus"
         }
       ],
       "services": {
@@ -54,6 +54,13 @@
             {
               "client_id": "514346757678-ugmq21vcm36no4t2cdfn0nkpo6df43ht.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "514346757678-bttid15gn1odmjt1ah30h964685dd4pa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.vm.VisualMath"
+              }
             }
           ]
         }
