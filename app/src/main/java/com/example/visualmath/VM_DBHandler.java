@@ -327,7 +327,7 @@ public class VM_DBHandler {
      * @param _solveWay
      * @return
      */
-    boolean newPost(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic, String _solveWay) {
+    void newPost(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic, String _solveWay) {
 
 
         String currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
@@ -386,16 +386,20 @@ public class VM_DBHandler {
             StartupLoadFile(_vmDataAdd, _vmDataBasic); //** 파이어베이스 저장소에 파일 등록
 
 
+//            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id());
+//            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_UPLOAD_DATE).setValue(vm_data_post.getUploadDate());
+//            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_SOLVE_WAY).setValue(vm_data_post.getSolveWay());
+//            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle());
+//            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_GRADE).setValue(vm_data_post.getData_default().getGrade());
+
+
             firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id());
-            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_UPLOAD_DATE).setValue(vm_data_post.getUploadDate());
-            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_SOLVE_WAY).setValue(vm_data_post.getSolveWay());
-            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle());
-            firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_GRADE).setValue(vm_data_post.getData_default().getGrade());
             Log.i(TAG, "[UNMATCHED instance 생성] ");
 
             //** TABLE : STUDENTS - child(unmatched)에 등록
@@ -405,25 +409,24 @@ public class VM_DBHandler {
                     .child(VM_ENUM.DB_STU_UNMATCHED)
                     .child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id()); //** 파이어베이스 DB 등록
-            firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
-                    .child(user)
-                    .child(VM_ENUM.DB_STU_POSTS)
-                    .child(VM_ENUM.DB_STU_UNMATCHED)
-                    .child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle()); //** 파이어베이스 DB 등록
-            firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
-                    .child(user)
-                    .child(VM_ENUM.DB_STU_POSTS)
-                    .child(VM_ENUM.DB_STU_UNMATCHED)
-                    .child(vm_data_post.getP_id())
-                    .child(VM_ENUM.DB_UPLOAD_DATE).setValue(vm_data_post.getUploadDate()); //** 파이어베이스 DB 등록
+
+//            firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+//                    .child(user)
+//                    .child(VM_ENUM.DB_STU_POSTS)
+//                    .child(VM_ENUM.DB_STU_UNMATCHED)
+//                    .child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_TITLE).setValue(vm_data_post.getData_default().getTitle()); //** 파이어베이스 DB 등록
+//            firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+//                    .child(user)
+//                    .child(VM_ENUM.DB_STU_POSTS)
+//                    .child(VM_ENUM.DB_STU_UNMATCHED)
+//                    .child(vm_data_post.getP_id())
+//                    .child(VM_ENUM.DB_UPLOAD_DATE).setValue(vm_data_post.getUploadDate()); //** 파이어베이스 DB 등록
 
             Log.i(TAG, "[STUDENTS - child(unmatched) instance 생성] ");
 
         }
 
-
-        return true;
     }
 
 
