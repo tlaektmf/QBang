@@ -118,5 +118,7 @@ public  class VM_ENUM {
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
 
+    public static final String IT_PROBLEM_URI ="IT_PROBLEM_URI" ;
+    public static final String IT_POST_GRADE = "IT_POST_GRADE";
 }
 

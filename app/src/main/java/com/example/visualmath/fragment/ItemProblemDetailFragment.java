@@ -85,6 +85,9 @@ public class ItemProblemDetailFragment extends Fragment {
     private String solveWay;
     private String matchSet_student;
     private String upLoadDate;
+    private VM_Data_Default data_default;
+
+
     View rootView;
     public static final String ARG_ITEM_ID = "post_id";
 
@@ -92,7 +95,8 @@ public class ItemProblemDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private VM_Data_Default vmDataDefault;
+
+   /// private VM_Data_Default vmDataDefault;
     private PostCustomData postCustomData;
 
     //** Glide Library Exception 처리
@@ -114,10 +118,19 @@ public class ItemProblemDetailFragment extends Fragment {
 
             post_id = getArguments().getString(ARG_ITEM_ID);
             solveWay = getArguments().getString(VM_ENUM.DB_SOLVE_WAY);
+            matchSet_student=getArguments().getString(VM_ENUM.DB_MATCH_STUDENT);
+            upLoadDate=getArguments().getString(VM_ENUM.DB_UPLOAD_DATE);
+
             Log.d(TAG, post_id + "," + solveWay);
             parent = (VM_ProblemListActivity) getActivity();
             mGlideRequestManager = Glide.with(this);
             Activity activity = this.getActivity();
+
+            // VM_Data_Default(String _title, String _grade, String _problem)
+            data_default=new VM_Data_Default(
+                    getArguments().getString(VM_ENUM.IT_POST_TITLE),
+                    getArguments().getString(VM_ENUM.IT_POST_GRADE),
+                    getArguments().getString(VM_ENUM.IT_PROBLEM_URI));
 
             if(getArguments().getString(VM_ENUM.IT_ARG_BLOCK)!=null){
                 Log.d(TAG,"[needToBlock 설정]");
@@ -128,7 +141,7 @@ public class ItemProblemDetailFragment extends Fragment {
                 fromUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
             }
 
-            initData();
+
 
         }
 
@@ -147,16 +160,17 @@ public class ItemProblemDetailFragment extends Fragment {
         Button buttonViewDetail = rootView.findViewById(R.id.bt_viewDetail);
         Button buttonMatch = rootView.findViewById(R.id.bt_match);
 
+        initData();
 
         buttonViewDetail.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // 상세보기 화면
 
                 Intent intent = new Intent(getContext(), VM_FullViewActivity.class);
                 intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, post_id);
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE, vmDataDefault.getTitle());
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE, vmDataDefault.getGrade());
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM, vmDataDefault.getProblem());
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE, data_default.getTitle());
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE, data_default.getGrade());
+                intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM, data_default.getProblem());
                 intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);//Teacher 문제 선택에서 넘어왔으므로, 채팅창 모두 막아야됨
 
                 if(needToBlock!=null){ //** 매치 미완료의 경우
@@ -232,7 +246,7 @@ public class ItemProblemDetailFragment extends Fragment {
                             VM_Dialog_registerProblem.dig.dismiss();
                             t.cancel();
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, data_default.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
                         }
@@ -276,7 +290,7 @@ public class ItemProblemDetailFragment extends Fragment {
         Log.d(VM_ENUM.TAG, "[makeMatchSet 시작]");
 
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
-        postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), solveWay, upLoadDate, matchSet_student, user);
+        postCustomData = new PostCustomData(post_id, data_default.getTitle(), solveWay, upLoadDate, matchSet_student, user);
 
         //>>> UNMATCHED 에서의 삭제는 mutable 로 해야되기 때문에 isDataAvailable() 함수에서 조건문에 따라 처리함
         //** 1. UNMATCHED 에서 삭제
@@ -352,7 +366,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
 
                     //** 5. 학생 알람에 등록
-                    AlarmItem alarmItem=new AlarmItem(post_id,vmDataDefault.getTitle(),VM_ENUM.ALARM_MATCHED);
+                    AlarmItem alarmItem=new AlarmItem(post_id,data_default.getTitle(),VM_ENUM.ALARM_MATCHED);
                     FirebaseDatabase.getInstance().getReference()
                             .child(VM_ENUM.DB_STUDENTS)
                             .child(matchSet_student)
@@ -376,7 +390,7 @@ public class ItemProblemDetailFragment extends Fragment {
                             t.cancel();
                             Log.d(VM_ENUM.TAG, "매치완료 ->문제선택 화면으로 다시 전환");
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, data_default.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
                         }
@@ -395,7 +409,7 @@ public class ItemProblemDetailFragment extends Fragment {
                             t.cancel();
                             // ->문제선택 화면으로 다시 전환
                             Intent intent = new Intent(parent, VM_ProblemListActivity.class);
-                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, vmDataDefault.getGrade());
+                            intent.putExtra(VM_ENUM.IT_MATCH_SUCCESS, data_default.getGrade());
                             parent.startActivity(intent);
                             parent.finish();
 
@@ -418,43 +432,106 @@ public class ItemProblemDetailFragment extends Fragment {
      * 데이터베이스 트랜젝션
      * write
      */
+//    public void initData() {
+//
+//        FirebaseDatabase firebaseDatabase;
+//        DatabaseReference reference;
+//
+//
+//        firebaseDatabase = FirebaseDatabase.getInstance();
+//        reference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
+//        reference = reference.child(post_id);
+//        //.child(VM_ENUM.DB_DATA_DEFAULT);
+//
+//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                vmDataDefault = dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
+//                matchSet_student = dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue(String.class);
+//                upLoadDate = dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue(String.class);
+//
+//                if (vmDataDefault != null) {
+//                    textViewProblemGrade.setText(vmDataDefault.getGrade());
+//                    textViewTitle.setText(vmDataDefault.getTitle());
+//                    if (solveWay.equals(VM_ENUM.VIDEO)) {
+//                        textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
+//                    } else if (solveWay.equals(VM_ENUM.TEXT)) {
+//                        textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
+//                    }
+//                } else {
+//                    Log.i(TAG, "null");
+//                }
+//
+//                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] ValueEventListener : " + dataSnapshot);
+//                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] matchSet_student : " + matchSet_student);
+//                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] upLoadDate : " + upLoadDate);
+//
+//                //** 사진 파일 읽기
+//                StorageReference storageReference;
+//                storageReference = FirebaseStorage.getInstance().getReference();
+//                StorageReference pathReference = storageReference.child(vmDataDefault.getProblem());
+//                pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        //** 사진파일 이미지뷰에 삽입
+//
+//                        mGlideRequestManager
+//                                .load(uri)
+//                                .into(problem);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                        int errorCode=((StorageException)e).getErrorCode();
+//                        if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
+//                            Log.d(VM_ENUM.TAG,"[ItemProblemDetailFragment]StorageException.ERROR_QUOTA_EXCEEDED");
+//                            Toast.makeText( getContext(),"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
+//                            problem.setImageResource(R.drawable.ic_warning_error_svgrepo_com);
+//                        }
+//                    }
+//                });
+//
+//
+////                //** 프래그먼트 갱신 (가장 마지막에 해야 모든 DB 정보가 들어와서 FullActivity로 이동
+////                FragmentTransaction ft = getFragmentManager().beginTransaction();
+////                if (Build.VERSION.SDK_INT >= 26) {
+////                    ft.setReorderingAllowed(false);
+////                }
+////                ft.detach(ItemProblemDetailFragment.this).attach(ItemProblemDetailFragment.this).commit();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                ///Toast.makeText(parent.getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
+//                Log.d(VM_ENUM.TAG, "<<<<<<Failed to read value>>>>>>>>", databaseError.toException());
+//            }
+//        });
+//
+//    }
+
+
     public void initData() {
-        FirebaseDatabase firebaseDatabase;
-        DatabaseReference reference;
 
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        reference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
-        reference = reference.child(post_id);
-        //.child(VM_ENUM.DB_DATA_DEFAULT);
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                vmDataDefault = dataSnapshot.child(VM_ENUM.DB_DATA_DEFAULT).getValue(VM_Data_Default.class);
-                matchSet_student = dataSnapshot.child(VM_ENUM.DB_MATCH_STUDENT).getValue(String.class);
-                upLoadDate = dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue(String.class);
-
-                if (vmDataDefault != null) {
-                    textViewProblemGrade.setText(vmDataDefault.getGrade());
-                    textViewTitle.setText(vmDataDefault.getTitle());
+                if (data_default != null) {
+                    textViewProblemGrade.setText(data_default.getGrade());
+                    textViewTitle.setText(data_default.getTitle());
                     if (solveWay.equals(VM_ENUM.VIDEO)) {
                         textViewSolveWay.setText("[영상 풀이를 원하는 학생의 질문입니다.]");
                     } else if (solveWay.equals(VM_ENUM.TEXT)) {
                         textViewSolveWay.setText("[텍스트 풀이를 원하는 학생의 질문입니다.]");
                     }
                 } else {
-                    Log.i(TAG, "null");
+                    Log.i(TAG, "[선생님 문제 선택/ Detail 뷰] initData() > data_default 가 null");
                 }
 
-                Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] ValueEventListener : " + dataSnapshot);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] matchSet_student : " + matchSet_student);
                 Log.d(TAG, "[선생님 문제 선택/ Detail 뷰] upLoadDate : " + upLoadDate);
 
                 //** 사진 파일 읽기
                 StorageReference storageReference;
                 storageReference = FirebaseStorage.getInstance().getReference();
-                StorageReference pathReference = storageReference.child(vmDataDefault.getProblem());
+                StorageReference pathReference = storageReference.child(data_default.getProblem());
                 pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -486,13 +563,7 @@ public class ItemProblemDetailFragment extends Fragment {
 //                ft.detach(ItemProblemDetailFragment.this).attach(ItemProblemDetailFragment.this).commit();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                ///Toast.makeText(parent.getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
-                Log.d(VM_ENUM.TAG, "<<<<<<Failed to read value>>>>>>>>", databaseError.toException());
-            }
-        });
 
-    }
+
 
 }

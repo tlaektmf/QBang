@@ -72,7 +72,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__problem_list);
 
-        Log.d(VM_ENUM.TAG,"[선생님 문제 선택 뷰]: Oncreate 함수 호출");
+        Log.w(VM_ENUM.TAG,"[선생님 문제 선택 뷰]: Oncreate 함수 호출");
         init();
 
     }
@@ -112,6 +112,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             nowGrade = VM_ENUM.GRADE_ELEMENT;
 
             Log.d(VM_ENUM.TAG, "[TeacherProblemSelect],onCreate | setUnmatched 호출");
+
             setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
         } else if (afterMatchSuccess.equals(VM_ENUM.GRADE_ELEMENT)) {
             Log.d(VM_ENUM.TAG, "[Match 성공 이후, 넘어옴 GRADE_ELEMENT]");
@@ -134,6 +135,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             nowGrade = VM_ENUM.GRADE_MID;
 
             Log.d(VM_ENUM.TAG, "[TeacherProblemSelect],onCreate | setUnmatched 호출");
+
             setUnmatchedData(VM_ENUM.GRADE_MID);
         } else if (afterMatchSuccess.equals(VM_ENUM.GRADE_HIGH)) {
             Log.d(VM_ENUM.TAG, "[Match 성공 이후, 넘어옴 GRADE_HIGH]");
@@ -145,6 +147,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             nowGrade = VM_ENUM.GRADE_HIGH;
 
             Log.d(VM_ENUM.TAG, "[TeacherProblemSelect],onCreate | setUnmatched 호출");
+
             setUnmatchedData(VM_ENUM.GRADE_HIGH);
         }
 
@@ -171,7 +174,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 PostCustomData item = (PostCustomData) view.getTag();
 
-                Log.d(VM_ENUM.TAG, "[아이템 선택]" + item.getP_id() + "," + item.getSolveWay());
+                Log.d(VM_ENUM.TAG, "[아이템 선택]" + item.getGrade());
                 //** 프래그먼트의 아이템 클릭 시, ProblemDetail 전환
                 ///searchData(pos);
                 Bundle arguments = new Bundle();
@@ -180,6 +183,12 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
                 arguments.putString(VM_ENUM.IT_FROM_UNMATCHED, VM_ENUM.IT_FROM_UNMATCHED);//매치 이전 문제이므로 matchset 찾지 않음
                 arguments.putString(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);//채팅창을 막음
+
+                arguments.putString(VM_ENUM.IT_PROBLEM_URI,item.getProblem());
+                arguments.putString(VM_ENUM.IT_POST_TITLE,item.getTitle());
+                arguments.putString(VM_ENUM.IT_POST_GRADE,item.getGrade());
+                arguments.putString(VM_ENUM.DB_MATCH_STUDENT,item.getMatchSet_student());
+                arguments.putString(VM_ENUM.DB_UPLOAD_DATE,item.getUpLoadDate());
 
                 ItemProblemDetailFragment fragment = new ItemProblemDetailFragment();
                 fragment.setArguments(arguments);
@@ -272,6 +281,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
             //초기 셋팅 필요
             Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : showElementary 버튼 클릭");
+
             setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
 
     }
@@ -285,6 +295,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
             //초기 셋팅 필요
         Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : showMid 버튼 클릭");
+
             setUnmatchedData(VM_ENUM.GRADE_MID);
 
     }
@@ -314,7 +325,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
 
-                //PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate)
+                // PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet_student)
 
                 VM_Data_POST post=dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
 
@@ -329,13 +340,34 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 //** 데이터 셋팅
                 if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 추가 ");
-                    unmatched_element.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    unmatched_element.add(new PostCustomData
+                            (post.getP_id()
+                            ,post.getData_default().getTitle()
+                            ,post.getSolveWay()
+                            ,post.getUploadDate()
+                            , post.getData_default().getGrade()
+                            ,post.getData_default().getProblem()
+                            ,post.getMatchSet_student()) );
                 } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 추가 ");
-                    unmatched_mid.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    unmatched_mid.add(new PostCustomData
+                            (post.getP_id()
+                                    ,post.getData_default().getTitle()
+                                    ,post.getSolveWay()
+                                    ,post.getUploadDate()
+                                    , post.getData_default().getGrade()
+                                    ,post.getData_default().getProblem()
+                                    ,post.getMatchSet_student()) );
                 } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 추가 ");
-                    unmatched_high.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    unmatched_high.add(new PostCustomData
+                            (post.getP_id()
+                                    ,post.getData_default().getTitle()
+                                    ,post.getSolveWay()
+                                    ,post.getUploadDate()
+                                    , post.getData_default().getGrade()
+                                    ,post.getData_default().getProblem()
+                                    ,post.getMatchSet_student()) );
                 }
 
                 //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
@@ -366,7 +398,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             }
         };
 
-        single_delete_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 추가 된것을
+        single_delete_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 삭제 된것을
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
@@ -378,13 +410,34 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 //** 데이터 셋팅
                 if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
                     //isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
-                    isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    isDeletedWell=unmatched_element.remove(new PostCustomData
+                            (post.getP_id()
+                                    ,post.getData_default().getTitle()
+                                    ,post.getSolveWay()
+                                    ,post.getUploadDate()
+                                    , post.getData_default().getGrade()
+                                    ,post.getData_default().getProblem()
+                                    ,post.getMatchSet_student()) );
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 삭제 "+isDeletedWell);
                 } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
-                    isDeletedWell=unmatched_mid.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    isDeletedWell=unmatched_mid.remove(new PostCustomData
+                            (post.getP_id()
+                                    ,post.getData_default().getTitle()
+                                    ,post.getSolveWay()
+                                    ,post.getUploadDate()
+                                    , post.getData_default().getGrade()
+                                    ,post.getData_default().getProblem()
+                                    ,post.getMatchSet_student()) );
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 삭제 "+isDeletedWell);
                 } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
-                     isDeletedWell=unmatched_high.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                     isDeletedWell=unmatched_high.remove(new PostCustomData
+                             (post.getP_id()
+                                     ,post.getData_default().getTitle()
+                                     ,post.getSolveWay()
+                                     ,post.getUploadDate()
+                                     , post.getData_default().getGrade()
+                                     ,post.getData_default().getProblem()
+                                     ,post.getMatchSet_student()) );
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 삭제 "+isDeletedWell);
 
                 }
@@ -458,7 +511,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             }
         };
 
-        //** 리스너 동작
+//        //** 리스너 동작
         Log.w(TAG, "[선생님 문제선택 뷰] : 리스너 부착");
         reference_unmatched.addChildEventListener(childEventListener);
     }
@@ -485,7 +538,36 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         }
 
-        list_loading_bar.setVisibility(View.INVISIBLE);
+        ///list_loading_bar.setVisibility(View.INVISIBLE);
     }
 
-    }
+//
+//    @Override
+//    protected void onStop() {
+//        //리스너 해제
+//        Log.d(TAG, "[선생님 문제 선택 뷰] onStop addValueEventListener  리스너 삭제");
+//        reference_unmatched.removeEventListener(childEventListener);
+//
+//        super.onStop();
+//
+//    }
+//
+//    @Override
+//    protected void onDestroy() {//리스너 해제
+//        Log.d(TAG, "[선생님 문제 선택 뷰]onDestroy addValueEventListener  리스너 삭제");
+//        reference_unmatched.removeEventListener(childEventListener);
+//
+//        super.onDestroy();
+//
+//    }
+//
+//    @Override
+//    protected void onStart() {
+//
+//        //** 리스너 동작
+//        Log.w(TAG, "[선생님 문제선택 뷰] onStart : progress bar 생성");
+//
+//        super.onStart();
+//    }
+
+}
