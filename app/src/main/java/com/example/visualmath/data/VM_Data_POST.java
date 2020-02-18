@@ -1,6 +1,7 @@
 package com.example.visualmath.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class VM_Data_POST {
@@ -11,7 +12,7 @@ public class VM_Data_POST {
     private String matchSet_student; // student-teacher match set
     private String uploadDate; //업로드 날짜
     private String solveWay; //풀이 방식
-    private List<VM_Data_CHAT> chatList;
+    private HashMap<String,VM_Data_CHAT> chatList;
 
 
     private VM_Data_Default data_default;
@@ -38,7 +39,7 @@ public class VM_Data_POST {
 
         //** 아직 입력이 안된 기본값들 초기 세팅
         this.liveTime=null;
-        this.chatList=new ArrayList<>();
+        this.chatList=new HashMap<>();
         ///VM_Data_CHAT chat=new VM_Data_CHAT("다슬","sdfsd",0,0);
         ///chatList.add(chat);
 
@@ -122,11 +123,11 @@ public class VM_Data_POST {
         this.uploadDate = uploadDate;
     }
 
-    public List<VM_Data_CHAT> getChatList() {
+    public HashMap<String, VM_Data_CHAT> getChatList() {
         return chatList;
     }
 
-    public void setChatList(List<VM_Data_CHAT> chatList) {
+    public void setChatList(HashMap<String, VM_Data_CHAT> chatList) {
         this.chatList = chatList;
     }
 
