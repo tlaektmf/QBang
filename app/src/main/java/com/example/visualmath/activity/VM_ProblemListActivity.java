@@ -22,6 +22,7 @@ import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.data.VM_Data_POST;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.fragment.ItemProblemDetailFragment;
 import com.google.firebase.database.ChildEventListener;
@@ -32,11 +33,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class VM_ProblemListActivity extends AppCompatActivity {
-    View recyclerView;
+
+    RecyclerView recyclerView;
+
     ViewGroup layout;
     public static String TAG = VM_ENUM.TAG;
     private ProgressBar list_loading_bar;
@@ -47,18 +51,28 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     //** DB
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference reference;
+    private DatabaseReference reference_unmatched;
+    private DatabaseReference reference_posts;
+
     private static List<PostCustomData> unmatched_element; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private static List<PostCustomData> unmatched_mid; //포스트 데이터 unmatched 리스트 /id/title/video or text
     private static List<PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
+
+//    private static HashMap<String,PostCustomData> unmatched_element; //포스트 데이터 unmatched 리스트 /id/title/video or text
+//    private static HashMap<String,PostCustomData> unmatched_mid; //포스트 데이터 unmatched 리스트 /id/title/video or text
+//    private static HashMap<String,PostCustomData> unmatched_high; //포스트 데이터 unmatched 리스트 /id/title/video or text
+
     private String nowGrade;
     private ChildEventListener childEventListener;
+    private ValueEventListener single_add_ValueEventListener;
+    private ValueEventListener single_delete_ValueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__problem_list);
 
+        Log.d(VM_ENUM.TAG,"[선생님 문제 선택 뷰]: Oncreate 함수 호출");
         init();
 
     }
@@ -66,15 +80,20 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     public void init() {
         recyclerView = findViewById(R.id.item_problem_list);
         layout = (ViewGroup) findViewById(R.id.item_problem_detail_container);
-        assert recyclerView != null;
+
         list_loading_bar = findViewById(R.id.list_loading_bar);
         btnElement = findViewById(R.id.ib_element);
         btnMid = findViewById(R.id.ib_mid);
         btnHigh = findViewById(R.id.ib_high);
 
+
         unmatched_element = new ArrayList<>();
         unmatched_mid =  new ArrayList<>();
         unmatched_high =  new ArrayList<>();
+
+//        unmatched_element = new HashMap<>();
+//        unmatched_mid =  new HashMap<>();
+//        unmatched_high =  new HashMap<>();
 
         initDatabaseListener();
 
@@ -85,7 +104,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
 
         if (afterMatchSuccess == null) {
-            Log.d(VM_ENUM.TAG, "[선생님 문제선택 뷰] : Match 성공 이후, 넘어온 게 아님 : 그냥 문제선택뷰에 들어가는 경우(초기 상태)");
+            Log.d(VM_ENUM.TAG, "[선생님 문제선택 뷰] : Match 성공 이후, 넘어온 게 아님 : 그냥 문제선택 뷰에 처음");
             btnElement.setSelected(true);
             btnMid.setSelected(false);
             btnHigh.setSelected(false);
@@ -132,11 +151,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     }
 
-    private void setData(@NonNull RecyclerView recyclerView, List<PostCustomData> items) {
-        recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, items));
 
-        list_loading_bar.setVisibility(View.INVISIBLE);
-    }
 
 
     /**
@@ -254,17 +269,10 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         btnMid.setSelected(false);
         btnHigh.setSelected(false);
 
-//** 데이터베이스 트랜젝션
-        if (unmatched_element != null) {
-            //데이터 셋팅은 되어있는 상태
-            //        리사이클러뷰에 객체 지정
-            setData((RecyclerView) recyclerView, unmatched_element);
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : 데이터 셋팅은 되어있는 상태 ");
-        } else {
+
             //초기 셋팅 필요
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : 초기 셋팅 필요 | setUnmatchedData 호출");
+            Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : showElementary 버튼 클릭");
             setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
-        }
 
     }
 
@@ -275,17 +283,9 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         btnHigh.setSelected(false);
         nowGrade = VM_ENUM.GRADE_MID;
 
-        //** 데이터베이스 트랜젝션
-        if (unmatched_mid != null) {
-            //데이터 셋팅은 되어있는 상태
-            //        리사이클러뷰에 객체 지정
-            setData((RecyclerView) recyclerView, unmatched_mid);
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택],데이터 셋팅은 되어있는 상태 ");
-        } else {
             //초기 셋팅 필요
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택],초기 셋팅 필요 | setUnmatchedData 호출");
+        Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : showMid 버튼 클릭");
             setUnmatchedData(VM_ENUM.GRADE_MID);
-        }
 
     }
 
@@ -296,96 +296,173 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         btnMid.setSelected(false);
         btnHigh.setSelected(true);
 
-//** 데이터베이스 트랜젝션
-        if (unmatched_high != null) {
-            //데이터 셋팅은 되어있는 상태
-            //        리사이클러뷰에 객체 지정
-            setData((RecyclerView) recyclerView, unmatched_high);
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택],데이터 셋팅은 되어있는 상태 ");
-        } else {
             //초기 셋팅 필요
-            Log.d(VM_ENUM.TAG, "[선생님 문제 선택],초기 셋팅 필요 | setUnmatchedData 호출");
+        Log.d(VM_ENUM.TAG, "[선생님 문제 선택] : showHigh 버튼 클릭");
             setUnmatchedData(VM_ENUM.GRADE_HIGH);
-        }
+
     }
 
 
     public void initDatabaseListener() { //** 모든 데이터를 초기화시킴 -> childAddedListener 이용
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        reference = firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
+        reference_unmatched = firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
+        reference_posts=firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
+
+        single_add_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 추가 된것을
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
+
+                //PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate)
+
+                VM_Data_POST post=dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+
+//                String post_id = dataSnapshot.getKey();
+//                String post_date = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue()).toString();
+//                String post_title = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_TITLE).getValue()).toString();
+//                String post_solveWay = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_SOLVE_WAY).getValue()).toString();
+//                String post_grade= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_GRADE).getValue()).toString();
+
+                String post_grade=post.getData_default().getGrade();
+
+                //** 데이터 셋팅
+                if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 추가 ");
+                    unmatched_element.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 추가 ");
+                    unmatched_mid.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 추가 ");
+                    unmatched_high.add(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                }
+
+                //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
+//                if (nowGrade.equals(VM_ENUM.GRADE_ELEMENT)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+//
+//                } else if (nowGrade.equals(VM_ENUM.GRADE_MID)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_MID);
+//
+//                } else if (nowGrade.equals(VM_ENUM.GRADE_HIGH)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_HIGH);
+//
+//                }
+
+                if(nowGrade.equals(post_grade)){ //** 들어온 데이터와 현재 활성화된 화면의 GRADE가 같은 경우에만 뷰에 셋팅 함
+                    Log.d(TAG, "[선생님 문제 선택뷰] "+nowGrade+" 데이터 셋팅 ");
+                    setUnmatchedData(nowGrade);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "[선생님 문제 선택뷰] DatabaseError : " , databaseError.toException());
+
+            }
+        };
+
+        single_delete_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 추가 된것을
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
+
+                VM_Data_POST post=dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+                String post_grade=post.getData_default().getGrade();
+
+                boolean isDeletedWell=false;
+                //** 데이터 셋팅
+                if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
+                    //isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 삭제 "+isDeletedWell);
+                } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
+                    isDeletedWell=unmatched_mid.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 삭제 "+isDeletedWell);
+                } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
+                     isDeletedWell=unmatched_high.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 삭제 "+isDeletedWell);
+
+                }
+
+                //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
+//                if (nowGrade.equals(VM_ENUM.GRADE_ELEMENT)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+//
+//                } else if (nowGrade.equals(VM_ENUM.GRADE_MID)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_MID);
+//
+//                } else if (nowGrade.equals(VM_ENUM.GRADE_HIGH)) {
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
+//                    setUnmatchedData(VM_ENUM.GRADE_HIGH);
+//
+//                }
+
+                if(nowGrade.equals(post_grade)){ //** 들어온 데이터와 현재 활성화된 화면의 GRADE가 같은 경우에만 뷰에 셋팅 함
+                    Log.d(TAG, "[선생님 문제 선택뷰] "+nowGrade+" 데이터 셋팅 ");
+                    setUnmatchedData(nowGrade);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "[선생님 문제 선택뷰] DatabaseError : " , databaseError.toException());
+
+            }
+        };
 
         childEventListener=new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                Log.d(TAG, "[선생님 문제 선택뷰] ValueEventListener : " + dataSnapshot);
+                Log.d(TAG, "[선생님 문제 선택뷰] onChildAdded : " + dataSnapshot);
 
                 String post_id = dataSnapshot.getKey();
-                String post_date = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue()).toString();
-                String post_title = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_TITLE).getValue()).toString();
-                String post_solveWay = Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_SOLVE_WAY).getValue()).toString();
-                String post_grade= Objects.requireNonNull(dataSnapshot.child(VM_ENUM.DB_GRADE).getValue()).toString();
-
-
-
-                //PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate)
-
-                if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 생성 ");
-                    unmatched_element.add(new PostCustomData(post_id,post_title,post_solveWay,post_date) );
-                } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 생성 ");
-                    unmatched_mid.add(new PostCustomData(post_id,post_title,post_solveWay,post_date) );
-                } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 생성 ");
-                    unmatched_high.add(new PostCustomData(post_id,post_title,post_solveWay,post_date) );
-                }
-
-                //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰에 셋팅을 할 지 결정함.
-                if (nowGrade.equals(VM_ENUM.GRADE_ELEMENT)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
-                    setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
-
-                } else if (nowGrade.equals(VM_ENUM.GRADE_MID)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
-                    setUnmatchedData(VM_ENUM.GRADE_MID);
-
-                } else if (nowGrade.equals(VM_ENUM.GRADE_HIGH)) {
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
-                    setUnmatchedData(VM_ENUM.GRADE_HIGH);
-
-                }
+                reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_add_ValueEventListener);
 
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.w(TAG, "Failed to read value :onChildChanged");
+                Log.w(TAG, "[선생님 문제 선택뷰] :onChildChanged");
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Log.w(TAG, "Failed to read value : onChildChanged");
+                Log.w(TAG, "[선생님 문제 선택뷰] : onChildRemoved");
+
+                String post_id = dataSnapshot.getKey();
+                reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_delete_ValueEventListener);
+
+
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.w(TAG, "Failed to read value : onChildMoved");
+                Log.w(TAG, "[선생님 문제 선택뷰] : onChildMoved");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //Toast.makeText(getBaseContext(), "데이터베이스 오류", Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "Failed to read value", databaseError.toException());
+                Log.w(TAG, "[선생님 문제 선택뷰]", databaseError.toException());
             }
         };
 
         //** 리스너 동작
         Log.w(TAG, "[선생님 문제선택 뷰] : 리스너 부착");
-        reference.addChildEventListener(childEventListener);
+        reference_unmatched.addChildEventListener(childEventListener);
     }
+
 
 
     public void setUnmatchedData(final String grade) {
@@ -393,67 +470,22 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         //** 변경된 setUnmatchedData 함수
 
         if (grade.equals(VM_ENUM.GRADE_ELEMENT)) {
-            Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
-            setData((RecyclerView) recyclerView, unmatched_element);
+            Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_element) ");
+            recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, unmatched_element));
+
 
         } else if (grade.equals(VM_ENUM.GRADE_MID)) {
-            Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
-            setData((RecyclerView) recyclerView, unmatched_mid);
+            Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_mid) ");
+            recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, unmatched_mid));
+
+
         } else if (grade.equals(VM_ENUM.GRADE_HIGH)) {
-            Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
-            setData((RecyclerView) recyclerView, unmatched_high);
+            Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_high ");
+            recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, unmatched_high));
 
         }
 
-
-        //** 기존 setUnmatchedData 함수
-//
-//        firebaseDatabase=FirebaseDatabase.getInstance();
-//
-//        reference=firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED);
-//
-//        reference.orderByChild(VM_ENUM.DB_GRADE).equalTo(grade).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                List<PostCustomData> unmatched=new ArrayList<>();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//
-//
-//                    String post_id=snapshot.getKey();
-//                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
-//                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
-//                    String post_solveWay=snapshot.child(VM_ENUM.DB_SOLVE_WAY).getValue().toString();
-//
-////                    PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate)
-//                    unmatched.add(new PostCustomData(post_id,post_title,post_solveWay,post_date) );
-//                    Log.d(TAG, "[선생님 문제 선택뷰] ValueEventListener : " +snapshot.getValue() );
-//
-//                }
-//
-//                if(grade.equals(VM_ENUM.GRADE_ELEMENT)){
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 생성 "  );
-//                    unmatched_element=unmatched;
-//                }else if(grade.equals(VM_ENUM.GRADE_MID)){
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 생성 "  );
-//                    unmatched_mid=unmatched;
-//                }else if(grade.equals(VM_ENUM.GRADE_HIGH)){
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 생성 "  );
-//                    unmatched_high=unmatched;
-//                }
-//
-//               setData((RecyclerView) recyclerView,unmatched);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-//                Log.w(TAG, "Failed to read value", databaseError.toException());
-//            }
-//        });
-//
-//    }
-
+        list_loading_bar.setVisibility(View.INVISIBLE);
     }
 
     }

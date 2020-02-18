@@ -1,5 +1,7 @@
 package com.example.visualmath.data;
 
+import androidx.annotation.Nullable;
+
 public class PostCustomData {
     private String p_id;
     private String title;
@@ -118,5 +120,17 @@ public class PostCustomData {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        //return super.equals(obj);
+
+        //** 메소드 오버라이드 : post_id 가 같은 경우는 같다고 함
+        PostCustomData other= (PostCustomData) obj;
+        if(this.p_id.equals(other.getP_id())){
+            return true;
+        }
+        return false;
     }
 }
