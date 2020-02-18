@@ -491,7 +491,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Log.w(TAG, "[선생님 문제 선택뷰] : onChildRemoved");
+                Log.w(TAG, "[선생님 문제 선택뷰] : onChildRemoved"+dataSnapshot);
 
                 String post_id = dataSnapshot.getKey();
                 reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_delete_ValueEventListener);
@@ -514,6 +514,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 //        //** 리스너 동작
         Log.w(TAG, "[선생님 문제선택 뷰] : 리스너 부착");
         reference_unmatched.addChildEventListener(childEventListener);
+
     }
 
 
@@ -541,7 +542,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
         ///list_loading_bar.setVisibility(View.INVISIBLE);
     }
 
-//
+
 //    @Override
 //    protected void onStop() {
 //        //리스너 해제
@@ -551,21 +552,22 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 //        super.onStop();
 //
 //    }
-//
+
+    @Override
+    protected void onDestroy() {//리스너 해제 : 뷰가 스택에 들어 있는 경우에는 리스너를 계속 동작 시키되, 아예 뷰가 finish 된 시점에서는 리스너르 완전 삭제 시킴
+        Log.w(TAG, "[선생님 문제 선택 뷰]onDestroy addValueEventListener  리스너 삭제");
+        reference_unmatched.removeEventListener(childEventListener);
+
+        super.onDestroy();
+
+    }
+
 //    @Override
-//    protected void onDestroy() {//리스너 해제
-//        Log.d(TAG, "[선생님 문제 선택 뷰]onDestroy addValueEventListener  리스너 삭제");
-//        reference_unmatched.removeEventListener(childEventListener);
-//
-//        super.onDestroy();
-//
-//    }
-//
-//    @Override
-//    protected void onStart() {
+//    protected void onStart() { // -> 이때 전체 DB 에 add 되지 않더라도, 디비를 새로 읽어오는 과정이 있게 됨 (배열을 모두 초기화 시키든지 해야됨)
 //
 //        //** 리스너 동작
 //        Log.w(TAG, "[선생님 문제선택 뷰] onStart : progress bar 생성");
+//        reference_unmatched.addChildEventListener(childEventListener);
 //
 //        super.onStart();
 //    }
