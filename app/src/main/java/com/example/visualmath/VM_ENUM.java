@@ -53,6 +53,9 @@ public  class VM_ENUM {
     public static final String IT_MATCHSET_TEA = "IT_MATCHSET_TEA";
     public static final String IT_CHAT_ITEM_URI ="IT_CHAT_ITEM_URI" ;
     public static final String IT_CHAT_ITEM_TYPE = "IT_CHAT_ITEM_TYPE";
+    public static final String IT_PROBLEM_URI ="IT_PROBLEM_URI" ;
+    public static final String IT_POST_GRADE = "IT_POST_GRADE";
+    public static final String IT_TAKE_VIDEO = "IT_TAKE_VIDEO";
 
     //** 상수 String
     public static final String TEXT="TEXT";
@@ -118,7 +121,6 @@ public  class VM_ENUM {
     public  static final String PRE_TEST="test";
     public static final String PREF_USER_NAME = "username";
 
-    public static final String IT_PROBLEM_URI ="IT_PROBLEM_URI" ;
-    public static final String IT_POST_GRADE = "IT_POST_GRADE";
+
 }
 
