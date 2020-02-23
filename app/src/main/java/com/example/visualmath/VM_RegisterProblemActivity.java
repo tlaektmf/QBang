@@ -130,7 +130,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     public void getAlbumFile() {
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
+        ///intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType("image/*");
+
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
         // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
         /*
