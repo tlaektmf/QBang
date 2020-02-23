@@ -55,6 +55,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,7 +116,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         solveWay = intent.getStringExtra(VM_ENUM.SOLVE_WAY);
         explainView = findViewById(R.id.explain_view);
         explainView.setVisibility(View.VISIBLE);
-        add=new VM_Data_ADD();
+        add = new VM_Data_ADD();
         Log.d(TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
     }
 
@@ -139,8 +140,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
     public void takePhoto() {
@@ -224,7 +223,6 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
-
 
 
     private void setImageByUri(Uri _uri) {
@@ -411,15 +409,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             //** 데이터베이스 생성 및 저장 && storage에 파일 업로드
             VM_DBHandler vmDbHandler = new VM_DBHandler();
-            vmDbHandler.newPost(add , vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
+            vmDbHandler.newPost(add, vmDataBasic, solveWay);//** DB에는 (바로 이전에 <내용추가뷰>에서 받은 VM_Data_ADD , VM_Data_Basic)
             //** 액티비티 종료
-            if(VM_RegiserOtherThingsActivity.activity!=null){
-                Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
-                VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+            if (VM_RegiserOtherThingsActivity.activity != null) {
+                Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 존재함]");
+                VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity) VM_RegiserOtherThingsActivity.activity;
                 activity.finish();
-                VM_RegiserOtherThingsActivity.activity=null;
-            }else{
-                Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+                VM_RegiserOtherThingsActivity.activity = null;
+            } else {
+                Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 없음]");
             }
             finish();
 
@@ -431,16 +429,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     }
 
 
-
     public void cancel(View view) {
 
-        if(VM_RegiserOtherThingsActivity.activity!=null){
-            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
-            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+        if (VM_RegiserOtherThingsActivity.activity != null) {
+            Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 존재함]");
+            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity) VM_RegiserOtherThingsActivity.activity;
             activity.finish();
-            VM_RegiserOtherThingsActivity.activity=null;
-        }else{
-            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+            VM_RegiserOtherThingsActivity.activity = null;
+        } else {
+            Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 없음]");
         }
         finish();
     }
@@ -449,15 +446,15 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
 
-        if(VM_RegiserOtherThingsActivity.activity!=null){
-            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 존재함]");
+        if (VM_RegiserOtherThingsActivity.activity != null) {
+            Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 존재함]");
 
-            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity)VM_RegiserOtherThingsActivity.activity;
+            VM_RegiserOtherThingsActivity activity = (VM_RegiserOtherThingsActivity) VM_RegiserOtherThingsActivity.activity;
             activity.finish();
-            VM_RegiserOtherThingsActivity.activity=null;
+            VM_RegiserOtherThingsActivity.activity = null;
 
-        }else{
-            Log.d(VM_ENUM.TAG,"[RegiOther Acitivity 없음]");
+        } else {
+            Log.d(VM_ENUM.TAG, "[RegiOther Acitivity 없음]");
         }
         finish();
 
@@ -472,7 +469,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
      * @return
      */
     public boolean checkAbility() {
-        int tmpNum=-1;
+        int tmpNum = -1;
         final VM_Dialog_registerProblem checkDialog =
                 new VM_Dialog_registerProblem(VM_RegisterProblemActivity.this);
 
@@ -480,32 +477,31 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 editTextTitle.getText().toString().replace(" ", "").equals("")) {
             //** title란이 아예 쓰여진게 없거나 공백들로 이루어진 경우
 
-            tmpNum=0;
+            tmpNum = 0;
             checkDialog.callFunction(tmpNum);
-            Log.d("register check 확인","첫번째 다이얼로그");
+            Log.d("register check 확인", "첫번째 다이얼로그");
 
             return false;
         }
         if (vmDataBasic.getProblem() == null) {
             //** 문제 사진란이 공백
 
-            tmpNum=1;
+            tmpNum = 1;
             checkDialog.callFunction(tmpNum);
-            Log.d("register check 확인","두번째 다이얼로그");
+            Log.d("register check 확인", "두번째 다이얼로그");
             return false;
         }
         if (vmDataBasic.getGrade() == null) {
             //** 학년 선택을 하지 않은 경우
 
-            tmpNum=2;
+            tmpNum = 2;
             checkDialog.callFunction(tmpNum);
-            Log.d("register check 확인","세번째 다이얼로그");
+            Log.d("register check 확인", "세번째 다이얼로그");
             return false;
         }
 
         return true;
     }
-
 
 
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
@@ -522,6 +518,40 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         return image;
     }
 
+
+    public String findMimeType(Uri uri) {
+        String mimeType = URLConnection.guessContentTypeFromName(uri.toString());
+        Log.w(VM_ENUM.TAG, "[VM_RegisterActivity] mimetype:" + mimeType);
+
+        return mimeType;
+    }
+
+    public String getPath(Uri photo_problem){
+        Log.w(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전(원본) photo_problem : " + photo_problem);
+
+                Cursor cursor = null;
+
+                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
+                try {
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    assert photo_problem != null;
+                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
+                    assert cursor != null;
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    galleryFile = new File(cursor.getString(column_index));
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+
+
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem : "
+                        + Uri.parse(galleryFile.getAbsolutePath()));
+
+                return  galleryFile.getAbsolutePath();
+    }
 
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -556,25 +586,45 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
 
- //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Uri uri = null;
-                if (data != null) {
-                    uri = data.getData();
-                    if(uri.toString().contains("video")){
+            //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.w(VM_ENUM.TAG,"[RegisterProblem /PICK_FROM_ALBUM ] uri(data.getData()) : "+uri);
+                //** 사진만 넣도록 예외처리
+
+                String realPath=getPath(uri);
+                String mimeType = findMimeType(Uri.parse(realPath));
+                if (mimeType != null) {
+
+                    if (mimeType.contains("image")) {
+                        //** 이미지 (git, webp 제외) 면 사진을 삽입 할 수 있도록 함
+                        if (mimeType.contains("gif") || mimeType.contains("webp")) {
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(VM_RegisterProblemActivity.this);
+                            checkDialog.callFunction(11);
+                        }else{
+                            try {
+                                getBitmapFromUri(uri);
+                                vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            explainView.setVisibility(View.GONE);
+                        }
+
+
+                    }else {
                         final VM_Dialog_registerProblem checkDialog =
                                 new VM_Dialog_registerProblem(VM_RegisterProblemActivity.this);
                         checkDialog.callFunction(11);
-                    }else{
-                        try {
-                            getBitmapFromUri(uri);
-                            vmDataBasic.setProblem(uri);//provider 가 씌워진 파일을 DB에 저장함
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        explainView.setVisibility(View.GONE);
                     }
+
                 }
- //           }
+
+
+            }
+            //           }
 //            else {
 //                assert data != null;
 //                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
@@ -608,27 +658,32 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 //            }
 
 
-
-        } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {//무조건 사진만 촬영 가능하므로 예외처리가 필요하지 않음
             Uri photoUri;
 
-            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]: getAbsolutePath "
+
+            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] getAbsolutePath : "
                     + Uri.parse(takeFile.getAbsolutePath()));
-            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:  Uri.fromFile(takeFile) "
+            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]  Uri.fromFile(takeFile) :  "
                     + Uri.fromFile(takeFile));
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
 
-                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]:content provider photoUri " + photoUri);
+                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] content provider photoUri : " + photoUri);
 
             } else {
                 photoUri = Uri.fromFile(takeFile);
             }
 
+            // Uri를 얻은 후 처리 작업 진행
+            //** 사진만 넣도록 예외처리 -> 필요없음
+            String mimeType = findMimeType(photoUri);
+
             vmDataBasic.setProblem(photoUri);//provider 가 씌워진 파일을 DB에 저장함
             setImageByUri(Uri.parse(takeFile.getAbsolutePath()));//이미지 set의 경우는 provider가 벗겨진 파일을 set
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
@@ -643,45 +698,42 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-            Log.d(TAG, "[VM_RegisterProblemActivity]: Onresume");
+        Log.d(TAG, "[VM_RegisterProblemActivity]: Onresume");
 
-            String notice = "";
+        String notice = "";
 
-            //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
-            //receiveDatat 변수에 저장함
-            assert add != null;
+        //** <내용추가뷰>로부터 받은 객체를 <문제등록뷰>에서 관리하기 위해
+        //receiveDatat 변수에 저장함
+        assert add != null;
 
-
-            assert add != null;
-            if (add .getDetail() == null || add.getDetail().equals("")) {
-                Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
-            }
-
-            if (add .getDetail()!=null && !add.getDetail().equals("")) {
-                notice = "추가 설명 등록.";
-
-            }
-            int count = 0;
-
-            for (int i = 0; i < 3; i++) {
-                if (add .getFilePathElement(i) != null) {
-                    count++;
-                    Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + "-->" + add .getFilePathElement(i).toString());
-                }
-            }
-            if (count != 0) {
-                notice += "사진 " + count + "개 추가.";
-            }
-
-            //** 버튼에 정보 표시
-            if (!notice.equals("")) {
-                buttonGoOther.setText(notice);
-            } else {
-                buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
-            }
-
+        if (add.getDetail() == null || add.getDetail().equals("")) {
+            Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
         }
 
+        if (add.getDetail() != null && !add.getDetail().equals("")) {
+            notice = "추가 설명 등록.";
+
+        }
+        int count = 0;
+
+        for (int i = 0; i < 3; i++) {
+            if (add.getFilePathElement(i) != null) {
+                count++;
+                Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + "-->" + add.getFilePathElement(i).toString());
+            }
+        }
+        if (count != 0) {
+            notice += "사진 " + count + "개 추가.";
+        }
+
+        //** 버튼에 정보 표시
+        if (!notice.equals("")) {
+            buttonGoOther.setText(notice);
+        } else {
+            buttonGoOther.setText("본인 풀이 또는 질문 내용 추가");
+        }
+
+    }
 
 
 }
