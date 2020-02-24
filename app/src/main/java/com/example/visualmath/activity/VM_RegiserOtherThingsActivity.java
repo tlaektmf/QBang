@@ -45,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,8 +69,8 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__regiser_other_things);
-        activity=this;
-        Log.d(VM_ENUM.TAG,"[RegiOtherActivity onCreate]");
+        activity = this;
+        Log.d(VM_ENUM.TAG, "[RegiOtherActivity onCreate]");
         init();
 
     }
@@ -86,34 +87,35 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
     public void resetWidget() throws IOException {
         //기존의 데이터와 save 가 다른 경우에만 원래의 데이터로 바꾼다.
-        Log.d(VM_ENUM.TAG,"[RegiOther/ add.getDetail()]"+VM_RegisterProblemActivity.add.getDetail());
-        for(int i=0;i<3;i++){
-            Log.d(VM_ENUM.TAG,"[RegiOther/ add.getFilePathElement "+i+","+VM_RegisterProblemActivity.add.getFilePathElement(i));
+        Log.d(VM_ENUM.TAG, "[RegiOther/ add.getDetail()]" + VM_RegisterProblemActivity.add.getDetail());
+        for (int i = 0; i < 3; i++) {
+            Log.d(VM_ENUM.TAG, "[RegiOther/ add.getFilePathElement " + i + "," + VM_RegisterProblemActivity.add.getFilePathElement(i));
         }
 
-        if (VM_RegisterProblemActivity.add.getDetail()!=null){
+        if (VM_RegisterProblemActivity.add.getDetail() != null) {
             editTextdetail.setText(VM_RegisterProblemActivity.add.getDetail());
             saveData.setDetail(VM_RegisterProblemActivity.add.getDetail());
-        }else{
+        } else {
             editTextdetail.setText("");
             saveData.setDetail(null);
         }
 
 
-        for(int i=0;i<3;i++){
-            if (VM_RegisterProblemActivity.add.getFilePathElement(i)!=null){
-                Bitmap image=getBitmap(VM_RegisterProblemActivity.add.getFilePathElement(i));
+        for (int i = 0; i < 3; i++) {
+            if (VM_RegisterProblemActivity.add.getFilePathElement(i) != null) {
+                Bitmap image = getBitmap(VM_RegisterProblemActivity.add.getFilePathElement(i));
                 if (image != null) {
                     imageViewsOtherPictureList[i].setImageBitmap(image); //이미지 set
-                    saveData.setFilePathElement(VM_RegisterProblemActivity.add.getFilePathElement(i),i);//이미지 set
+                    saveData.setFilePathElement(VM_RegisterProblemActivity.add.getFilePathElement(i), i);//이미지 set
                 }
-            }else{
+            } else {
                 imageViewsOtherPictureList[i].setImageResource(R.drawable.add_extra_img);
-                saveData.setFilePathElement(null,i);
+                saveData.setFilePathElement(null, i);
             }
         }
 
     }
+
     public void cancel(View view) {
         try {
             resetWidget();
@@ -138,7 +140,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void init()  {
+    public void init() {
 
         editTextdetail = findViewById(R.id.tv_detail);
         imageviewID = -1;
@@ -146,11 +148,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         imageViewsOtherPictureList[0] = findViewById(R.id.iv_picture1);
         imageViewsOtherPictureList[1] = findViewById(R.id.iv_picture2);
         imageViewsOtherPictureList[2] = findViewById(R.id.iv_picture3);
-        saveData=new VM_Data_ADD();
+        saveData = new VM_Data_ADD();
 
 
     }
-
 
 
     //** 사용자 카메라, 사진첩에 접근하여 파일 추가
@@ -172,7 +173,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         }
         Log.d(TAG, "[pickViewIndex 선택] " + picViewIndex);
 
-        if (saveData!= null) {
+        if (saveData != null) {
             if (saveData.getFilePathElement(picViewIndex) != null) {//** imageView에 이미지가 있는 경우
                 Intent intent = new Intent(VM_RegiserOtherThingsActivity.this, VM_PhotoViewActivity.class);
                 intent.putExtra(VM_ENUM.IT_PHOTO_INDEX, picViewIndex);
@@ -191,16 +192,16 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     public void loadAddInfo(View view) {
 
 
-        Log.d(VM_ENUM.TAG,"[RegiOther/ saveData.getDetail()]"+editTextdetail.getText().toString());
-        for(int i=0;i<3;i++){
-            Log.d(VM_ENUM.TAG,"[RegiOther/ saveData.getFilePathElement "+i+","+saveData.getFilePathElement(i));
+        Log.d(VM_ENUM.TAG, "[RegiOther/ saveData.getDetail()]" + editTextdetail.getText().toString());
+        for (int i = 0; i < 3; i++) {
+            Log.d(VM_ENUM.TAG, "[RegiOther/ saveData.getFilePathElement " + i + "," + saveData.getFilePathElement(i));
         }
 
         //** 이때만 데이터 저장
         VM_RegisterProblemActivity.add.setDetail(editTextdetail.getText().toString());
 
-        for(int i=0;i<3;i++){
-            VM_RegisterProblemActivity.add.setFilePathElement(saveData.getFilePathElement(i),i);
+        for (int i = 0; i < 3; i++) {
+            VM_RegisterProblemActivity.add.setFilePathElement(saveData.getFilePathElement(i), i);
         }
 
         Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
@@ -210,9 +211,15 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     }
 
     public void getAlbumFile() {
+//
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        ///intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+//        intent.setType("image/*"); // image 만 들어올 수 있도록 함
 
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*"); //image 만 들어올 수 있도록 함
+
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
 
         /*
@@ -371,10 +378,10 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 break;
         }
 
-        Log.i(TAG, "[RegiOther] createdata: " + index+","+_uri);
+        Log.i(TAG, "[RegiOther] createdata: " + index + "," + _uri);
 
         //** 데이터 등록
-        saveData.setFilePathElement(_uri,index);
+        saveData.setFilePathElement(_uri, index);
 
 
     }
@@ -457,7 +464,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     }
 
 
-
     private void setBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
@@ -480,13 +486,19 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
         if (image != null) {
             imageViewsOtherPictureList[idx].setImageBitmap(image); //이미지 set
-            Log.d(VM_ENUM.TAG, "[RegiOther],setBitmapFromUri-> Gallery uri" +uri );
+            Log.d(VM_ENUM.TAG, "[RegiOther],setBitmapFromUri-> Gallery uri" + uri);
 
         }
 
     }
 
+    public String findMimeType(Uri uri) {
+        String mimeType = getContentResolver().getType(uri);
+        Log.w(VM_ENUM.TAG, "[VM_RegisterActivity] mimetype:" + mimeType);
 
+
+        return mimeType;
+    }
 
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -522,30 +534,40 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             return;
         } else if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
 
- //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Uri uri = null;
-                if (data != null) {
-                    uri = data.getData();
-                    Log.i(TAG, "[RegiOther] onActivityResult Uri: " + uri.toString());
+            //           if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                Log.i(TAG, "[RegiOther] onActivityResult Uri: " + uri.toString());
 
-                    if(uri.toString().contains("video")){
+                //** 동영상, 이미지 예외처리
+                String mimeType = findMimeType(uri);
+                if (mimeType != null) {
+                    if (mimeType.contains("image")) {
+                        //** 이미지 (git, webp 제외) 면 사진을 삽입 할 수 있도록 함
+                        if (mimeType.contains("gif") || mimeType.contains("webp")) {
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(VM_RegiserOtherThingsActivity.this);
+                            checkDialog.callFunction(11);
+                        } else {
+                            try {
+                                setBitmapFromUri(uri);
+                                createData(uri);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }else{
                         final VM_Dialog_registerProblem checkDialog =
                                 new VM_Dialog_registerProblem(VM_RegiserOtherThingsActivity.this);
                         checkDialog.callFunction(11);
-                    }else{
-                        try {
-                            setBitmapFromUri(uri);
-                            createData(uri);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
-
                 }
 
+            }
 
-  //          }
+            //          }   //안드로이드 Q 버전 이상 대음 >>>>> end
 //            else {
 //                Uri photo_problem = data.getData();// data.getData() 를 통해 갤러리에서 선택한 이미지의 Uri 를 받아 옴
 //                Cursor cursor = null;
@@ -568,8 +590,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 //                }
 //            }
 
-        }
-        else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
+        } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
             Uri photoUri;
             Log.d(TAG, "[RegiOther/PICK_FROM_CAMERA]: getAbsolutePath "
                     + Uri.parse(takeFile.getAbsolutePath()));
@@ -584,29 +605,28 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
                 photoUri = Uri.fromFile(takeFile);
             }
             createData(photoUri);//provider 가 씌워진 파일을 DB에 저장함
-            setImageByUri( Uri.parse(takeFile.getAbsolutePath()));
+            setImageByUri(Uri.parse(takeFile.getAbsolutePath()));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveFile();
             }
-        }
-        else if (requestCode == VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW) {
-            boolean isDeleteEvent=data.getBooleanExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX,false);
-            if(isDeleteEvent){
+        } else if (requestCode == VM_ENUM.RC_REGIOTHER_TO_PHOTOVIEW) {
+            boolean isDeleteEvent = data.getBooleanExtra(VM_ENUM.IT_DELETE_PHOTO_INDEX, false);
+            if (isDeleteEvent) {
                 //** 삭제 진행
                 Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] deleteIndex" + picViewIndex);
                 deletePhoto(picViewIndex);
             }
 
-            boolean isChangePhotoFromGallery=data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_GALLERY,false);
-            if(isChangePhotoFromGallery){
+            boolean isChangePhotoFromGallery = data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_GALLERY, false);
+            if (isChangePhotoFromGallery) {
                 //** 위젯에 있는 사진 변경
                 Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] changePhoto-> getAlbumFile()" + picViewIndex);
                 getAlbumFile();
             }
 
-            boolean isChangePhotoFromTakePhoto=data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_TAKE,false);
-            if(isChangePhotoFromTakePhoto){
+            boolean isChangePhotoFromTakePhoto = data.getBooleanExtra(VM_ENUM.IT_CHANGE_PHOTO_GET_FROM_TAKE, false);
+            if (isChangePhotoFromTakePhoto) {
                 //** 위젯에 있는 사진 변경
                 Log.d(VM_ENUM.TAG, "[VM_RegiOtherActivity] changePhoto -> takePhoto()" + picViewIndex);
                 takePhoto();
