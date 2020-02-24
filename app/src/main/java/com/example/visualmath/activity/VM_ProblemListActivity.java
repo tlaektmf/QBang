@@ -65,7 +65,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     private String nowGrade;
     private ChildEventListener childEventListener;
     private ValueEventListener single_add_ValueEventListener;
-    private ValueEventListener single_delete_ValueEventListener;
+//    private ValueEventListener single_delete_ValueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -398,79 +398,79 @@ public class VM_ProblemListActivity extends AppCompatActivity {
             }
         };
 
-        single_delete_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 삭제 된것을
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
-
-                VM_Data_POST post=dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
-                String post_grade=post.getData_default().getGrade();
-
-                boolean isDeletedWell=false;
-                //** 데이터 셋팅
-                if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
-                    //isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
-                    isDeletedWell=unmatched_element.remove(new PostCustomData
-                            (post.getP_id()
-                                    ,post.getData_default().getTitle()
-                                    ,post.getSolveWay()
-                                    ,post.getUploadDate()
-                                    , post.getData_default().getGrade()
-                                    ,post.getData_default().getProblem()
-                                    ,post.getMatchSet_student()) );
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 삭제 "+isDeletedWell);
-                } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
-                    isDeletedWell=unmatched_mid.remove(new PostCustomData
-                            (post.getP_id()
-                                    ,post.getData_default().getTitle()
-                                    ,post.getSolveWay()
-                                    ,post.getUploadDate()
-                                    , post.getData_default().getGrade()
-                                    ,post.getData_default().getProblem()
-                                    ,post.getMatchSet_student()) );
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 삭제 "+isDeletedWell);
-                } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
-                     isDeletedWell=unmatched_high.remove(new PostCustomData
-                             (post.getP_id()
-                                     ,post.getData_default().getTitle()
-                                     ,post.getSolveWay()
-                                     ,post.getUploadDate()
-                                     , post.getData_default().getGrade()
-                                     ,post.getData_default().getProblem()
-                                     ,post.getMatchSet_student()) );
-                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 삭제 "+isDeletedWell);
-
-                }
-
-                //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
-//                if (nowGrade.equals(VM_ENUM.GRADE_ELEMENT)) {
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
-//                    setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+//        single_delete_ValueEventListener=new ValueEventListener() { //-> 이 리스너가 호출 되었다는 것은 반드시 한 개 이상의 아이템이 삭제 된것을
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d(TAG, "[선생님 문제 선택뷰] SearchByKey : " +dataSnapshot);
 //
-//                } else if (nowGrade.equals(VM_ENUM.GRADE_MID)) {
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
-//                    setUnmatchedData(VM_ENUM.GRADE_MID);
+//                VM_Data_POST post=dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+//                String post_grade=post.getData_default().getGrade();
 //
-//                } else if (nowGrade.equals(VM_ENUM.GRADE_HIGH)) {
-//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
-//                    setUnmatchedData(VM_ENUM.GRADE_HIGH);
+//                boolean isDeletedWell=false;
+//                //** 데이터 셋팅
+//                if (post_grade.equals(VM_ENUM.GRADE_ELEMENT)) {
+//                    //isDeletedWell=unmatched_element.remove(new PostCustomData(post.getP_id(),post.getData_default().getTitle(),post.getSolveWay(),post.getUploadDate()) );
+//                    isDeletedWell=unmatched_element.remove(new PostCustomData
+//                            (post.getP_id()
+//                                    ,post.getData_default().getTitle()
+//                                    ,post.getSolveWay()
+//                                    ,post.getUploadDate()
+//                                    , post.getData_default().getGrade()
+//                                    ,post.getData_default().getProblem()
+//                                    ,post.getMatchSet_student()) );
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 삭제 "+isDeletedWell);
+//                } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
+//                    isDeletedWell=unmatched_mid.remove(new PostCustomData
+//                            (post.getP_id()
+//                                    ,post.getData_default().getTitle()
+//                                    ,post.getSolveWay()
+//                                    ,post.getUploadDate()
+//                                    , post.getData_default().getGrade()
+//                                    ,post.getData_default().getProblem()
+//                                    ,post.getMatchSet_student()) );
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 삭제 "+isDeletedWell);
+//                } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
+//                     isDeletedWell=unmatched_high.remove(new PostCustomData
+//                             (post.getP_id()
+//                                     ,post.getData_default().getTitle()
+//                                     ,post.getSolveWay()
+//                                     ,post.getUploadDate()
+//                                     , post.getData_default().getGrade()
+//                                     ,post.getData_default().getProblem()
+//                                     ,post.getMatchSet_student()) );
+//                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 삭제 "+isDeletedWell);
 //
 //                }
-
-                if(nowGrade.equals(post_grade)){ //** 들어온 데이터와 현재 활성화된 화면의 GRADE가 같은 경우에만 뷰에 셋팅 함
-                    Log.d(TAG, "[선생님 문제 선택뷰] "+nowGrade+" 데이터 셋팅 ");
-                    setUnmatchedData(nowGrade);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "[선생님 문제 선택뷰] DatabaseError : " , databaseError.toException());
-
-            }
-        };
+//
+//                //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
+////                if (nowGrade.equals(VM_ENUM.GRADE_ELEMENT)) {
+////                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_ELEMENT 데이터 셋팅 ");
+////                    setUnmatchedData(VM_ENUM.GRADE_ELEMENT);
+////
+////                } else if (nowGrade.equals(VM_ENUM.GRADE_MID)) {
+////                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 셋팅 ");
+////                    setUnmatchedData(VM_ENUM.GRADE_MID);
+////
+////                } else if (nowGrade.equals(VM_ENUM.GRADE_HIGH)) {
+////                    Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 셋팅 ");
+////                    setUnmatchedData(VM_ENUM.GRADE_HIGH);
+////
+////                }
+//
+//                if(nowGrade.equals(post_grade)){ //** 들어온 데이터와 현재 활성화된 화면의 GRADE가 같은 경우에만 뷰에 셋팅 함
+//                    Log.d(TAG, "[선생님 문제 선택뷰] "+nowGrade+" 데이터 셋팅 ");
+//                    setUnmatchedData(nowGrade);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Log.d(TAG, "[선생님 문제 선택뷰] DatabaseError : " , databaseError.toException());
+//
+//            }
+//        };
 
         childEventListener=new ChildEventListener() {
 
@@ -494,7 +494,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 Log.w(TAG, "[선생님 문제 선택뷰] : onChildRemoved"+dataSnapshot);
 
                 String post_id = dataSnapshot.getKey();
-                reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_delete_ValueEventListener);
+                ///reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_delete_ValueEventListener);
 
 
             }
