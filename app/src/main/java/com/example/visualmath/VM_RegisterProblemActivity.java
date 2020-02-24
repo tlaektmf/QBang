@@ -25,10 +25,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -129,10 +131,16 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
 
     public void getAlbumFile() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
 
-        ///intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        intent.setType("image/*"); // image 만 들어올 수 있도록 함
+        ///Intent intent = new Intent(Intent.ACTION_PICK);
+      Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+      /// intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[] {"image/*", "video/*"}); // image 만 들어올 수 있도록 함 "image/* video/*"
+
 
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
         // -> 사진촬영과는 다르게, 경로를 넘겨줄 필요없으나 선택한 파일을 반환하므로 onActivity result에서 데이터를 받아야됨
@@ -529,35 +537,13 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         String mimeType = getContentResolver().getType(uri);
         Log.w(VM_ENUM.TAG, "[VM_RegisterActivity] mimetype:" + mimeType);
 
+
         return mimeType;
+
+
     }
 
-//    public String getPath(Uri photo_problem){
-//        Log.w(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 전(원본) photo_problem : " + photo_problem);
-//
-//                Cursor cursor = null;
-//
-//                //**  cursor 를 통해 스키마를 content:// 에서 file:// 로 변경 -> 사진이 저장된 절대경로를 받아오는 과정
-//                try {
-//                    String[] proj = {MediaStore.Images.Media.DATA};
-//                    assert photo_problem != null;
-//                    cursor = getContentResolver().query(photo_problem, proj, null, null, null);
-//                    assert cursor != null;
-//                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//                    cursor.moveToFirst();
-//                    galleryFile = new File(cursor.getString(column_index));
-//                } finally {
-//                    if (cursor != null) {
-//                        cursor.close();
-//                    }
-//                }
-//
-//
-//                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_ALBUM]: 커서 후 photo_problem : "
-//                        + Uri.parse(galleryFile.getAbsolutePath()));
-//
-//                return  galleryFile.getAbsolutePath();
-//    }
+
 
     /**
      * startActivityForResult 를 통해 다른 Activity 로 이동한 후 다시 돌아오게 되면 onActivityResult 가 동작함.
@@ -599,7 +585,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
                 Log.w(VM_ENUM.TAG,"[RegisterProblem /PICK_FROM_ALBUM ] uri(data.getData()) : "+uri);
                 //** 사진만 넣도록 예외처리
 
-                //String realPath=getPath(uri);
+
                 //String mimeType = findMimeType(Uri.parse(realPath));
                 String mimeType = findMimeType(uri);
                 if (mimeType != null) {
