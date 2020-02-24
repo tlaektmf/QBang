@@ -138,8 +138,10 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
       /// intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[] {"image/*", "video/*"}); // image 만 들어올 수 있도록 함 "image/* video/*"
+        intent.setType("image/*"); //image 만 들어올 수 있도록 함
+
+        //intent.setType("*/*"); //
+        ///intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[] {"image/*", "video/*"}); // "image/* video/*"
 
 
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
