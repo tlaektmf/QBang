@@ -503,7 +503,7 @@ public class VM_ViewActivity extends AppCompatActivity {
         //** 데이터베이스 저장
 
         String mimType=findMimeType(db_save_uri);
-        if(db_save_uri.toString().contains("video")||mimType.contains("video")){ //비디오인 경우
+        if(mimType.contains("video")){ //비디오인 경우 //////db_save_uri.toString().contains("video")
             Log.d(VM_ENUM.TAG,"비디오 데이터 채팅에 추가");
             VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(),VM_ENUM.CHAT_VIDEO);
             loadDatabase(post_id,data);
