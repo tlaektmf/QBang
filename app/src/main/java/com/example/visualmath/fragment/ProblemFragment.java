@@ -687,21 +687,40 @@ public class ProblemFragment extends Fragment {
         PostCustomData postCustomData = new PostCustomData(post_id, vmDataDefault.getTitle(), vmDataDefault.getGrade(), vmDataDefault.getProblem(), doneTime);
 
         //** teacher unsolved에서 done으로 이동
+//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+//                .child(matchset_teacher)
+//                .child(VM_ENUM.DB_TEA_POSTS)
+//                .child(VM_ENUM.DB_TEA_DONE)
+//                .child(post_id)
+//                .setValue(postCustomData);
+//        Log.d(TAG, matchset_teacher + "[teacher done에 저장]");
+
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
                 .child(matchset_teacher)
                 .child(VM_ENUM.DB_TEA_POSTS)
                 .child(VM_ENUM.DB_TEA_DONE)
                 .child(post_id)
-                .setValue(postCustomData);
+                .child(VM_ENUM.DB_P_ID)
+                .setValue(post_id);
         Log.d(TAG, matchset_teacher + "[teacher done에 저장]");
 
         //** student unsolved에서 done으로 이동
+//        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+//                .child(user_id)
+//                .child(VM_ENUM.DB_STU_POSTS)
+//                .child(VM_ENUM.DB_STU_DONE)
+//                .child(post_id)
+//                .setValue(postCustomData);
+//        Log.d(TAG, user_id + "[student done에 저장]");
+
+
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
                 .child(user_id)
                 .child(VM_ENUM.DB_STU_POSTS)
                 .child(VM_ENUM.DB_STU_DONE)
                 .child(post_id)
-                .setValue(postCustomData);
+                .child(VM_ENUM.DB_P_ID)
+                .setValue(post_id);
         Log.d(TAG, user_id + "[student done에 저장]");
 
 
