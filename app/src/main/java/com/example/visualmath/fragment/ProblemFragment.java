@@ -49,10 +49,13 @@ import com.example.visualmath.data.AlarmItem;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.dialog.VM_DialogLIstener_Pick_Picture_Or_Video;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu;
 import com.example.visualmath.dialog.VM_DialogLIstener_chatMenu_teacher;
 import com.example.visualmath.dialog.VM_DialogListener_PickHowToGetPicture;
+import com.example.visualmath.dialog.VM_Dialog_PickGrade;
 import com.example.visualmath.dialog.VM_Dialog_PickHowToGetPicture;
+import com.example.visualmath.dialog.VM_Dialog_Pick_Picture_Or_Video;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu;
 import com.example.visualmath.dialog.VM_Dialog_chatMenu_teacher;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
@@ -498,12 +501,14 @@ public class ProblemFragment extends Fragment {
                 //** 다이얼로그 위치
                 if (user_type.equals(VM_ENUM.TEACHER)) {//선생님
                     final VM_Dialog_chatMenu_teacher dig = new VM_Dialog_chatMenu_teacher(getContext());
+                    final VM_Dialog_Pick_Picture_Or_Video pick_picture_or_video = new VM_Dialog_Pick_Picture_Or_Video(parent);
 
                     dig.setDialogListener(new VM_DialogLIstener_chatMenu_teacher() {
                         @Override
                         public void onButtonCamera() {
                             ///Toast.makeText(getActivity(), "카메라버튼", Toast.LENGTH_LONG).show();
 
+                            //** 동영상 촬영을 금지하고, 카메라로는 사진 촬영만 가능하게 함
                             Intent intent = new Intent(parent, VM_ViewActivity.class);
                             intent.putExtra(VM_ENUM.IT_PICK_FLAG, VM_ENUM.IT_TAKE_PHOTO);
                             intent.putExtra(VM_ENUM.IT_POST_ID, post_id);
@@ -513,6 +518,43 @@ public class ProblemFragment extends Fragment {
                             intent.putExtra(VM_ENUM.IT_MATCHSET_STD, matchset_student);
                             intent.putExtra(VM_ENUM.IT_MATCHSET_TEA, matchset_teacher);
                             startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+                            //>>>>>>>>>
+
+                            pick_picture_or_video.setDialogListener(new VM_DialogLIstener_Pick_Picture_Or_Video() {
+
+
+                                @Override
+                                public void onButtonVideo() { //동영상 촬영
+                                    Intent intent = new Intent(parent, VM_ViewActivity.class);
+                                    intent.putExtra(VM_ENUM.IT_PICK_FLAG, VM_ENUM.IT_TAKE_VIDEO);
+                                    intent.putExtra(VM_ENUM.IT_POST_ID, post_id);
+                                    intent.putExtra(VM_ENUM.IT_USER_TYPE, user_type);
+                                    intent.putExtra(VM_ENUM.IT_USER_ID, user_id);
+                                    intent.putExtra(VM_ENUM.IT_POST_TITLE, post_title);
+                                    intent.putExtra(VM_ENUM.IT_MATCHSET_STD, matchset_student);
+                                    intent.putExtra(VM_ENUM.IT_MATCHSET_TEA, matchset_teacher);
+                                    startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+                                }
+
+                                @Override
+                                public void onButtonPicture() {// 사진 촬영
+                                    Intent intent = new Intent(parent, VM_ViewActivity.class);
+                                    intent.putExtra(VM_ENUM.IT_PICK_FLAG, VM_ENUM.IT_TAKE_PHOTO);
+                                    intent.putExtra(VM_ENUM.IT_POST_ID, post_id);
+                                    intent.putExtra(VM_ENUM.IT_USER_TYPE, user_type);
+                                    intent.putExtra(VM_ENUM.IT_USER_ID, user_id);
+                                    intent.putExtra(VM_ENUM.IT_POST_TITLE, post_title);
+                                    intent.putExtra(VM_ENUM.IT_MATCHSET_STD, matchset_student);
+                                    intent.putExtra(VM_ENUM.IT_MATCHSET_TEA, matchset_teacher);
+                                    startActivityForResult(intent, VM_ENUM.RC_ProblemFragment_to_ViewActivity);
+                                }
+
+
+
+
+                            });
+
+                            ///pick_picture_or_video.callFunction();
                         }
 
                         @Override
@@ -540,6 +582,8 @@ public class ProblemFragment extends Fragment {
                     });
 
                     dig.callFunction();
+
+
                 } else {//학생
                     final VM_Dialog_chatMenu dig = new VM_Dialog_chatMenu(getContext());
 
@@ -615,6 +659,7 @@ public class ProblemFragment extends Fragment {
                         }
                     });
                     dig.callFunction();
+
                 }
             }
         });
