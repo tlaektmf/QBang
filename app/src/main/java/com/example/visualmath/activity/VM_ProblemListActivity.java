@@ -37,6 +37,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+
+/***
+ * 선생님 문제 선택 화면 뷰
+ */
+
 public class VM_ProblemListActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
