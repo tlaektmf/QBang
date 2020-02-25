@@ -702,6 +702,13 @@ public class ProblemFragment extends Fragment {
                 .child(post_id)
                 .child(VM_ENUM.DB_P_ID)
                 .setValue(post_id);
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+                .child(matchset_teacher)
+                .child(VM_ENUM.DB_TEA_POSTS)
+                .child(VM_ENUM.DB_TEA_DONE)
+                .child(post_id)
+                .child(VM_ENUM.DB_DONE_TIME)
+                .setValue(doneTime);
         Log.d(TAG, matchset_teacher + "[teacher done에 저장]");
 
         //** student unsolved에서 done으로 이동
@@ -721,6 +728,13 @@ public class ProblemFragment extends Fragment {
                 .child(post_id)
                 .child(VM_ENUM.DB_P_ID)
                 .setValue(post_id);
+        FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+                .child(user_id)
+                .child(VM_ENUM.DB_STU_POSTS)
+                .child(VM_ENUM.DB_STU_DONE)
+                .child(post_id)
+                .child(VM_ENUM.DB_DONE_TIME)
+                .setValue(doneTime);
         Log.d(TAG, user_id + "[student done에 저장]");
 
 
