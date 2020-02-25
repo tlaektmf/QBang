@@ -71,8 +71,10 @@ public class calendarListAdapater extends RecyclerView.Adapter<calendarListAdapa
 
     // 재활용 되는 View가 호출, Adapter가 해당 position에 해당하는 데이터를 결합
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder,  int position) {
         date_data one_data = date_content.get(position);
+
+        ///int pos=holder.getAdapterPosition();
 
         // 데이터 결합
         Calendar calendar_milli = Calendar.getInstance();
