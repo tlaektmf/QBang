@@ -24,6 +24,12 @@ public class VM_Data_Default
         problem=_problem;
     }
 
+    public VM_Data_Default(VM_Data_Default data_default) {
+        this.grade=data_default.grade;
+        this.title=data_default.title;
+        this.problem=data_default.problem;
+    }
+
     public String getTitle() {
         return title;
     }
