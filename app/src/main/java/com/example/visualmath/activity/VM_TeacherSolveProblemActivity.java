@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,10 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
     private DatabaseReference reference_posts;
     private ValueEventListener singleValueEventListener;
 
+    //** 프로그래스바
+    private ProgressBar cal_loading_bar;
+    private View cal_loading_back;
+
     ///private static List<Pair<String,Pair<String,String>>> matched; //포스트 데이터 matched 리스트 /id/title/date
 
 
@@ -69,6 +74,11 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
     public void init() {
 
         recycler_view = findViewById(R.id.teacher_solve_rv);
+
+        //로딩창
+        cal_loading_bar = findViewById(R.id.cal_loading_bar);
+        cal_loading_back = findViewById(R.id.cal_loading_back);
+
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
         //** 데이터 초기화
@@ -92,7 +102,7 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 
 
     public void initDatabaseListener(){
-        Log.d(VM_ENUM.TAG, "[ProblemBox],onCreate |  리스너 생성 ");
+        Log.d(VM_ENUM.TAG, "[TeacherProblemBox],onCreate |  리스너 생성 ");
 
         singleValueEventListener = new ValueEventListener() {
             @Override
@@ -233,7 +243,6 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
                     String key = snapshot.getKey();
                     reference_posts.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleValueEventListener);
 
-
                     Log.d(VM_ENUM.TAG, "[TeacherProblemBox] ValueEventListener (key) : " + key);
 
                 }
@@ -243,6 +252,9 @@ public class VM_TeacherSolveProblemActivity extends AppCompatActivity {
 //                //        리사이클러뷰에 객체 지정
 //                mAdapater = new VM_TeacherSolveProblemActivity.ProblemListAdapter(postCustomData);
 //                recycler_view.setAdapter(mAdapater);
+
+                cal_loading_back.setVisibility(View.INVISIBLE);
+                cal_loading_bar.setVisibility(View.INVISIBLE);
 
             }
 
