@@ -87,6 +87,9 @@ public class DashboardListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.w(VM_ENUM.TAG,"[DashboardListFragment] onCreateView 호출");
+
         rootView=(ViewGroup)inflater.inflate(R.layout.fragment_dashboard_list, container, false);
 
         //배열 초기화

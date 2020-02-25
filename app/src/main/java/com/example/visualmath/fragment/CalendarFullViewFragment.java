@@ -67,7 +67,7 @@ public class CalendarFullViewFragment extends Fragment {
     public int focusedMonth;
     public int focusedDay;
 
-    private List<Pair<VM_Data_Default,Pair<String,String>>> subs; //포스트 데이터 일부 리스트 post/id/date
+
 
     public CalendarFullViewFragment() {
         // Required empty public constructor
@@ -82,12 +82,16 @@ public class CalendarFullViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        Log.w(VM_ENUM.TAG,"[CalendarFullView] onCreateView 호출");
         root = (ViewGroup) inflater.inflate(R.layout.fragment_calendar_full_view, container, false);
         parent=getActivity();
 
         recyclerView = root.findViewById(R.id.calendar_recyclerview);
         datecheck = root.findViewById(R.id.datecheck);
         calendar = root.findViewById(R.id.calendar);
+
+        //** 리사이클러뷰 세팅
         setupRecyclerView(recyclerView);
 
         dateInit();
@@ -120,7 +124,7 @@ public class CalendarFullViewFragment extends Fragment {
 //        datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
 
         //초기셋팅
-        setSubItem(focusedYear,focusedMonth-1,focusedDay);
+//        setSubItem(focusedYear,focusedMonth-1,focusedDay);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -128,36 +132,6 @@ public class CalendarFullViewFragment extends Fragment {
                 //선택한 날짜가 전돨됨
 
                 setSubItem(year,month,dayOfMonth);
-//                datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
-//                subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
-//
-//                String selectedDate=year+"-";
-//
-//                if((month+1)<10){
-//                    selectedDate+="0"+(month+1)+"-";
-//                }else{
-//                    selectedDate+=(month+1)+"-";
-//                }
-//
-//                if(dayOfMonth<10){
-//                    selectedDate+="0"+(dayOfMonth);
-//                }else{
-//                    selectedDate+=dayOfMonth;
-//                }
-//
-//                Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
-//
-//                if(DashboardFragment.posts!=null){
-//                    for(int i=0;i<DashboardFragment.posts.size();i++){
-//                        Log.d(TAG,"[클릭이벤트]포스트 날짜: "+DashboardFragment.posts.get(i).second.second);
-//                        if(DashboardFragment.posts.get(i).second.second.contains(selectedDate)){
-//                            subs.add(Pair.create(DashboardFragment.posts.get(i).first,
-//                                    Pair.create(DashboardFragment.posts.get(i).second.first,DashboardFragment.posts.get(i).second.second)));
-//                        }
-//                    }
-//                }
-//
-//                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
 
             }
         });
@@ -167,7 +141,7 @@ public class CalendarFullViewFragment extends Fragment {
 
         datecheck.setText(year + "년 " + (month+1) + "월 " + dayOfMonth + "일 문제 목록");
 
-        subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
+        CalendarData.subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
 
         String selectedDate=year+"-";
 
@@ -189,13 +163,14 @@ public class CalendarFullViewFragment extends Fragment {
             for(int i=0;i<CalendarData.posts.size();i++){
                 Log.d(TAG,"[클릭이벤트]포스트 날짜: "+CalendarData.posts.get(i).second.second);
                 if(CalendarData.posts.get(i).second.second.contains(selectedDate)){
-                    subs.add(Pair.create(CalendarData.posts.get(i).first,
+                    CalendarData.subs.add(Pair.create(CalendarData.posts.get(i).first,
                             Pair.create(CalendarData.posts.get(i).second.first,CalendarData.posts.get(i).second.second)));
                 }
             }
         }
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(subs, mTwoPane,parent));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CalendarData.subs,parent));
+
     }
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(parent));
@@ -207,12 +182,10 @@ public class CalendarFullViewFragment extends Fragment {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
-        private final boolean mTwoPane;
         private final Activity mParentActivity;
 
-        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items, boolean twoPane,Activity parent) {
+        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items,Activity parent) {
             mValues = items;
-            mTwoPane = twoPane;
             mParentActivity = parent;
         }
 
@@ -286,10 +259,10 @@ public class CalendarFullViewFragment extends Fragment {
                     //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
                     // post_id 인자
                     Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
-                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
-                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
-                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, CalendarData.subs.get(pos).second.first);
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,CalendarData.subs.get(pos).first.getTitle());
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,CalendarData.subs.get(pos).first.getGrade());
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,CalendarData.subs.get(pos).first.getProblem());
                     intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
                     mParentActivity.startActivity(intent);
 
