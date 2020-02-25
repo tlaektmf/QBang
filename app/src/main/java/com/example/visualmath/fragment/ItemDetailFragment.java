@@ -46,6 +46,8 @@ import com.google.firebase.storage.StorageReference;
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * <p>
  * on handsets.
+ *
+ * : 아이템 미리보기 화면 뷰
  */
 public class ItemDetailFragment extends Fragment {
     /**
@@ -164,6 +166,7 @@ public class ItemDetailFragment extends Fragment {
                 StorageReference storageReference;
                 storageReference = FirebaseStorage.getInstance().getReference();
                 StorageReference pathReference = storageReference.child(vmDataDefault.getProblem());
+
                 pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
