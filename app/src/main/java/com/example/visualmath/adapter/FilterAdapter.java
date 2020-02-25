@@ -115,7 +115,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
                         intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,FilteredList.get(pos).first.getProblem());
                         intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK);
                         context.startActivity(intent);
-                        Toast.makeText(v.getContext(), "확인" + pos, Toast.LENGTH_LONG).show();
+
                     }
                 }
             });

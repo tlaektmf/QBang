@@ -239,10 +239,11 @@ public class CalendarFullViewFragment extends Fragment {
             return mValues.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             final TextView mContentView;
             final TextView mTimeView;
+
             ViewHolder(View view) {
                 super(view);
 
@@ -250,26 +251,49 @@ public class CalendarFullViewFragment extends Fragment {
                 mTimeView = (TextView) view.findViewById(R.id.endTime);
 
 
-                //** 아이템 클릭 이벤트
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = getAdapterPosition();
+                //** 아이템 클릭 이벤트 ->> 리사이클러뷰 성능을 위해 변경
+                itemView.setOnClickListener(this);
 
-                        if (pos != RecyclerView.NO_POSITION) {
-                            //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
-                            // post_id 인자
-                            Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
-                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
-                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
-                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
-                            mParentActivity.startActivity(intent);
+//                view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        int pos = getAdapterPosition();
+//
+//                        if (pos != RecyclerView.NO_POSITION) {
+//                            //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+//                            // post_id 인자
+//                            Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
+//                            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
+//                            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
+//                            intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
+//                            mParentActivity.startActivity(intent);
+//
+//                        }
+//                    }
+//                });
 
-                        }
-                    }
-                });
+
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                int pos = getAdapterPosition();
+
+                if (pos != RecyclerView.NO_POSITION) {
+                    //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+                    // post_id 인자
+                    Intent intent = new Intent(mParentActivity, VM_FullViewActivity.class);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, subs.get(pos).second.first);
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,subs.get(pos).first.getTitle());
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,subs.get(pos).first.getGrade());
+                    intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,subs.get(pos).first.getProblem());
+                    intent.putExtra(VM_ENUM.IT_ARG_BLOCK,VM_ENUM.IT_ARG_BLOCK); //** dashboard에서는 완료된 항목이 가기 때문에 모든 창을 비활성화
+                    mParentActivity.startActivity(intent);
+
+                }
             }
         }
     }

@@ -75,7 +75,7 @@ public class DashboardListFragment extends Fragment {
 
     ViewGroup rootView;
 
-    private List<String> dates=CalendarData.dates; //포스트 데이터 전체 리스트 post/id/date
+    private final List<String> dates=CalendarData.dates; //포스트 데이터 전체 리스트 post/id/date
 
     //** 사용자 최초 회원 가입 날짜
     private String user_join_date;
