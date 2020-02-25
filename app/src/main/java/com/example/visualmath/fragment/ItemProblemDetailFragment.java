@@ -336,21 +336,39 @@ public class ItemProblemDetailFragment extends Fragment {
                     Log.d(TAG, "[POSTS 의 matchset 재등록 완료]");
 
                     //** 2. teacher unsolved 에 저장
+//                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
+//                            .child(user)
+//                            .child(VM_ENUM.DB_TEA_POSTS)
+//                            .child(VM_ENUM.DB_TEA_UNSOLVED)
+//                            .child(post_id)
+//                            .setValue(postCustomData);
+
                     FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
                             .child(user)
                             .child(VM_ENUM.DB_TEA_POSTS)
                             .child(VM_ENUM.DB_TEA_UNSOLVED)
                             .child(post_id)
-                            .setValue(postCustomData);
+                            .child(VM_ENUM.DB_P_ID)
+                            .setValue(post_id);
+
                     Log.d(TAG, "[teacher unsolved 에 저장]");
 
                     //** 3. student unsolved에 저장
+//                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
+//                            .child(matchSet_student)
+//                            .child(VM_ENUM.DB_STU_POSTS)
+//                            .child(VM_ENUM.DB_STU_UNSOLVED)
+//                            .child(post_id)
+//                            .setValue(postCustomData);
+
                     FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_STUDENTS)
                             .child(matchSet_student)
                             .child(VM_ENUM.DB_STU_POSTS)
                             .child(VM_ENUM.DB_STU_UNSOLVED)
                             .child(post_id)
-                            .setValue(postCustomData);
+                            .child(VM_ENUM.DB_P_ID)
+                            .setValue(post_id);
+
                     Log.d(TAG, "[student unsolved에 저장]");
 
 
