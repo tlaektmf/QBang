@@ -378,15 +378,22 @@ public class DashboardFragment extends Fragment implements TextWatcher {
     public void readDatabase() {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        if (user_type.equals(VM_ENUM.STUDENT)) {
 
-            reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
-                    .child(user_id)
-                    .child(VM_ENUM.DB_STU_POSTS).child(VM_ENUM.DB_STU_DONE);
-        } else if (user_type.equals(VM_ENUM.TEACHER)) {
-            reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
-                    .child(user_id).child(VM_ENUM.DB_TEA_POSTS).child(VM_ENUM.DB_TEA_DONE);
-        }
+        //** 대시보드는 선생님, 학생 java 파일이 구분 되어 있으므로 user_type으로 구분하지 않아도 됨
+
+//        if (user_type.equals(VM_ENUM.STUDENT)) {
+//
+//            reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+//                    .child(user_id)
+//                    .child(VM_ENUM.DB_STU_POSTS).child(VM_ENUM.DB_STU_DONE);
+//        } else if (user_type.equals(VM_ENUM.TEACHER)) {
+//            reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
+//                    .child(user_id).child(VM_ENUM.DB_TEA_POSTS).child(VM_ENUM.DB_TEA_DONE);
+//        }
+
+        reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
+                .child(user_id)
+                .child(VM_ENUM.DB_STU_POSTS).child(VM_ENUM.DB_STU_DONE);
 
         reference_posts = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
         Log.d(TAG, "[DashboardFragment] 데이터 접근 : " + user_id + "," + user_type);
@@ -418,7 +425,7 @@ public class DashboardFragment extends Fragment implements TextWatcher {
                 ///filterAdapter = new FilterAdapter(getContext(), CalendarData.posts);
 
                 //lhj_3
-                Log.w(VM_ENUM.TAG, "[ProblemBox] cal_loading_back 중지");
+                Log.w(VM_ENUM.TAG, "[DashBoard] cal_loading_back 중지");
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
                 //lhj_3
@@ -435,4 +442,15 @@ public class DashboardFragment extends Fragment implements TextWatcher {
 
     }
 
+    @Override
+    public void onDestroy() {
+        Log.d(VM_ENUM.TAG,"[학생 대시보드] static 변수 초기화");
+        CalendarData.subs=null;
+        CalendarData.dates=null;
+        CalendarData.posts=null;
+        CalendarFullViewFragment.recyclerView=null;
+        CalendarFullViewFragment.parent=null;
+
+        super.onDestroy();
+    }
 }

@@ -177,7 +177,7 @@ public class CalendarFullViewFragment extends Fragment {
     }
 
 
-    public static class SimpleItemRecyclerViewAdapter
+    public static final class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;

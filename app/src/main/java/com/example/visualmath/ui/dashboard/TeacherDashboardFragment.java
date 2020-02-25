@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.adapter.FilterAdapter;
 import com.example.visualmath.data.PostCustomData;
+import com.example.visualmath.data.VM_Data_POST;
 import com.example.visualmath.fragment.CalendarFullViewFragment;
 import com.example.visualmath.fragment.ItemDetailFragment;
 import com.example.visualmath.R;
@@ -57,14 +58,8 @@ import java.util.Objects;
  */
 public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     private DashboardViewModel dashboardViewModel;
-
-//    private String this_year;
-//    private String this_month;
-//    private String this_day;
-
-//    private TextView datecheck;
-//    private CalendarView calendar;
-//    private RecyclerView recyclerView;
+    private CalendarFullViewFragment calendarFullViewFragment;
+    private  DashboardListFragment dashboardListFragment;
 
     //    모드 변경 버튼
     private Button cal_mode_btn;
@@ -85,16 +80,15 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
     //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
+    private DatabaseReference reference_posts;
+    private ValueEventListener singleValueEventListener;
 
-//    public static List<Pair<VM_Data_Default, Pair<String, String>>> subs; //포스트 데이터 일부 리스트 post/id/date
-//    public static List<Pair<VM_Data_Default, Pair<String, String>>> posts; //포스트 데이터 전체 리스트 post/id/date
-//    public static List <String> dates;
 
     private TeacherHomeActivity parent;
     private String TAG = VM_ENUM.TAG;
-//    public int focusedYear;
-//    public int focusedMonth;
-//    public int focusedDay;
+
+    //현재 날짜 정보
+    private String today;
 
     private String user_id;
     private String user_type;
@@ -118,6 +112,13 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
         user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
+
+        //* CalendarData class의 static 변수 데이터 배열 초기화
+        CalendarData.dates = new ArrayList<String>();
+        CalendarData.posts = new ArrayList<Pair<VM_Data_Default, Pair<String, String>>>(); //포스트 데이터 전체 리스트 post/id/date
+        CalendarData.subs=new ArrayList<Pair<VM_Data_Default, Pair<String,String>>>();
+
+
         if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
             //선생님
             user_type=VM_ENUM.TEACHER;
@@ -125,7 +126,11 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
             user_type=VM_ENUM.STUDENT;
         }
 
+
+        //** 리스너 초기화
+        initListener();
     }
+
 
 
     @Override
@@ -133,9 +138,6 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
 
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_teacher_dashboard, container, false);
-//        recyclerView = root.findViewById(R.id.teacher_calendar_recyclerview);
-//        datecheck = root.findViewById(R.id.teacher_datecheck);
-//        calendar = root.findViewById(R.id.teacher_calendar);
 
         //로딩창
         cal_loading_bar = root.findViewById(R.id.cal_loading_bar);
@@ -153,16 +155,25 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         search_editText.addTextChangedListener(this);
         imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         searched_list=root.findViewById(R.id.teacher_searched_list);
-        //setupRecyclerView(recyclerView);
 
-        //dateInit();
+        //** 어댑터 초기 설정 ( 초기에는 데이터가 없음)
+        filterAdapter = new FilterAdapter(parent, CalendarData.posts);
+
         Log.d(VM_ENUM.TAG,"[DashBoardFragment] 데이터베이스 호출");
+
+        //** 현재 시간 정보
+        getCurrentDate();
+
+        //** 데이터 READ
         readDataBase();
 
         //** 프래그먼트 초기 설정
         FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
         FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
-        CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
+
+        calendarFullViewFragment=new CalendarFullViewFragment();
+        dashboardListFragment = new DashboardListFragment();
+
         tran.replace(R.id.frame, calendarFullViewFragment);
         tran.commit();
         //>>>
@@ -178,7 +189,6 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
                     view_click_count=0;
 
                     //small view mode
-                    CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
                     tran.replace(R.id.frame, calendarFullViewFragment);
                     tran.commit();
 
@@ -190,7 +200,7 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
                         Bundle arguments = new Bundle();
                         arguments.putString(VM_ENUM.IT_ARG_USER_JOIN_DATE,user_join_date);
 
-                        DashboardListFragment dashboardListFragment=new DashboardListFragment();
+
                         dashboardListFragment.setArguments(arguments);
 
                         tran.replace(R.id.frame, dashboardListFragment);
@@ -210,6 +220,9 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
             @Override
             public void onClick(View v) {
             teacher_search_container.setVisibility(teacher_search_container.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+                //검색 어댑터 생성
+                Log.d(VM_ENUM.TAG, "[TeacherDashboardFragment] posts 사이즈 : " + CalendarData.posts.size());
 
             searched_list.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
             searched_list.setAdapter(filterAdapter);
@@ -322,6 +335,55 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
 
     }
 
+    public void getCurrentDate(){
+
+        today=new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(new Date());
+        Log.w(VM_ENUM.TAG,"[선셍님 대시보드] 현재 날짜 정보 : "+today);
+
+    }
+
+    public void initListener(){
+
+        singleValueEventListener = new ValueEventListener() {
+
+            private VM_Data_POST item;
+            private int position;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                item = dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+
+                position=CalendarData.posts.size();
+
+                Log.d(VM_ENUM.TAG, "[선생님 대시보드]  CalendarData.posts.size() : "+position);
+                Log.d(VM_ENUM.TAG, "[선생님 대시보드]  SearchByKey : " + dataSnapshot);
+
+
+                CalendarData.posts.add(Pair.create(new VM_Data_Default(item.getData_default()),
+                        Pair.create(item.getP_id(), CalendarData.dates.get(position))));
+
+                filterAdapter.notifyItemInserted(CalendarData.posts.size());
+
+                //** 월 별 달력 뷰 초기화
+                if( CalendarFullViewFragment.recyclerView!=null){ //리사이클러뷰가 셋팅이 되어있는 경우
+                    if(CalendarData.dates.get(position).equals(today)){
+                        CalendarData.subs.add(Pair.create(new VM_Data_Default(item.getData_default()),
+                                Pair.create(item.getP_id(), CalendarData.dates.get(position))));
+
+                        CalendarFullViewFragment.recyclerView.setAdapter(new CalendarFullViewFragment.SimpleItemRecyclerViewAdapter(CalendarData.subs,CalendarFullViewFragment.parent));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(VM_ENUM.TAG, "[선생님 문제 풀이뷰] DatabaseError : ", databaseError.toException());
+
+            }
+        };
+    }
 
     public void getJoinDate(){
         //** 최초 회원가입 날짜
@@ -339,7 +401,6 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
                 Bundle arguments = new Bundle();
                 arguments.putString(VM_ENUM.IT_ARG_USER_JOIN_DATE,user_join_date);
 
-                DashboardListFragment dashboardListFragment=new DashboardListFragment();
                 dashboardListFragment.setArguments(arguments);
 
                 tran.replace(R.id.frame, dashboardListFragment);
@@ -448,54 +509,33 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         reference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS)
                 .child(user_id)
                 .child(VM_ENUM.DB_TEA_POSTS).child(VM_ENUM.DB_TEA_DONE);
+        reference_posts = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                CalendarData.dates=new ArrayList<String>();
-                CalendarData.posts = new ArrayList<Pair<VM_Data_Default, Pair<String, String>>>();
-                String post_id, post_date, post_title, post_grade, post_problem;
-                PostCustomData postCustomData;
+                String post_date, key;
 
-                //PostCustomData(String p_id,String p_title,String grade,String problem,String time)
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    postCustomData=snapshot.getValue(PostCustomData.class);
-                    assert postCustomData != null;
-                    post_id=postCustomData.getP_id();
-                    post_date=postCustomData.getTime();
-                    post_title=postCustomData.getTitle();
-                    post_grade=postCustomData.getGrade();
-                    post_problem=postCustomData.getProblem();
-                    CalendarData.dates.add(post_date);
-                    CalendarData.posts.add(Pair.create(new VM_Data_Default(post_title,post_grade,post_problem),
-                            Pair.create(post_id,post_date)));
-                    Log.d(TAG, "[TeacherDashBoard]ValueEventListener : " + snapshot);
+                    key = snapshot.getKey();
+                    Log.d(VM_ENUM.TAG, "[ProblemBox] ValueEventListener (key) : " + key);
+
+                    post_date=snapshot.child(VM_ENUM.DB_DONE_TIME).getValue().toString();
+                    Log.d(VM_ENUM.TAG, "[ProblemBox] ValueEventListener (post_date) : " + post_date);
+                    CalendarData.dates.add(post_date); // 문제 완료 시간 항목을 리스트에 저장함
+
+                    reference_posts.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleValueEventListener);
 
                 }
 
 
-                filterAdapter = new FilterAdapter(getContext(),CalendarData.posts);
+//                filterAdapter = new FilterAdapter(getContext(),CalendarData.posts);
 
                 //로딩창 숨기기
+                Log.w(VM_ENUM.TAG, "[TeacherDashBoard] cal_loading_back 중지");
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
-
-
-
-//                if (getFragmentManager() != null) {
-//                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] visible");
-//                    //대시보드리스트 프레그먼트로 replace
-//                    FragmentManager fm = (parent).getSupportFragmentManager();           //프래그먼트 매니저 생성
-//                    FragmentTransaction tran = fm.beginTransaction();               //트랜잭션 가져오기
-//                    CalendarFullViewFragment calendarFullViewFragment=new CalendarFullViewFragment();
-//                    tran.replace(R.id.frame, calendarFullViewFragment);
-//                    tran.commit();
-//
-//                }else{
-//                    Log.d(VM_ENUM.TAG,"[TeacherDashBoardFragment] invisible");
-//                }
-
 
             }
 
@@ -507,4 +547,17 @@ public class TeacherDashboardFragment extends Fragment implements TextWatcher {
         });
 
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d(VM_ENUM.TAG,"[선생님 대시보드] static 변수 초기화");
+        CalendarData.subs=null;
+        CalendarData.dates=null;
+        CalendarData.posts=null;
+        CalendarFullViewFragment.recyclerView=null;
+        CalendarFullViewFragment.parent=null;
+
+        super.onDestroy();
+    }
+
 }

@@ -1040,10 +1040,11 @@ public class ProblemFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
 
         //리스너 해제
         Log.d(VM_ENUM.TAG,"[ProblemFragment] childEventListener 리스너 삭제");
         reference.child(VM_ENUM.DB_chatList).removeEventListener(childEventListener);
+
+        super.onDetach();
     }
 }
