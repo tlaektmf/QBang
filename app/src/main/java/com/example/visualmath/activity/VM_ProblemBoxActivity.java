@@ -24,7 +24,9 @@ import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.data.PostCustomData;
 import com.example.visualmath.data.VM_Data_Default;
+import com.example.visualmath.data.VM_Data_POST;
 import com.example.visualmath.fragment.ItemDetailFragment;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,13 +49,20 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
     //문제 목록을 보여줄 리사이클러뷰
     private RecyclerView recycler_view;
-    private  ProblemListAdapter mAdapater;
+    private  ProblemListAdapter mAdapater_unmatched;
+    private  ProblemListAdapter mAdapater_matched;
 
     //** DB
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
+    private DatabaseReference reference_posts;
+
     private static List<PostCustomData> unmatched; //포스트 데이터 unmatched 리스트 /id/title/date
     private static List<PostCustomData> matched; //포스트 데이터 matched 리스트 /id/title/date
+    private List<VM_Data_POST> unmatched_posts;
+    private List<VM_Data_POST> matched_posts;
+    private ValueEventListener singleValueEventListener_unmatched;
+    private ValueEventListener singleValueEventListener_matched;
 
     //    로딩창
     private ProgressBar cal_loading_bar;
@@ -64,6 +73,8 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm__problem_box);
 
+
+
         Log.d(VM_ENUM.TAG,"[ProblemBoxAct]init 함수 호출");
         init();
     }
@@ -71,6 +82,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
     public void init(){
         isUnMatchedClick=true;//** 초기에는 매치 미완료 클릭
+
         btn_unmatched = findViewById(R.id.btn_unmatched);
         btn_matched = findViewById(R.id.btn_matched);
         recycler_view = findViewById(R.id.problem_recyclerview);
@@ -78,9 +90,12 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 //        레이아웃 매니저 생성 및 지정
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
+
         //로딩창
         cal_loading_bar = findViewById(R.id.cal_loading_bar);
         cal_loading_back = findViewById(R.id.cal_loading_back);
+
+
 
         needToBlock=null;
         fromStudentUnmatched=null;
@@ -90,15 +105,103 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
 
 
         //** 데이터 초기화
-        unmatched=null;
-        matched=null;
+        unmatched=new ArrayList<PostCustomData>();
+        matched=new ArrayList<PostCustomData>();
+        unmatched_posts=new ArrayList<>();
+        matched_posts=new ArrayList<>();
 
-        Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setUnmatched 호출");
+        //** 어댑터 초기화
+        mAdapater_matched = new ProblemListAdapter(matched);
+        mAdapater_unmatched = new ProblemListAdapter(unmatched);
 
-        setUnmatchedData();
-        setMatchedData();
+
+
+
+        initDatabaseListener();
+
+        getUnmatchedData();
+        getMatchedData();
     }
 
+    public void initDatabaseListener(){
+        Log.d(VM_ENUM.TAG, "[ProblemBox],onCreate |  singleValueEventListener_unmatched 리스너 생성 ");
+
+        singleValueEventListener_unmatched = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(VM_ENUM.TAG, "[선생님 문제 풀이뷰] unmatched SearchByKey : " + dataSnapshot);
+
+                VM_Data_POST post = dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+
+                unmatched_posts.add(post);
+
+                //** 데이터 셋팅
+                unmatched.add(new PostCustomData
+                        (post.getP_id()
+                                , post.getData_default().getTitle()
+                                , post.getSolveWay()
+                                , post.getUploadDate()
+                                , post.getData_default().getGrade()
+                                , post.getData_default().getProblem()
+                                , post.getMatchSet_student()));
+
+                if(isUnMatchedClick){
+                    recycler_view.setAdapter(mAdapater_unmatched);
+                    ///mAdapater_unmatched.notifyItemInserted(unmatched.size());
+                    //mAdapater_matched.notifyDataSetChanged();
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(VM_ENUM.TAG, "[선생님 문제 풀이뷰] DatabaseError : ", databaseError.toException());
+
+            }
+        };
+
+        Log.d(VM_ENUM.TAG, "[ProblemBox],onCreate |  singleValueEventListener_matched 리스너 생성 ");
+
+        singleValueEventListener_matched = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(VM_ENUM.TAG, "[선생님 문제 풀이뷰] matched SearchByKey : " + dataSnapshot);
+
+                VM_Data_POST post = dataSnapshot.getChildren().iterator().next().getValue(VM_Data_POST.class);
+
+                matched_posts.add(post);
+
+                //** 데이터 셋팅
+                matched.add(new PostCustomData
+                        (post.getP_id()
+                                , post.getData_default().getTitle()
+                                , post.getSolveWay()
+                                , post.getUploadDate()
+                                , post.getData_default().getGrade()
+                                , post.getData_default().getProblem()
+                                , post.getMatchSet_student()));
+
+                if(!isUnMatchedClick){
+                    recycler_view.setAdapter(mAdapater_matched);
+                    ///mAdapater_matched.notifyItemInserted(matched.size());
+                    ///mAdapater_matched.notifyDataSetChanged();
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(VM_ENUM.TAG, "[선생님 문제 풀이뷰] DatabaseError : ", databaseError.toException());
+
+            }
+        };
+
+    }
 
     //매치 미완료 목록 보여주기 탭(왼쪽)
     public void show_unmatched_list(View view){
@@ -112,16 +215,21 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         //** 데이터베이스 트랜젝션
         if(unmatched!=null){
             //데이터 셋팅은 되어있는 상태
-            Log.d(VM_ENUM.TAG,"[ProblemBox],데이터 셋팅은 되어있는 상태 ");
+            Log.d(VM_ENUM.TAG,"[ProblemBox]show_unmatched_list ");
             //        리사이클러뷰에 객체 지정
-            mAdapater = new ProblemListAdapter(unmatched);
-            recycler_view.setAdapter(mAdapater);
 
-        }else{
-            //초기 셋팅 필요
-            Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setUnmatched 호출");
-            setUnmatchedData();
+            ///mAdapater_unmatched = new ProblemListAdapter(unmatched);
+            recycler_view.setAdapter(mAdapater_unmatched);
+            ///mAdapater_unmatched.notifyDataSetChanged();
+
         }
+
+//        else{
+//            //초기 셋팅 필요
+//            Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setUnmatched 호출");
+//            setUnmatchedData();
+//        }
+
     }
     //매치 완료 목록 보여주기 탭(오른쪽)
     public void show_matched_list(View view){
@@ -134,14 +242,17 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         if(matched!=null){
             //데이터 셋팅은 되어있는 상태
             //        리사이클러뷰에 객체 지정
-            mAdapater = new ProblemListAdapter(matched);
-            recycler_view.setAdapter(mAdapater);
-            Log.d(VM_ENUM.TAG,"[ProblemBox],데이터 셋팅은 되어있는 상태 ");
-        }else{
-            //초기 셋팅 필요
-            Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setMatchedData 호출");
-            setMatchedData();
+
+            ///mAdapater_matched = new ProblemListAdapter(matched);
+            recycler_view.setAdapter(mAdapater_matched);
+            Log.d(VM_ENUM.TAG,"[ProblemBox]show_matched_list ");
         }
+//
+//        else{
+//            //초기 셋팅 필요
+//            Log.d(VM_ENUM.TAG,"[ProblemBox],초기 셋팅 필요 | setMatchedData 호출");
+//            setMatchedData();
+//        }
 
     }
 
@@ -159,6 +270,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             mData = list;
         }
 
+
         @NonNull
         @Override
         public ProblemListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -174,6 +286,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ProblemListAdapter.ViewHolder holder, int position) {
 
+            Log.w(VM_ENUM.TAG,"[학생문제박스] onBindViewHolder position :"+position);
             holder.pName.setText(mData.get(position).getTitle());
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
@@ -200,7 +313,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             return mData.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder implements {
             TextView pName;
             TextView pDate;
             ImageView pLive;
@@ -238,9 +351,9 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
      * 데이터베이스 트랜젝션
      * write
      */
-    public void setUnmatchedData(){
-
-        unmatched=new ArrayList<PostCustomData>();
+    public void getUnmatchedData(){
+        Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setUnmatched 호출");
+//        unmatched=new ArrayList<PostCustomData>();
 
         firebaseDatabase=FirebaseDatabase.getInstance();
 
@@ -256,27 +369,32 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(user)
                 .child(VM_ENUM.DB_STU_POSTS)
                 .child(VM_ENUM.DB_STU_UNMATCHED);
-
+        reference_posts = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    String post_id=snapshot.getKey();
-                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
-                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
+                    String key = snapshot.getKey();
+                    reference_posts.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleValueEventListener_unmatched);
 
-                    unmatched.add(new PostCustomData(post_id,post_title,post_date));
-                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
+                    Log.d(VM_ENUM.TAG, "[ProblemBox] ValueEventListener (unmatched_key) : " + key);
+
+//                    String post_id=snapshot.getKey();
+//                    String post_date=snapshot.child(VM_ENUM.DB_UPLOAD_DATE).getValue().toString();
+//                    String post_title=snapshot.child(VM_ENUM.DB_TITLE).getValue().toString();
+//
+//                    unmatched.add(new PostCustomData(post_id,post_title,post_date));
+//                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
 
                 }
 
 ////                //        리사이클러뷰에 객체 지정
-                if(isUnMatchedClick){
-                    mAdapater = new ProblemListAdapter(unmatched);
-                    recycler_view.setAdapter(mAdapater);
-                }
+//                if(isUnMatchedClick){
+//                    mAdapater = new ProblemListAdapter(unmatched);
+//                    recycler_view.setAdapter(mAdapater);
+//                }
 
 //        mAdapater = new ProblemListAdapter(unmatched);
 //       recycler_view.setAdapter(mAdapater);
@@ -298,10 +416,10 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
      * 데이터베이스 트랜젝션
      * write
      */
-    public void setMatchedData(){
+    public void getMatchedData(){
 
-        matched=new ArrayList<PostCustomData>();
-
+//        matched=new ArrayList<PostCustomData>();
+        Log.d(VM_ENUM.TAG,"[ProblemBox],onCreate | setMatchedData 호출");
         firebaseDatabase=FirebaseDatabase.getInstance();
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
@@ -316,28 +434,36 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 .child(user)
                 .child(VM_ENUM.DB_STU_POSTS)
                 .child(VM_ENUM.DB_STU_UNSOLVED);
-
+        reference_posts = firebaseDatabase.getReference(VM_ENUM.DB_POSTS);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    matched.add(snapshot.getValue(PostCustomData.class));
-                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
+//                    matched.add(snapshot.getValue(PostCustomData.class));
+//                    Log.d(TAG, "[ProblemBox] ValueEventListener : " +snapshot );
+
+                    String key = snapshot.getKey();
+                    reference_posts.orderByKey().equalTo(key).addListenerForSingleValueEvent(singleValueEventListener_matched);
+
+                    Log.d(VM_ENUM.TAG, "[ProblemBox] ValueEventListener (matched_key) : " + key);
+
 
                 }
+
 
                 //// 리사이클러뷰에 객체 지정
-                if(!isUnMatchedClick){
-                    mAdapater = new ProblemListAdapter(matched);
-                    recycler_view.setAdapter(mAdapater);
-                }
+//                if(!isUnMatchedClick){
+//                    mAdapater = new ProblemListAdapter(matched);
+//                    recycler_view.setAdapter(mAdapater);
+//                }
 
                 //        리사이클러뷰에 객체 지정
 //                mAdapater = new ProblemListAdapter(matched);
 //                recycler_view.setAdapter(mAdapater);
 
+                //** 데이터 로드가 이부분이 제일 오래 걸리므로, 본 리스너가 종료되면 로딩바 중지시킴
                 cal_loading_back.setVisibility(View.INVISIBLE);
                 cal_loading_bar.setVisibility(View.INVISIBLE);
             }
