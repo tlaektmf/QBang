@@ -122,5 +122,6 @@ public  class VM_ENUM {
     public static final String PREF_USER_NAME = "username";
 
 
+    public static final String DB_DONE_TIME ="time" ;
 }
 
