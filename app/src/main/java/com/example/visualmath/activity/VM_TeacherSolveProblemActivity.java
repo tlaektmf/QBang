@@ -1,5 +1,9 @@
 package com.example.visualmath.activity;
 
+/***
+ * 선생님 문제 풀이 화면 뷰
+ */
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
