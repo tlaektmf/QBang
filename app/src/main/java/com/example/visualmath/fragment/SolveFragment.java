@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,8 @@ public class SolveFragment extends Fragment {
     private ImageView imageViewProblem;
     private FrameLayout detail_front;
     private Button close_btn;
+
+    private ProgressBar cal_loading_bar;
 
     private Context context;
     ///private FirebaseStorage firebaseStorage;
@@ -77,7 +80,10 @@ public class SolveFragment extends Fragment {
          textViewTitle=_rootView.findViewById(R.id.tv_grade);
          textViewGrade=_rootView.findViewById(R.id.tv_title);
          imageViewProblem=_rootView.findViewById(R.id.iv_file_problem);
-         imageViewProblem.setOnClickListener(new View.OnClickListener() {
+        cal_loading_bar = _rootView.findViewById(R.id.cal_loading_bar);
+
+
+        imageViewProblem.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
                  Drawable.ConstantState constantState = context.getResources()
@@ -159,6 +165,11 @@ public class SolveFragment extends Fragment {
                     mGlideRequestManager
                             .load(uri)
                             .into(imageViewProblem);
+
+                    //** 로딩바 제거
+                    Log.w(VM_ENUM.TAG,"[문제만 보는 뷰] 로딩바 제거");
+                    cal_loading_bar.setVisibility(View.INVISIBLE);
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
