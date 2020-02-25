@@ -58,12 +58,11 @@ public class CalendarFullViewFragment extends Fragment {
     private ViewGroup root;
     private TextView datecheck;
     private CalendarView calendar;
-    private RecyclerView recyclerView;
 
+    public static RecyclerView recyclerView;
+    public static Activity parent;
 
-    public Activity parent;
-    private   String TAG=VM_ENUM.TAG;
-    public int focusedYear;
+    public  int focusedYear;
     public int focusedMonth;
     public int focusedDay;
 
@@ -124,7 +123,7 @@ public class CalendarFullViewFragment extends Fragment {
 //        datecheck.setText(this_year + "년 " + this_month + "월 " + this_day + "일 문제 목록");
 
         //초기셋팅
-//        setSubItem(focusedYear,focusedMonth-1,focusedDay);
+        setSubItem(focusedYear,focusedMonth-1,focusedDay);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -157,11 +156,11 @@ public class CalendarFullViewFragment extends Fragment {
             selectedDate+=dayOfMonth;
         }
 
-        Log.d(TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
+        Log.d(VM_ENUM.TAG,"[클릭이벤트]선택한 날짜: "+selectedDate);
 
         if(CalendarData.posts!=null){
             for(int i=0;i<CalendarData.posts.size();i++){
-                Log.d(TAG,"[클릭이벤트]포스트 날짜: "+CalendarData.posts.get(i).second.second);
+                Log.d(VM_ENUM.TAG,"[클릭이벤트]포스트 날짜: "+CalendarData.posts.get(i).second.second);
                 if(CalendarData.posts.get(i).second.second.contains(selectedDate)){
                     CalendarData.subs.add(Pair.create(CalendarData.posts.get(i).first,
                             Pair.create(CalendarData.posts.get(i).second.first,CalendarData.posts.get(i).second.second)));
@@ -178,13 +177,13 @@ public class CalendarFullViewFragment extends Fragment {
     }
 
 
-    public class SimpleItemRecyclerViewAdapter
+    public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Pair<VM_Data_Default,Pair<String,String>>> mValues;
         private final Activity mParentActivity;
 
-        SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items,Activity parent) {
+        public  SimpleItemRecyclerViewAdapter(List<Pair<VM_Data_Default,Pair<String,String>>>  items,Activity parent) {
             mValues = items;
             mParentActivity = parent;
         }
