@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class VM_DBHandler {
-    private static final String TAG = VM_ENUM.TAG;
+
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -86,7 +86,7 @@ public class VM_DBHandler {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        Log.i(TAG, "[파이어베이스 저장소 저장] 사진 업로드 성공");
+                        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장] 사진 업로드 성공");
 
                         //** 파일 이름 변경
                         chatitem.setChatContent(fileName);
@@ -96,7 +96,7 @@ public class VM_DBHandler {
                         ///databaseReference.child(index).setValue(chatitem); //** 파이어베이스 DB 등록 -> List 형태의 경우 이렇게 등록
                         databaseReference.push().setValue(chatitem); //** 파이어베이스 DB 등록
 
-                        Log.i(TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
+                        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
 
                     }
                 })
@@ -105,7 +105,7 @@ public class VM_DBHandler {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
-                        Log.i(TAG, "[파이어베이스 저장소 저장]사진 업로드  실패..."+Uri.parse(chatitem.getChatContent()));
+                        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장]사진 업로드  실패..."+Uri.parse(chatitem.getChatContent()));
                     }
                 });
 
@@ -118,7 +118,7 @@ public class VM_DBHandler {
         databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_POSTS).child(post_id).child(VM_ENUM.DB_chatList);
         databaseReference.push().setValue(chatitem); //** 파이어베이스 DB 등록
 
-        Log.i(TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
+        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장] DB 저장 성공");
 
     }
 
@@ -219,7 +219,7 @@ public class VM_DBHandler {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "FirebaseFirestore: DocumentSnapshot successfully written!");
+                        Log.d(VM_ENUM.TAG, "FirebaseFirestore: DocumentSnapshot successfully written!");
 
                         //** 바로 위의 key 값을 가져옴
                         CollectionReference reference = db.collection(path);
@@ -230,24 +230,24 @@ public class VM_DBHandler {
                                 String upper_key=null;
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        Log.d(VM_ENUM.TAG, document.getId() + " => " + document.getData());
                                         upper_key=document.getId();
                                     }
 
                                     //** 2. alarms 에서 value 삭제
                                     //** Alarms 에서 삭제
                                     if(upper_key!=null){
-                                        Log.d(TAG, "upper_key: "+upper_key);
+                                        Log.d(VM_ENUM.TAG, "upper_key: "+upper_key);
                                         databaseReference.child(upper_key).removeValue(deleteCompletionListener);
                                     }else{
-                                        Log.d(TAG, "upper_key가 null임, alarms에서 삭제 진행하지 않고 alarms에 추가만 함");
+                                        Log.d(VM_ENUM.TAG, "upper_key가 null임, alarms에서 삭제 진행하지 않고 alarms에 추가만 함");
                                         databaseReference.child(push_key).setValue(alarmItem,setCompletionListener);
                                     }
 
                                 }
 
                                 else {
-                                    Log.d(TAG, "Error => ", task.getException());
+                                    Log.d(VM_ENUM.TAG, "Error => ", task.getException());
                                 }
                             }
 
@@ -256,7 +256,7 @@ public class VM_DBHandler {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
+                Log.w(VM_ENUM.TAG, "Error writing document", e);
             }
         });
 
@@ -282,7 +282,7 @@ public class VM_DBHandler {
         if (databaseReference == null) {
             //table이 없으면 생성
             databaseReference.child(VM_ENUM.DB_USERS);
-            Log.i(TAG, "[USERS TABLE 생성] ");
+            Log.i(VM_ENUM.TAG, "[USERS TABLE 생성] ");
         }
 
         //** 학생과 선생님을 구분해서 유저 객체 생성
@@ -291,29 +291,29 @@ public class VM_DBHandler {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
         String joinDate = dateFormat.format(date);
 
-        Log.i(TAG, "[유저 최초 가입 날짜:] " + joinDate);
+        Log.i(VM_ENUM.TAG, "[유저 최초 가입 날짜:] " + joinDate);
 
         if (user_type.equals(VM_ENUM.TEACHER)) {
             VM_Data_TEACHER teacher = new VM_Data_TEACHER(user_email, joinDate);
 
             databaseReference.child(user_email).child(VM_ENUM.DB_T_ID).setValue(user_email); //** 파이어베이스 DB 등록
             databaseReference.child(user_email).child(VM_ENUM.DB_USER_TYPE).setValue(user_type); //** 파이어베이스 DB 등록
-            Log.i(TAG, "[USERS instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[USERS instance 생성] ");
 
             databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_TEACHERS);
             databaseReference.child(user_email).child(VM_ENUM.DB_INFO).setValue(teacher); //** 파이어베이스 DB 등록
-            Log.i(TAG, "[TEACHERS instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[TEACHERS instance 생성] ");
 
         } else if (user_type.equals(VM_ENUM.STUDENT)) {
             VM_Data_STUDENT student = new VM_Data_STUDENT(user_email, joinDate);
 
             databaseReference.child(user_email).child(VM_ENUM.DB_S_ID).setValue(user_email); //** 파이어베이스 DB 등록
             databaseReference.child(user_email).child(VM_ENUM.DB_USER_TYPE).setValue(user_type); //** 파이어베이스 DB 등록
-            Log.i(TAG, "[USERS instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[USERS instance 생성] ");
 
             databaseReference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS);
             databaseReference.child(user_email).child(VM_ENUM.DB_INFO).setValue(student); //** 파이어베이스 DB 등록
-            Log.i(TAG, "[STUDENTS instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[STUDENTS instance 생성] ");
         }
 
 
@@ -340,7 +340,7 @@ public class VM_DBHandler {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);//사용할 포맷 정의
         String uploadDate = dateFormat.format(date);
 
-        Log.i(TAG, "[포스트 업로드 날짜:] " + uploadDate);
+        Log.i(VM_ENUM.TAG, "[포스트 업로드 날짜:] " + uploadDate);
 
         //** VM_Data_Extra 생성
         if (_vmDataAdd != null) {
@@ -400,7 +400,7 @@ public class VM_DBHandler {
 
             firebaseDatabase.getReference(VM_ENUM.DB_UNMATCHED).child(vm_data_post.getP_id())
                     .child(VM_ENUM.DB_P_ID).setValue(vm_data_post.getP_id());
-            Log.i(TAG, "[UNMATCHED instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[UNMATCHED instance 생성] ");
 
             //** TABLE : STUDENTS - child(unmatched)에 등록
             firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
@@ -423,7 +423,7 @@ public class VM_DBHandler {
 //                    .child(vm_data_post.getP_id())
 //                    .child(VM_ENUM.DB_UPLOAD_DATE).setValue(vm_data_post.getUploadDate()); //** 파이어베이스 DB 등록
 
-            Log.i(TAG, "[STUDENTS - child(unmatched) instance 생성] ");
+            Log.i(VM_ENUM.TAG, "[STUDENTS - child(unmatched) instance 생성] ");
 
         }
 
@@ -473,7 +473,7 @@ public class VM_DBHandler {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        Log.i(TAG, "[파이어베이스 저장소 저장] 사진 업로드 성공");
+                        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장] 사진 업로드 성공");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -481,7 +481,7 @@ public class VM_DBHandler {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
-                        Log.i(TAG, "[파이어베이스 저장소 저장] 사진 업로드 실패..."+uri);
+                        Log.i(VM_ENUM.TAG, "[파이어베이스 저장소 저장] 사진 업로드 실패..."+uri);
                     }
                 });
     }

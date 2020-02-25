@@ -65,7 +65,6 @@ import java.util.Locale;
 
 public class VM_RegisterProblemActivity extends AppCompatActivity {
 
-    private static final String TAG = VM_ENUM.TAG;
     private int returnResult;
 
     private File galleryFile; //갤러리로부터 받아온 이미지를 저장
@@ -101,7 +100,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        Log.d(TAG, "VM_RegisterProblemActivity OnCreate 호출");
+        Log.d(VM_ENUM.TAG, "VM_RegisterProblemActivity OnCreate 호출");
         init();
 
 
@@ -119,7 +118,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         explainView = findViewById(R.id.explain_view);
         explainView.setVisibility(View.VISIBLE);
         add = new VM_Data_ADD();
-        Log.d(TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
+        Log.d(VM_ENUM.TAG, "[문제등록뷰로 넘어온 Intent 확인]" + solveWay);
     }
 
 
@@ -165,7 +164,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             ///Toast.makeText(this, "처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "createImageFile 처리 오류! 다시 시도해주세요.");
+            Log.d(VM_ENUM.TAG, "createImageFile 처리 오류! 다시 시도해주세요.");
             finish();
             e.printStackTrace();
         }
@@ -385,7 +384,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             public void onPermissionGranted() {
                 //** 권한 요청 성공
                 Toast.makeText(VM_RegisterProblemActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "[VM_RegisterProblemActivity] Permission Granted");
+                Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity] Permission Granted");
                 showPickDialog();
 
             }
@@ -414,7 +413,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
         //** 문제 등록의 최소 요건 확인
         if (checkAbility()) {
-            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족");
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족");
             //** 데이서 생성 VM_Data_ADD, VM_Data_Basic
             vmDataBasic.setTitle(editTextTitle.getText().toString());
 
@@ -437,7 +436,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             finish();
 
         } else {
-            Log.d(TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity]: 문제 등록 요구사항 만족 못함");
         }
 
 
@@ -564,12 +563,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         if (resultCode != Activity.RESULT_OK) {
 
             ///Toast.makeText(this, "선택이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "[VM_RegisterProblemActivity]onActivityResult 선택이 취소 되었습니다");
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity]onActivityResult 선택이 취소 되었습니다");
             if (requestCode == VM_ENUM.PICK_FROM_CAMERA) {
                 if (takeFile != null) {//->이때는 무조건 "사진 촬영" 하려다가 취소한 경우에 해당함
                     if (takeFile.exists()) {
                         if (takeFile.delete()) {
-                            Log.d(TAG, takeFile.getAbsolutePath() + " 삭제 성공");
+                            Log.d(VM_ENUM.TAG, takeFile.getAbsolutePath() + " 삭제 성공");
                             takeFile = null;
                         }
                     }
@@ -657,16 +656,16 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             Uri photoUri;
 
 
-            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] getAbsolutePath : "
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] getAbsolutePath : "
                     + Uri.parse(takeFile.getAbsolutePath()));
-            Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]  Uri.fromFile(takeFile) :  "
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA]  Uri.fromFile(takeFile) :  "
                     + Uri.fromFile(takeFile));
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
                         "com.example.visualmath.provider", takeFile);
 
-                Log.d(TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] content provider photoUri : " + photoUri);
+                Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] content provider photoUri : " + photoUri);
 
             } else {
                 photoUri = Uri.fromFile(takeFile);
@@ -693,7 +692,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "[VM_RegisterProblemActivity]: Onresume");
+        Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity]: Onresume");
 
         String notice = "";
 
@@ -702,7 +701,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         assert add != null;
 
         if (add.getDetail() == null || add.getDetail().equals("")) {
-            Log.d(TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
+            Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity]: receiveData.getDetail()==null");
         }
 
         if (add.getDetail() != null && !add.getDetail().equals("")) {
@@ -714,7 +713,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
         for (int i = 0; i < 3; i++) {
             if (add.getFilePathElement(i) != null) {
                 count++;
-                Log.d(TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + "-->" + add.getFilePathElement(i).toString());
+                Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity] receiveDatacheck: " + i + "-->" + add.getFilePathElement(i).toString());
             }
         }
         if (count != 0) {
@@ -730,5 +729,12 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
 
+        Log.w(VM_ENUM.TAG,"[학생문제등록] static 변수 초기화");
+        add=null;
+
+        super.onDestroy();
+    }
 }
