@@ -528,6 +528,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
         //** 변경된 setUnmatchedData 함수
 
+
         if (grade.equals(VM_ENUM.GRADE_ELEMENT)) {
             Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_element) ");
             recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, unmatched_element));
@@ -539,24 +540,16 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
 
         } else if (grade.equals(VM_ENUM.GRADE_HIGH)) {
-            Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_high ");
+            Log.d(TAG, "[선생님 문제 선택뷰] setAdapter(adapter_high) ");
             recyclerView.setAdapter(new VM_ProblemListActivity.SimpleItemRecyclerViewAdapter(this, unmatched_high));
 
         }
 
-        ///list_loading_bar.setVisibility(View.INVISIBLE);
+
+
     }
 
 
-//    @Override
-//    protected void onStop() {
-//        //리스너 해제
-//        Log.d(TAG, "[선생님 문제 선택 뷰] onStop addValueEventListener  리스너 삭제");
-//        reference_unmatched.removeEventListener(childEventListener);
-//
-//        super.onStop();
-//
-//    }
 
     @Override
     protected void onDestroy() {//리스너 해제 : 뷰가 스택에 들어 있는 경우에는 리스너를 계속 동작 시키되, 아예 뷰가 finish 된 시점에서는 리스너르 완전 삭제 시킴
@@ -567,14 +560,6 @@ public class VM_ProblemListActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStart() { // -> 이때 전체 DB 에 add 되지 않더라도, 디비를 새로 읽어오는 과정이 있게 됨 (배열을 모두 초기화 시키든지 해야됨)
-//
-//        //** 리스너 동작
-//        Log.w(TAG, "[선생님 문제선택 뷰] onStart : progress bar 생성");
-//        reference_unmatched.addChildEventListener(childEventListener);
-//
-//        super.onStart();
-//    }
+
 
 }
