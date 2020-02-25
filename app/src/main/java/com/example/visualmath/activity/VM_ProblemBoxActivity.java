@@ -313,7 +313,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             return mData.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             TextView pName;
             TextView pDate;
             ImageView pLive;
@@ -329,20 +329,33 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                 pMatchTeacher = itemView.findViewById(R.id.problem_matchSet);
                 pSolveWay = itemView.findViewById(R.id.problem_solveWay);
 
-                //** 아이템 클릭 이벤트
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = getAdapterPosition();
+                //** 아이템 클릭 이벤트 -> 리사이클러뷰 성능을 위해 변경
+                itemView.setOnClickListener(this);
 
+                //** 아이템 클릭 이벤트
+//                itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        int pos = getAdapterPosition();
+//
+//
+//                        if (pos != RecyclerView.NO_POSITION) {
+//                            //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
+//                            searchData(pos);
+//                        }
+//                    }
+//                });
+
+            }
+
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
 
                         if (pos != RecyclerView.NO_POSITION) {
                             //** 프래그먼트의 아이템 클릭 시, FullViewActivity로 전환
                             searchData(pos);
                         }
-                    }
-                });
-
             }
         }
     }
@@ -478,59 +491,44 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
     }
 
     public void searchData(int position){
-        String post_id=null;
+
+        //** posts 에 대해서 이미 저장했으므로, 별도로 search 과정을 거치지 않아도 됨
+
+        Intent intent = new Intent(VM_ProblemBoxActivity.this, VM_FullViewActivity.class);
 
         if(!isUnMatchedClick){//"현재상태: 매치완료 목록"
-            post_id=matched.get(position).getP_id();
-            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
-                    .child(post_id)
-                    .child(VM_ENUM.DB_DATA_DEFAULT);
             needToBlock=null;
             fromStudentUnmatched=null;
-        }else{//"현재 상태: 매치 미완료 목록"
-            post_id=unmatched.get(position).getP_id();
-            reference=firebaseDatabase.getReference(VM_ENUM.DB_POSTS)
-                    .child(post_id)
-                    .child(VM_ENUM.DB_DATA_DEFAULT);
 
+
+            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, matched_posts.get(position).getP_id());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,matched_posts.get(position).getData_default().getTitle());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,matched_posts.get(position).getData_default().getGrade());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,matched_posts.get(position).getData_default().getProblem());
+
+
+
+        }else{//"현재 상태: 매치 미완료 목록"
             needToBlock=VM_ENUM.IT_ARG_BLOCK;
             fromStudentUnmatched=VM_ENUM.IT_FROM_UNMATCHED;
+
+            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, unmatched_posts.get(position).getP_id());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,unmatched_posts.get(position).getData_default().getTitle());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,unmatched_posts.get(position).getData_default().getGrade());
+            intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,unmatched_posts.get(position).getData_default().getProblem());
+
            }
 
-        final String finalPost_id = post_id;
-        Log.d(VM_ENUM.TAG,"[VM_ProblemBox] POSTS 데이터"+finalPost_id+" 접근");
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {//**한번만 호출
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                VM_Data_Default vmDataDefault=dataSnapshot.getValue(VM_Data_Default.class);
-
-                assert vmDataDefault != null;
-                Log.d(TAG, "[ProblemBox] ValueEventListener : " +vmDataDefault.getTitle() );
-
-                Intent intent = new Intent(VM_ProblemBoxActivity.this, VM_FullViewActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, finalPost_id);
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_TITLE,vmDataDefault.getTitle());
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_GRADE,vmDataDefault.getGrade());
-                intent.putExtra(VM_FullViewActivity.ARG_ITEM_PROBLEM,vmDataDefault.getProblem());
-
-                if(needToBlock!=null){ //** 매치 미완료의 경우 사용자의 채팅창 막음
-                    intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);
-                    intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);
-                    Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
-                }
-
-                startActivityForResult(intent,VM_ENUM.RC_PROBLEM_SOLVE);
 
 
-            }
+        if(needToBlock!=null){ //** 매치 미완료의 경우 사용자의 채팅창 막음 && 매치셋(matchset_teacher)도 찾지 않음
+            intent.putExtra(VM_ENUM.IT_ARG_BLOCK, VM_ENUM.IT_ARG_BLOCK);
+            intent.putExtra(VM_ENUM.IT_FROM_UNMATCHED,VM_ENUM.IT_FROM_UNMATCHED);
+            Log.d(TAG, "[ProblemBox] IT_ARG_BLOCK & IT_FROM_UNMATCHED " );
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Toast.makeText(getBaseContext(),"데이터베이스 오류",Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Failed to read value", databaseError.toException());
-            }
-        });
+        ///startActivityForResult(intent,VM_ENUM.RC_PROBLEM_SOLVE);
+        startActivity(intent);
 
     }
 
