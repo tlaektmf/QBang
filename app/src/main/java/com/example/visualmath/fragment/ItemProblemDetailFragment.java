@@ -86,7 +86,7 @@ public class ItemProblemDetailFragment extends Fragment {
     private String matchSet_student;
     private String upLoadDate;
     private VM_Data_Default data_default;
-
+    private String user;
 
     View rootView;
     public static final String ARG_ITEM_ID = "post_id";
@@ -195,7 +195,7 @@ public class ItemProblemDetailFragment extends Fragment {
                 dialog.setDialogListener(new VM_DialogListener_matchComplete() {
                     public void onButtonYes() {
                         matchProgress();
-                        //checkDialog.callFunction(5);
+
                     }
 
                     public void onButtonNo() {
@@ -254,7 +254,7 @@ public class ItemProblemDetailFragment extends Fragment {
 
                 } else {
                     Log.d(VM_ENUM.TAG, "문제가 유효함. dataUpdate 함수 호출 ");
-                    dataUpdate();
+                    makeMatchSet();
                 }
 
             }
@@ -272,27 +272,13 @@ public class ItemProblemDetailFragment extends Fragment {
     /**
      *
      */
-    public void dataUpdate() { //DB를 업데이트 함
-        Log.d(VM_ENUM.TAG, "[dataUpdate 시작]");
-        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        assert currentUserEmail != null;
-        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        String user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+    public void makeMatchSet() {
 
-        if (makeMatchSet(user)) {
-            getFirstTeacher(user);
-        }
-    }
-
-
-    public boolean makeMatchSet(String user) {
-
-        Log.d(VM_ENUM.TAG, "[makeMatchSet 시작]");
+        Log.w(VM_ENUM.TAG, "[makeMatchSet 시작]");
 
         //매치 셋 생성 :  public PostCustomData(String p_id,String p_title,String solveWaym ,String upLoadDate,String student,String teacher)
         postCustomData = new PostCustomData(post_id, data_default.getTitle(), solveWay, upLoadDate, matchSet_student, user);
 
-        //>>> UNMATCHED 에서의 삭제는 mutable 로 해야되기 때문에 isDataAvailable() 함수에서 조건문에 따라 처리함
         //** 1. UNMATCHED 에서 삭제
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_UNMATCHED)
                 .child(post_id).removeValue();
@@ -300,10 +286,14 @@ public class ItemProblemDetailFragment extends Fragment {
 
         //** 5. POSTS 의 matchset에 설정
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
-                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).push().setValue(user);
-        Log.d(TAG, "[POSTS 의 matchset 등록 완료]");
+                .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).push().setValue(user, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                Log.w(TAG, "[POSTS 의 matchset 등록 완료] CompletionListener -> getFirstTeacher 함수 호출");
+                getFirstTeacher();
+            }
+        });
 
-        return true;
     }
 
 
@@ -312,9 +302,9 @@ public class ItemProblemDetailFragment extends Fragment {
      *
      * @return
      */
-    public void getFirstTeacher(final String user) {
+    public void getFirstTeacher() {
 
-        Log.d(VM_ENUM.TAG, "[getFirstTeacher 시작]");
+        Log.w(VM_ENUM.TAG, "[getFirstTeacher 시작]");
         FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
                 .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -328,12 +318,17 @@ public class ItemProblemDetailFragment extends Fragment {
 
                     //** 1. POSTS 의 matchset에 설정
                     FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
-                            .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(null);
+                            .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(null, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
+                                    .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
 
-                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_POSTS)
-                            .child(post_id).child(VM_ENUM.DB_MATCH_TEACHER).setValue(user);
+                            Log.d(TAG, "[POSTS 의 matchset (전부 삭제 후) 재등록 완료] CompletionListener");
+                        }
+                    });
 
-                    Log.d(TAG, "[POSTS 의 matchset 재등록 완료]");
+
 
                     //** 2. teacher unsolved 에 저장
 //                    FirebaseDatabase.getInstance().getReference().child(VM_ENUM.DB_TEACHERS)
@@ -530,6 +525,11 @@ public class ItemProblemDetailFragment extends Fragment {
 
 
     public void initData() {
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert currentUserEmail != null;
+        String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
+        user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
                 if (data_default != null) {
                     textViewProblemGrade.setText(data_default.getGrade());
