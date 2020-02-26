@@ -499,6 +499,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                 Log.w(TAG, "[선생님 문제 선택뷰] : onChildRemoved"+dataSnapshot);
 
                 String post_id = dataSnapshot.getKey();
+                deleteItem(post_id);
                 ///reference_posts.orderByKey().equalTo(post_id).addListenerForSingleValueEvent(single_delete_ValueEventListener);
 
 
@@ -523,6 +524,39 @@ public class VM_ProblemListActivity extends AppCompatActivity {
     }
 
 
+
+    public void deleteItem(String post_id){
+
+        String deleteGrade=null;
+        for(int i=0;i<unmatched_element.size();i++){
+            if(unmatched_element.get(i).getP_id().equals(post_id)){
+                Log.w(TAG, "[선생님 문제 선택뷰] 초등데이터 삭제 ");
+                deleteGrade=VM_ENUM.GRADE_ELEMENT;
+                unmatched_element.remove(i);
+            }
+        }
+
+        for(int i=0;i<unmatched_mid.size();i++){
+            if(unmatched_mid.get(i).getP_id().equals(post_id)){
+                Log.w(TAG, "[선생님 문제 선택뷰] 중등 데이터 삭제 ");
+                deleteGrade=VM_ENUM.GRADE_MID;
+                unmatched_mid.remove(i);
+            }
+        }
+
+        for(int i=0;i<unmatched_high.size();i++){
+            if(unmatched_high.get(i).getP_id().equals(post_id)){
+                Log.w(TAG, "[선생님 문제 선택뷰] 고등 데이터 삭제 ");
+                deleteGrade=VM_ENUM.GRADE_HIGH;
+                unmatched_high.remove(i);
+            }
+        }
+
+        if(nowGrade.equals(deleteGrade)){ //** 들어온 데이터와 현재 활성화된 화면의 GRADE가 같은 경우에만 뷰에 셋팅 함
+            Log.d(TAG, "[선생님 문제 선택뷰] "+nowGrade+" 데이터 셋팅 ");
+            setUnmatchedData(nowGrade);
+        }
+    }
 
     public void setUnmatchedData(final String grade) {
 
