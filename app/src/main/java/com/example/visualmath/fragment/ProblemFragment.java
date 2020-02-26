@@ -128,9 +128,11 @@ public class ProblemFragment extends Fragment {
 
     //>>>>>
     private File takeFile;
-    private ProgressBar chat_loading_bar;
+    public static ProgressBar chat_loading_bar;
+    public static boolean isLoadingBarAvailable;
+    public static ConstraintLayout chat_bottom_layout;
     private View chat_loading_back;
-    private boolean isDataAdded;
+
 
     //DashBoardFragment
 // VM_ProblemBoxActivity
@@ -161,9 +163,9 @@ public class ProblemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         parent = getActivity();
+        isLoadingBarAvailable=false;
         needToBlock = false;
         fromStudentUnmatched = false;
-        isDataAdded=false;
         assert getArguments() != null;
         needToBlock = getArguments().getBoolean(VM_ENUM.IT_ARG_BLOCK);
         fromStudentUnmatched = getArguments().getBoolean(VM_ENUM.IT_FROM_UNMATCHED);
@@ -191,7 +193,7 @@ public class ProblemFragment extends Fragment {
         sendMsgBtn = rootView.findViewById(R.id.sendMsgBtn);
         showActionDialog = rootView.findViewById(R.id.showActionDialog);
         textViewChatRoomTitle = rootView.findViewById(R.id.chat_problem_title);
-
+        chat_bottom_layout = (ConstraintLayout) rootView.findViewById(R.id.chat_bottom_lay);
         chat_loading_bar = rootView.findViewById(R.id.chat_loading_bar);
         chat_loading_back = rootView.findViewById(R.id.chat_loading_back);
 
@@ -832,74 +834,8 @@ public class ProblemFragment extends Fragment {
 //    }
 ///*** open with addvalueListenr <<<<<<<
 
-    public void downloadInMemory(String storagePath){
-        final long ONE_MEGABYTE=1024*1024;
-
-        StorageReference pathReference = FirebaseStorage.getInstance().getReference().child(storagePath);
-        Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 시작: "+storagePath);
-
-        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                ///bitmaps.add(bitmap);
-
-                bitmaps.set(chatList.size()-1,bitmap);
-                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 성공");
-
-                if(adapter!=null){
-                    adapter.notifyItemInserted(chatList.size());
-                    Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
 
 
-                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
-                    Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 삭제");
-                    chat_loading_back.setVisibility(View.GONE);
-                    chat_loading_bar.setVisibility(View.GONE);
-                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
-
-                    ///adapter.notifyDataSetChanged();
-                }else{
-                    Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
-                }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패");
-
-                int errorCode=((StorageException)e).getErrorCode();
-                String  erroMessage=e.getMessage();
-                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패//"+errorCode);
-                Log.d(VM_ENUM.TAG,"[ProblemFragment] 다운로드 실패//"+erroMessage);
-                if(errorCode==StorageException.ERROR_QUOTA_EXCEEDED){
-                    Log.d(VM_ENUM.TAG,"[ProblemFragment]StorageException.ERROR_QUOTA_EXCEEDED");
-                    Toast.makeText( parent,"저장소 용량이 초과되었습니다",Toast.LENGTH_SHORT).show();
-                }
-
-                //>>
-                ///bitmaps.add(null);
-                if(adapter!=null){
-                    adapter.notifyItemInserted(chatList.size());
-
-                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
-                    Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 삭제");
-                    chat_loading_back.setVisibility(View.GONE);
-                    chat_loading_bar.setVisibility(View.GONE);
-                    //>> 이미지 삽입시에만 프로그래스바 생성후 삭제
-
-                    Log.d(VM_ENUM.TAG,"[ProblemFragment] notifyItemInserted adapter 준비완료, 리사이클러뷰에 데이터 세팅");
-                    ///adapter.notifyDataSetChanged();
-                }else{
-                    Log.d(VM_ENUM.TAG,"[ProblemFragment] addChildEventListener adapter 준비 안됨 ");
-                }
-
-            }
-        });
-
-    }
     public void itemLoad(final String post_id, final VM_Data_CHAT chatItem) {
 
         //** 유효한 데이터인지 검사
@@ -1026,14 +962,19 @@ public class ProblemFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(VM_ENUM.TAG, "[ProblemFragment] " + requestCode + " ," + resultCode);
 
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == VM_ENUM.RC_ProblemFragment_to_ViewActivity) {
-//                Log.d(VM_ENUM.TAG, "[ProblemFragment] 프로그래스바 생성");
-//                isDataAdded=true;
-//                chat_loading_back.setVisibility(View.VISIBLE);
-//                chat_loading_bar.setVisibility(View.VISIBLE);
-//            }
-//        }
+        if (resultCode == Activity.RESULT_OK) { //새로운 컨텐츠 ( 동영상 or 이미지) 추가
+            if (requestCode == VM_ENUM.RC_ProblemFragment_to_ViewActivity) {
+                Log.d(VM_ENUM.TAG, "[ProblemFragment] isLoadingBarAvailable 를 true 변경");
+                Log.d(VM_ENUM.TAG, "[ProblemFragment] 데이터 로딩 완료 시점까지 chat_bottom_layout 클릭 막음");
+
+               for (int i = 0; i < chat_bottom_layout.getChildCount(); i++) {
+                    View child = chat_bottom_layout.getChildAt(i);
+                    child.setEnabled(false);
+                }
+
+                isLoadingBarAvailable =true;
+            }
+        }
 
 
     }
@@ -1044,6 +985,9 @@ public class ProblemFragment extends Fragment {
         //리스너 해제
         Log.d(VM_ENUM.TAG,"[ProblemFragment] childEventListener 리스너 삭제");
         reference.child(VM_ENUM.DB_chatList).removeEventListener(childEventListener);
+        chat_loading_bar=null;
+        chat_bottom_layout=null;
+        isLoadingBarAvailable=false;
 
         super.onDetach();
     }

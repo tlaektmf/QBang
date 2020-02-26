@@ -25,6 +25,7 @@ import com.example.visualmath.R;
 import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.activity.VM_ChatItemViewActivity;
 import com.example.visualmath.data.VM_Data_CHAT;
+import com.example.visualmath.fragment.ProblemFragment;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -365,6 +366,21 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
                                         .into(holder.myMsgPhotoView);
 
                                 Log.d(VM_ENUM.TAG,"사진 로드 성공 > "+uri);
+
+                                progressBarSetting();
+//                                if(ProblemFragment.isLoadingBarAvailable){
+//                                    ProblemFragment.chat_loading_bar.setVisibility(View.GONE);
+//                                    ProblemFragment.isLoadingBarAvailable=false;
+//                                    Log.d(VM_ENUM.TAG,"[VM_ChatAdapter] 프로그래스 바 삭제, isLoadingBarAvailable false로 초기화");
+//
+//                                    Log.d(VM_ENUM.TAG, "[ProblemFragment] 데이터 로딩 완료됐으므로 chat_bottom_layout 클릭 열어둠");
+//                                    for (int i = 0; i < ProblemFragment.chat_bottom_layout.getChildCount(); i++) {
+//                                        View child = ProblemFragment.chat_bottom_layout.getChildAt(i);
+//                                        child.setEnabled(true);
+//                                    }
+//
+//                                }
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -711,6 +727,21 @@ public class VM_ChatAdapter extends RecyclerView.Adapter<VM_ChatAdapter.VM_Custo
     @Override
     public int getItemCount() {
         return (null != this.chatList ? chatList.size() : 0);
+    }
+
+    public void progressBarSetting(){
+        if(ProblemFragment.isLoadingBarAvailable){
+            ProblemFragment.chat_loading_bar.setVisibility(View.GONE);
+            ProblemFragment.isLoadingBarAvailable=false;
+            Log.d(VM_ENUM.TAG,"[VM_ChatAdapter] 프로그래스 바 삭제, isLoadingBarAvailable false로 초기화");
+
+            Log.d(VM_ENUM.TAG, "[ProblemFragment] 데이터 로딩 완료됐으므로 chat_bottom_layout 클릭 열어둠");
+            for (int i = 0; i < ProblemFragment.chat_bottom_layout.getChildCount(); i++) {
+                View child = ProblemFragment.chat_bottom_layout.getChildAt(i);
+                child.setEnabled(true);
+            }
+
+        }
     }
 
 

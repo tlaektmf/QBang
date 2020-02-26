@@ -36,6 +36,7 @@ import com.example.visualmath.VM_ENUM;
 import com.example.visualmath.VM_RegisterProblemActivity;
 import com.example.visualmath.data.VM_Data_CHAT;
 import com.example.visualmath.dialog.VM_Dialog_registerProblem;
+import com.example.visualmath.fragment.ProblemFragment;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -102,45 +103,45 @@ public class VM_ViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm_view);
 
-        parent=VM_ViewActivity.this;
+        parent = VM_ViewActivity.this;
 
         imageViewPhoto = (PhotoView) findViewById(R.id.iv_photo);
-        videoView=findViewById(R.id.iv_video);
-        repickButton=findViewById(R.id.ib_repick);
-        playButton=findViewById(R.id.btn_play);
-        stopButton=findViewById(R.id.btn_stop);
-        startRecordButton=findViewById(R.id.btn_start_record);
-        stopRecordButton=findViewById(R.id.btn_finish_record);
-        surfaceView=findViewById(R.id.surface_view);
-        surfaceHolder=surfaceView.getHolder();
+        videoView = findViewById(R.id.iv_video);
+        repickButton = findViewById(R.id.ib_repick);
+        playButton = findViewById(R.id.btn_play);
+        stopButton = findViewById(R.id.btn_stop);
+        startRecordButton = findViewById(R.id.btn_start_record);
+        stopRecordButton = findViewById(R.id.btn_finish_record);
+        surfaceView = findViewById(R.id.surface_view);
+        surfaceHolder = surfaceView.getHolder();
 
 
         //** 인텐트 확인
-        PICK_FLAG=getIntent().getStringExtra(VM_ENUM.IT_PICK_FLAG);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, PICK_FLAG  "+PICK_FLAG);
-        post_id=getIntent().getStringExtra(VM_ENUM.IT_POST_ID);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, post_id  "+post_id);
-        user_type=getIntent().getStringExtra(VM_ENUM.IT_USER_TYPE);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, user_type  "+user_type);
-        user_id=getIntent().getStringExtra(VM_ENUM.IT_USER_ID);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, user_id  "+user_id);
-        post_title=getIntent().getStringExtra(VM_ENUM.IT_POST_TITLE);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, post_title  "+post_title);
-        matchset_student=getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_STD);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, matchset_student  "+matchset_student);
-        matchset_teacher=getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_TEA);
-        Log.d(VM_ENUM.TAG,"[VM_ViewActivity]onCreate 호출, matchset_teacher  "+matchset_teacher);
+        PICK_FLAG = getIntent().getStringExtra(VM_ENUM.IT_PICK_FLAG);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, PICK_FLAG  " + PICK_FLAG);
+        post_id = getIntent().getStringExtra(VM_ENUM.IT_POST_ID);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, post_id  " + post_id);
+        user_type = getIntent().getStringExtra(VM_ENUM.IT_USER_TYPE);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, user_type  " + user_type);
+        user_id = getIntent().getStringExtra(VM_ENUM.IT_USER_ID);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, user_id  " + user_id);
+        post_title = getIntent().getStringExtra(VM_ENUM.IT_POST_TITLE);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, post_title  " + post_title);
+        matchset_student = getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_STD);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, matchset_student  " + matchset_student);
+        matchset_teacher = getIntent().getStringExtra(VM_ENUM.IT_MATCHSET_TEA);
+        Log.d(VM_ENUM.TAG, "[VM_ViewActivity]onCreate 호출, matchset_teacher  " + matchset_teacher);
         //>>>>
 
-        if(PICK_FLAG.equals(VM_ENUM.IT_TAKE_PHOTO)){
+        if (PICK_FLAG.equals(VM_ENUM.IT_TAKE_PHOTO)) {
             repickButton.setBackgroundResource(R.drawable.pv_camera_btn);
-        }else if(PICK_FLAG.equals(VM_ENUM.IT_GALLERY_PHOTO)){
+        } else if (PICK_FLAG.equals(VM_ENUM.IT_GALLERY_PHOTO)) {
             repickButton.setBackgroundResource(R.drawable.pv_gallery_btn);
-        }else if(PICK_FLAG.equals(VM_ENUM.IT_TAKE_VIDEO)){
+        } else if (PICK_FLAG.equals(VM_ENUM.IT_TAKE_VIDEO)) {
             repickButton.setBackgroundResource(R.drawable.pv_camera_btn);
         }
 
-        switch (PICK_FLAG){
+        switch (PICK_FLAG) {
             case VM_ENUM.IT_TAKE_PHOTO:
                 Log.d(VM_ENUM.TAG, "[사진을 새로 촬영합니다]. photoview -> regiother] ");
                 //** 권한 체크
@@ -157,7 +158,6 @@ public class VM_ViewActivity extends AppCompatActivity {
                 tedPermission(VM_ENUM.IT_TAKE_VIDEO);
                 break;
         }
-
 
 
     }
@@ -178,23 +178,19 @@ public class VM_ViewActivity extends AppCompatActivity {
 
 
     public void getAlbumFile() {
-        pick=VM_ENUM.IT_GALLERY_PHOTO;
+        pick = VM_ENUM.IT_GALLERY_PHOTO;
 
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[] {"image/*", "video/*"});
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "video/*"});
         startActivityForResult(intent, VM_ENUM.PICK_FROM_ALBUM); //앨범 화면으로 이동
-
-
-
-
 
 
     }
 
     public void takePhoto() {
-        pick=VM_ENUM.IT_TAKE_PHOTO;
+        pick = VM_ENUM.IT_TAKE_PHOTO;
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intent를 통해 카메라 화면으로 이동함
 
@@ -231,7 +227,7 @@ public class VM_ViewActivity extends AppCompatActivity {
 
 
     public void takeVideo() {
-        pick=VM_ENUM.IT_TAKE_VIDEO;
+        pick = VM_ENUM.IT_TAKE_VIDEO;
 
         try {
             takeFile = createVideoFile(); //파일 경로가 담긴 빈 이미지 생성(아직 content provider이 입혀져 있지 않음)
@@ -243,9 +239,9 @@ public class VM_ViewActivity extends AppCompatActivity {
         }
 
 
-        if(takeFile!=null){
+        if (takeFile != null) {
             surfaceView.setVisibility(View.VISIBLE);
-            mediaRecorder=new MediaRecorder();
+            mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -262,7 +258,6 @@ public class VM_ViewActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
 
 
     }
@@ -329,13 +324,14 @@ public class VM_ViewActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void  saveVideoFile(){
+    private void saveVideoFile() {
 
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/" + "VisualMath");
         values.put(MediaStore.Images.Media.DISPLAY_NAME, takeFile.getName());
-        values.put(MediaStore.Video.Media.MIME_TYPE, "video/*");;
+        values.put(MediaStore.Video.Media.MIME_TYPE, "video/*");
+        ;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // 파일을 write중이라면 다른곳에서 데이터요구를 무시하겠다는 의미.
@@ -465,13 +461,11 @@ public class VM_ViewActivity extends AppCompatActivity {
                 //** 권한 요청 성공
                 Toast.makeText(VM_ViewActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
-                if(VIEW.equals(VM_ENUM.IT_TAKE_PHOTO)){
+                if (VIEW.equals(VM_ENUM.IT_TAKE_PHOTO)) {
                     takePhoto();
-                }
-                else if (VIEW.equals(VM_ENUM.IT_GALLERY_PHOTO)) {
+                } else if (VIEW.equals(VM_ENUM.IT_GALLERY_PHOTO)) {
                     getAlbumFile();
-                }
-                else if (VIEW.equals(VM_ENUM.IT_TAKE_VIDEO)) {
+                } else if (VIEW.equals(VM_ENUM.IT_TAKE_VIDEO)) {
                     takeVideo();
                 }
             }
@@ -495,28 +489,28 @@ public class VM_ViewActivity extends AppCompatActivity {
 
     }
 
-    public void cancel(View view){
-  finish();
+    public void cancel(View view) {
+        finish();
     }
 
     public void send(View view) {
         //** 데이터베이스 저장
 
-        String mimType=findMimeType(db_save_uri);
-        if(mimType.contains("video")){ //비디오인 경우 //////db_save_uri.toString().contains("video")
-            Log.d(VM_ENUM.TAG,"비디오 데이터 채팅에 추가");
-            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(),VM_ENUM.CHAT_VIDEO);
-            loadDatabase(post_id,data);
-        }else {//이미지 타입인 경우
-            Log.d(VM_ENUM.TAG,"이미지 데이터 채팅에 추가");
-            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(),VM_ENUM.CHAT_IMAGE);
-            loadDatabase(post_id,data);
+        String mimType = findMimeType(db_save_uri);
+        if (mimType.contains("video")) { //비디오인 경우 //////db_save_uri.toString().contains("video")
+            Log.d(VM_ENUM.TAG, "비디오 데이터 채팅에 추가");
+            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(), VM_ENUM.CHAT_VIDEO);
+            loadDatabase(post_id, data);
+        } else {//이미지 타입인 경우
+            Log.d(VM_ENUM.TAG, "이미지 데이터 채팅에 추가");
+            VM_Data_CHAT data = new VM_Data_CHAT(user_type, db_save_uri.toString(), VM_ENUM.CHAT_IMAGE);
+            loadDatabase(post_id, data);
         }
 
 
     }
 
-    public String findMimeType(Uri uri){
+    public String findMimeType(Uri uri) {
         String mimeType = getContentResolver().getType(uri);
         Log.w(VM_ENUM.TAG, "[VM_RegisterActivity] mimetype:" + mimeType);
 
@@ -524,11 +518,12 @@ public class VM_ViewActivity extends AppCompatActivity {
         return mimeType;
 
     }
-    public void loadDatabase(final String post_id, final VM_Data_CHAT chatItem){
+
+    public void loadDatabase(final String post_id, final VM_Data_CHAT chatItem) {
 
         //** 유효한 데이터인지 검사
-        if(user_type.equals(VM_ENUM.TEACHER)){
-            DatabaseReference ref= FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS)
+        if (user_type.equals(VM_ENUM.TEACHER)) {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(VM_ENUM.DB_TEACHERS)
                     .child(user_id)
                     .child(VM_ENUM.DB_TEA_POSTS)
                     .child(VM_ENUM.DB_TEA_UNSOLVED);
@@ -536,12 +531,12 @@ public class VM_ViewActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    if(dataSnapshot.getValue()==null){
-                        Log.d(VM_ENUM.TAG,"문제가 이미 완료됨");
+                    if (dataSnapshot.getValue() == null) {
+                        Log.d(VM_ENUM.TAG, "문제가 이미 완료됨");
 
                         final VM_Dialog_registerProblem checkDialog =
                                 new VM_Dialog_registerProblem(parent);
-                        checkDialog.callFunction(8,parent);
+                        checkDialog.callFunction(8, parent);
 
                         final Timer t = new Timer();
                         t.schedule(new TimerTask() {
@@ -554,16 +549,19 @@ public class VM_ViewActivity extends AppCompatActivity {
                                 finish();//***** 종료
                             }
                         }, 2000);
-                    }
-                    else{
+                    } else {
+                        //** 프로그래스바 설정
+                        Log.w(VM_ENUM.TAG, "[VM_ViewActivity] ProblemFragment에 프로그래스바 설정");
+                        ProblemFragment.chat_loading_bar.setVisibility(View.VISIBLE);
 
-                        VM_DBHandler dbHandler=new VM_DBHandler();
-                                dbHandler.newChatMediaItem(post_id,chatItem,user_id);
-                                Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
-                                dbHandler.newMessageAlarm(post_id,post_title,user_type,matchset_student,VM_ENUM.ALARM_NEW);
-                                Log.d(VM_ENUM.TAG,"문제가 유효함. 학생 알람을 추가"+user_type+","+matchset_student);
-                                Toast.makeText(parent,"컨텐츠를 로딩중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG).show();
-                                    finish();//***** 종료
+                        VM_DBHandler dbHandler = new VM_DBHandler();
+                        dbHandler.newChatMediaItem(post_id, chatItem, user_id);
+                        Log.d(VM_ENUM.TAG, "문제가 유효함. 채팅을 추가");
+                        dbHandler.newMessageAlarm(post_id, post_title, user_type, matchset_student, VM_ENUM.ALARM_NEW);
+                        Log.d(VM_ENUM.TAG, "문제가 유효함. 학생 알람을 추가" + user_type + "," + matchset_student);
+                        Toast.makeText(parent, "컨텐츠를 로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
+                        setResult(RESULT_OK);
+                        finish();//***** 종료
 
                     }
                 }
@@ -573,17 +571,21 @@ public class VM_ViewActivity extends AppCompatActivity {
 
                 }
             });
-        }
-        else if(user_type.equals(VM_ENUM.STUDENT)){
+        } else if (user_type.equals(VM_ENUM.STUDENT)) {
             //학생이면 검사 없이 그냥 채팅 추가
 
-            VM_DBHandler dbHandler=new VM_DBHandler();
-                    dbHandler.newChatMediaItem(post_id,chatItem,user_id);
-                    Log.d(VM_ENUM.TAG,"문제가 유효함. 채팅을 추가");
-                    dbHandler.newMessageAlarm(post_id, post_title,user_type,matchset_teacher,VM_ENUM.ALARM_NEW);
-                    Log.d(VM_ENUM.TAG,"문제가 유효함. 선생님 알람을 추가"+user_type+","+matchset_teacher);
-                    Toast.makeText(parent,"컨텐츠를 로딩중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG).show();
-                    finish();//***** 종료
+            //** 프로그래스바 설정
+            Log.w(VM_ENUM.TAG, "[VM_ViewActivity] ProblemFragment에 프로그래스바 설정");
+            ProblemFragment.chat_loading_bar.setVisibility(View.VISIBLE);
+
+            VM_DBHandler dbHandler = new VM_DBHandler();
+            dbHandler.newChatMediaItem(post_id, chatItem, user_id);
+            Log.d(VM_ENUM.TAG, "문제가 유효함. 채팅을 추가");
+            dbHandler.newMessageAlarm(post_id, post_title, user_type, matchset_teacher, VM_ENUM.ALARM_NEW);
+            Log.d(VM_ENUM.TAG, "문제가 유효함. 선생님 알람을 추가" + user_type + "," + matchset_teacher);
+            Toast.makeText(parent, "컨텐츠를 로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK);
+            finish();//***** 종료
 
         }
 
@@ -593,7 +595,7 @@ public class VM_ViewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(VM_ENUM.TAG,"[ViewActivity]"+requestCode);
+        Log.d(VM_ENUM.TAG, "[ViewActivity]" + requestCode);
 
         if (resultCode != Activity.RESULT_OK) {
 
@@ -613,18 +615,18 @@ public class VM_ViewActivity extends AppCompatActivity {
             }
 
             finish();
-        }else {
-            if(requestCode==VM_ENUM.PICK_FROM_ALBUM){
+        } else {
+            if (requestCode == VM_ENUM.PICK_FROM_ALBUM) {
                 Uri uri = null;
                 if (data != null) {
                     uri = data.getData();
-                    db_save_uri=uri;
+                    db_save_uri = uri;
 
                     //** 비디오, 이미지 판단
-                    String mimeType=findMimeType(uri);
-                    if(mimeType!=null){
-                        if(mimeType.contains("video")){
-                            Log.d(VM_ENUM.TAG,"[ViewActivity], video");
+                    String mimeType = findMimeType(uri);
+                    if (mimeType != null) {
+                        if (mimeType.contains("video")) {
+                            Log.d(VM_ENUM.TAG, "[ViewActivity], video");
                             imageViewPhoto.setVisibility(View.GONE);
                             videoView.setVisibility(View.VISIBLE);
                             videoView.setVideoURI(uri);
@@ -633,7 +635,7 @@ public class VM_ViewActivity extends AppCompatActivity {
                             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                 @Override
                                 public void onPrepared(MediaPlayer mp) {
-                                    Log.d(VM_ENUM.TAG,"동영상 재생준비 완료");
+                                    Log.d(VM_ENUM.TAG, "동영상 재생준비 완료");
                                     playButton.setVisibility(View.VISIBLE);
                                     stopButton.setVisibility(View.GONE);
 
@@ -642,14 +644,14 @@ public class VM_ViewActivity extends AppCompatActivity {
                             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
-                                    Log.d(VM_ENUM.TAG,"동영상 재생 완료");
+                                    Log.d(VM_ENUM.TAG, "동영상 재생 완료");
                                     playButton.setVisibility(View.VISIBLE);
                                     stopButton.setVisibility(View.GONE);
                                 }
                             });
 
-                        }else if(mimeType.contains("image")) { //gif 파일도 가능하긴 함...
-                            Log.d(VM_ENUM.TAG,"[ViewActivity], image");
+                        } else if (mimeType.contains("image")) { //gif 파일도 가능하긴 함...
+                            Log.d(VM_ENUM.TAG, "[ViewActivity], image");
                             try {
                                 imageViewPhoto.setVisibility(View.VISIBLE);
                                 videoView.setVisibility(View.GONE);
@@ -661,12 +663,10 @@ public class VM_ViewActivity extends AppCompatActivity {
                     }
 
 
-
-
-                }else{
-                    Log.d(VM_ENUM.TAG,"[ViewActivity] data null임");
+                } else {
+                    Log.d(VM_ENUM.TAG, "[ViewActivity] data null임");
                 }
-            }else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) { //카메라로 촬영
+            } else if (requestCode == VM_ENUM.PICK_FROM_CAMERA) { //카메라로 촬영
                 Uri photoUri;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -678,23 +678,23 @@ public class VM_ViewActivity extends AppCompatActivity {
                 }
 
                 //** 데이터베이스에 저장할 uri 생성
-                db_save_uri=photoUri;
+                db_save_uri = photoUri;
 
                 //** 비디오, 이미지 판단 (카메라로 촬영)
-                String flag=null;
-                String mimeType=findMimeType(photoUri);
-                if(mimeType!=null){
-                    if(mimeType.contains("video")){
-                        Log.d(VM_ENUM.TAG,"[ViewActivity], video");
-                        flag=VM_ENUM.IT_TAKE_VIDEO;
+                String flag = null;
+                String mimeType = findMimeType(photoUri);
+                if (mimeType != null) {
+                    if (mimeType.contains("video")) {
+                        Log.d(VM_ENUM.TAG, "[ViewActivity], video");
+                        flag = VM_ENUM.IT_TAKE_VIDEO;
                         imageViewPhoto.setVisibility(View.GONE);
                         videoView.setVisibility(View.VISIBLE);
                         videoView.setVideoURI(photoUri);
                         videoView.start();
 
-                    }else if(mimeType.contains("image")){
-                        Log.d(VM_ENUM.TAG,"[ViewActivity], image");
-                        flag=VM_ENUM.IT_TAKE_PHOTO;
+                    } else if (mimeType.contains("image")) {
+                        Log.d(VM_ENUM.TAG, "[ViewActivity], image");
+                        flag = VM_ENUM.IT_TAKE_PHOTO;
                         try {
                             imageViewPhoto.setVisibility(View.VISIBLE);
                             videoView.setVisibility(View.GONE);
@@ -727,9 +727,9 @@ public class VM_ViewActivity extends AppCompatActivity {
 
                 //Q 이상이면 디렉토리 내 파일 다시 저장
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    if(flag.equals(VM_ENUM.IT_TAKE_VIDEO)){
+                    if (flag.equals(VM_ENUM.IT_TAKE_VIDEO)) {
                         saveVideoFile();
-                    }else if(flag.equals(VM_ENUM.IT_TAKE_PHOTO)){
+                    } else if (flag.equals(VM_ENUM.IT_TAKE_PHOTO)) {
                         saveFile();
                     }
 
@@ -745,20 +745,19 @@ public class VM_ViewActivity extends AppCompatActivity {
         playButton.setVisibility(View.GONE);
         stopButton.setVisibility(View.GONE);
 
-        if(pick.equals(VM_ENUM.IT_TAKE_PHOTO)){
-            db_save_uri=null;
+        if (pick.equals(VM_ENUM.IT_TAKE_PHOTO)) {
+            db_save_uri = null;
             imageViewPhoto.setVisibility(View.GONE);
             videoView.setVisibility(View.GONE);
             takePhoto();
 
-        }else if(pick.equals(VM_ENUM.IT_GALLERY_PHOTO)){
-            db_save_uri=null;
+        } else if (pick.equals(VM_ENUM.IT_GALLERY_PHOTO)) {
+            db_save_uri = null;
             imageViewPhoto.setVisibility(View.GONE);
             videoView.setVisibility(View.GONE);
             getAlbumFile();
-        }
-        else if(pick.equals(VM_ENUM.IT_TAKE_VIDEO)){
-            db_save_uri=null;
+        } else if (pick.equals(VM_ENUM.IT_TAKE_VIDEO)) {
+            db_save_uri = null;
             imageViewPhoto.setVisibility(View.GONE);
             videoView.setVisibility(View.GONE);
             takeVideo();
