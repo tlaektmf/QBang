@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +75,10 @@ public class problem_detail extends Fragment {
     private Button close_btn;
 
     private Context context;
+
+    //** 로딩바
+    private ProgressBar cal_loading_bar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +113,9 @@ public class problem_detail extends Fragment {
         imageViewOther1=_rootView.findViewById(R.id.extra_img_one);
         imageViewOther2=_rootView.findViewById(R.id.extra_img_two);
         imageViewOther3=_rootView.findViewById(R.id.extra_img_three);
+
+        //로딩창
+        cal_loading_bar = _rootView.findViewById(R.id.cal_loading_bar);
 
         detail_front=_rootView.findViewById(R.id.detail_front);
         close_btn=_rootView.findViewById(R.id.pv_close_btn);
@@ -223,26 +231,74 @@ public class problem_detail extends Fragment {
         reference=reference.child(post_id)
                 .child(VM_ENUM.DB_DATA_EXTRA);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            private int count=0;
+            private int loading_count=0;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 vmDataExtra=dataSnapshot.getValue(VM_Data_EXTRA.class);
                 Log.d(TAG, "ValueEventListener : " +dataSnapshot );
 
                 if(vmDataExtra==null){//** <내용추가뷰>에서 채운 데이터가 없더라도 "질문내용" 부분에는 Default 메시지 필요
+
+                    Log.d(VM_ENUM.TAG,"[추가 질문 등록 뷰] 데이터 없음 null");
+
                     textViewContent.setText("추가 질문 내용이 없습니다.");
+
+                    //** 추가 사진 들어가는 곳 제어
+                     imageViewOther1.setVisibility(View.INVISIBLE);
+                     imageViewOther2.setVisibility(View.INVISIBLE);
+                     imageViewOther3.setVisibility(View.INVISIBLE);
+
+                     //** 로딩바 제어
+                    Log.w(VM_ENUM.TAG,"[질문 추가 사항 뷰] 로딩바 삭제");
+                    cal_loading_bar.setVisibility(View.INVISIBLE);
+
                 }
-                if(vmDataExtra!=null){
+
+
+                if(vmDataExtra!=null){ // 추가사진 or  추가 질문 내용 텍스트 중 데이터가 들어 있는 경우
                     if(vmDataExtra.getContent()!=null){
                         textViewContent.setText(vmDataExtra.getContent());
                     }else{//추가 설명이 없는 경우
                         textViewContent.setText("추가 질문 내용이 없습니다.");
                     }
 
+                  if(vmDataExtra.getAdd_picture1()!=null){
+                      count++;
+                      Log.d(VM_ENUM.TAG,"[추가 질문 등록 뷰]  1 count : "+count);
+
+                  }else{
+                      imageViewOther1.setVisibility(View.INVISIBLE);
+                  }
+
+                  if(vmDataExtra.getAdd_picture2()!=null){
+                      count++;
+                      Log.d(VM_ENUM.TAG,"[추가 질문 등록 뷰] 2 count : "+count);
+
+                  }else{
+                      imageViewOther2.setVisibility(View.INVISIBLE);
+                  }
+                  if(vmDataExtra.getAdd_picture3()!=null){
+                      count++;
+                      Log.d(VM_ENUM.TAG,"[추가 질문 등록 뷰] 3 count : "+count);
+
+                  }else{
+                      imageViewOther3.setVisibility(View.INVISIBLE);
+                  }
+
+
+
                     //*** 사진 파일 읽기
                     //** storage 파일 가져오기
-
                     //다운로드할 파일을 가르키는 참조 만들기
                     StorageReference pathReference;
+
+                    //** 세개다 이미지가 없는 경우, 로딩바 자동삭제
+                    if(count==0){
+                        Log.w(VM_ENUM.TAG,"[질문 추가 사항 뷰] 로딩바 삭제");
+                        cal_loading_bar.setVisibility(View.INVISIBLE);
+                    }
 
                     if(vmDataExtra.getAdd_picture1()!=null){
 
@@ -253,6 +309,14 @@ public class problem_detail extends Fragment {
                                 mGlideRequestManager
                                         .load(uri)
                                         .into(imageViewOther1);
+
+                                //프로그래스바 제어
+                                loading_count++;
+                                Log.w(VM_ENUM.TAG,"[질문 추가 사항 뷰] 1 loading_count : " +loading_count);
+
+                                if(count==loading_count){
+                                    cal_loading_bar.setVisibility(View.INVISIBLE);
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -280,6 +344,16 @@ public class problem_detail extends Fragment {
                                 mGlideRequestManager
                                         .load(uri)
                                         .into(imageViewOther2);
+
+                                //프로그래스바 제어
+                                loading_count++;
+                                Log.w(VM_ENUM.TAG,"[질문 추가 사항 뷰] 2 loading_count : " +loading_count);
+
+                                if(count==loading_count){
+                                    cal_loading_bar.setVisibility(View.INVISIBLE);
+                                }
+
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -309,6 +383,16 @@ public class problem_detail extends Fragment {
                                 mGlideRequestManager
                                         .load(uri)
                                         .into(imageViewOther3);
+
+                                //프로그래스바 제어
+                                loading_count++;
+                                Log.w(VM_ENUM.TAG,"[질문 추가 사항 뷰] 3 loading_count : " +loading_count);
+
+                                if(count==loading_count){
+                                    cal_loading_bar.setVisibility(View.INVISIBLE);
+                                }
+
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -326,7 +410,7 @@ public class problem_detail extends Fragment {
                             }
                         });
                     }
-                }
+                } // 데이터가 있는 경우 후처리 작업
 
 
             }
@@ -356,16 +440,6 @@ public class problem_detail extends Fragment {
         }
         if(getArguments().containsKey(VM_FullViewActivity.ARG_ITEM_GRADE)){
             textViewGrade.setText(getArguments().getString(VM_FullViewActivity.ARG_ITEM_GRADE));
-        }
-
-        if(vmDataExtra!=null){ //*** 데이터를 DB에서 읽어온 경우
-            ///Toast.makeText(getContext(),"로딩완료.",Toast.LENGTH_SHORT).show();
-            Log.d(VM_ENUM.TAG,"[problem_detail] 로딩완료.");
-
-        }else {
-            //데이터 읽어오는 중 => 로딩 필요
-            ///Toast.makeText(getContext(), "로딩중입니다.", Toast.LENGTH_SHORT).show();
-            Log.d(VM_ENUM.TAG,"[problem_detail] 로딩중입니다.");
         }
 
     }
