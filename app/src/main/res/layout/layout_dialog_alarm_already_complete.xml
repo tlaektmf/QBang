@@ -45,7 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이미 완료된 문제입니다. 질문노트에서 확인 가능합니다."
+                android:text="이미 완료된 문제입니다. \n \n질문노트에서 확인 가능합니다."
 
                 android:fontFamily="@font/nanumsquaure_b"
                 android:textColor="#014a67"
