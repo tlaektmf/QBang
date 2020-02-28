@@ -74,11 +74,12 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/your_chat_back"
                     android:fontFamily="@font/nanumsquaure_r"
-                    android:gravity="center"
 
+                    android:ems="12"
+                    android:inputType="textMultiLine"
                     android:padding="8dp"
                     android:elevation="3dp"
-                    android:textAlignment="center"
+
                     android:textColor="#016a96"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -194,14 +195,14 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     tools:text="내가 보낸 메세지"
-
+                   android:singleLine="false"
                     android:padding="8dp"
                     android:elevation="3dp"
-                    android:textAlignment="center"
+
                     android:fontFamily="@font/nanumsquaure_r"
                     android:textColor="#016a96"
-                    android:gravity="center"
-
+                    android:ems="12"
+                    android:inputType="textMultiLine"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginBottom="5dp"
