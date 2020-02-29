@@ -574,12 +574,12 @@ public class ProblemFragment extends Fragment {
 
                         @Override
                         public void onButtonSetTime() {
-                            Toast.makeText(parent, "2020년 03월 시행 ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(parent, "2020년 04월 시행 ", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onButtonVoice() {
-
+                            Toast.makeText(parent, "2020년 04월 시행 ", Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -627,7 +627,7 @@ public class ProblemFragment extends Fragment {
 
                         @Override
                         public void onButtonVoice() {
-                            ///Toast.makeText(getActivity(), "음성버튼", Toast.LENGTH_LONG).show();
+                            Toast.makeText(parent, "2020년 04월 시행 ", Toast.LENGTH_LONG).show();
 
                         }
 
