@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:514346757678:android:25fa9f92a8b146aa19b9bf",
         "android_client_info": {
-          "package_name": "com.example.visualmath"
+          "package_name": "com.visualstudy.visualmath"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "514346757678-q1ok7ek3k8ajkc8h78u0m5ro2n9up1ci.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.visualmath",
+            "package_name": "com.visualstudy.visualmath",
             "certificate_hash": "f2dac3c48ba58c8cc130d611c170f26ad36a2233"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "514346757678-61a40af2l5denb621c0laher4ll6pvch.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.visualmath",
+            "package_name": "com.visualstudy.visualmath",
             "certificate_hash": "4a73e862d70cb57dc1a34839276da47708e30d70"
           }
         },
@@ -34,7 +34,7 @@
           "client_id": "514346757678-88t9uksgt8908tqqo9d45r49vgn9k4ti.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.visualmath",
+            "package_name": "com.visualstudy.visualmath",
             "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
           }
         },

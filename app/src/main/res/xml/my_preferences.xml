@@ -20,17 +20,17 @@
 <!--        android:layout="@layout/pre_logout"-->
 <!--        android:key="logout"/>-->
 
-    <com.example.visualmath.preference.LogoutPreference
+    <com.visualstudy.visualmath.preference.LogoutPreference
         android:selectable="false"
         android:layout="@layout/pre_logout"
         android:key="logout"/>
 
-    <com.example.visualmath.preference.CountSolveProblemPreference
+    <com.visualstudy.visualmath.preference.CountSolveProblemPreference
         android:layout="@layout/pre_count"
         android:selectable="false"
         android:key="countsolveProblem"/>
 
-    <com.example.visualmath.preference.DatabaseRemovePreference
+    <com.visualstudy.visualmath.preference.DatabaseRemovePreference
         android:layout="@layout/pre_test"
         android:selectable="false"
         android:key="dataRemove"/>
