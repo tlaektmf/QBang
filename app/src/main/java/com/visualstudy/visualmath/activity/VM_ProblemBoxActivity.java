@@ -138,7 +138,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                                 , post.getUploadDate()
                                 , post.getData_default().getGrade()
                                 , post.getData_default().getProblem()
-                                , post.getMatchSet_student()));
+                                , post.getMatchSet_teacher()));
 
                 if(isUnMatchedClick){
                     recycler_view.setAdapter(mAdapater_unmatched);
@@ -177,7 +177,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                                 , post.getUploadDate()
                                 , post.getData_default().getGrade()
                                 , post.getData_default().getProblem()
-                                , post.getMatchSet_student()));
+                                , post.getMatchSet_teacher()));
 
                 if(!isUnMatchedClick){
                     recycler_view.setAdapter(mAdapater_matched);
@@ -286,7 +286,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
             holder.pDate.setText(mData.get(position).getUpLoadDate());
             holder.pLive.setVisibility(View.INVISIBLE);//**라이브 default false
 
-            if(mData.get(position).getMatchSet_student()!=null){
+            if(mData.get(position).getMatchSet_teacher()!=null){
                 holder.pMatchTeacher.setText(mData.get(position).getMatchSet_teacher());
             }
             if(mData.get(position).getSolveWay()!=null){

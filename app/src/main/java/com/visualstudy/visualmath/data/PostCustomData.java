@@ -32,16 +32,18 @@ public class PostCustomData {
 //        this.upLoadDate=upLoadDate;
 //    }
 
-    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet_student){
+
+    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet_teacher){
         this.p_id=p_id;
         this.title=p_title;
         this.grade=grade;
         this.problem=problem;
         this.solveWay=solveWay;
         this.upLoadDate=upLoadDate;
-        this.matchSet_student=matchSet_student;
+        this.matchSet_teacher=matchSet_teacher;
 
     }
+
     public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String student,String teacher){
         this.p_id=p_id;
         this.title=p_title;
