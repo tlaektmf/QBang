@@ -2,6 +2,8 @@ package com.visualstudy.visualmath.data;
 
 import androidx.annotation.Nullable;
 
+import com.visualstudy.visualmath.VM_ENUM;
+
 public class PostCustomData {
     private String p_id;
     private String title;
@@ -33,14 +35,25 @@ public class PostCustomData {
 //    }
 
 
-    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet_teacher){
+    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet){
         this.p_id=p_id;
         this.title=p_title;
         this.grade=grade;
         this.problem=problem;
         this.solveWay=solveWay;
         this.upLoadDate=upLoadDate;
-        this.matchSet_teacher=matchSet_teacher;
+
+        if(matchSet!=null){
+            String mailDomain = matchSet.split("_")[1];
+            if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+                this.matchSet_teacher=matchSet;
+            }else{
+                this.matchSet_student=matchSet;
+            }
+
+        }else{
+
+        }
 
     }
 

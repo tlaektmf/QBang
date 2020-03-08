@@ -138,7 +138,7 @@ public class VM_ProblemBoxActivity extends AppCompatActivity {
                                 , post.getUploadDate()
                                 , post.getData_default().getGrade()
                                 , post.getData_default().getProblem()
-                                , post.getMatchSet_teacher()));
+                                , null));
 
                 if(isUnMatchedClick){
                     recycler_view.setAdapter(mAdapater_unmatched);
