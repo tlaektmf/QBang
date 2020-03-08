@@ -162,7 +162,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
+                        "com.visualstudy.visualmath.provider", takeFile);
 
                 Log.d(VM_ENUM.TAG, "[VM_RegisterProblem]+content provider 후" + photoUri);
 
@@ -651,7 +651,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
+                        "com.visualstudy.visualmath.provider", takeFile);
 
                 Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity/PICK_FROM_CAMERA] content provider photoUri : " + photoUri);
 

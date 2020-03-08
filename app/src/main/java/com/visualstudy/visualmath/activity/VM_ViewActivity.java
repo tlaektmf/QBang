@@ -204,7 +204,7 @@ public class VM_ViewActivity extends AppCompatActivity {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
+                        "com.visualstudy.visualmath.provider", takeFile);
 
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);//provider을 씌워서 보냄
                 // : photoUri를 intent로 넘겨주고, 이를 다시 onActivity result에서 받기 위함이 아니라,가서 쓰라는 의미
@@ -666,7 +666,7 @@ public class VM_ViewActivity extends AppCompatActivity {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     photoUri = FileProvider.getUriForFile(this,
-                            "com.example.visualmath.provider", takeFile);
+                            "com.visualstudy.visualmath.provider", takeFile);
                     Log.d(VM_ENUM.TAG, "[VM_VieActivity /PICK_FROM_CAMERA]: photoUri " + photoUri);
                 } else {
                     photoUri = Uri.fromFile(takeFile);

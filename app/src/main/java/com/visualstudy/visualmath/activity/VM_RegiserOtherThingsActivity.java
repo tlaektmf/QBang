@@ -244,7 +244,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 
                 Uri photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
+                        "com.visualstudy.visualmath.provider", takeFile);
                 Log.d(VM_ENUM.TAG, "[RegiOther]+content provider 후" + photoUri);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(intent, VM_ENUM.PICK_FROM_CAMERA);
@@ -595,7 +595,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 photoUri = FileProvider.getUriForFile(this,
-                        "com.example.visualmath.provider", takeFile);
+                        "com.visualstudy.visualmath.provider", takeFile);
 
             } else {
                 photoUri = Uri.fromFile(takeFile);
