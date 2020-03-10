@@ -346,7 +346,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                             ,post.getUploadDate()
                             , post.getData_default().getGrade()
                             ,post.getData_default().getProblem()
-                            ,post.getMatchSet_student()) );
+                            ,post.getMatchSet_student(),VM_ENUM.STUDENT) );
                 } else if (post_grade.equals(VM_ENUM.GRADE_MID)) {
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_MID 데이터 추가 ");
                     unmatched_mid.add(new PostCustomData
@@ -356,7 +356,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                                     ,post.getUploadDate()
                                     , post.getData_default().getGrade()
                                     ,post.getData_default().getProblem()
-                                    ,post.getMatchSet_student()) );
+                                    ,post.getMatchSet_student(),VM_ENUM.STUDENT) );
                 } else if (post_grade.equals(VM_ENUM.GRADE_HIGH)) {
                     Log.d(TAG, "[선생님 문제 선택뷰] GRADE_HIGH 데이터 추가 ");
                     unmatched_high.add(new PostCustomData
@@ -366,7 +366,7 @@ public class VM_ProblemListActivity extends AppCompatActivity {
                                     ,post.getUploadDate()
                                     , post.getData_default().getGrade()
                                     ,post.getData_default().getProblem()
-                                    ,post.getMatchSet_student()) );
+                                    ,post.getMatchSet_student(),VM_ENUM.STUDENT) );
                 }
 
                 //** 현재 활성화 되어있는 버튼(초, 중, 고)에 따라서 리사이클러뷰 "갱신"
