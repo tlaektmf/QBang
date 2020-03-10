@@ -39,6 +39,8 @@ public class VM_Dialog_registerProblem {
             dig.setContentView(R.layout.layout_dialog_alarm_already_matched);
         } else if(tmpNum==8){
             dig.setContentView(R.layout.layout_dialog_alarm_already_complete);
+        }else if(tmpNum==9){
+            dig.setContentView(R.layout.layout_dialog_success_join);
         }
         else{
             Log.d("registerProblem 오류","다이얼로그 if문 조건 범위 오류");
@@ -66,8 +68,6 @@ public class VM_Dialog_registerProblem {
         else if(tmpNum==5){
             //매치 완료 다이얼로그
             dig.setContentView(R.layout.layout_dialog_match_complete);
-        }else if(tmpNum==9){
-            dig.setContentView(R.layout.layout_dialog_success_join);
         }else if(tmpNum==10){
             //로그인 실패
             dig.setContentView(R.layout.layout_dialog_alarm_login_fail);
