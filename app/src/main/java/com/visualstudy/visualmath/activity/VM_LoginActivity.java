@@ -239,7 +239,17 @@ public class VM_LoginActivity extends AppCompatActivity {
         //** DB 있는 지 확인
         final String user;
         final String mailDomain = acct.getEmail().split("@")[1].split("\\.")[0];
-        user = acct.getEmail().split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        String userFirebaseId=acct.getEmail().split("@")[0];
+        userFirebaseId=userFirebaseId.replace(".", "_");
+        userFirebaseId=userFirebaseId.replace("#", "_");
+        userFirebaseId=userFirebaseId.replace("$", "_");
+        userFirebaseId=userFirebaseId.replace("[", "_");
+        userFirebaseId=userFirebaseId.replace("]", "_");
+
+
+        user = userFirebaseId + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
         Log.d(VM_ENUM.TAG,user);
 
         FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
