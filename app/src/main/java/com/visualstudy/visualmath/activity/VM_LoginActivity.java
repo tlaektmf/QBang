@@ -49,7 +49,7 @@ public class VM_LoginActivity extends AppCompatActivity {
     CheckBox checkBoxAutoLogin;
     TextView textViewRegister;
 
-    String userId = "defaultId";
+   String userId = "defaultId";
     String userPw = "defaultPw";
     Boolean isAutoLoginChecked = false;
 
@@ -264,12 +264,7 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                     //데이터 베이스 등록
                     VM_DBHandler dbHandler=new VM_DBHandler();
-                    Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
 
-                    Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
-
-                    String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
-                    //String user=acct.getEmail().split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
                     dbHandler.newUser(user,VM_ENUM.STUDENT);
 
                     if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
