@@ -34,8 +34,7 @@ public class PostCustomData {
 //        this.upLoadDate=upLoadDate;
 //    }
 
-
-    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet){
+    public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String grade, String problem,String matchSet,String type){
         this.p_id=p_id;
         this.title=p_title;
         this.grade=grade;
@@ -44,8 +43,8 @@ public class PostCustomData {
         this.upLoadDate=upLoadDate;
 
         if(matchSet!=null){
-            String mailDomain = matchSet.split("_")[1];
-            if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+
+            if(type.equals(VM_ENUM.TEACHER)){
                 this.matchSet_teacher=matchSet;
             }else{
                 this.matchSet_student=matchSet;
@@ -56,6 +55,7 @@ public class PostCustomData {
         }
 
     }
+
 
     public PostCustomData(String p_id,String p_title,String solveWay ,String upLoadDate,String student,String teacher){
         this.p_id=p_id;
