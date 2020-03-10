@@ -238,7 +238,7 @@ public class VM_LoginActivity extends AppCompatActivity {
         reference.orderByKey().equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(VM_ENUM.TAG,dataSnapshot.getValue().toString());
+
                 if(dataSnapshot.getValue()==null){
                     Log.d(VM_ENUM.TAG,"계정이 없습니다. DB 등록");
                     //구글 이용자 확인된 사람정보 파이어베이스로 넘기기
@@ -249,9 +249,19 @@ public class VM_LoginActivity extends AppCompatActivity {
 
                     Log.d(VM_ENUM.TAG, "[google user email]"+acct.getEmail());
 
-                    //String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
+                    String mailDomain=acct.getEmail().split("@")[1].split("\\.")[0];
                     //String user=acct.getEmail().split("@")[0]+"_"+mailDomain;//이메일 형식은 파이어베이스 정책상 불가
                     dbHandler.newUser(user,VM_ENUM.STUDENT);
+
+                    if(mailDomain.equals(VM_ENUM.PROJECT_EMAIL)){
+                        Intent intent = new Intent(getApplicationContext(), TeacherHomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //**
+                        startActivity(intent);
+                        finish();
+                    }
 
                 }else{
 
