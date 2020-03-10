@@ -152,7 +152,16 @@ public class VM_LoginActivity extends AppCompatActivity {
                             String currentUserEmail = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
                             assert currentUserEmail != null;
                             String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-                            String user=currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+                            String userFirebaseId=currentUserEmail.split("@")[0];
+                            userFirebaseId=userFirebaseId.replace(".", "_");
+                            userFirebaseId=userFirebaseId.replace("#", "_");
+                            userFirebaseId=userFirebaseId.replace("$", "_");
+                            userFirebaseId=userFirebaseId.replace("[", "_");
+                            userFirebaseId=userFirebaseId.replace("]", "_");
+
+
+                            String user=userFirebaseId + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
                             boolean isAllowed=false;
 

@@ -224,7 +224,14 @@ public class ItemListActivity extends AppCompatActivity {
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        user = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+        String userFirebaseId=currentUserEmail.split("@")[0];
+        userFirebaseId=userFirebaseId.replace(".", "_");
+        userFirebaseId=userFirebaseId.replace("#", "_");
+        userFirebaseId=userFirebaseId.replace("$", "_");
+        userFirebaseId=userFirebaseId.replace("[", "_");
+        userFirebaseId=userFirebaseId.replace("]", "_");
+
+        user = userFirebaseId+ "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
         Log.d(VM_ENUM.TAG, "[학생 알람] " + user + " 의 데이터 접근");
         reference = firebaseDatabase.getReference(VM_ENUM.DB_STUDENTS)
                 .child(user)

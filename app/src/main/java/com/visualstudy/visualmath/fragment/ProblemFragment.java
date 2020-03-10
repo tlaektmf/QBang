@@ -186,7 +186,16 @@ public class ProblemFragment extends Fragment {
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         assert currentUserEmail != null;
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
-        user_id = currentUserEmail.split("@")[0] + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
+
+        String userFirebaseId=currentUserEmail.split("@")[0];
+        userFirebaseId=userFirebaseId.replace(".", "_");
+        userFirebaseId=userFirebaseId.replace("#", "_");
+        userFirebaseId=userFirebaseId.replace("$", "_");
+        userFirebaseId=userFirebaseId.replace("[", "_");
+        userFirebaseId=userFirebaseId.replace("]", "_");
+
+
+        user_id = userFirebaseId + "_" + mailDomain;//이메일 형식은 파이어베이스 정책상 불가
 
         if (mailDomain.equals(VM_ENUM.PROJECT_EMAIL)) {
             //선생님
