@@ -75,11 +75,20 @@
 
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp">
-                <ImageView
+                <TextView
+                    android:text="인증 가능한 이메일 주소를 입력해주세요.
+                    \n\n이메일에  #   $   ]   [  문자는 포함 될 수 없습니다.
+                    \n\nvisual math 앱 내에서 사용 할 비밀번호를 입력해주세요.
+                    \n\n비밀번호는 6~10 글자로 구성되어야 합니다."
+                    android:fontFamily="@font/nanumsquaure_b"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp"
+
+
                     android:id="@+id/iv_mainLogo"
                     android:layout_width="190dp"
                     android:layout_height="190dp"
-                    android:src="@drawable/launcher_logo"
+
 
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

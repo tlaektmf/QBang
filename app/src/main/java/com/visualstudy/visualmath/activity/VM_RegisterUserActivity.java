@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.visualstudy.visualmath.R;
 import com.visualstudy.visualmath.VM_ENUM;
 import com.visualstudy.visualmath.dialog.VM_Dialog_registerProblem;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 public class VM_RegisterUserActivity extends AppCompatActivity {
 
     // 비밀번호 정규식
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{4,16}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,10}$");
 
     private FirebaseAuth firebaseAuth;
 
@@ -85,7 +86,9 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             // 이메일 형식 불일치
-
+            final VM_Dialog_registerProblem checkDialog =
+                    new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
+            checkDialog.callFunction(12);
             return false;
         } else {
             return true;
@@ -99,6 +102,9 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             return false;
         } else if (!PASSWORD_PATTERN.matcher(password).matches()) {
             // 비밀번호 형식 불일치
+            final VM_Dialog_registerProblem checkDialog =
+                    new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
+            checkDialog.callFunction(13);
             return false;
         } else {
             return true;
@@ -122,10 +128,17 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                             ///Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
                         } else {
                             // 회원가입 실패
-                            Toast.makeText(VM_RegisterUserActivity.this, R.string.failed_signup, Toast.LENGTH_SHORT).show();
-                        }
+                            final VM_Dialog_registerProblem checkDialog =
+                                    new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
+                            checkDialog.callFunction(14);
+                             }
                     }
-                });
+                }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(VM_ENUM.TAG,"[회원 가입 ] "+e.getMessage());
+            }
+        });
     }
 
     public void sendVerifyEmail(){
