@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.visualstudy.visualmath.R;
@@ -38,6 +39,10 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
     private String password = "";
 
 
+
+    // ** 사용자 편의를 위한 로딩바
+    private ProgressBar send_mail_loading_bar;
+    private View send_mail_loading_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,10 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();//파이어베이스 인증 객체 선언
         editTextEmail = findViewById(R.id.et_email);
         editTextPassword = findViewById(R.id.et_password);
+
+        //로딩창
+        send_mail_loading_bar = findViewById(R.id.send_mail_loading_bar);
+        send_mail_loading_back = findViewById(R.id.send_mail_loading_back);
     }
 
     public void registerUser(View view) {
@@ -63,6 +72,9 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
 
         if(isValidEmail() && isValidPasswd()) {
             createUser(email, password);
+        }else{
+            //이메일 혹은 패스워드 형식이 맞지 않는경우
+
         }
     }
 
@@ -73,6 +85,7 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             // 이메일 형식 불일치
+
             return false;
         } else {
             return true;
@@ -100,6 +113,8 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 회원가입 성공
+                            send_mail_loading_back.setVisibility(View.VISIBLE);
+                            send_mail_loading_bar.setVisibility(View.VISIBLE);
 
                             //인증 메일 보냄
                             sendVerifyEmail();
@@ -122,6 +137,9 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {                         //해당 이메일에 확인메일을 보냄
                     Log.d(VM_ENUM.TAG, "[메일 요청 완료]");
+
+                    send_mail_loading_back.setVisibility(View.INVISIBLE);
+                    send_mail_loading_bar.setVisibility(View.INVISIBLE);
 
                     //회원가입 성공. 메일 인증을 완료해주세요.
                     final VM_Dialog_registerProblem checkDialog =
