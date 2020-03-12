@@ -337,10 +337,9 @@ public class VM_LoginActivity extends AppCompatActivity {
 //                                finish();
 //                            }
 
-                            Toast.makeText(VM_LoginActivity.this, "아이디 생성완료", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VM_LoginActivity.this, "성공", Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.d(VM_ENUM.TAG,"아이디 생성 실패! 다시 시도해주세요");
-                            Toast.makeText(VM_LoginActivity.this, "아이디 생설실패", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VM_LoginActivity.this, "실패! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
