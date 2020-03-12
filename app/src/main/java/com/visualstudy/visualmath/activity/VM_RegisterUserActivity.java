@@ -101,12 +101,9 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 회원가입 성공
 
-                            //회원가입 성공. 메일 인증을 완료해주세요.
-                            final VM_Dialog_registerProblem checkDialog =
-                                    new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
-                            checkDialog.callFunction(9,VM_RegisterUserActivity.this);
-
+                            //인증 메일 보냄
                             sendVerifyEmail();
+
                             ///Toast.makeText(VM_RegisterUserActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
                         } else {
                             // 회원가입 실패
@@ -118,7 +115,6 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
 
     public void sendVerifyEmail(){
         FirebaseUser currentUser  = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseAuth.getInstance().useAppLanguage();                //해당기기의 언어 설정
 
         assert currentUser != null;
         currentUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -126,8 +122,22 @@ public class VM_RegisterUserActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {                         //해당 이메일에 확인메일을 보냄
                     Log.d(VM_ENUM.TAG, "[메일 요청 완료]");
-                    Intent intent=new Intent(VM_RegisterUserActivity.this, VM_LoginActivity.class);
-                    finish();
+
+                    //회원가입 성공. 메일 인증을 완료해주세요.
+                    final VM_Dialog_registerProblem checkDialog =
+                            new VM_Dialog_registerProblem(VM_RegisterUserActivity.this);
+                    checkDialog.callFunction(9,VM_RegisterUserActivity.this);
+
+                    final Timer t = new Timer();
+                    t.schedule(new TimerTask() {
+                        public void run() {
+                            VM_Dialog_registerProblem.dig.dismiss();
+                            t.cancel();
+                            finish();
+                        }
+                    }, 3000);
+
+
 
                 } else {                                             //메일 보내기 실패
                     Log.d(VM_ENUM.TAG, "[메일 발송 실패]");
