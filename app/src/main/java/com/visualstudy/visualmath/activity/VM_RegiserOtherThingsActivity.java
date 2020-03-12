@@ -126,14 +126,18 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        try {
-            resetWidget();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
+
+        //뒤로가기 버튼 클릭 금지
+//
+//        try {
+//            resetWidget();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        Intent intent = new Intent(this, VM_RegisterProblemActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        startActivity(intent);
+//
     }
 
     public void init() {
@@ -437,7 +441,7 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 //** 권한 요청 성공
-                Toast.makeText(VM_RegiserOtherThingsActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_RegiserOtherThingsActivity.this, "사용자 권한 요청 완료", Toast.LENGTH_SHORT).show();
 
                 showPickDialog();
             }
@@ -631,5 +635,6 @@ public class VM_RegiserOtherThingsActivity extends AppCompatActivity {
         }
 
     }
+
 
 }
