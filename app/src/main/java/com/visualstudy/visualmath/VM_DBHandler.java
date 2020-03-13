@@ -58,8 +58,6 @@ public class VM_DBHandler {
     }
 
 
-
-
 ///*** open with addvalueListenr     <<<<<<<
 //    public void newChat(String post_id, List<VM_Data_CHAT> chat) {
 //
@@ -75,7 +73,7 @@ public class VM_DBHandler {
                 timeStamp;
 
         StorageReference riversRef = storageReference.child(fileName);
-;
+
         riversRef.putFile(Uri.parse(chatitem.getChatContent()))
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -324,6 +322,21 @@ public class VM_DBHandler {
      */
     void newPost(VM_Data_ADD _vmDataAdd, VM_Data_BASIC _vmDataBasic, String _solveWay) {
 
+
+        //** firebase 정책 테스트
+
+//        String str="sl.d#kss$df]s[dfg][@mail.com";
+//        String pre=str.split("@")[0];
+//        String post=str.split("@")[1].split("\\.")[0];
+//        Log.w(VM_ENUM.TAG,"정제 전 : "+pre+"  "+post);
+//        pre=pre.replace(".", "_");
+//        pre=pre.replace("#", "_");
+//        pre=pre.replace("$", "_");
+//        pre=pre.replace("[", "_");
+//        pre=pre.replace("]", "_");
+//        Log.w(VM_ENUM.TAG,"정제 후 : "+pre+"  "+post);
+
+        // >>>>>>
 
         String currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
         String mailDomain = currentUserEmail.split("@")[1].split("\\.")[0];
