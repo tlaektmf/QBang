@@ -88,7 +88,7 @@ public class VM_LauncherActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 //** 요청한 모든 권한 요청 성공
-                Toast.makeText(VM_LauncherActivity.this,"Permission Granted",Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_LauncherActivity.this,"사용자 권한 요청 완료",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(VM_LauncherActivity.this, VM_AutoLoginCheckActivity.class);
                 startActivity(intent);
                 finish();

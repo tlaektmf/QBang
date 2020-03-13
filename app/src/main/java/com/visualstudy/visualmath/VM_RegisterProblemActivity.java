@@ -371,7 +371,7 @@ public class VM_RegisterProblemActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 //** 권한 요청 성공
-                Toast.makeText(VM_RegisterProblemActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_RegisterProblemActivity.this, "사용자 권한 요청 완료", Toast.LENGTH_SHORT).show();
                 Log.d(VM_ENUM.TAG, "[VM_RegisterProblemActivity] Permission Granted");
                 showPickDialog();
 

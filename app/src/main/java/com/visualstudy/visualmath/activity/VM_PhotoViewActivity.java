@@ -119,7 +119,7 @@ public class VM_PhotoViewActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 //** 권한 요청 성공
-                Toast.makeText(VM_PhotoViewActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VM_PhotoViewActivity.this, "사용자 권한 요청 완료", Toast.LENGTH_SHORT).show();
 
                 if(VIEW.equals(VM_ENUM.IT_TAKE_PHOTO)){
                     takePhoto();
