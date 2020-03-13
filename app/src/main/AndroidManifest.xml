@@ -40,7 +40,6 @@
         <activity
             android:name="com.visualstudy.visualmath.activity.VM_ViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
-        <activity android:name="com.visualstudy.visualmath.activity.VM_GoogleLoginActivity" />
         <activity
             android:name="com.visualstudy.visualmath.activity.VM_ProblemBoxActivity"
             android:theme="@style/AppTheme.notitlebar" />
