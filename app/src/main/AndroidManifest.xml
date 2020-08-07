@@ -33,75 +33,81 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.visualstudy.visualmath.activity.VM_ChatItemViewActivity"
-            android:theme="@style/AppTheme.blackStatusBar"></activity>
+        <activity android:name=".TempActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_PhotoViewActivity"
+            android:name=".activity.VM_ChatItemViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_ViewActivity"
+            android:name=".activity.VM_PhotoViewActivity"
             android:theme="@style/AppTheme.blackStatusBar" />
-        <activity android:name="com.visualstudy.visualmath.activity.VM_GoogleLoginActivity" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_ProblemBoxActivity"
+            android:name=".activity.VM_ViewActivity"
+            android:theme="@style/AppTheme.blackStatusBar" />
+        <activity android:name=".activity.VM_GoogleLoginActivity" />
+        <activity
+            android:name=".activity.VM_ProblemBoxActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_RegisterUserActivity"
+            android:name=".activity.VM_RegisterUserActivity"
             android:theme="@style/AppTheme.blueStatusBar_notitle" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_RegiserOtherThingsActivity"
+            android:name=".activity.VM_RegiserOtherThingsActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_FullViewActivity"
+            android:name=".activity.VM_FullViewActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="com.visualstudy.visualmath.VM_RegisterProblemActivity" />
+        <activity android:name=".VM_RegisterProblemActivity" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_TeacherSolveProblemActivity"
+            android:name=".activity.VM_TeacherSolveProblemActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_ProblemListActivity"
+            android:name=".activity.VM_ProblemListActivity"
             android:theme="@style/AppTheme.notitlebar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.TeacherItemListActivity"
+            android:name=".activity.TeacherItemListActivity"
             android:theme="@style/AppTheme.notitlebar" />
-        <activity android:name="com.visualstudy.visualmath.activity.TeacherHomeActivity" />
+        <activity android:name=".activity.TeacherHomeActivity" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_SettingsActivity"
+            android:name=".activity.VM_SettingsActivity"
             android:label="@string/title_activity_vm__settings" />
-        <activity android:name="com.visualstudy.visualmath.activity.VM_WebViewActivity" />
+        <activity android:name=".activity.VM_WebViewActivity" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.ItemListActivity"
+            android:name=".activity.ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.ItemDetailActivity"
+            android:name=".activity.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName="com.visualstudy.visualmath.activity.ItemListActivity"
+            android:parentActivityName=".activity.ItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.visualstudy.visualmath.activity.ItemListActivity" />
         </activity>
         <activity
-            android:name="com.visualstudy.visualmath.activity.HomeActivity"
+            android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_AutoLoginCheckActivity"
+            android:name=".activity.VM_AutoLoginCheckActivity"
             android:theme="@style/AppTheme.blueStatusBar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_LoginActivity"
+            android:name=".activity.VM_LoginActivity"
             android:theme="@style/AppTheme.blueStatusBar" />
         <activity
-            android:name="com.visualstudy.visualmath.activity.VM_LauncherActivity"
+            android:name=".activity.VM_LauncherActivity"
             android:theme="@style/AppTheme.blueStatusBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name="com.visualstudy.visualmath.activity.MainActivity" /> <!-- 사진 촬영을 위한 provide -->
+        <activity android:name=".activity.MainActivity" /> <!-- 사진 촬영을 위한 provide -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.visualstudy.visualmath.provider"
@@ -111,6 +117,22 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <!--- 안드로이드 8.0 이상 푸시 처리 추가 코드-->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications_black_24dp"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"/>
+
+        <service android:name=".FirebaseMessagingService">
+            <intent-filter>
+
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
